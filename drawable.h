@@ -51,6 +51,7 @@ public:
 	 */
 	void SetX(int x);	// Sets the new x position
 	void SetY(int y);	// Sets the new y position
+	void SetPos(int x, int y);
 	void SetPos(SDL_Point pos);	// Shortcut to set position
 
 private:
@@ -62,7 +63,6 @@ private:
 
 	float _x;			// Current x position of image
 	float _y;			// Current y position of image
-
 	int _width;			// Width of the image
 	int _height;		// Height of the image
 };

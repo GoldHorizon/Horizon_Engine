@@ -168,6 +168,12 @@ void Drawable::SetY(int y)
 	_y = y;
 }
 
+void Drawable::SetPos(int x, int y)
+{
+	_x = x;
+	_y = y;
+}
+
 void Drawable::SetPos(SDL_Point pos)
 {
 	_x = pos.x;
