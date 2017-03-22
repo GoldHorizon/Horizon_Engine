@@ -39,7 +39,7 @@ public:
 	//	y:			y position of rendering
 	//	clipping:	rectangle the image is clipped to before rendered
 	//	angle:		angle with which the image is rotated when drawing
-	//	origin:		origin of rotation (BUT NOT PLACEMENT)
+	//	origin:		origin of rotation and placement
 	//	flip:		if image is flipped (see SDL_RendererFlip enum);
 	//void Render(float x, float y, double angle, SDL_Point* origin, SDL_RendererFlip flip, SDL_Rect* clipping = nullptr);
 
