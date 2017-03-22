@@ -5,9 +5,12 @@ Drawable::Drawable():
 	_renderer(globalRenderer),
 	_x(0),
 	_y(0),
+	_angle(0),
 	_width(0),
 	_height(0)
 {
+	_origin = {0, 0};
+
 	if (globalRenderer == nullptr)
 	{
 		std::cerr << "Error: Cannot instantiate object - globalRenderer not set!" << std::endl;
@@ -19,9 +22,12 @@ Drawable::Drawable(SDL_Renderer* renderer):
 	_renderer(renderer),
 	_x(0),
 	_y(0),
+	_angle(0),
 	_width(0),
 	_height(0)
 {
+	_origin = {0, 0};
+
 	if (renderer == nullptr)
 	{
 		std::cerr << "Error: Cannot instantiate object - globalRenderer not set!" << std::endl;
@@ -191,6 +197,16 @@ float Drawable::y() const
 	return _y;
 }
 
+double Drawable::angle() const
+{
+	return _angle;
+}
+
+SDL_Point Drawable::origin() const
+{
+	return _origin;
+}
+
 int Drawable::width() const
 {
 	return _width;
@@ -213,6 +229,23 @@ void Drawable::SetX(float x)
 void Drawable::SetY(float y)
 {
 	_y = y;
+}
+
+void Drawable::SetAngle(double angle)
+{
+	_angle = angle;
+}
+
+void Drawable::SetOrigin(int x, int y)
+{
+	_x = x;
+	_y = y;
+}
+
+void Drawable::SetOrigin(SDL_Point pos)
+{
+	_x = pos.x;
+	_y = pos.y;
 }
 
 void Drawable::SetPosition(float x, float y)

@@ -55,6 +55,8 @@ public:
 	 */
 	float x() const;		// Returns the x position
 	float y() const;		// Returns the y position
+	double angle() const;	// Returns the angle
+	SDL_Point origin() const;	// Returns the origin
 	int width() const;	// Returns the width of the image
 	int height() const;	// Returns the height of the image
 
@@ -63,7 +65,11 @@ public:
 	 */
 	void SetX(float x);	// Sets the new x position
 	void SetY(float y);	// Sets the new y position
-	void SetPosition(float x, float y);
+	void SetAngle(double angle);	// Sets the angle
+	void SetOrigin(int x, int y);	// Sets the origin
+	void SetOrigin(SDL_Point pos);		// Sets the origin
+
+	void SetPosition(float x, float y);	// Shortcut to set position
 	void SetPosition(SDL_Point pos);	// Shortcut to set position
 
 private:
@@ -75,6 +81,8 @@ private:
 
 	float _x;			// Current x position of image
 	float _y;			// Current y position of image
+	double _angle;		// Angle of image
+	SDL_Point _origin;	// Origin of image
 	int _width;			// Width of the image
 	int _height;		// Height of the image
 };
