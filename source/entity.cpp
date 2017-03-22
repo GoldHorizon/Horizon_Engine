@@ -3,6 +3,7 @@
 Entity::Entity():
 	_image(nullptr),
 	_renderer(globalRenderer),
+	_ID(0),
 	_x(0),
 	_y(0),
 	_angle(0),
@@ -20,6 +21,7 @@ Entity::Entity():
 Entity::Entity(SDL_Renderer* renderer):
 	_image(nullptr),
 	_renderer(renderer),
+	_ID(0),
 	_x(0),
 	_y(0),
 	_angle(0),
@@ -183,6 +185,11 @@ void Entity::Move(float x, float y)
 /*
  * Get Methods
  */
+int Entity::ID() const
+{
+	return _ID;
+}
+
 float Entity::x() const
 {
 	return _x;
@@ -216,6 +223,10 @@ int Entity::height() const
 /*
  * Set Methods
  */
+void Entity::SetID(int ID)
+{
+	_ID = ID;
+}
 
 void Entity::SetX(float x)
 {

@@ -51,6 +51,7 @@ public:
 	/*
 	 * Get Methods
 	 */
+	int ID() const;
 	float x() const;		// Returns the x position
 	float y() const;		// Returns the y position
 	double angle() const;	// Returns the angle
@@ -61,6 +62,7 @@ public:
 	/*
 	 * Set Methods
 	 */
+	void SetID(int ID);
 	void SetX(float x);	// Sets the new x position
 	void SetY(float y);	// Sets the new y position
 	void SetAngle(double angle);	// Sets the angle
@@ -76,6 +78,7 @@ private:
 	// _renderer		- Renderer we draw to for this drawable
 	SDL_Renderer* _renderer;
 
+	int _ID;
 	float _x;			// Current x position of image
 	float _y;			// Current y position of image
 	double _angle;		// Angle of image
