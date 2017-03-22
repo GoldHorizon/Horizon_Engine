@@ -62,6 +62,7 @@ private:
 
 	float _x;			// Current x position of image
 	float _y;			// Current y position of image
+
 	int _width;			// Width of the image
 	int _height;		// Height of the image
 };

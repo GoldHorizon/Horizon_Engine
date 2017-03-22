@@ -1,5 +1,5 @@
 #pragma once
 
-//class Game;
+class Game;
 class Drawable;
-//class Entity;
+class Entity;
