@@ -15,9 +15,9 @@ public:
 	 * Class Methods
 	 */
 	int GetCount() const;
-	Entity& GetByName(std::string name) const;
-	Entity& GetByID(int ID) const;
-	Entity& GetByIndex(int index) const;
+	Entity* const GetByName(std::string name) const;
+	Entity* const GetByID(int ID) const;
+	Entity* const GetByIndex(unsigned int index) const;
 
 	void AddEntity(std::string name, Entity* entity);
 	void RemoveByName(std::string name);
