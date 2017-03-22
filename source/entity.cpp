@@ -1,6 +1,6 @@
-#include "../drawable.h"
+#include "../entity.h"
 
-Drawable::Drawable():
+Entity::Entity():
 	_image(nullptr),
 	_renderer(globalRenderer),
 	_x(0),
@@ -17,7 +17,7 @@ Drawable::Drawable():
 	}
 }
 
-Drawable::Drawable(SDL_Renderer* renderer):
+Entity::Entity(SDL_Renderer* renderer):
 	_image(nullptr),
 	_renderer(renderer),
 	_x(0),
@@ -34,12 +34,12 @@ Drawable::Drawable(SDL_Renderer* renderer):
 	}
 }
 
-Drawable::~Drawable()
+Entity::~Entity()
 {
 	FreeMemory();
 }
 
-void Drawable::LoadFromFile(const std::string file)
+void Entity::LoadFromFile(const std::string file)
 {
 	// Create a temporary surface to load our image onto
 	SDL_Surface* tempSurface;
@@ -64,7 +64,7 @@ void Drawable::LoadFromFile(const std::string file)
 	//	}
 }
 
-void Drawable::FreeMemory()
+void Entity::FreeMemory()
 {
 	if (_image != nullptr)
 	{
@@ -74,7 +74,7 @@ void Drawable::FreeMemory()
 	}
 }
 
-void Drawable::Render()
+void Entity::Render()
 {
 	if (_image != nullptr)
 	{
@@ -89,7 +89,7 @@ void Drawable::Render()
 	}
 }
 
-void Drawable::Render(SDL_Rect* clipping)
+void Entity::Render(SDL_Rect* clipping)
 {
 	if (_image != nullptr)
 	{
@@ -115,7 +115,7 @@ void Drawable::Render(SDL_Rect* clipping)
 //	}
 }
 
-void Drawable::Render(SDL_RendererFlip flip, SDL_Rect* clipping)
+void Entity::Render(SDL_RendererFlip flip, SDL_Rect* clipping)
 {
 	if (_image != nullptr)
 	{
@@ -174,7 +174,7 @@ void Drawable::Render(SDL_RendererFlip flip, SDL_Rect* clipping)
 ////	}
 //}
 
-void Drawable::Move(float x, float y)
+void Entity::Move(float x, float y)
 {
 	_x += x;
 	_y += y;
@@ -183,32 +183,32 @@ void Drawable::Move(float x, float y)
 /*
  * Get Methods
  */
-float Drawable::x() const
+float Entity::x() const
 {
 	return _x;
 }
 
-float Drawable::y() const
+float Entity::y() const
 {
 	return _y;
 }
 
-double Drawable::angle() const
+double Entity::angle() const
 {
 	return _angle;
 }
 
-SDL_Point Drawable::origin() const
+SDL_Point Entity::origin() const
 {
 	return _origin;
 }
 
-int Drawable::width() const
+int Entity::width() const
 {
 	return _width;
 }
 
-int Drawable::height() const
+int Entity::height() const
 {
 	return _height;
 }
@@ -217,40 +217,40 @@ int Drawable::height() const
  * Set Methods
  */
 
-void Drawable::SetX(float x)
+void Entity::SetX(float x)
 {
 	_x = x;
 }
 
-void Drawable::SetY(float y)
+void Entity::SetY(float y)
 {
 	_y = y;
 }
 
-void Drawable::SetAngle(double angle)
+void Entity::SetAngle(double angle)
 {
 	_angle = angle;
 }
 
-void Drawable::SetOrigin(int x, int y)
+void Entity::SetOrigin(int x, int y)
 {
 	_x = x;
 	_y = y;
 }
 
-void Drawable::SetOrigin(SDL_Point pos)
+void Entity::SetOrigin(SDL_Point pos)
 {
 	_x = pos.x;
 	_y = pos.y;
 }
 
-void Drawable::SetPosition(float x, float y)
+void Entity::SetPosition(float x, float y)
 {
 	_x = x;
 	_y = y;
 }
 
-void Drawable::SetPosition(SDL_Point pos)
+void Entity::SetPosition(SDL_Point pos)
 {
 	_x = pos.x;
 	_y = pos.y;

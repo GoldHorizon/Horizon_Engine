@@ -2,15 +2,15 @@
 
 #include "header.h"
 
-class Drawable
+class Entity
 {
 public:
 	/*
 	 * Constructors/Destructors
 	 */
-	Drawable();
-	explicit Drawable(SDL_Renderer* renderer);
-	~Drawable();
+	Entity();
+	explicit Entity(SDL_Renderer* renderer);
+	~Entity();
 
 	/*
 	 * Class Methods
