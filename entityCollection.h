@@ -22,7 +22,7 @@ public:
 	void AddEntity(std::string name, Entity* entity);
 	void RemoveByName(std::string name);
 	void RemoveByID(int ID);
-	void RemoveByIndex(int index);
+	void RemoveByIndex(unsigned int index);
 
 	void UpdateAll();
 	void RenderAll();

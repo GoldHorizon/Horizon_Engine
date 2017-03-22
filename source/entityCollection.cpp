@@ -76,3 +76,87 @@ Entity* const EntityCollection::GetByIndex(unsigned int index) const
 
 	return nullptr;
 }
+
+void EntityCollection::AddEntity(std::string name, Entity* entity)
+{
+	entity->SetID(_collection.size());
+
+	std::pair<std::string, Entity*> object;
+
+	object.first = name;
+	object.second = entity;
+
+	_collection.insert(object);
+}
+
+void EntityCollection::RemoveByName(std::string name)
+{
+	// eMap == std::map<std::string, Entity*>
+	eMap::const_iterator it = _collection.begin();
+
+	it = _collection.find(name);
+
+	if (it != _collection.end())
+	{
+		delete it->second;
+
+		_collection.erase(it);
+	}
+}
+
+void EntityCollection::RemoveByID(int ID)
+{
+	// eMap == std::map<std::string, Entity*>
+	eMap::const_iterator it = _collection.begin();
+
+	while (it != _collection.end() && it->second->ID() != ID)
+	{
+		it++;
+	}
+
+	if (it != _collection.end())
+	{
+		delete it->second;
+
+		_collection.erase(it);
+	}
+}
+
+void EntityCollection::RemoveByIndex(unsigned int index)
+{
+	// eMap == std::map<std::string, Entity*>
+	eMap::const_iterator it = _collection.begin();
+
+	if (index < _collection.size())
+	{
+		for (unsigned int i = 0; i < index; i++)
+		{
+			it++;
+		}
+
+		if (it->second != nullptr)
+		{
+			delete it->second;
+
+			_collection.erase(it);
+		}
+	}
+}
+
+void EntityCollection::UpdateAll()
+{
+	// eMap == std::map<std::string, Entity*>
+	eMap::const_iterator it = _collection.begin();
+
+
+}
+
+void EntityCollection::RenderAll()
+{
+	// eMap == std::map<std::string, Entity*>
+	eMap::const_iterator it = _collection.begin();
+
+
+}
+
+
