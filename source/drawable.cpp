@@ -131,15 +131,21 @@ void Drawable::Render(float x, float y, double angle, SDL_Point* origin, SDL_Ren
 //	}
 }
 
+void Drawable::Move(float x, float y)
+{
+	_x += x;
+	_y += y;
+}
+
 /*
  * Get Methods
  */
-int Drawable::x() const
+float Drawable::x() const
 {
 	return _x;
 }
 
-int Drawable::y() const
+float Drawable::y() const
 {
 	return _y;
 }
@@ -158,17 +164,17 @@ int Drawable::height() const
  * Set Methods
  */
 
-void Drawable::SetX(int x)
+void Drawable::SetX(float x)
 {
 	_x = x;
 }
 
-void Drawable::SetY(int y)
+void Drawable::SetY(float y)
 {
 	_y = y;
 }
 
-void Drawable::SetPos(int x, int y)
+void Drawable::SetPos(float x, float y)
 {
 	_x = x;
 	_y = y;
@@ -179,3 +185,4 @@ void Drawable::SetPos(SDL_Point pos)
 	_x = pos.x;
 	_y = pos.y;
 }
+

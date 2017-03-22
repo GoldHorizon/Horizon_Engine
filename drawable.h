@@ -38,20 +38,26 @@ public:
 	//	flip:		if image is flipped (see SDL_RendererFlip enum);
 	virtual void Render(float x, float y, double angle, SDL_Point* origin, SDL_RendererFlip flip, SDL_Rect* clipping = nullptr);
 
+	// Move()			- Moves the image by an offset of x and y coordinates
+	//	x:			amount to move in the x direction
+	//	y:			amount to move in the y direction
+	void Move(float x, float y);
+
+
 	/*
 	 * Get Methods
 	 */
-	int x() const;		// Returns the x position
-	int y() const;		// Returns the y position
+	float x() const;		// Returns the x position
+	float y() const;		// Returns the y position
 	int width() const;	// Returns the width of the image
 	int height() const;	// Returns the height of the image
 
 	/*
 	 * Set Methods
 	 */
-	void SetX(int x);	// Sets the new x position
-	void SetY(int y);	// Sets the new y position
-	void SetPos(int x, int y);
+	void SetX(float x);	// Sets the new x position
+	void SetY(float y);	// Sets the new y position
+	void SetPos(float x, float y);
 	void SetPos(SDL_Point pos);	// Shortcut to set position
 
 private:
