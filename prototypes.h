@@ -2,4 +2,3 @@
 
 class Game;
 class Drawable;
-class Entity;
