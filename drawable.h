@@ -50,7 +50,6 @@ public:
 	//	y:			amount to move in the y direction
 	void Move(float x, float y);
 
-
 	/*
 	 * Get Methods
 	 */
@@ -64,8 +63,8 @@ public:
 	 */
 	void SetX(float x);	// Sets the new x position
 	void SetY(float y);	// Sets the new y position
-	void SetPos(float x, float y);
-	void SetPos(SDL_Point pos);	// Shortcut to set position
+	void SetPosition(float x, float y);
+	void SetPosition(SDL_Point pos);	// Shortcut to set position
 
 private:
 

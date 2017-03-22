@@ -215,13 +215,13 @@ void Drawable::SetY(float y)
 	_y = y;
 }
 
-void Drawable::SetPos(float x, float y)
+void Drawable::SetPosition(float x, float y)
 {
 	_x = x;
 	_y = y;
 }
 
-void Drawable::SetPos(SDL_Point pos)
+void Drawable::SetPosition(SDL_Point pos)
 {
 	_x = pos.x;
 	_y = pos.y;
