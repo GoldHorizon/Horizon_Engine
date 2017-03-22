@@ -15,9 +15,9 @@ public:
 	 * Class Methods
 	 */
 	int GetCount() const;
-	Entity GetByName(std::string name) const;
-	Entity GetByID(int ID) const;
-	Entity GetByIndex(int index) const;
+	Entity& GetByName(std::string name) const;
+	Entity& GetByID(int ID) const;
+	Entity& GetByIndex(int index) const;
 
 	void AddEntity(std::string name, Entity* entity);
 	void RemoveByName(std::string name);
@@ -34,5 +34,6 @@ public:
 	 * Set Methods
 	 */
 private:
-	std::map<std::string, Entity*> _collection;
+	// eMap == std::map<std::string, Entity*>
+	eMap _collection;
 };

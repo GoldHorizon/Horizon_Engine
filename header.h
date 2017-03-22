@@ -16,7 +16,7 @@
 #include "constants.h"
 #include "enumerations.h"
 #include "prototypes.h"
-
+#include "typedefs.h"
 
 // Game Headers
 #include "game.h"
