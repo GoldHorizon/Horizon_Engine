@@ -31,10 +31,9 @@ public:
 	void Render(SDL_Rect* clipping);
 
 	// Render() 		- Renders the texture to a position
-	//	x:			x position of rendering
-	//	y:			y position of rendering
+	//	flip:		how to flip the image before it is rendered
 	//	clipping:	rectangle the image is clipped to before rendered
-	void Render(float x, float y, SDL_Rect* clipping = nullptr);
+	void Render(SDL_RendererFlip flip, SDL_Rect* clipping = nullptr);
 
 	// Render() 		- Renders the texture to a position
 	//	x:			x position of rendering
@@ -43,7 +42,7 @@ public:
 	//	angle:		angle with which the image is rotated when drawing
 	//	origin:		origin of rotation (BUT NOT PLACEMENT)
 	//	flip:		if image is flipped (see SDL_RendererFlip enum);
-	void Render(float x, float y, double angle, SDL_Point* origin, SDL_RendererFlip flip, SDL_Rect* clipping = nullptr);
+	//void Render(float x, float y, double angle, SDL_Point* origin, SDL_RendererFlip flip, SDL_Rect* clipping = nullptr);
 
 	// Move()			- Moves the image by an offset of x and y coordinates
 	//	x:			amount to move in the x direction
@@ -68,7 +67,6 @@ public:
 	void SetAngle(double angle);	// Sets the angle
 	void SetOrigin(int x, int y);	// Sets the origin
 	void SetOrigin(SDL_Point pos);		// Sets the origin
-
 	void SetPosition(float x, float y);	// Shortcut to set position
 	void SetPosition(SDL_Point pos);	// Shortcut to set position
 

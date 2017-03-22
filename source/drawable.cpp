@@ -85,7 +85,7 @@ void Drawable::Render()
 		// Create a rectangle to put on display
 		SDL_Rect displayImage = {xx, yy, _width, _height};
 
-		SDL_RenderCopy(_renderer, _image, nullptr, &displayImage);
+		SDL_RenderCopyEx(_renderer, _image, nullptr, &displayImage, _angle, &_origin, SDL_FLIP_NONE);
 	}
 }
 
@@ -107,7 +107,7 @@ void Drawable::Render(SDL_Rect* clipping)
 			displayImage.h = clipping->h;
 		}
 
-		SDL_RenderCopy(_renderer, _image, clipping, &displayImage);
+		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, _angle, &_origin, SDL_FLIP_NONE);
 	}
 //	else
 //	{
@@ -115,17 +115,13 @@ void Drawable::Render(SDL_Rect* clipping)
 //	}
 }
 
-void Drawable::Render(float x, float y, SDL_Rect* clipping)
+void Drawable::Render(SDL_RendererFlip flip, SDL_Rect* clipping)
 {
-	// Set our member variables to the new drawing position
-	_x = x;
-	_y = y;
-
 	if (_image != nullptr)
 	{
 		// Create a set of ints to use for drawing position
-		int xx = static_cast<int>(x);
-		int yy = static_cast<int>(y);
+		int xx = static_cast<int>(_x);
+		int yy = static_cast<int>(_y);
 
 		// Create a rectangle to put on display
 		SDL_Rect displayImage = {xx, yy, _width, _height};
@@ -137,7 +133,7 @@ void Drawable::Render(float x, float y, SDL_Rect* clipping)
 			displayImage.h = clipping->h;
 		}
 
-		SDL_RenderCopy(_renderer, _image, clipping, &displayImage);
+		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, _angle, &_origin, flip);
 //		SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
 //		SDL_RenderDrawRect(_renderer, &displayImage);
 	}
@@ -147,36 +143,36 @@ void Drawable::Render(float x, float y, SDL_Rect* clipping)
 //	}
 }
 
-void Drawable::Render(float x, float y, double angle, SDL_Point* origin, SDL_RendererFlip flip, SDL_Rect* clipping)
-{
-	// Set our member variables to the new drawing position
-	_x = x;
-	_y = y;
-
-	if (_image != nullptr)
-	{
-		// Create a set of ints to use for drawing position
-		int xx = static_cast<int>(x);
-		int yy = static_cast<int>(y);
-
-		// Create a rectangle to put on display
-		SDL_Rect displayImage = {xx, yy, _width, _height};
-		//std::cout << clipping->x << " " << clipping->y << " " << clipping->w << " " << clipping->h << " " << std::endl;
-
-		// If we are clipping the sprite, adjust it
-		if (clipping != nullptr)
-		{
-			displayImage.w = clipping->w;
-			displayImage.h = clipping->h;
-		}
-
-		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, angle, origin, flip);
-	}
-//	else
+//void Drawable::Render(float x, float y, double angle, SDL_Point* origin, SDL_RendererFlip flip, SDL_Rect* clipping)
+//{
+//	// Set our member variables to the new drawing position
+//	_x = x;
+//	_y = y;
+//
+//	if (_image != nullptr)
 //	{
-//		//std::cout << "Error: _image not found..." << std::endl;
+//		// Create a set of ints to use for drawing position
+//		int xx = static_cast<int>(x);
+//		int yy = static_cast<int>(y);
+//
+//		// Create a rectangle to put on display
+//		SDL_Rect displayImage = {xx, yy, _width, _height};
+//		//std::cout << clipping->x << " " << clipping->y << " " << clipping->w << " " << clipping->h << " " << std::endl;
+//
+//		// If we are clipping the sprite, adjust it
+//		if (clipping != nullptr)
+//		{
+//			displayImage.w = clipping->w;
+//			displayImage.h = clipping->h;
+//		}
+//
+//		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, angle, origin, flip);
 //	}
-}
+////	else
+////	{
+////		//std::cout << "Error: _image not found..." << std::endl;
+////	}
+//}
 
 void Drawable::Move(float x, float y)
 {
