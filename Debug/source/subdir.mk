@@ -5,18 +5,21 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../source/drawable.cpp \
+../source/entity.cpp \
 ../source/game.cpp \
 ../source/globals.cpp \
 ../source/main.cpp 
 
 OBJS += \
 ./source/drawable.o \
+./source/entity.o \
 ./source/game.o \
 ./source/globals.o \
 ./source/main.o 
 
 CPP_DEPS += \
 ./source/drawable.d \
+./source/entity.d \
 ./source/game.d \
 ./source/globals.d \
 ./source/main.d 

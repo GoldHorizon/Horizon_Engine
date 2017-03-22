@@ -9,11 +9,13 @@ public:
 	 * Constructors/Destructors
 	 */
 	Entity();
+	explicit Entity(SDL_Renderer* renderer);
 	virtual ~Entity();
 
 	/*
 	 * Class Methods
 	 */
+
 
 	/*
 	 * Get Methods

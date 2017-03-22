@@ -9,7 +9,7 @@ public:
 	 * Constructors/Destructors
 	 */
 	Drawable();
-	Drawable(SDL_Renderer* renderer);
+	explicit Drawable(SDL_Renderer* renderer);
 	virtual ~Drawable();
 
 	/*
