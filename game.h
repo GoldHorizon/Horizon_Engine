@@ -19,4 +19,6 @@ private:
 	SDL_Renderer* _mainRenderer;
 	SDL_Event _event;
 	GameState _state;
+
+	Entity* TEMP;
 };

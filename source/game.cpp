@@ -7,6 +7,8 @@ Game::Game():
 {
 	// Set the draw color for our renderer (rendered when renderer is cleared)
 	SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
+
+	TEMP = nullptr;
 }
 
 Game::~Game()
@@ -65,6 +67,13 @@ int Game::Initialize()
 
 	// If all is well, set the game state and return something besides -1
 	ChangeState(GameState::MAIN_MENU);
+
+	// TEMP
+	TEMP = new Entity();
+	TEMP->LoadFromFile("images/PlayButton.png");
+	TEMP->SetOrigin(0, 0);
+	TEMP->SetAngle(45);
+	TEMP->SetPosition(100, 0);
 
 	return 0;
 }
@@ -137,6 +146,9 @@ void Game::Render()
 
 	// Clear the renderer to the set color
 	SDL_RenderClear(_mainRenderer);
+
+	// TEMP
+	TEMP->Render();
 
 	// Draw (present) the renderer to the screen
 	SDL_RenderPresent(_mainRenderer);
