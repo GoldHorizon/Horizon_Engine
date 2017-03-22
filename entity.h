@@ -15,7 +15,6 @@ public:
 	/*
 	 * Class Methods
 	 */
-
 	// LoadFromFile() 	- Load the texture from a file
 	//	file:		string with filepath to image
 	void LoadFromFile(const std::string file);

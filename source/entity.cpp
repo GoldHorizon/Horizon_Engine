@@ -79,8 +79,8 @@ void Entity::Render()
 	if (_image != nullptr)
 	{
 		// Create a set of ints to use for drawing position
-		int xx = static_cast<int>(_x);
-		int yy = static_cast<int>(_y);
+		int xx = static_cast<int>(_x) - _origin.x;
+		int yy = static_cast<int>(_y) - _origin.y;
 
 		// Create a rectangle to put on display
 		SDL_Rect displayImage = {xx, yy, _width, _height};
@@ -94,8 +94,8 @@ void Entity::Render(SDL_Rect* clipping)
 	if (_image != nullptr)
 	{
 		// Create a set of ints to use for drawing position
-		int xx = static_cast<int>(_x);
-		int yy = static_cast<int>(_y);
+		int xx = static_cast<int>(_x) - _origin.x;
+		int yy = static_cast<int>(_y) - _origin.y;
 
 		// Create a rectangle to put on display
 		SDL_Rect displayImage = {xx, yy, _width, _height};
@@ -120,8 +120,8 @@ void Entity::Render(SDL_RendererFlip flip, SDL_Rect* clipping)
 	if (_image != nullptr)
 	{
 		// Create a set of ints to use for drawing position
-		int xx = static_cast<int>(_x);
-		int yy = static_cast<int>(_y);
+		int xx = static_cast<int>(_x) - _origin.x;
+		int yy = static_cast<int>(_y) - _origin.y;
 
 		// Create a rectangle to put on display
 		SDL_Rect displayImage = {xx, yy, _width, _height};
@@ -234,14 +234,14 @@ void Entity::SetAngle(double angle)
 
 void Entity::SetOrigin(int x, int y)
 {
-	_x = x;
-	_y = y;
+	_origin.x = x;
+	_origin.y = y;
 }
 
 void Entity::SetOrigin(SDL_Point pos)
 {
-	_x = pos.x;
-	_y = pos.y;
+	_origin.x = pos.x;
+	_origin.y = pos.y;
 }
 
 void Entity::SetPosition(float x, float y)
