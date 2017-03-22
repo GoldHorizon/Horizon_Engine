@@ -23,6 +23,13 @@ public:
 	// FreeMemory() 	- Frees the texture memory used
 	void FreeMemory();
 
+	// Render()			- Renders the texture to its current position
+	void Render();
+
+	// Render()			- Renders the texture to its current position
+	//	clipping:	rectangle the image is clipped to before rendered
+	void Render(SDL_Rect* clipping);
+
 	// Render() 		- Renders the texture to a position
 	//	x:			x position of rendering
 	//	y:			y position of rendering
