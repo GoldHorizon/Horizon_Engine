@@ -10,7 +10,7 @@ public:
 	 */
 	Entity();
 	explicit Entity(SDL_Renderer* renderer);
-	~Entity();
+	virtual ~Entity();
 
 	/*
 	 * Class Methods
@@ -21,6 +21,9 @@ public:
 
 	// FreeMemory() 	- Frees the texture memory used
 	void FreeMemory();
+
+	// Update()			- Updates anything to do with the entity
+	virtual void Update();
 
 	// Render()			- Renders the texture to its current position
 	void Render();

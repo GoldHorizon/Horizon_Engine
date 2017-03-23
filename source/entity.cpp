@@ -76,6 +76,11 @@ void Entity::FreeMemory()
 	}
 }
 
+void Entity::Update()
+{
+
+}
+
 void Entity::Render()
 {
 	if (_image != nullptr)

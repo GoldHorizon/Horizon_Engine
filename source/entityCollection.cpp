@@ -79,7 +79,18 @@ Entity* const EntityCollection::GetByIndex(unsigned int index) const
 
 void EntityCollection::AddEntity(std::string name, Entity* entity)
 {
-	entity->SetID(_collection.size());
+	if (_collection.size() == 0)
+	{
+		entity->SetID(0);
+	}
+	else
+	{
+		// eMap == std::map<std::string, Entity*>
+		eMap::const_iterator it = _collection.end();
+		it--;
+
+		entity->SetID(it->second->ID() + 1);
+	}
 
 	std::pair<std::string, Entity*> object;
 
@@ -148,6 +159,15 @@ void EntityCollection::UpdateAll()
 	// eMap == std::map<std::string, Entity*>
 	eMap::const_iterator it = _collection.begin();
 
+	while (it != _collection.end())
+	{
+		if (it->second != nullptr)
+		{
+			it->second->Update();
+		}
+
+		it++;
+	}
 
 }
 
