@@ -168,7 +168,6 @@ void EntityCollection::UpdateAll()
 
 		it++;
 	}
-
 }
 
 void EntityCollection::RenderAll()
@@ -176,7 +175,15 @@ void EntityCollection::RenderAll()
 	// eMap == std::map<std::string, Entity*>
 	eMap::const_iterator it = _collection.begin();
 
+	while (it != _collection.end())
+	{
+		if (it->second != nullptr)
+		{
+			it->second->Render();
+		}
 
+		it++;
+	}
 }
 
 
