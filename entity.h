@@ -1,6 +1,8 @@
 #pragma once
 
-#include "header.h"
+//#include "header.h"
+#include "SDL2/SDL.h"
+#include <string>
 
 class Entity
 {

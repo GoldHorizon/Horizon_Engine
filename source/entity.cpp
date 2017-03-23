@@ -1,4 +1,7 @@
 #include "../entity.h"
+#include "../globals.h"
+#include <iostream>
+#include "SDL2/SDL_image.h"
 
 Entity::Entity():
 	_image(nullptr),

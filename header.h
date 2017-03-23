@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 // Library Headers
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_surface.h>
@@ -21,3 +21,6 @@
 // Game Headers
 #include "game.h"
 #include "entity.h"
+//#include "entityCollection.h"
+ *
+ */

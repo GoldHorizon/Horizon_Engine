@@ -1,4 +1,7 @@
-#include "../header.h"
+#include "../game.h"
+#include <iostream>
+#include "../globals.h"
+#include "../constants.h"
 
 Game::Game():
 	_mainWindow(0),

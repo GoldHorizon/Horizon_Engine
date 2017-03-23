@@ -1,6 +1,8 @@
 #pragma once
 
-#include "header.h"
+#include "entityCollection.h"
+#include "enumerations.h"
+#include "SDL2/SDL.h"
 
 class Game
 {
@@ -19,4 +21,6 @@ private:
 	SDL_Renderer* _mainRenderer;
 	SDL_Event _event;
 	GameState _state;
+
+	EntityCollection _entities;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entity.h"
+#include "typedefs.h"
 
 class EntityCollection
 {

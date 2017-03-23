@@ -1,4 +1,4 @@
-#include "../header.h"
+#include "../game.h"
 
 // Program start
 int main(int argc, char** argv)
