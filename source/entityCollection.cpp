@@ -154,7 +154,7 @@ void EntityCollection::RemoveByIndex(unsigned int index)
 	}
 }
 
-void EntityCollection::UpdateAll(double elapsedTime)
+void EntityCollection::UpdateAll()
 {
 	// eMap == std::map<std::string, Entity*>
 	eMap::const_iterator it = _collection.begin();
@@ -163,14 +163,14 @@ void EntityCollection::UpdateAll(double elapsedTime)
 	{
 		if (it->second != nullptr)
 		{
-			it->second->Update(elapsedTime);
+			it->second->Update();
 		}
 
 		it++;
 	}
 }
 
-void EntityCollection::RenderAll()
+void EntityCollection::RenderAll(float interpolation)
 {
 	// eMap == std::map<std::string, Entity*>
 	eMap::const_iterator it = _collection.begin();
@@ -179,7 +179,7 @@ void EntityCollection::RenderAll()
 	{
 		if (it->second != nullptr)
 		{
-			it->second->Render();
+			it->second->Render(interpolation);
 		}
 
 		it++;

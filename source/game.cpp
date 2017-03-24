@@ -102,7 +102,7 @@ bool Game::GetInput()
 		switch (_event.key.keysym.scancode)
 		{
 		case SDL_SCANCODE_ESCAPE:
-			return true;
+			return false;
 			break;
 		default:
 			break;
@@ -115,7 +115,7 @@ bool Game::GetInput()
 		case SDL_WINDOWEVENT_CLOSE:
 			// If window is closed, take this as the user quitting
 			// In the future, this must be made more elegant.
-			return true;
+			return false;
 			break;
 		default:
 			break;
@@ -123,24 +123,24 @@ bool Game::GetInput()
 	}
 
 	// The player has not quit the game, so return false
-	return false;
+	return true;
 }
 
-void Game::Update(double elapsedTime)
+void Game::Update()
 {
 	// STEP 2: Update
 
-	_entities.UpdateAll(elapsedTime);
+	_entities.UpdateAll();
 }
 
-void Game::Render()
+void Game::Render(float interpolation)
 {
 	// STEP 3: Render
 
 	// Clear the renderer to the set color
 	SDL_RenderClear(_mainRenderer);
 
-	_entities.RenderAll();
+	_entities.RenderAll(interpolation);
 
 	// Draw (present) the renderer to the screen
 	SDL_RenderPresent(_mainRenderer);

@@ -13,8 +13,8 @@ public:
 	int Initialize();
 	void ChangeState(GameState newState);
 	bool GetInput();
-	void Update(double elapsedTime);
-	void Render();
+	void Update();
+	void Render(float interpolation);
 
 	EntityCollection& Entities();
 

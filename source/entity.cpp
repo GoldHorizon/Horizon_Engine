@@ -1,5 +1,6 @@
 #include "../entity.h"
 #include "../globals.h"
+#include "../constants.h"
 #include <iostream>
 #include "SDL2/SDL_image.h"
 
@@ -9,6 +10,8 @@ Entity::Entity():
 	_ID(0),
 	_x(0),
 	_y(0),
+	_direction(0),
+	_speed(0),
 	_imageAngle(0),
 	_imageWidth(0),
 	_imageHeight(0)
@@ -27,6 +30,8 @@ Entity::Entity(SDL_Renderer* renderer):
 	_ID(0),
 	_x(0),
 	_y(0),
+	_direction(0),
+	_speed(0),
 	_imageAngle(0),
 	_imageWidth(0),
 	_imageHeight(0)
@@ -79,17 +84,17 @@ void Entity::FreeMemory()
 	}
 }
 
-void Entity::Update(double elapsedTime)
+void Entity::Update()
 {
 
 }
 
-void Entity::Render()
+void Entity::Render(float interpolation)
 {
 	if (_image != nullptr)
 	{
 		// Create a set of ints to use for drawing position
-		int xx = static_cast<int>(_x) - _imageOrigin.x;
+		int xx = static_cast<int>(_x) - _imageOrigin.x + static_cast<int>(cos(_direction * PI / 180) * _speed * interpolation);
 		int yy = static_cast<int>(_y) - _imageOrigin.y;
 
 		// Create a rectangle to put on display

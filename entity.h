@@ -25,10 +25,10 @@ public:
 	void FreeMemory();
 
 	// Update()			- Updates anything to do with the entity
-	virtual void Update(double elapsedTime);
+	virtual void Update();
 
 	// Render()			- Renders the texture to its current position
-	void Render();
+	void Render(float interpolation);
 
 	// Render()			- Renders the texture to its current position
 	//	clipping:	rectangle the image is clipped to before rendered
@@ -86,6 +86,8 @@ private:
 	int _ID;
 	float _x;			// Current x position of image
 	float _y;			// Current y position of image
+	float _direction;	// Direction the entity is moving
+	float _speed;		// Speed the entity is moving at
 	double _imageAngle;		// Angle of image
 	SDL_Point _imageOrigin;	// Origin of image
 	int _imageWidth;			// Width of the image
