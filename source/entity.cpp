@@ -79,7 +79,7 @@ void Entity::FreeMemory()
 	}
 }
 
-void Entity::Update()
+void Entity::Update(double elapsedTime)
 {
 
 }

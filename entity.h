@@ -25,7 +25,7 @@ public:
 	void FreeMemory();
 
 	// Update()			- Updates anything to do with the entity
-	virtual void Update();
+	virtual void Update(double elapsedTime);
 
 	// Render()			- Renders the texture to its current position
 	void Render();

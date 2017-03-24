@@ -154,7 +154,7 @@ void EntityCollection::RemoveByIndex(unsigned int index)
 	}
 }
 
-void EntityCollection::UpdateAll()
+void EntityCollection::UpdateAll(double elapsedTime)
 {
 	// eMap == std::map<std::string, Entity*>
 	eMap::const_iterator it = _collection.begin();
@@ -163,7 +163,7 @@ void EntityCollection::UpdateAll()
 	{
 		if (it->second != nullptr)
 		{
-			it->second->Update();
+			it->second->Update(elapsedTime);
 		}
 
 		it++;

@@ -14,7 +14,7 @@ Game::Game():
 
 Game::~Game()
 {
-
+	SDL_Quit();
 }
 
 int Game::Initialize()
@@ -128,10 +128,9 @@ bool Game::GetInput()
 
 void Game::Update(double elapsedTime)
 {
-
 	// STEP 2: Update
 
-
+	_entities.UpdateAll(elapsedTime);
 }
 
 void Game::Render()
@@ -140,6 +139,8 @@ void Game::Render()
 
 	// Clear the renderer to the set color
 	SDL_RenderClear(_mainRenderer);
+
+	_entities.RenderAll();
 
 	// Draw (present) the renderer to the screen
 	SDL_RenderPresent(_mainRenderer);

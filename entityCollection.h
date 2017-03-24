@@ -25,7 +25,7 @@ public:
 	void RemoveByID(int ID);
 	void RemoveByIndex(unsigned int index);
 
-	void UpdateAll();
+	void UpdateAll(double elapsedTime);
 	void RenderAll();
 	/*
 	 * Get Methods
