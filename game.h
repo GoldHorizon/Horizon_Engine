@@ -16,6 +16,8 @@ public:
 	void Update(double elapsedTime);
 	void Render();
 
+	EntityCollection& Entities();
+
 private:
 	SDL_Window* _mainWindow;
 	SDL_Renderer* _mainRenderer;

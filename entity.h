@@ -90,4 +90,6 @@ private:
 	SDL_Point _imageOrigin;	// Origin of image
 	int _imageWidth;			// Width of the image
 	int _imageHeight;		// Height of the image
+
+	// Note: Will eventually need "direction" and "speed" members
 };

@@ -69,6 +69,20 @@ int Game::Initialize()
 	// If all is well, set the game state and return something besides -1
 	ChangeState(GameState::MAIN_MENU);
 
+	// MAJOR TEMP ENTITY TESTS
+	Entity* playButtonTEMP = new Entity;
+	playButtonTEMP->LoadFromFile("images/PlayButton.png");
+	playButtonTEMP->SetImageOrigin(playButtonTEMP->imageWidth() / 2, playButtonTEMP->imageHeight() / 2);
+	playButtonTEMP->SetPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 3);
+
+	Entity* quitButtonTEMP = new Entity;
+	quitButtonTEMP->LoadFromFile("images/QuitButton.png");
+	quitButtonTEMP->SetImageOrigin(quitButtonTEMP->imageWidth() / 2, quitButtonTEMP->imageHeight() / 2);
+	quitButtonTEMP->SetPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 2 / 3);
+
+	Entities().AddEntity("PlayButton", playButtonTEMP);
+	Entities().AddEntity("QuitButton", quitButtonTEMP);
+
 	return 0;
 }
 
@@ -144,4 +158,9 @@ void Game::Render()
 
 	// Draw (present) the renderer to the screen
 	SDL_RenderPresent(_mainRenderer);
+}
+
+EntityCollection& Game::Entities()
+{
+	return _entities;
 }
