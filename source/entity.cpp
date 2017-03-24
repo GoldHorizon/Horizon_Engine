@@ -9,11 +9,11 @@ Entity::Entity():
 	_ID(0),
 	_x(0),
 	_y(0),
-	_angle(0),
-	_width(0),
-	_height(0)
+	_imageAngle(0),
+	_imageWidth(0),
+	_imageHeight(0)
 {
-	_origin = {0, 0};
+	_imageOrigin = {0, 0};
 
 	if (globalRenderer == nullptr)
 	{
@@ -27,11 +27,11 @@ Entity::Entity(SDL_Renderer* renderer):
 	_ID(0),
 	_x(0),
 	_y(0),
-	_angle(0),
-	_width(0),
-	_height(0)
+	_imageAngle(0),
+	_imageWidth(0),
+	_imageHeight(0)
 {
-	_origin = {0, 0};
+	_imageOrigin = {0, 0};
 
 	if (renderer == nullptr)
 	{
@@ -54,8 +54,8 @@ void Entity::LoadFromFile(const std::string file)
 	{
 		// Set our attributes to match image properties
 		_image = SDL_CreateTextureFromSurface(_renderer, tempSurface);
-		_width = tempSurface->w;
-		_height = tempSurface->h;
+		_imageWidth = tempSurface->w;
+		_imageHeight = tempSurface->h;
 
 		// Free up our surface when we're done
 		SDL_FreeSurface(tempSurface);
@@ -74,8 +74,8 @@ void Entity::FreeMemory()
 	if (_image != nullptr)
 	{
 		SDL_DestroyTexture(_image);
-		_width = 0;
-		_height = 0;
+		_imageWidth = 0;
+		_imageHeight = 0;
 	}
 }
 
@@ -89,13 +89,13 @@ void Entity::Render()
 	if (_image != nullptr)
 	{
 		// Create a set of ints to use for drawing position
-		int xx = static_cast<int>(_x) - _origin.x;
-		int yy = static_cast<int>(_y) - _origin.y;
+		int xx = static_cast<int>(_x) - _imageOrigin.x;
+		int yy = static_cast<int>(_y) - _imageOrigin.y;
 
 		// Create a rectangle to put on display
-		SDL_Rect displayImage = {xx, yy, _width, _height};
+		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
 
-		SDL_RenderCopyEx(_renderer, _image, nullptr, &displayImage, _angle, &_origin, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(_renderer, _image, nullptr, &displayImage, _imageAngle, &_imageOrigin, SDL_FLIP_NONE);
 	}
 }
 
@@ -104,11 +104,11 @@ void Entity::Render(SDL_Rect* clipping)
 	if (_image != nullptr)
 	{
 		// Create a set of ints to use for drawing position
-		int xx = static_cast<int>(_x) - _origin.x;
-		int yy = static_cast<int>(_y) - _origin.y;
+		int xx = static_cast<int>(_x) - _imageOrigin.x;
+		int yy = static_cast<int>(_y) - _imageOrigin.y;
 
 		// Create a rectangle to put on display
-		SDL_Rect displayImage = {xx, yy, _width, _height};
+		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
 
 		// If we are clipping the sprite, adjust it
 		if (clipping != nullptr)
@@ -117,7 +117,7 @@ void Entity::Render(SDL_Rect* clipping)
 			displayImage.h = clipping->h;
 		}
 
-		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, _angle, &_origin, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, _imageAngle, &_imageOrigin, SDL_FLIP_NONE);
 	}
 //	else
 //	{
@@ -130,11 +130,11 @@ void Entity::Render(SDL_RendererFlip flip, SDL_Rect* clipping)
 	if (_image != nullptr)
 	{
 		// Create a set of ints to use for drawing position
-		int xx = static_cast<int>(_x) - _origin.x;
-		int yy = static_cast<int>(_y) - _origin.y;
+		int xx = static_cast<int>(_x) - _imageOrigin.x;
+		int yy = static_cast<int>(_y) - _imageOrigin.y;
 
 		// Create a rectangle to put on display
-		SDL_Rect displayImage = {xx, yy, _width, _height};
+		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
 
 		// If we are clipping the sprite, adjust it
 		if (clipping != nullptr)
@@ -143,7 +143,7 @@ void Entity::Render(SDL_RendererFlip flip, SDL_Rect* clipping)
 			displayImage.h = clipping->h;
 		}
 
-		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, _angle, &_origin, flip);
+		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, _imageAngle, &_imageOrigin, flip);
 //		SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
 //		SDL_RenderDrawRect(_renderer, &displayImage);
 	}
@@ -208,24 +208,24 @@ float Entity::y() const
 	return _y;
 }
 
-double Entity::angle() const
+double Entity::imageAngle() const
 {
-	return _angle;
+	return _imageAngle;
 }
 
-SDL_Point Entity::origin() const
+SDL_Point Entity::imageOrigin() const
 {
-	return _origin;
+	return _imageOrigin;
 }
 
-int Entity::width() const
+int Entity::imageWidth() const
 {
-	return _width;
+	return _imageWidth;
 }
 
-int Entity::height() const
+int Entity::imageHeight() const
 {
-	return _height;
+	return _imageHeight;
 }
 
 /*
@@ -246,21 +246,21 @@ void Entity::SetY(float y)
 	_y = y;
 }
 
-void Entity::SetAngle(double angle)
+void Entity::SetImageAngle(double angle)
 {
-	_angle = angle;
+	_imageAngle = angle;
 }
 
-void Entity::SetOrigin(int x, int y)
+void Entity::SetImageOrigin(int x, int y)
 {
-	_origin.x = x;
-	_origin.y = y;
+	_imageOrigin.x = x;
+	_imageOrigin.y = y;
 }
 
-void Entity::SetOrigin(SDL_Point pos)
+void Entity::SetImageOrigin(SDL_Point pos)
 {
-	_origin.x = pos.x;
-	_origin.y = pos.y;
+	_imageOrigin.x = pos.x;
+	_imageOrigin.y = pos.y;
 }
 
 void Entity::SetPosition(float x, float y)

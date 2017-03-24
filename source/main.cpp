@@ -1,4 +1,5 @@
 #include "../game.h"
+#include "../constants.h"
 
 // Program start
 int main(int argc, char** argv)
@@ -21,7 +22,6 @@ int main(int argc, char** argv)
 
 	while (!userQuit)
 	{
-
 		startTime = SDL_GetTicks();
 
 		userQuit = mainGame.GetInput();
