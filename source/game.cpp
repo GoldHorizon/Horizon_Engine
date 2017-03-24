@@ -1,4 +1,7 @@
-#include "../header.h"
+#include "../game.h"
+#include <iostream>
+#include "../globals.h"
+#include "../constants.h"
 
 Game::Game():
 	_mainWindow(0),
@@ -7,13 +10,11 @@ Game::Game():
 {
 	// Set the draw color for our renderer (rendered when renderer is cleared)
 	SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
-
-	TEMP = nullptr;
 }
 
 Game::~Game()
 {
-
+	SDL_Quit();
 }
 
 int Game::Initialize()
@@ -67,13 +68,6 @@ int Game::Initialize()
 
 	// If all is well, set the game state and return something besides -1
 	ChangeState(GameState::MAIN_MENU);
-
-	// TEMP
-	TEMP = new Entity();
-	TEMP->LoadFromFile("images/PlayButton.png");
-	TEMP->SetOrigin(0, 0);
-	TEMP->SetAngle(45);
-	TEMP->SetPosition(100, 0);
 
 	return 0;
 }
@@ -134,10 +128,9 @@ bool Game::GetInput()
 
 void Game::Update(double elapsedTime)
 {
-
 	// STEP 2: Update
 
-
+	_entities.UpdateAll(elapsedTime);
 }
 
 void Game::Render()
@@ -147,9 +140,13 @@ void Game::Render()
 	// Clear the renderer to the set color
 	SDL_RenderClear(_mainRenderer);
 
-	// TEMP
-	TEMP->Render();
+	_entities.RenderAll();
 
 	// Draw (present) the renderer to the screen
 	SDL_RenderPresent(_mainRenderer);
+}
+
+EntityCollection& Game::Entities()
+{
+	return _entities;
 }

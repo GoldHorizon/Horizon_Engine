@@ -1,6 +1,8 @@
 #pragma once
 
-#include "header.h"
+#include "entityCollection.h"
+#include "enumerations.h"
+#include "SDL2/SDL.h"
 
 class Game
 {
@@ -14,11 +16,13 @@ public:
 	void Update(double elapsedTime);
 	void Render();
 
+	EntityCollection& Entities();
+
 private:
 	SDL_Window* _mainWindow;
 	SDL_Renderer* _mainRenderer;
 	SDL_Event _event;
 	GameState _state;
 
-	Entity* TEMP;
+	EntityCollection _entities;
 };

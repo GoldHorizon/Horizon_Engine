@@ -2,3 +2,4 @@
 
 class Game;
 class Entity;
+//class EntityCollection;

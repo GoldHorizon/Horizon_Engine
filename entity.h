@@ -1,6 +1,8 @@
 #pragma once
 
-#include "header.h"
+//#include "header.h"
+#include "SDL2/SDL.h"
+#include <string>
 
 class Entity
 {
@@ -10,7 +12,7 @@ public:
 	 */
 	Entity();
 	explicit Entity(SDL_Renderer* renderer);
-	~Entity();
+	virtual ~Entity();
 
 	/*
 	 * Class Methods
@@ -21,6 +23,9 @@ public:
 
 	// FreeMemory() 	- Frees the texture memory used
 	void FreeMemory();
+
+	// Update()			- Updates anything to do with the entity
+	virtual void Update(double elapsedTime);
 
 	// Render()			- Renders the texture to its current position
 	void Render();
@@ -51,21 +56,23 @@ public:
 	/*
 	 * Get Methods
 	 */
+	int ID() const;
 	float x() const;		// Returns the x position
 	float y() const;		// Returns the y position
-	double angle() const;	// Returns the angle
-	SDL_Point origin() const;	// Returns the origin
-	int width() const;	// Returns the width of the image
-	int height() const;	// Returns the height of the image
+	double imageAngle() const;	// Returns the angle
+	SDL_Point imageOrigin() const;	// Returns the origin
+	int imageWidth() const;	// Returns the width of the image
+	int imageHeight() const;	// Returns the height of the image
 
 	/*
 	 * Set Methods
 	 */
+	void SetID(int ID);
 	void SetX(float x);	// Sets the new x position
 	void SetY(float y);	// Sets the new y position
-	void SetAngle(double angle);	// Sets the angle
-	void SetOrigin(int x, int y);	// Sets the origin
-	void SetOrigin(SDL_Point pos);		// Sets the origin
+	void SetImageAngle(double angle);	// Sets the angle
+	void SetImageOrigin(int x, int y);	// Sets the origin
+	void SetImageOrigin(SDL_Point pos);		// Sets the origin
 	void SetPosition(float x, float y);	// Shortcut to set position
 	void SetPosition(SDL_Point pos);	// Shortcut to set position
 
@@ -76,10 +83,13 @@ private:
 	// _renderer		- Renderer we draw to for this drawable
 	SDL_Renderer* _renderer;
 
+	int _ID;
 	float _x;			// Current x position of image
 	float _y;			// Current y position of image
-	double _angle;		// Angle of image
-	SDL_Point _origin;	// Origin of image
-	int _width;			// Width of the image
-	int _height;		// Height of the image
+	double _imageAngle;		// Angle of image
+	SDL_Point _imageOrigin;	// Origin of image
+	int _imageWidth;			// Width of the image
+	int _imageHeight;		// Height of the image
+
+	// Note: Will eventually need "direction" and "speed" members
 };
