@@ -56,7 +56,7 @@ public:
 	/*
 	 * Get Methods
 	 */
-	int ID() const;
+	int ID() const;					// Returns entity ID
 	float x() const;				// Returns the x position
 	float y() const;				// Returns the y position
 	float direction() const;		// Returns movement direction
@@ -96,6 +96,4 @@ private:
 	SDL_Point _imageOrigin;	// Origin of image
 	int _imageWidth;		// Width of the image
 	int _imageHeight;		// Height of the image
-
-	// Note: Will eventually need "direction" and "speed" members
 };
