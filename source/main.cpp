@@ -30,10 +30,14 @@ int main(int argc, char** argv)
 
 			nextGameTick += SKIP_TICKS;
 			loops++;
+
+			std::cout << loops << " ";
 		}
 
 		interpolation = float(SDL_GetTicks() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
 		mainGame.Render(interpolation);
+
+		std::cout << interpolation << std::endl;
 	}
 
 	// userQuit : If the user has somehow exited the application
