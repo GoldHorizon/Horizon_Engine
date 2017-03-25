@@ -59,6 +59,8 @@ public:
 	int ID() const;
 	float x() const;		// Returns the x position
 	float y() const;		// Returns the y position
+	float direction() const;
+	float speed() const;
 	double imageAngle() const;	// Returns the angle
 	SDL_Point imageOrigin() const;	// Returns the origin
 	int imageWidth() const;	// Returns the width of the image
@@ -70,6 +72,8 @@ public:
 	void SetID(int ID);
 	void SetX(float x);	// Sets the new x position
 	void SetY(float y);	// Sets the new y position
+	void SetDirection(float direction);
+	void SetSpeed(float speed);
 	void SetImageAngle(double angle);	// Sets the angle
 	void SetImageOrigin(int x, int y);	// Sets the origin
 	void SetImageOrigin(SDL_Point pos);		// Sets the origin

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "../globals.h"
 #include "../constants.h"
+#include "../TEMPball.h"
 
 Game::Game():
 	_mainWindow(0),
@@ -68,6 +69,12 @@ int Game::Initialize()
 
 	// If all is well, set the game state and return something besides -1
 	ChangeState(GameState::MAIN_MENU);
+
+	//TEMPball
+	Ball* myBall = new Ball;
+	myBall->LoadFromFile("images/Paddle.png");
+
+	_entities.AddEntity("ball", myBall);
 
 	return 0;
 }

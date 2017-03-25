@@ -95,7 +95,7 @@ void Entity::Render(float interpolation)
 	{
 		// Create a set of ints to use for drawing position
 		int xx = static_cast<int>(_x) - _imageOrigin.x + static_cast<int>(cos(_direction * PI / 180) * _speed * interpolation);
-		int yy = static_cast<int>(_y) - _imageOrigin.y;
+		int yy = static_cast<int>(_y) - _imageOrigin.y + static_cast<int>(sin(_direction * PI / 180) * _speed * interpolation);
 
 		// Create a rectangle to put on display
 		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
@@ -213,6 +213,16 @@ float Entity::y() const
 	return _y;
 }
 
+float Entity::direction() const
+{
+	return _direction;
+}
+
+float Entity::speed() const
+{
+	return _speed;
+}
+
 double Entity::imageAngle() const
 {
 	return _imageAngle;
@@ -249,6 +259,16 @@ void Entity::SetX(float x)
 void Entity::SetY(float y)
 {
 	_y = y;
+}
+
+void Entity::SetDirection(float direction)
+{
+	_direction = direction;
+}
+
+void Entity::SetSpeed(float speed)
+{
+	_speed = speed;
 }
 
 void Entity::SetImageAngle(double angle)
