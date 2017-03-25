@@ -33,7 +33,6 @@ int main(int argc, char** argv)
 		}
 
 		interpolation = float(SDL_GetTicks() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
-		std::cout << interpolation << std::endl;
 		mainGame.Render(interpolation);
 	}
 
