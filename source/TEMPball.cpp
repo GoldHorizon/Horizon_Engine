@@ -4,7 +4,7 @@
 Ball::Ball()
 {
 	SetDirection(0);
-	SetSpeed(30);
+	SetSpeed(10);
 }
 
 void Ball::Update()
@@ -21,6 +21,13 @@ void Ball::Update()
 	while (direction() > 360)
 	{
 		SetDirection(direction() - 360);
+	}
+
+	SetImageAngle(imageAngle() + 1);
+
+	while (imageAngle() > 360)
+	{
+		SetDirection(imageAngle() - 360);
 	}
 
 	Move(xdir, ydir);

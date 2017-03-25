@@ -91,11 +91,14 @@ void Entity::Update()
 
 void Entity::Render(float interpolation)
 {
+	// Only attempt to render if we have successfully loaded an image
 	if (_image != nullptr)
 	{
-		// Create a set of ints to use for drawing position
-		int xx = static_cast<int>(_x) - _imageOrigin.x + static_cast<int>(cos(_direction * PI / 180) * _speed * interpolation);
-		int yy = static_cast<int>(_y) - _imageOrigin.y + static_cast<int>(sin(_direction * PI / 180) * _speed * interpolation);
+		// Create a set of ints to use for drawing position (use interpolation to predict movement)
+		int xx = static_cast<int>(_x) - _imageOrigin.x
+			   + static_cast<int>(cos(_direction * PI / 180) * _speed * interpolation);
+		int yy = static_cast<int>(_y) - _imageOrigin.y
+			   + static_cast<int>(sin(_direction * PI / 180) * _speed * interpolation);
 
 		// Create a rectangle to put on display
 		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
@@ -104,59 +107,59 @@ void Entity::Render(float interpolation)
 	}
 }
 
-void Entity::Render(SDL_Rect* clipping)
-{
-	if (_image != nullptr)
-	{
-		// Create a set of ints to use for drawing position
-		int xx = static_cast<int>(_x) - _imageOrigin.x;
-		int yy = static_cast<int>(_y) - _imageOrigin.y;
-
-		// Create a rectangle to put on display
-		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
-
-		// If we are clipping the sprite, adjust it
-		if (clipping != nullptr)
-		{
-			displayImage.w = clipping->w;
-			displayImage.h = clipping->h;
-		}
-
-		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, _imageAngle, &_imageOrigin, SDL_FLIP_NONE);
-	}
-//	else
+//void Entity::Render(SDL_Rect* clipping)
+//{
+//	if (_image != nullptr)
 //	{
-//		//std::cout << "Error: _image not found..." << std::endl;
+//		// Create a set of ints to use for drawing position
+//		int xx = static_cast<int>(_x) - _imageOrigin.x;
+//		int yy = static_cast<int>(_y) - _imageOrigin.y;
+//
+//		// Create a rectangle to put on display
+//		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
+//
+//		// If we are clipping the sprite, adjust it
+//		if (clipping != nullptr)
+//		{
+//			displayImage.w = clipping->w;
+//			displayImage.h = clipping->h;
+//		}
+//
+//		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, _imageAngle, &_imageOrigin, SDL_FLIP_NONE);
 //	}
-}
+////	else
+////	{
+////		//std::cout << "Error: _image not found..." << std::endl;
+////	}
+//}
 
-void Entity::Render(SDL_RendererFlip flip, SDL_Rect* clipping)
-{
-	if (_image != nullptr)
-	{
-		// Create a set of ints to use for drawing position
-		int xx = static_cast<int>(_x) - _imageOrigin.x;
-		int yy = static_cast<int>(_y) - _imageOrigin.y;
-
-		// Create a rectangle to put on display
-		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
-
-		// If we are clipping the sprite, adjust it
-		if (clipping != nullptr)
-		{
-			displayImage.w = clipping->w;
-			displayImage.h = clipping->h;
-		}
-
-		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, _imageAngle, &_imageOrigin, flip);
-//		SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
-//		SDL_RenderDrawRect(_renderer, &displayImage);
-	}
-//	else
+//void Entity::Render(SDL_RendererFlip flip, SDL_Rect* clipping)
+//{
+//	if (_image != nullptr)
 //	{
-//		//std::cout << "Error: _image not found..." << std::endl;
+//		// Create a set of ints to use for drawing position
+//		int xx = static_cast<int>(_x) - _imageOrigin.x;
+//		int yy = static_cast<int>(_y) - _imageOrigin.y;
+//
+//		// Create a rectangle to put on display
+//		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
+//
+//		// If we are clipping the sprite, adjust it
+//		if (clipping != nullptr)
+//		{
+//			displayImage.w = clipping->w;
+//			displayImage.h = clipping->h;
+//		}
+//
+//		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, _imageAngle, &_imageOrigin, flip);
+////		SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
+////		SDL_RenderDrawRect(_renderer, &displayImage);
 //	}
-}
+////	else
+////	{
+////		//std::cout << "Error: _image not found..." << std::endl;
+////	}
+//}
 
 //void Drawable::Render(float x, float y, double angle, SDL_Point* origin, SDL_RendererFlip flip, SDL_Rect* clipping)
 //{
