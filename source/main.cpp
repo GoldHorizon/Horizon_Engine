@@ -1,6 +1,7 @@
+#include <iostream>
+
 #include "../game.h"
 #include "../constants.h"
-#include <iostream>
 
 // Program start
 int main(int argc, char** argv)
@@ -17,6 +18,7 @@ int main(int argc, char** argv)
 	int loops;
 	float interpolation;
 
+	// Whether or not game is still running
 	bool gameIsRunning = true;
 
 	while (gameIsRunning)
@@ -31,13 +33,16 @@ int main(int argc, char** argv)
 			nextGameTick += SKIP_TICKS;
 			loops++;
 
-			std::cout << loops << " ";
+			// Part of testing loop counter
+			//std::cout << loops << " ";
 		}
 
+		// Decides how much to predict movement of entity
 		interpolation = float(SDL_GetTicks() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
 		mainGame.Render(interpolation);
 
-		std::cout << interpolation << std::endl;
+		// Part of testing loop counter
+		//std::cout << interpolation << std::endl;
 	}
 
 	// userQuit : If the user has somehow exited the application
