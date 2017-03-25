@@ -72,9 +72,13 @@ int Game::Initialize()
 
 	//TEMPball
 	Ball* myBall = new Ball;
+	Ball* myBall2 = new Ball;
 	myBall->LoadFromFile("images/Paddle.png");
+	myBall2->LoadFromFile("images/PlayButton.png");
+	myBall2->SetY(200);
 
 	_entities.AddEntity("ball", myBall);
+	_entities.AddEntity("ball2", myBall2);
 
 	return 0;
 }

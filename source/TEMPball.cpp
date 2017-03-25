@@ -4,7 +4,7 @@
 Ball::Ball()
 {
 	SetDirection(0);
-	SetSpeed(10);
+	SetSpeed(30);
 }
 
 void Ball::Update()
