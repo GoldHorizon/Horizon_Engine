@@ -77,6 +77,7 @@ int Game::Initialize()
 	myBall2->LoadFromFile("images/PlayButton.png");
 	myBall->SetY(100);
 	myBall2->SetY(200);
+	myBall->SetImageOrigin(20, 20);
 
 	_entities.AddEntity("ball", myBall);
 	_entities.AddEntity("ball2", myBall2);
