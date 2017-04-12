@@ -1,6 +1,8 @@
 
 // Inspired by Game Dev Geek
 // http://gamedevgeek.com/tutorials/managing-game-states-in-c/ 
+// and
+// https://sourcemaking.com/design_patterns/singleton/cpp/1 
 
 class GameState
 {
