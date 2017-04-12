@@ -43,4 +43,5 @@ private:
     static GameState* thisInstance;
 }
 
-GameState* GameState::thisInstance = 0;
+// Initiate global instance to nullptr
+GameState* GameState::thisInstance = nullptr;
