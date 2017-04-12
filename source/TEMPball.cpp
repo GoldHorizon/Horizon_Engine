@@ -20,17 +20,25 @@ void Ball::Update()
 		xdir = -xdir;
 	}
 
-	while (direction() > 360)
-	{
-		SetDirection(direction() - 360);
-	}
+//	while (direction() > 360)
+//	{
+//		SetDirection(direction() - 360);
+//	}
+//    while (direction() < 0)
+//    {
+//        SetDirection(direction() + 360);
+//    }
 
 	SetImageAngle(imageAngle() + 1);
 
-	while (imageAngle() > 360)
-	{
-		SetDirection(imageAngle() - 360);
-	}
+//	while (imageAngle() > 360)
+//	{
+//		SetDirection(imageAngle() - 360);
+//	}
+//    while (imageAngle() < 0)
+//    {
+//        SetDirection(imageAngle() + 360);
+//    }
 
 	Move(xdir, ydir);
 }
