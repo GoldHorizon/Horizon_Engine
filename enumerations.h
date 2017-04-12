@@ -1,6 +1,6 @@
 #pragma once
 
-enum class GameState
+enum class GameStateType
 {
 	UNINITIALIZED,
 	TITLE_SCREEN,

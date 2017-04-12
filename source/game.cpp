@@ -4,13 +4,20 @@
 #include "../constants.h"
 #include "../TEMPball.h"
 
+#include "../states/playing.h"
+#include "../states/uninitialized.h"
+
 Game::Game():
 	_mainWindow(0),
-	_mainRenderer(0),
-	_state(GameState::UNINITIALIZED)
+	_mainRenderer(0)
+	//_state(GameState::UNINITIALIZED)
 {
 	// Set the draw color for our renderer (rendered when renderer is cleared)
 	SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
+
+    // Set our stack to only be uninitialized.
+    // _stateStack.push(
+    _stateStack.push_back(StateUninitialized::Instance());
 }
 
 Game::~Game()
@@ -21,11 +28,11 @@ Game::~Game()
 int Game::Initialize()
 {
 	// If the game was already initialized, there's a problem.
-	if (_state != GameState::UNINITIALIZED)
-	{
-		return -1;
-	}
-
+	//if (_state != GameState::UNINITIALIZED)
+    if (_stateStack.empty() || (_stateStack.back()->GetType() != GameStateType::UNINITIALIZED))
+   	{   
+   		return -1;
+   	}
 	// STEP 1
 	// Initialize SDL using SDL_Init
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
@@ -68,7 +75,7 @@ int Game::Initialize()
 	}
 
 	// If all is well, set the game state and return something besides -1
-	ChangeState(GameState::MAIN_MENU);
+	ChangeState(StatePlaying::Instance());
 
 	//TEMPball
 	Ball* myBall = new Ball;
@@ -85,18 +92,30 @@ int Game::Initialize()
 	return 0;
 }
 
-void Game::ChangeState(GameState newState)
+void Game::ChangeState(GameState* newState)
 {
-	switch(newState)
+    while (!_stateStack.empty())
+    {
+        _stateStack.back()->Cleanup();
+        _stateStack.pop_back();
+    }
+
+    GameStateType type = newState->GetType();
+	switch(type)
 	{
-	case GameState::MAIN_MENU:
+	case GameStateType::MAIN_MENU:
 		// Create buttons here
 		break;
+
+    case GameStateType::PLAYING_GAME:
+        _stateStack.push_back(StatePlaying::Instance());
+        break;
+
 	default:
+        std::cerr << "ERROR: Trying to change to error state" << std::endl;
+        _stateStack.push_back(StateUninitialized::Instance());
 		break;
 	}
-
-	_state = newState;
 }
 
 bool Game::GetInput()

@@ -1,3 +1,6 @@
+###
+### Variables
+###
 executable := launchGame
 
 objects := 	main.o \
@@ -5,20 +8,26 @@ objects := 	main.o \
 			globals.o \
 			entity.o \
 			entityCollection.o \
-			TEMPball.o 
+			TEMPball.o \
+			gameState.o \
+			playing.o \
+			uninitialized.o
 
-#sources := 
 flags := -lSDL2 \
 		 -lSDL2main \
 		 -lSDL2_image \
 		 -lm \
 		 -lstdc++
 
+###
+### Main make program
+###
 all : $(objects)
 	gcc -o $(executable) $(objects) $(flags)
 
-# Old flags: -lSDL2 -lSDL2main -lSDL2_image -lm -lstdc++
-
+###
+### Source files
+###
 main.o 				: source/main.cpp game.h constants.h
 	gcc -c source/main.cpp
 
@@ -37,8 +46,19 @@ entityCollection.o  : source/entityCollection.cpp entityCollection.h
 TEMPball.o			: source/TEMPball.cpp TEMPball.h constants.h
 	gcc -c source/TEMPball.cpp
 
-#gameState.o 		: gameState.h
-#	gcc -c source/gameState.cpp
+gameState.o 		: source/gameState.cpp gameState.h
+	gcc -c source/gameState.cpp
 
+###
+### List of game states to be compiled ###
+###
+playing.o			: source/states/playing.cpp states/playing.h
+	gcc -c source/states/playing.cpp
+
+uninitialized.o		: source/states/uninitialized.cpp states/uninitialized.h
+	gcc -c source/states/uninitialized.cpp
+###
+### Cleans object and executable files (Debug stuff)
+###
 clean :
 	rm $(executable) $(objects)

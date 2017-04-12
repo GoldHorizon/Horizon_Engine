@@ -1,3 +1,7 @@
+#pragma once
+
+#include "game.h"
+#include "enumerations.h"
 
 // Inspired by Game Dev Geek
 // http://gamedevgeek.com/tutorials/managing-game-states-in-c/ 
@@ -11,6 +15,7 @@ class GameState
 	 */
     protected: GameState() {}
 public:
+    virtual ~GameState();
 	/*
 	 * Class Methods
 	 */
@@ -24,24 +29,27 @@ public:
     virtual void Update() = 0;
     virtual void Draw() = 0;
 
-    void ChangeState (GameState* nextState)
-    {
-        // Send signal to GameStateManager to change state.
-    }
+    void ChangeState (Game* gameReference, GameState* nextState);
 
-    // Note: This may need to go in derived GameState classes...not sure yet
-    static GameState* Instance()
-    {
-        if (thisInstance == nullptr)
-        {
-            thisInstance = new GameState;
-        }
-        return thisInstance;
-    }
+    // NOTE: Goes in all inherited states
+    // static GameState* Instance()
+    //{
+    //    if (_thisInstance == nullptr)
+    //    {
+    //        _thisInstance = new GameState;
+    //    }
+    //    return _thisInstance;
+    //}
+
+    GameStateType GetType ();
 
 private:
-    static GameState* thisInstance;
-}
+    // NOTE: Goes in all inherited states
+    //static GameState* _thisInstance;
 
+    GameStateType _type;
+};
+
+// NOTE: Goes in all inherited states
 // Initiate global instance to nullptr
-GameState* GameState::thisInstance = nullptr;
+//GameState* GameState::_thisInstance = nullptr;
