@@ -1,7 +1,10 @@
 #include "../entity.h"
 #include "../globals.h"
 #include "../constants.h"
+
 #include <iostream>
+#include <math.h>
+
 #include "SDL2/SDL_image.h"
 
 Entity::Entity():

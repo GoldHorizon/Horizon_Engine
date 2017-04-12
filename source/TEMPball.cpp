@@ -1,6 +1,8 @@
 #include "../TEMPball.h"
 #include "../constants.h"
 
+#include <math.h>
+
 Ball::Ball()
 {
 	SetDirection(0);
