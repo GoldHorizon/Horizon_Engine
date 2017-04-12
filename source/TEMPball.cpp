@@ -24,10 +24,10 @@ void Ball::Update()
 //	{
 //		SetDirection(direction() - 360);
 //	}
-//    while (direction() < 0)
-//    {
-//        SetDirection(direction() + 360);
-//    }
+//  while (direction() < 0)
+//  {
+//      SetDirection(direction() + 360);
+//  }
 
 	SetImageAngle(imageAngle() + 1);
 
