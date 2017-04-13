@@ -17,7 +17,7 @@ Game::Game():
 
     // Set our stack to only be uninitialized.
     // _stateStack.push(
-    _stateStack.push_back(StateUninitialized::Instance());
+    _stateStack.push_back(StateUndef::Instance());
 }
 
 Game::~Game()
@@ -113,7 +113,7 @@ void Game::ChangeState(GameState* newState)
 
 	default:
         std::cerr << "ERROR: Trying to change to error state" << std::endl;
-        _stateStack.push_back(StateUninitialized::Instance());
+        _stateStack.push_back(StateUndef::Instance());
 		break;
 	}
 }
@@ -161,7 +161,17 @@ bool Game::GetInput()
 void Game::Update()
 {
 	// STEP 2: Update
+    while (!_stateStack.empty())
+    {
+        std::vector<GameState*>::iterator it = _stateStack.begin();
 
+        while (it != _stateStack.end())
+        {
+            (*it)->Update();
+        }
+    }
+
+    // Almost deprecated ***
 	_entities.UpdateAll();
 }
 
@@ -172,6 +182,7 @@ void Game::Render(float interpolation)
 	// Clear the renderer to the set color
 	SDL_RenderClear(_mainRenderer);
 
+    // Almost deprecated ***
 	_entities.RenderAll(interpolation);
 
 	// Draw (present) the renderer to the screen

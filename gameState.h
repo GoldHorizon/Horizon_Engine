@@ -27,7 +27,7 @@ public:
 
     virtual void HandleEvents() = 0;
     virtual void Update() = 0;
-    virtual void Draw() = 0;
+    virtual void Render() = 0;
 
     void ChangeState (Game* gameReference, GameState* nextState);
 

@@ -23,7 +23,7 @@ public:
 
     void HandleEvents();
     void Update();
-    void Draw();
+    void Render();
 
     static StatePlaying* Instance()
     {

@@ -37,7 +37,7 @@ void StatePlaying::Update()
 
 }
 
-void StatePlaying::Draw()
+void StatePlaying::Render()
 {
 
 }

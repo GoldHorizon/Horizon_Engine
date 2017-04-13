@@ -2,16 +2,16 @@
 
 #include "../gameState.h"
 
-class StateUninitialized:
+class StateUndef:
     public GameState
 {
 	/*
 	 * Constructors/Destructors
 	 */
 protected: 
-    StateUninitialized() {}
+    StateUndef() {}
 public:
-    ~StateUninitialized();
+    ~StateUndef();
 	/*
 	 * Class Methods
 	 */
@@ -23,17 +23,17 @@ public:
 
     void HandleEvents();
     void Update();
-    void Draw();
+    void Render();
 
-    static StateUninitialized* Instance()
+    static StateUndef* Instance()
     {
         if (_uninitializedInstance == nullptr)
         {
-            _uninitializedInstance = new StateUninitialized;
+            _uninitializedInstance = new StateUndef;
         }
         return _uninitializedInstance;
     }
 
 private:
-    static StateUninitialized* _uninitializedInstance;
+    static StateUndef* _uninitializedInstance;
 };

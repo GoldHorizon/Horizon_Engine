@@ -61,4 +61,4 @@ uninitialized.o		: source/states/uninitialized.cpp states/uninitialized.h
 ### Cleans object and executable files (Debug stuff)
 ###
 clean :
-	rm $(executable) $(objects)
+	rm -f $(executable) $(objects)

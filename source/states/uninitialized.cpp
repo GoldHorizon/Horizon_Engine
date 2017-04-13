@@ -1,43 +1,43 @@
 #include "../../states/uninitialized.h"
 
-StateUninitialized* StateUninitialized::_uninitializedInstance = nullptr;
+StateUndef* StateUndef::_uninitializedInstance = nullptr;
 
-StateUninitialized::~StateUninitialized()
+StateUndef::~StateUndef()
 {
 
 }
 
-void StateUninitialized::Initialize()
+void StateUndef::Initialize()
 {
     
 }
 
-void StateUninitialized::Cleanup()
+void StateUndef::Cleanup()
 {
 
 }
 
-void StateUninitialized::Pause()
+void StateUndef::Pause()
 {
 
 }
 
-void StateUninitialized::Resume()
+void StateUndef::Resume()
 {
 
 }
 
-void StateUninitialized::HandleEvents()
+void StateUndef::HandleEvents()
 {
 
 }
 
-void StateUninitialized::Update()
+void StateUndef::Update()
 {
 
 }
 
-void StateUninitialized::Draw()
+void StateUndef::Render()
 {
 
 }
