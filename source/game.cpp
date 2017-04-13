@@ -182,6 +182,16 @@ void Game::Render(float interpolation)
 	// Clear the renderer to the set color
 	SDL_RenderClear(_mainRenderer);
 
+    while (!_stateStack.empty())
+    {
+        std::vector<GameState*>::iterator it = _stateStack.begin();
+
+        while (it != _stateStack.end())
+        {
+            (*it)->Render();
+        }
+    }
+
     // Almost deprecated ***
 	_entities.RenderAll(interpolation);
 
