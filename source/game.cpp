@@ -2,7 +2,7 @@
 #include <iostream>
 #include "../globals.h"
 #include "../constants.h"
-#include "../TEMPball.h"
+#include "../ball.h"
 
 #include "../states/playing.h"
 #include "../states/uninitialized.h"

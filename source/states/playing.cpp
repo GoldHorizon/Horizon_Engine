@@ -1,5 +1,5 @@
 #include "../../states/playing.h"
-#include "../../TEMPball.h"
+#include "../../ball.h"
 
 StatePlaying* StatePlaying::_thisInstance = nullptr;
 

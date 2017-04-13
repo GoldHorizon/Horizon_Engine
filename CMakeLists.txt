@@ -17,7 +17,7 @@ set(SOURCE_FILES
         source/gameState.cpp
         source/globals.cpp
         source/main.cpp
-        source/TEMPball.cpp
+        source/ball.cpp
         states/playing.h
         states/uninitialized.h
         constants.h
@@ -29,7 +29,7 @@ set(SOURCE_FILES
         globals.h
         header.h
         prototypes.h
-        TEMPball.h)
+        ball.h)
 
 add_executable(SDL_Test_Game ${SOURCE_FILES})
 

@@ -1,4 +1,4 @@
-#include "../TEMPball.h"
+#include "../ball.h"
 #include "../constants.h"
 
 #include <math.h>
