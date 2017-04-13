@@ -1,3 +1,4 @@
+//#include <entities.h>
 #include "../gameState.h"
 
 GameState::~GameState()
@@ -15,4 +16,7 @@ GameStateType GameState::GetType()
     return _type;
 }
 
-
+EntityCollection& GameState::Entities()
+{
+    return _entities;
+}

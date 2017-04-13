@@ -190,6 +190,7 @@ void Game::Render(float interpolation)
         while (it != _stateStack.end())
         {
             (*it)->Render();
+            it++;
         }
     }
 

@@ -29,7 +29,7 @@ public:
     virtual void Update() = 0;
     virtual void Render() = 0;
 
-    void ChangeState (Game* gameReference, GameState* nextState);
+    void ChangeState(Game* gameReference, GameState* nextState);
 
     // NOTE: Goes in all inherited states
     // static GameState* Instance()
@@ -41,13 +41,19 @@ public:
     //    return _thisInstance;
     //}
 
-    GameStateType GetType ();
+    // GetType()            - Returns the state type
+    GameStateType GetType();
+
+    // Entities()			- Returns entity collection
+    EntityCollection& Entities();
 
 private:
     // NOTE: Goes in all inherited states
     //static GameState* _thisInstance;
 
     GameStateType _type;
+
+    EntityCollection _entities;
 };
 
 // NOTE: Goes in all inherited states
