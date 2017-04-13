@@ -9,7 +9,7 @@ class StateUndef:
 	 * Constructors/Destructors
 	 */
 protected: 
-    StateUndef() {}
+    StateUndef() {SetType(GameStateType::UNINITIALIZED);}
 public:
     ~StateUndef();
 	/*
@@ -23,17 +23,18 @@ public:
 
     void HandleEvents();
     void Update();
-    void Render();
+    void Render(float interpolation);
 
     static StateUndef* Instance()
     {
-        if (_uninitializedInstance == nullptr)
+        if (_thisInstance == nullptr)
         {
-            _uninitializedInstance = new StateUndef;
+            _thisInstance = new StateUndef;
         }
-        return _uninitializedInstance;
+        _thisInstance->Initialize();
+        return _thisInstance;
     }
 
 private:
-    static StateUndef* _uninitializedInstance;
+    static StateUndef* _thisInstance;
 };

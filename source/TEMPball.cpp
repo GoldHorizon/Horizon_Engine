@@ -16,8 +16,16 @@ void Ball::Update()
 
 	if (x() < 0 || x() > SCREEN_WIDTH)
 	{
-		SetDirection(direction() + 180);
+		SetDirection(180 - direction());
 		xdir = -xdir;
+		SetSpeed(speed() + 0.1);
+	}
+
+	if (y() < 0 || y() > SCREEN_HEIGHT)
+	{
+		SetDirection(360 - direction());
+		ydir = -ydir;
+		SetSpeed(speed() + 0.1);
 	}
 
 //	while (direction() > 360)

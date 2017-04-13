@@ -13,7 +13,8 @@ class GameState
 	/*
 	 * Constructors/Destructors
 	 */
-    protected: GameState() {}
+protected:
+    GameState() {}
 public:
     virtual ~GameState();
 	/*
@@ -27,7 +28,7 @@ public:
 
     virtual void HandleEvents() = 0;
     virtual void Update() = 0;
-    virtual void Render() = 0;
+    virtual void Render(float interpolation) = 0;
 
     void ChangeState(Game* gameReference, GameState* nextState);
 
@@ -53,6 +54,8 @@ private:
 
     GameStateType _type;
 
+protected:
+    void SetType(GameStateType type);
     EntityCollection _entities;
 };
 

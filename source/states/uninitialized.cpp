@@ -1,6 +1,6 @@
 #include "../../states/uninitialized.h"
 
-StateUndef* StateUndef::_uninitializedInstance = nullptr;
+StateUndef* StateUndef::_thisInstance = nullptr;
 
 StateUndef::~StateUndef()
 {
@@ -37,7 +37,7 @@ void StateUndef::Update()
 
 }
 
-void StateUndef::Render()
+void StateUndef::Render(float interpolation)
 {
 
 }

@@ -9,7 +9,7 @@ class StatePlaying:
 	 * Constructors/Destructors
 	 */
 protected: 
-    StatePlaying() {}
+    StatePlaying() {SetType(GameStateType::PLAYING_GAME);}
 public:
     ~StatePlaying();
 	/*
@@ -23,7 +23,7 @@ public:
 
     void HandleEvents();
     void Update();
-    void Render();
+    void Render(float interpolation);
 
     static StatePlaying* Instance()
     {
@@ -31,6 +31,7 @@ public:
         {
             _thisInstance = new StatePlaying;
         }
+        _thisInstance->Initialize();
         return _thisInstance;
     }
 

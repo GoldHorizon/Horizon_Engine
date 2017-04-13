@@ -16,7 +16,6 @@ Game::Game():
 	SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
 
     // Set our stack to only be uninitialized.
-    // _stateStack.push(
     _stateStack.push_back(StateUndef::Instance());
 }
 
@@ -108,7 +107,7 @@ void Game::ChangeState(GameState* newState)
 		break;
 
     case GameStateType::PLAYING_GAME:
-        _stateStack.push_back(StatePlaying::Instance());
+        _stateStack.push_back(newState);
         break;
 
 	default:
@@ -161,7 +160,7 @@ bool Game::GetInput()
 void Game::Update()
 {
 	// STEP 2: Update
-    while (!_stateStack.empty())
+    if (!_stateStack.empty())
     {
         std::vector<GameState*>::iterator it = _stateStack.begin();
 
@@ -183,13 +182,13 @@ void Game::Render(float interpolation)
 	// Clear the renderer to the set color
 	SDL_RenderClear(_mainRenderer);
 
-    while (!_stateStack.empty())
+    if (!_stateStack.empty())
     {
         std::vector<GameState*>::iterator it = _stateStack.begin();
 
         while (it != _stateStack.end())
         {
-            (*it)->Render();
+            (*it)->Render(interpolation);
             it++;
         }
     }
