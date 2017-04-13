@@ -1,5 +1,7 @@
-# Debug Folder
+# Debug Folders
 Debug/*
+.idea/*
+cmake-build-debug/*
 
 # Compiled Object files
 *.slo

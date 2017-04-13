@@ -113,7 +113,7 @@ void Game::ChangeState(GameState* newState)
 
 	default:
         std::cerr << "ERROR: Trying to change to error state" << std::endl;
-        _stateStack.push_back(StateUndef::Instance());
+        //_stateStack.push_back(StateUndef::Instance());
 		break;
 	}
 }
@@ -168,6 +168,7 @@ void Game::Update()
         while (it != _stateStack.end())
         {
             (*it)->Update();
+			it++;
         }
     }
 
