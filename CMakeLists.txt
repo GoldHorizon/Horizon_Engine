@@ -12,6 +12,8 @@ set(SOURCE_FILES
         source/states/playing.cpp
         source/states/uninitialized.cpp
         source/states/titleScreen.cpp
+        source/states/options.cpp
+        source/states/pauseMenu.cpp
         source/entity.cpp
         source/entityCollection.cpp
         source/game.cpp
@@ -22,6 +24,8 @@ set(SOURCE_FILES
         states/playing.h
         states/uninitialized.h
         states/titleScreen.h
+        states/options.h
+        states/pauseMenu.h
         constants.h
         entity.h
         entityCollection.h

@@ -2,18 +2,18 @@
 
 #include "../gameState.h"
 
-#define ClassName StateTitleScreen
+#define ClassName StateOptions
 
-class StateTitleScreen:
+class StateOptions:
     public GameState
 {
 	/*
 	 * Constructors/Destructors
 	 */
 protected:
-    ClassName() {SetType(GameStateType::TITLE_SCREEN);}
+    ClassName() {SetType(GameStateType::OPTIONS);}
 public:
-    ~StateTitleScreen();
+    ~StateOptions();
 	/*
 	 * Class Methods
 	 */

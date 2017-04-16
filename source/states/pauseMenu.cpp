@@ -1,10 +1,10 @@
 #include "../../globals.h"
 
-#include "../../states/titleScreen.h"
+#include "../../states/pauseMenu.h"
 
 ClassName* ClassName::_thisInstance = nullptr;
 
-ClassName::~StateTitleScreen()
+ClassName::~ClassName()
 {
 
 }
@@ -41,11 +41,5 @@ void ClassName::Update()
 
 void ClassName::Render(float interpolation)
 {
-//    int mx;
-//    int my;
-//
-//    SDL_GetMouseState(&mx, &my);
-//
-//    SDL_SetRenderDrawColor(globalRenderer, 255, 0, 0, 255);
-//    SDL_RenderDrawLine(globalRenderer, 0, 0, mx, my);
+
 }
