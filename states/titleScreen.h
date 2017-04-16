@@ -2,16 +2,16 @@
 
 #include "../gameState.h"
 
-class StateUndef:
+class StateTitleScreen:
     public GameState
 {
 	/*
 	 * Constructors/Destructors
 	 */
-protected: 
-    StateUndef() {SetType(GameStateType::UNINITIALIZED);}
+protected:
+    StateTitleScreen() {SetType(GameStateType::TITLE_SCREEN);}
 public:
-    ~StateUndef();
+    ~StateTitleScreen();
 	/*
 	 * Class Methods
 	 */
@@ -25,16 +25,16 @@ public:
     void Update();
     void Render(float interpolation);
 
-    static StateUndef* Instance()
+    static StateTitleScreen* Instance()
     {
         if (_thisInstance == nullptr)
         {
-            _thisInstance = new StateUndef;
+            _thisInstance = new StateTitleScreen;
         }
         _thisInstance->Initialize();
         return _thisInstance;
     }
 
 private:
-    static StateUndef* _thisInstance;
+    static StateTitleScreen* _thisInstance;
 };

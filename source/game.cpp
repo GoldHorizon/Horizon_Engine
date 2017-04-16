@@ -6,6 +6,7 @@
 
 #include "../states/playing.h"
 #include "../states/uninitialized.h"
+#include "../states/titleScreen.h"
 
 Game::Game():
 	_mainWindow(0),
@@ -16,7 +17,7 @@ Game::Game():
 	SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
 
     // Set our stack to only be uninitialized.
-    _stateStack.push_back(StateUndef::Instance());
+    _stateStack.push_back(StateUninitialized::Instance());
 }
 
 Game::~Game()
@@ -74,7 +75,7 @@ int Game::Initialize()
 	}
 
 	// If all is well, set the game state and return something besides -1
-	ChangeState(StatePlaying::Instance());
+	ChangeState(StateTitleScreen::Instance());
 
 	//TEMPball
 	Ball* myBall = new Ball;
@@ -99,21 +100,25 @@ void Game::ChangeState(GameState* newState)
         _stateStack.pop_back();
     }
 
-    GameStateType type = newState->GetType();
-	switch(type)
+	if (newState != nullptr)
 	{
-	case GameStateType::MAIN_MENU:
-		// Create buttons here
-		break;
+		GameStateType type = newState->GetType();
+		switch(type)
+		{
+			case GameStateType::MAIN_MENU:
+				// Create buttons here
+				break;
 
-    case GameStateType::PLAYING_GAME:
-        _stateStack.push_back(newState);
-        break;
+			case GameStateType::PLAYING_GAME:
+				break;
 
-	default:
-        std::cerr << "ERROR: Trying to change to error state" << std::endl;
-        //_stateStack.push_back(StateUndef::Instance());
-		break;
+			default:
+				std::cerr << "ERROR: Trying to change to error state" << std::endl;
+				//_stateStack.push_back(StateUninitialized::Instance());
+				break;
+		}
+
+		_stateStack.push_back(newState);
 	}
 }
 
