@@ -11,6 +11,7 @@ set(SOURCE_FILES
         images/SplashScreen.png
         source/states/playing.cpp
         source/states/uninitialized.cpp
+        source/states/titleScreen.cpp
         source/entity.cpp
         source/entityCollection.cpp
         source/game.cpp
@@ -20,6 +21,7 @@ set(SOURCE_FILES
         source/ball.cpp
         states/playing.h
         states/uninitialized.h
+        states/titleScreen.h
         constants.h
         entity.h
         entityCollection.h

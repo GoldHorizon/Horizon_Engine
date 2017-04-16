@@ -38,4 +38,3 @@ public:
 private:
     static StatePlaying* _thisInstance;
 };
-

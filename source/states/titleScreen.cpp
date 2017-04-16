@@ -41,10 +41,11 @@ void StateTitleScreen::Update()
 
 void StateTitleScreen::Render(float interpolation)
 {
-    int mx;
-    int my;
-
-    SDL_GetGlobalMouseState(&mx, &my);
-
-    SDL_RenderDrawLine(globalRenderer, 0, 0, mx, my);
+//    int mx;
+//    int my;
+//
+//    SDL_GetMouseState(&mx, &my);
+//
+//    SDL_SetRenderDrawColor(globalRenderer, 255, 0, 0, 255);
+//    SDL_RenderDrawLine(globalRenderer, 0, 0, mx, my);
 }

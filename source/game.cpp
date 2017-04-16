@@ -122,6 +122,17 @@ void Game::ChangeState(GameState* newState)
 	}
 }
 
+void Game::PushState(GameState* newState)
+{
+    _stateStack.push_back(newState);
+}
+
+void Game::PopState()
+{
+    _stateStack.back()->Cleanup();
+    _stateStack.pop_back();
+}
+
 bool Game::GetInput()
 {
 	// Poll the system for an event of some kind
@@ -184,6 +195,7 @@ void Game::Render(float interpolation)
 {
 	// STEP 3: Render
 
+    SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
 	// Clear the renderer to the set color
 	SDL_RenderClear(_mainRenderer);
 

@@ -6,7 +6,7 @@ GameState::~GameState()
 
 }
 
-void GameState::ChangeState (Game* gameReference, GameState* nextState)
+void GameState::ChangeState(Game* gameReference, GameState* nextState)
 {
     gameReference->ChangeState(nextState);
 }
