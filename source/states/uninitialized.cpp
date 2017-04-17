@@ -1,43 +1,49 @@
 #include "../../states/uninitialized.h"
 
-StateUninitialized* StateUninitialized::_thisInstance = nullptr;
+#define ClassName StateUninitialized
 
-StateUninitialized::~StateUninitialized()
+ClassName* ClassName::_thisInstance = nullptr;
+
+ClassName::~ClassName()
 {
 
 }
 
-void StateUninitialized::Initialize()
+void ClassName::Initialize()
 {
     
 }
 
-void StateUninitialized::Cleanup()
+void ClassName::Cleanup()
 {
 
 }
 
-void StateUninitialized::Pause()
+void ClassName::Pause()
 {
 
 }
 
-void StateUninitialized::Resume()
+void ClassName::Resume()
 {
 
 }
 
-void StateUninitialized::HandleEvents()
+void ClassName::HandleEvents()
 {
 
 }
 
-void StateUninitialized::Update()
+void ClassName::Update()
 {
 
 }
 
-void StateUninitialized::Render(float interpolation)
+void ClassName::Render(float interpolation)
 {
 
 }
+
+#ifdef ClassName
+#undef ClassName
+#endif

@@ -40,3 +40,7 @@ public:
 private:
     static ClassName* _thisInstance;
 };
+
+#ifdef ClassName
+#undef ClassName
+#endif

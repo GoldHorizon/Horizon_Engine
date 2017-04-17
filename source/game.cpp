@@ -7,6 +7,8 @@
 #include "../states/playing.h"
 #include "../states/uninitialized.h"
 #include "../states/titleScreen.h"
+#include "../states/options.h"
+#include "../states/pauseMenu.h"
 
 Game::Game():
 	_mainWindow(0),

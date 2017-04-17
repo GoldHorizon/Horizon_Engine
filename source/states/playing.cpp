@@ -1,14 +1,16 @@
 #include "../../states/playing.h"
 #include "../../ball.h"
 
-StatePlaying* StatePlaying::_thisInstance = nullptr;
+#define ClassName StatePlaying
 
-StatePlaying::~StatePlaying()
+ClassName* ClassName::_thisInstance = nullptr;
+
+ClassName::~ClassName()
 {
 
 }
 
-void StatePlaying::Initialize()
+void ClassName::Initialize()
 {
     Ball* playingBall = new Ball();
     playingBall->SetDirection(15);
@@ -16,32 +18,36 @@ void StatePlaying::Initialize()
     _entities.AddEntity("PlayingBall", playingBall);
 }
 
-void StatePlaying::Cleanup()
+void ClassName::Cleanup()
 {
 
 }
 
-void StatePlaying::Pause()
+void ClassName::Pause()
 {
 
 }
 
-void StatePlaying::Resume()
+void ClassName::Resume()
 {
 
 }
 
-void StatePlaying::HandleEvents()
+void ClassName::HandleEvents()
 {
 
 }
 
-void StatePlaying::Update()
+void ClassName::Update()
 {
     _entities.UpdateAll();
 }
 
-void StatePlaying::Render(float interpolation)
+void ClassName::Render(float interpolation)
 {
     _entities.RenderAll(interpolation);
 }
+
+#ifdef ClassName
+#undef ClassName
+#endif

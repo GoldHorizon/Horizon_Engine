@@ -1,6 +1,6 @@
-#include "../../globals.h"
-
 #include "../../states/pauseMenu.h"
+
+#define ClassName StatePauseMenu
 
 ClassName* ClassName::_thisInstance = nullptr;
 
@@ -43,3 +43,7 @@ void ClassName::Render(float interpolation)
 {
 
 }
+
+#ifdef ClassName
+#undef ClassName
+#endif

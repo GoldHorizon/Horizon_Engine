@@ -2,14 +2,16 @@
 
 #include "../gameState.h"
 
+#define ClassName StatePlaying
+
 class StatePlaying:
     public GameState
 {
 	/*
 	 * Constructors/Destructors
 	 */
-protected: 
-    StatePlaying() {SetType(GameStateType::PLAYING_GAME);}
+protected:
+    ClassName() {SetType(GameStateType::PLAYING_GAME);}
 public:
     ~StatePlaying();
 	/*
@@ -25,16 +27,20 @@ public:
     void Update();
     void Render(float interpolation);
 
-    static StatePlaying* Instance()
+    static ClassName* Instance()
     {
         if (_thisInstance == nullptr)
         {
-            _thisInstance = new StatePlaying;
+            _thisInstance = new ClassName;
         }
         _thisInstance->Initialize();
         return _thisInstance;
     }
 
 private:
-    static StatePlaying* _thisInstance;
+    static ClassName* _thisInstance;
 };
+
+#ifdef ClassName
+#undef ClassName
+#endif

@@ -2,14 +2,16 @@
 
 #include "../gameState.h"
 
+#define ClassName StateUninitialized
+
 class StateUninitialized:
     public GameState
 {
 	/*
 	 * Constructors/Destructors
 	 */
-protected: 
-    StateUninitialized() {SetType(GameStateType::UNINITIALIZED);}
+protected:
+    ClassName() {SetType(GameStateType::UNINITIALIZED);}
 public:
     ~StateUninitialized();
 	/*
@@ -25,16 +27,20 @@ public:
     void Update();
     void Render(float interpolation);
 
-    static StateUninitialized* Instance()
+    static ClassName* Instance()
     {
         if (_thisInstance == nullptr)
         {
-            _thisInstance = new StateUninitialized;
+            _thisInstance = new ClassName;
         }
         _thisInstance->Initialize();
         return _thisInstance;
     }
 
 private:
-    static StateUninitialized* _thisInstance;
+    static ClassName* _thisInstance;
 };
+
+#ifdef ClassName
+#undef ClassName
+#endif
