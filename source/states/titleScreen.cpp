@@ -1,4 +1,5 @@
 #include "../../states/titleScreen.h"
+#include "../../globals.h"
 
 #define ClassName StateTitleScreen
 
@@ -41,13 +42,13 @@ void ClassName::Update()
 
 void ClassName::Render(float interpolation)
 {
-//    int mx;
-//    int my;
-//
-//    SDL_GetMouseState(&mx, &my);
-//
-//    SDL_SetRenderDrawColor(globalRenderer, 255, 0, 0, 255);
-//    SDL_RenderDrawLine(globalRenderer, 0, 0, mx, my);
+    int mx;
+    int my;
+
+    SDL_GetMouseState(&mx, &my);
+
+    SDL_SetRenderDrawColor(globalRenderer, 255, 0, 0, 255);
+    SDL_RenderDrawLine(globalRenderer, 0, 0, mx, my);
 }
 
 #ifdef ClassName

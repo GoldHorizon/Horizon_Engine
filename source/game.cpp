@@ -78,6 +78,7 @@ int Game::Initialize()
 
 	// If all is well, set the game state and return something besides -1
 	ChangeState(StateTitleScreen::Instance());
+    PushState(StatePlaying::Instance());
 
 	//TEMPball
 	Ball* myBall = new Ball;
@@ -153,6 +154,7 @@ bool Game::GetInput()
 		case SDL_SCANCODE_ESCAPE:
 			return false;
 			break;
+
 		default:
 			break;
 		}
@@ -196,8 +198,8 @@ void Game::Update()
 void Game::Render(float interpolation)
 {
 	// STEP 3: Render
-
     SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
+
 	// Clear the renderer to the set color
 	SDL_RenderClear(_mainRenderer);
 
