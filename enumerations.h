@@ -1,10 +1,11 @@
 #pragma once
 
-enum class GameState
+enum class GameStateType
 {
 	UNINITIALIZED,
 	TITLE_SCREEN,
 	MAIN_MENU,
+	OPTIONS,
 	PLAYING_GAME,
-	OPTIONS
+	PAUSE_MENU
 };

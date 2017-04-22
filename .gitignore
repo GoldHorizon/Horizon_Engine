@@ -1,5 +1,13 @@
-# Debug Folder
+# Debug Folders
 Debug/*
+.idea/*
+cmake-build-debug/*
+
+# CMake Stuff
+CMakeCache.txt
+CMakeFiles/*
+Makefile
+cmake_install.cmake
 
 # Compiled Object files
 *.slo

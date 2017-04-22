@@ -1,8 +1,12 @@
 #pragma once
 
+#include <vector>
+
 #include "entityCollection.h"
 #include "enumerations.h"
 #include "SDL2/SDL.h"
+
+class GameState;
 
 class Game
 {
@@ -21,7 +25,13 @@ public:
 
 	// ChangeState()		- Changes state to specified state
 	//	newState:		new state to change to
-	void ChangeState(GameState newState);
+	void ChangeState(GameState* newState);
+
+    // PushState()          - Push another state onto the stack of states
+    void PushState (GameState* newState);
+
+    // PopState()           - Pop the latest state from the top of the stack
+    void PopState ();
 
 	// GetInput()			- Retrieves global window input, returns quit value
 	bool GetInput();
@@ -44,7 +54,10 @@ private:
 	// _event			- global event gathered by game
 	SDL_Event _event;
 	// _state			- global state gathered by game
-	GameState _state;
+//	GameState _state;
+
+    // _stateStack      - stack of all states in game
+    std::vector<GameState*> _stateStack;
 
 	// _entities		- collection of game entities
 	EntityCollection _entities;

@@ -2,15 +2,24 @@
 #include <iostream>
 #include "../globals.h"
 #include "../constants.h"
-#include "../TEMPball.h"
+#include "../ball.h"
+
+#include "../states/playing.h"
+#include "../states/uninitialized.h"
+#include "../states/titleScreen.h"
+#include "../states/options.h"
+#include "../states/pauseMenu.h"
 
 Game::Game():
 	_mainWindow(0),
-	_mainRenderer(0),
-	_state(GameState::UNINITIALIZED)
+	_mainRenderer(0)
+	//_state(GameState::UNINITIALIZED)
 {
 	// Set the draw color for our renderer (rendered when renderer is cleared)
 	SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
+
+    // Set our stack to only be uninitialized.
+    _stateStack.push_back(StateUninitialized::Instance());
 }
 
 Game::~Game()
@@ -21,11 +30,11 @@ Game::~Game()
 int Game::Initialize()
 {
 	// If the game was already initialized, there's a problem.
-	if (_state != GameState::UNINITIALIZED)
-	{
-		return -1;
-	}
-
+	//if (_state != GameState::UNINITIALIZED)
+    if (_stateStack.empty() || (_stateStack.back()->GetType() != GameStateType::UNINITIALIZED))
+   	{   
+   		return -1;
+   	}
 	// STEP 1
 	// Initialize SDL using SDL_Init
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
@@ -68,7 +77,8 @@ int Game::Initialize()
 	}
 
 	// If all is well, set the game state and return something besides -1
-	ChangeState(GameState::MAIN_MENU);
+	ChangeState(StateTitleScreen::Instance());
+    PushState(StatePlaying::Instance());
 
 	//TEMPball
 	Ball* myBall = new Ball;
@@ -85,18 +95,45 @@ int Game::Initialize()
 	return 0;
 }
 
-void Game::ChangeState(GameState newState)
+void Game::ChangeState(GameState* newState)
 {
-	switch(newState)
-	{
-	case GameState::MAIN_MENU:
-		// Create buttons here
-		break;
-	default:
-		break;
-	}
+    while (!_stateStack.empty())
+    {
+        _stateStack.back()->Cleanup();
+        _stateStack.pop_back();
+    }
 
-	_state = newState;
+	if (newState != nullptr)
+	{
+		GameStateType type = newState->GetType();
+		switch(type)
+		{
+			case GameStateType::MAIN_MENU:
+				// Create buttons here
+				break;
+
+			case GameStateType::PLAYING_GAME:
+				break;
+
+			default:
+				std::cerr << "ERROR: Trying to change to error state" << std::endl;
+				//_stateStack.push_back(StateUninitialized::Instance());
+				break;
+		}
+
+		_stateStack.push_back(newState);
+	}
+}
+
+void Game::PushState(GameState* newState)
+{
+    _stateStack.push_back(newState);
+}
+
+void Game::PopState()
+{
+    _stateStack.back()->Cleanup();
+    _stateStack.pop_back();
 }
 
 bool Game::GetInput()
@@ -117,6 +154,7 @@ bool Game::GetInput()
 		case SDL_SCANCODE_ESCAPE:
 			return false;
 			break;
+
 		default:
 			break;
 		}
@@ -142,17 +180,41 @@ bool Game::GetInput()
 void Game::Update()
 {
 	// STEP 2: Update
+    if (!_stateStack.empty())
+    {
+        std::vector<GameState*>::iterator it = _stateStack.begin();
 
+        while (it != _stateStack.end())
+        {
+            (*it)->Update();
+			it++;
+        }
+    }
+
+    // Almost deprecated ***
 	_entities.UpdateAll();
 }
 
 void Game::Render(float interpolation)
 {
 	// STEP 3: Render
+    SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
 
 	// Clear the renderer to the set color
 	SDL_RenderClear(_mainRenderer);
 
+    if (!_stateStack.empty())
+    {
+        std::vector<GameState*>::iterator it = _stateStack.begin();
+
+        while (it != _stateStack.end())
+        {
+            (*it)->Render(interpolation);
+            it++;
+        }
+    }
+
+    // Almost deprecated ***
 	_entities.RenderAll(interpolation);
 
 	// Draw (present) the renderer to the screen
