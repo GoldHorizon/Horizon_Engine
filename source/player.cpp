@@ -13,8 +13,51 @@ Player::Player()
 void Player::HandleEvents(SDL_Event* event)
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	int calcDirection = 0;
 
-	// If our event is a keyboard button press ???
+	if ((state[SDL_SCANCODE_W] ^ state[SDL_SCANCODE_S]) || (state[SDL_SCANCODE_A] ^ state[SDL_SCANCODE_D]))
+	{
+		SetSpeed(4);
+
+		calcDirection = ((state[SDL_SCANCODE_D] * 1) +
+						 (state[SDL_SCANCODE_S] * 2) +
+						 (state[SDL_SCANCODE_A] * 4) +
+						 (state[SDL_SCANCODE_W] * 8)) ;
+
+		switch (calcDirection)
+		{
+			case 1: case 11:
+				SetDirection(0);
+				break;
+			case 2: case 7:
+				SetDirection(90);
+				break;
+			case 4: case 14:
+				SetDirection(180);
+				break;
+			case 8: case 13:
+				SetDirection(270);
+				break;
+			case 3:
+				SetDirection(45);
+				break;
+			case 6:
+				SetDirection(135);
+				break;
+			case 12:
+				SetDirection(225);
+				break;
+			case 9:
+				SetDirection(315);
+				break;
+			default:
+				break;
+		}
+	}
+	else
+		SetSpeed(0);
+
+// 		If our event is a keyboard button press ???
 //	if (event->type == SDL_KEYDOWN)
 //	{
 //		switch (event->key.keysym.scancode)
@@ -55,19 +98,19 @@ void Player::Update()
 	float xdir = (cos(direction() * PI / 180) * speed());
 	float ydir = (sin(direction() * PI / 180) * speed());
 
-	if (x() < 0 || x() > SCREEN_WIDTH)
-	{
-		SetDirection(180 - direction());
-		xdir = -xdir;
-		SetSpeed(speed() + 0.1);
-	}
-
-	if (y() < 0 || y() > SCREEN_HEIGHT)
-	{
-		SetDirection(360 - direction());
-		ydir = -ydir;
-		SetSpeed(speed() + 0.1);
-	}
+//	if (x() < 0 || x() > SCREEN_WIDTH)
+//	{
+//		SetDirection(180 - direction());
+//		xdir = -xdir;
+//		SetSpeed(speed() + 0.1);
+//	}
+//
+//	if (y() < 0 || y() > SCREEN_HEIGHT)
+//	{
+//		SetDirection(360 - direction());
+//		ydir = -ydir;
+//		SetSpeed(speed() + 0.1);
+//	}
 
 	Move(xdir, ydir);
 }
