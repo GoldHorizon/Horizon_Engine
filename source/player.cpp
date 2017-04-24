@@ -5,9 +5,49 @@
 
 Player::Player()
 {
-    Entity::LoadFromFile("images/player.png");
-    LoadFromFile("");
+    LoadFromFile("images/Player.png");
+    SetImageOrigin(this->imageWidth() / 2, this->imageHeight() / 2);
 
+}
+
+void Player::HandleEvents(SDL_Event* event)
+{
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
+
+	// If our event is a keyboard button press ???
+//	if (event->type == SDL_KEYDOWN)
+//	{
+//		switch (event->key.keysym.scancode)
+//		{
+//			case SDL_SCANCODE_W:
+//				SetDirection(270);
+//				SetSpeed(4);
+//				break;
+//
+//			case SDL_SCANCODE_S:
+//				SetDirection(90);
+//				SetSpeed(4);
+//				break;
+//
+//			case SDL_SCANCODE_A:
+//				SetDirection(180);
+//				SetSpeed(4);
+//				break;
+//
+//			case SDL_SCANCODE_D:
+//				SetDirection(0);
+//				SetSpeed(4);
+//				break;
+//
+//			default:
+//				SetSpeed(0);
+//				break;
+//		}
+//	}
+//	else
+//	{
+//		SetSpeed(0);
+//	}
 }
 
 void Player::Update()
@@ -29,25 +69,10 @@ void Player::Update()
 		SetSpeed(speed() + 0.1);
 	}
 
-//	while (direction() > 360)
-//	{
-//		SetDirection(direction() - 360);
-//	}
-//  while (direction() < 0)
-//  {
-//      SetDirection(direction() + 360);
-//  }
-
-	SetImageAngle(imageAngle() + 1);
-
-//	while (imageAngle() > 360)
-//	{
-//		SetDirection(imageAngle() - 360);
-//	}
-//    while (imageAngle() < 0)
-//    {
-//        SetDirection(imageAngle() + 360);
-//    }
-
 	Move(xdir, ydir);
+}
+
+Entity* Player::NewInstance()
+{
+    return new Player();
 }

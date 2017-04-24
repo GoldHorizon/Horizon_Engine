@@ -51,6 +51,9 @@ public:
 	//	index:		index at which to remove entity
 	void RemoveByIndex(unsigned int index);
 
+	// HandleAllEvents()- Handles events (such as input) for all entities in collection
+	void HandleAllEvents(SDL_Event*);
+
 	// UpdateAll()		- Update every entity in collection
 	void UpdateAll();
 

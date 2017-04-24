@@ -21,6 +21,7 @@ set(SOURCE_FILES
         source/globals.cpp
         source/main.cpp
         source/ball.cpp
+        source/player.cpp
         states/playing.h
         states/uninitialized.h
         states/titleScreen.h
@@ -35,7 +36,8 @@ set(SOURCE_FILES
         globals.h
         header.h
         prototypes.h
-        ball.h)
+        ball.h
+        player.h)
 
 add_executable(SDL_Test_Game ${SOURCE_FILES})
 

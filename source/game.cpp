@@ -80,7 +80,7 @@ int Game::Initialize()
 	ChangeState(StateTitleScreen::Instance());
     PushState(StatePlaying::Instance());
 
-	//TEMPball
+	//temporary balls
 	Ball* myBall = new Ball;
 	Ball* myBall2 = new Ball;
 	myBall->LoadFromFile("images/Paddle.png");
@@ -173,7 +173,12 @@ bool Game::GetInput()
 		}
 	}
 
-	// The player has not quit the game, so return false
+	std::vector<GameState*>::iterator it = _stateStack.end();
+	it--;
+
+    (*it)->HandleEvents(&_event);
+
+    // The player has not quit the game, so return false
 	return true;
 }
 
@@ -198,7 +203,7 @@ void Game::Update()
 void Game::Render(float interpolation)
 {
 	// STEP 3: Render
-    SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(_mainRenderer, 200, 200, 200, 255);
 
 	// Clear the renderer to the set color
 	SDL_RenderClear(_mainRenderer);

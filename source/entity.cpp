@@ -87,6 +87,11 @@ void Entity::FreeMemory()
 	}
 }
 
+void Entity::HandleEvents(SDL_Event*)
+{
+
+}
+
 void Entity::Update()
 {
 
@@ -199,6 +204,11 @@ void Entity::Move(float x, float y)
 {
 	_x += x;
 	_y += y;
+}
+
+Entity* Entity::NewInstance()
+{
+	return nullptr;
 }
 
 /*
