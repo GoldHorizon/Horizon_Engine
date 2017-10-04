@@ -77,10 +77,10 @@ int Game::Initialize()
 	}
 
 	// If all is well, set the game state and return something besides -1
-	ChangeState(StateTitleScreen::Instance());
+	// ChangeState(StateTitleScreen::Instance());
     PushState(StatePlaying::Instance());
 
-	//TEMPball
+	//TEMPball (now located in ball.cpp/ball.h)
 	Ball* myBall = new Ball;
 	Ball* myBall2 = new Ball;
 	myBall->LoadFromFile("images/Paddle.png");

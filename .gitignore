@@ -1,3 +1,6 @@
+# Executable Files
+launchGame
+
 # Debug Folders
 Debug/*
 .idea/*
