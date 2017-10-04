@@ -80,18 +80,6 @@ int Game::Initialize()
 	ChangeState(StateTitleScreen::Instance());
     PushState(StatePlaying::Instance());
 
-	//temporary balls
-	Ball* myBall = new Ball;
-	Ball* myBall2 = new Ball;
-	myBall->LoadFromFile("images/Paddle.png");
-	myBall2->LoadFromFile("images/PlayButton.png");
-	myBall->SetY(100);
-	myBall2->SetY(200);
-	myBall->SetImageOrigin(20, 20);
-
-	_entities.AddEntity("ball", myBall);
-	_entities.AddEntity("ball2", myBall2);
-
 	return 0;
 }
 
