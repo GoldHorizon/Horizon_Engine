@@ -198,7 +198,7 @@ void Game::Update()
 void Game::Render(float interpolation)
 {
 	// STEP 3: Render
-    SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(_mainRenderer, 200, 200, 200, 255);
 
 	// Clear the renderer to the set color
 	SDL_RenderClear(_mainRenderer);
