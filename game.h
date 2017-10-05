@@ -53,8 +53,6 @@ private:
 	SDL_Renderer* _mainRenderer;
 	// _event			- global event gathered by game
 	SDL_Event _event;
-	// _state			- global state gathered by game
-//	GameState _state;
 
     // _stateStack      - stack of all states in game
     std::vector<GameState*> _stateStack;

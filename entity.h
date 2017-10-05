@@ -24,6 +24,9 @@ public:
 	// FreeMemory() 	- Frees the texture memory used
 	void FreeMemory();
 
+    // HandleEvents()   - Handles things such as user input
+    virtual void HandleEvents(SDL_Event*);
+
 	// Update()			- Updates anything to do with the entity
 	virtual void Update();
 
@@ -52,6 +55,9 @@ public:
 	//	x:			amount to move in the x direction
 	//	y:			amount to move in the y direction
 	void Move(float x, float y);
+
+    // NewInstance()    - Returns a new entity of a certain type
+    virtual Entity* NewInstance();
 
 	/*
 	 * Get Methods

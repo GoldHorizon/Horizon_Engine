@@ -28,6 +28,7 @@ int main(int argc, char** argv)
 		while (SDL_GetTicks() > nextGameTick && loops < MAX_FRAMESKIP)
 		{
 			gameIsRunning = mainGame.GetInput();
+
 			mainGame.Update();
 
 			nextGameTick += SKIP_TICKS;

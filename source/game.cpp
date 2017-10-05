@@ -77,20 +77,20 @@ int Game::Initialize()
 	}
 
 	// If all is well, set the game state and return something besides -1
-	// ChangeState(StateTitleScreen::Instance());
+	//ChangeState(StateTitleScreen::Instance());
     PushState(StatePlaying::Instance());
 
 	//TEMPball (now located in ball.cpp/ball.h)
-	Ball* myBall = new Ball;
-	Ball* myBall2 = new Ball;
-	myBall->LoadFromFile("images/Paddle.png");
-	myBall2->LoadFromFile("images/PlayButton.png");
-	myBall->SetY(100);
-	myBall2->SetY(200);
-	myBall->SetImageOrigin(20, 20);
+	//Ball* myBall = new Ball;
+    //Ball* myBall2 = new Ball;
+	//myBall->LoadFromFile("images/Paddle.png");
+	//myBall2->LoadFromFile("images/PlayButton.png");
+	//myBall->SetY(100);
+	//myBall2->SetY(200);
+	//myBall->SetImageOrigin(20, 20);
 
-	_entities.AddEntity("ball", myBall);
-	_entities.AddEntity("ball2", myBall2);
+	//_entities.AddEntity("ball", myBall);
+	//_entities.AddEntity("ball2", myBall2);
 
 	return 0;
 }
@@ -173,7 +173,12 @@ bool Game::GetInput()
 		}
 	}
 
-	// The player has not quit the game, so return false
+	std::vector<GameState*>::iterator it = _stateStack.end();
+	it--;
+
+    (*it)->HandleEvents(&_event);
+
+    // The player has not quit the game, so return false
 	return true;
 }
 

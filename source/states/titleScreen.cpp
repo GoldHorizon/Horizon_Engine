@@ -30,7 +30,7 @@ void ClassName::Resume()
 
 }
 
-void ClassName::HandleEvents()
+void ClassName::HandleEvents(SDL_Event*)
 {
 
 }

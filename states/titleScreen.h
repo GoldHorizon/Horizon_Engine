@@ -23,7 +23,7 @@ public:
     void Pause();
     void Resume();
 
-    void HandleEvents();
+    void HandleEvents(SDL_Event*);
     void Update();
     void Render(float interpolation);
 

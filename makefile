@@ -9,6 +9,7 @@ objects := 	main.o \
 			entity.o \
 			entityCollection.o \
 			ball.o \
+			player.o \
 			gameState.o \
 			playing.o \
 			uninitialized.o
@@ -23,7 +24,7 @@ flags := -lSDL2 \
 ### Main make program
 ###
 all : $(objects)
-	gcc -o $(executable) $(objects) $(flags)
+	gcc -g -o $(executable) $(objects) $(flags)
 
 ###
 ### Source files
@@ -43,8 +44,11 @@ entity.o 			: source/entity.cpp entity.h globals.h constants.h
 entityCollection.o  : source/entityCollection.cpp entityCollection.h
 	gcc -c source/entityCollection.cpp
 
-ball.o			: source/ball.cpp ball.h constants.h
+ball.o				: source/ball.cpp ball.h constants.h
 	gcc -c source/ball.cpp
+
+player.o			: source/player.cpp
+	gcc -c source/player.cpp
 
 gameState.o 		: source/gameState.cpp gameState.h
 	gcc -c source/gameState.cpp

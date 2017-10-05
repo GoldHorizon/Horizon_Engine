@@ -26,7 +26,7 @@ public:
     virtual void Pause() = 0;
     virtual void Resume() = 0;
 
-    virtual void HandleEvents() = 0;
+    virtual void HandleEvents(SDL_Event*) = 0;
     virtual void Update() = 0;
     virtual void Render(float interpolation) = 0;
 

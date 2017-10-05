@@ -1,5 +1,7 @@
 #include "../entityCollection.h"
 
+#include <iostream>
+
 EntityCollection::EntityCollection()
 {
 
@@ -154,6 +156,22 @@ void EntityCollection::RemoveByIndex(unsigned int index)
 	}
 }
 
+void EntityCollection::HandleAllEvents(SDL_Event* event)
+{
+	// eMap == std::map<std::string, Entity*>
+	eMap::const_iterator it = _collection.begin();
+
+	while (it != _collection.end())
+	{
+		if (it->second != nullptr)
+		{
+			it->second->HandleEvents(event);
+		}
+
+		it++;
+	}
+}
+
 void EntityCollection::UpdateAll()
 {
 	// eMap == std::map<std::string, Entity*>
@@ -161,6 +179,8 @@ void EntityCollection::UpdateAll()
 
 	while (it != _collection.end())
 	{
+        // Uncomment to debug Update() on different entities
+        //std::cerr << it->first << std::endl;
 		if (it->second != nullptr)
 		{
 			it->second->Update();
@@ -177,6 +197,8 @@ void EntityCollection::RenderAll(float interpolation)
 
 	while (it != _collection.end())
 	{
+        // Uncomment to debug Render() on different entities
+        //std::cerr << it->first << std::endl;
 		if (it->second != nullptr)
 		{
 			it->second->Render(interpolation);
