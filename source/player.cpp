@@ -1,6 +1,7 @@
 #include "../player.h"
 #include "../constants.h"
 
+#include <iostream>
 #include <math.h>
 
 Player::Player()

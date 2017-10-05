@@ -1,6 +1,7 @@
 #include "../ball.h"
 #include "../constants.h"
 
+#include <iostream>
 #include <math.h>
 
 Ball::Ball()
@@ -43,10 +44,10 @@ void Ball::Update()
 //	{
 //		SetDirection(imageAngle() - 360);
 //	}
-//    while (imageAngle() < 0)
-//    {
-//        SetDirection(imageAngle() + 360);
-//    }
+//  while (imageAngle() < 0)
+//  {
+//      SetDirection(imageAngle() + 360);
+//  }
 
 	Move(xdir, ydir);
 }
