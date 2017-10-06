@@ -45,11 +45,7 @@ public:
 	// Render() 		- Renders the texture to a position
 	//	x:			x position of rendering
 	//	y:			y position of rendering
-	//	clipping:	rectangle the image is clipped to before rendered
-	//	angle:		angle with which the image is rotated when drawing
-	//	origin:		origin of rotation and placement
-	//	flip:		if image is flipped (see SDL_RendererFlip enum);
-	//void Render(float x, float y, double angle, SDL_Point* origin, SDL_RendererFlip flip, SDL_Rect* clipping = nullptr);
+	//void Render(float x, float y, float interpolation);
 
 	// Move()			- Moves the image by an offset of x and y coordinates
 	//	x:			amount to move in the x direction
