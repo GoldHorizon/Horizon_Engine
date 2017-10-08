@@ -13,6 +13,15 @@ Player::Player()
 
 void Player::HandleEvents(SDL_Event* event)
 {
+    if (event->type == SDL_MOUSEBUTTONDOWN)
+    {
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+
+        SetX(x);
+        SetY(y);
+    } 
+
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	int calcDirection = 0;
 

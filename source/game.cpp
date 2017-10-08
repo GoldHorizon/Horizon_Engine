@@ -1,5 +1,4 @@
 #include "../game.h"
-#include <iostream>
 #include "../globals.h"
 #include "../constants.h"
 #include "../ball.h"
@@ -9,6 +8,8 @@
 #include "../states/titleScreen.h"
 #include "../states/options.h"
 #include "../states/pauseMenu.h"
+
+#include <iostream>
 
 Game::Game():
 	_mainWindow(0),
