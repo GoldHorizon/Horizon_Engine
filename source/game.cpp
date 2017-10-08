@@ -10,6 +10,8 @@
 #include "../include/states/options.h"
 #include "../include/states/pauseMenu.h"
 
+#include <iostream>
+
 Game::Game():
 	_mainWindow(0),
 	_mainRenderer(0)
