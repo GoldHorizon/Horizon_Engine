@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <math.h>
+#include <filesystem>
 
 #include "SDL_image.h"
 
@@ -54,6 +55,8 @@ Entity::~Entity()
 
 void Entity::LoadFromFile(const std::string file)
 {
+	//std::string fullPath = std::experimental::filesystem::current_path().string() + "\\" + file;
+	
 	// Create a temporary surface to load our image onto
 	SDL_Surface* tempSurface;
 	tempSurface = IMG_Load(file.c_str());
@@ -70,11 +73,9 @@ void Entity::LoadFromFile(const std::string file)
 	}
 	else
 	{
-		std::cout << "Error loading file: " + file << std::endl;
-	}//	else
-	//	{
-	//		//std::cout << "Error: _image not found..." << std::endl;
-	//	}
+		//std::cout << "Error loading file: " + fullPath << std::endl;
+		std::cout << IMG_GetError() << std::endl;
+	}
 }
 
 void Entity::FreeMemory()
