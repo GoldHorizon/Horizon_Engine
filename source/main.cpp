@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "../game.h"
-#include "../constants.h"
+#include "../include/game.h"
+#include "../include/constants.h"
 
 // Program start
 int main(int argc, char** argv)

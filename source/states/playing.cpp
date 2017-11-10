@@ -1,6 +1,6 @@
-#include "../../states/playing.h"
-#include "../../ball.h"
-#include "../../player.h"
+#include "../../include/states/playing.h"
+#include "../../include/ball.h"
+#include "../../include/player.h"
 
 #define ClassName StatePlaying
 
@@ -18,7 +18,7 @@ void ClassName::Initialize()
 
     Ball* playingBall = new Ball();
     playingBall->SetDirection(15);
-    playingBall->LoadFromFile("images/Paddle.png");
+    playingBall->LoadFromFile("../images/Paddle.png");
     _entities.AddEntity("PlayingBall", playingBall);
 }
 

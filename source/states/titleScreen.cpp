@@ -1,5 +1,5 @@
-#include "../../states/titleScreen.h"
-#include "../../globals.h"
+#include "../../include/states/titleScreen.h"
+#include "../../include/globals.h"
 
 #define ClassName StateTitleScreen
 

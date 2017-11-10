@@ -1,11 +1,11 @@
-#include "../entity.h"
-#include "../globals.h"
-#include "../constants.h"
+#include "../include/entity.h"
+#include "../include/globals.h"
+#include "../include/constants.h"
 
 #include <iostream>
 #include <math.h>
 
-#include "SDL2/SDL_image.h"
+#include "SDL_image.h"
 
 Entity::Entity():
 	_image(nullptr),

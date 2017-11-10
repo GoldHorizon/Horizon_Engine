@@ -1,14 +1,14 @@
-#include "../game.h"
+#include "../include/game.h"
 #include <iostream>
-#include "../globals.h"
-#include "../constants.h"
-#include "../ball.h"
+#include "../include/globals.h"
+#include "../include/constants.h"
+#include "../include/ball.h"
 
-#include "../states/playing.h"
-#include "../states/uninitialized.h"
-#include "../states/titleScreen.h"
-#include "../states/options.h"
-#include "../states/pauseMenu.h"
+#include "../include/states/playing.h"
+#include "../include/states/uninitialized.h"
+#include "../include/states/titleScreen.h"
+#include "../include/states/options.h"
+#include "../include/states/pauseMenu.h"
 
 Game::Game():
 	_mainWindow(0),
