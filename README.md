@@ -1,3 +1,3 @@
-# SDL_Test_Game
+# SDL_Engine
 
-This is the repository for a basic SDL game I'm working on.
+This is the repository for a basic SDL engine I'm working on.
