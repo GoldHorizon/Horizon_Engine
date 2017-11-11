@@ -82,7 +82,7 @@ int Game::Initialize()
 
 	// If all is well, set the game state and return something besides -1
 	//ChangeState(StateTitleScreen::Instance());
-    //PushState(StatePlaying::Instance());
+    ChangeState(StatePlaying::Instance());
 
 	//TEMPball (now located in ball.cpp/ball.h)
 	//Ball* myBall = new Ball;
