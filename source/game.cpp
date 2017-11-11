@@ -81,16 +81,18 @@ int Game::Initialize()
     PushState(StatePlaying::Instance());
 
 	//TEMPball (now located in ball.cpp/ball.h)
-	Ball* myBall = new Ball;
-    Ball* myBall2 = new Ball;
-	myBall->LoadFromFile("images/Player.png");
-	myBall2->LoadFromFile("images/Player.png");
-	myBall->SetY(100);
-	myBall2->SetY(200);
-	myBall->SetImageOrigin(20, 20);
-
-	_entities.AddEntity("ball", myBall);
-	_entities.AddEntity("ball2", myBall2);
+	//Ball* myBall = new Ball;
+    //Ball* myBall2 = new Ball;
+	//myBall->LoadFromFile("images/Player.png");
+	//myBall2->LoadFromFile("images/Player.png");
+	//myBall->SetY(100);
+	//myBall2->SetY(200);
+	//myBall->SetImageOrigin(20, 20);
+	//myBall->SetActive(false);
+	//myBall2->SetActive(false);
+	//
+	//_entities.AddEntity("ball", myBall);
+	//_entities.AddEntity("ball2", myBall2);
 
 	return 0;
 }
@@ -196,8 +198,8 @@ void Game::Update()
         }
     }
 
-    // Almost deprecated ***
-	_entities.UpdateAll();
+    // deprecated ***
+	//_entities.UpdateAll();
 }
 
 void Game::Render(float interpolation)
@@ -219,8 +221,8 @@ void Game::Render(float interpolation)
         }
     }
 
-    // Almost deprecated ***
-	_entities.RenderAll(interpolation);
+    // deprecated ***
+	//_entities.RenderAll(interpolation);
 
 	// Draw (present) the renderer to the screen
 	SDL_RenderPresent(_mainRenderer);
