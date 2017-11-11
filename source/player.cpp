@@ -1,5 +1,5 @@
-#include "../player.h"
-#include "../constants.h"
+#include "../include/player.h"
+#include "../include/constants.h"
 
 #include <iostream>
 #include <math.h>

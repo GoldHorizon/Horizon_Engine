@@ -1,7 +1,7 @@
 #pragma once
 
 //#include "header.h"
-#include "SDL2/SDL.h"
+#include "SDL.h"
 #include "entity.h"
 #include <string>
 

@@ -1,3 +1,3 @@
-#include "../globals.h"
+#include "../include/globals.h"
 
 SDL_Renderer* globalRenderer = nullptr;

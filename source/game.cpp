@@ -1,14 +1,14 @@
-#include "../game.h"
+#include "../include/game.h"
 #include <iostream>
-#include "../globals.h"
-#include "../constants.h"
-#include "../ball.h"
+#include "../include/globals.h"
+#include "../include/constants.h"
+#include "../include/ball.h"
 
-#include "../states/playing.h"
-#include "../states/uninitialized.h"
-#include "../states/titleScreen.h"
-#include "../states/options.h"
-#include "../states/pauseMenu.h"
+#include "../include/states/playing.h"
+#include "../include/states/uninitialized.h"
+#include "../include/states/titleScreen.h"
+#include "../include/states/options.h"
+#include "../include/states/pauseMenu.h"
 
 Game::Game():
 	_mainWindow(0),
@@ -37,7 +37,9 @@ int Game::Initialize()
    	}
 	// STEP 1
 	// Initialize SDL using SDL_Init
-	if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
+	// Note: Using SDL_INIT_EVERYTHING slows startup considerably on 32-bit versions
+	// Consider implementing startup of subsystems in threads?
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) == -1)
 	{
 		// If it fails, output error message and quit
 		std::cout << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
@@ -78,17 +80,19 @@ int Game::Initialize()
 
 	// If all is well, set the game state and return something besides -1
 	//ChangeState(StateTitleScreen::Instance());
-    PushState(StatePlaying::Instance());
+    //PushState(StatePlaying::Instance());
 
 	//TEMPball (now located in ball.cpp/ball.h)
 	//Ball* myBall = new Ball;
     //Ball* myBall2 = new Ball;
-	//myBall->LoadFromFile("images/Paddle.png");
-	//myBall2->LoadFromFile("images/PlayButton.png");
+	//myBall->LoadFromFile("images/Player.png");
+	//myBall2->LoadFromFile("images/Player.png");
 	//myBall->SetY(100);
 	//myBall2->SetY(200);
 	//myBall->SetImageOrigin(20, 20);
-
+	//myBall->SetActive(false);
+	//myBall2->SetActive(false);
+	//
 	//_entities.AddEntity("ball", myBall);
 	//_entities.AddEntity("ball2", myBall2);
 
@@ -138,13 +142,16 @@ void Game::PopState()
 
 bool Game::GetInput()
 {
+	// For the method, assume we are continuing
+	bool continueGame = true;
+
 	// Poll the system for an event of some kind
 	SDL_PollEvent(&_event);
 
 	// STEP 1: Process Input
 
 	// There will eventually be a switch statement here to
-	// determine what game state we are in
+	// determine what game state we are in (Maybe?)
 
 	// If our event is a keyboard button press
 	if (_event.type == SDL_KEYDOWN)
@@ -152,34 +159,36 @@ bool Game::GetInput()
 		switch (_event.key.keysym.scancode)
 		{
 		case SDL_SCANCODE_ESCAPE:
-			return false;
+			continueGame = false;
 			break;
 
 		default:
 			break;
 		}
 	}
-	else if (_event.type == SDL_WINDOWEVENT)
+	else if (_event.type == SDL_WINDOWEVENT && _event.window.windowID == SDL_GetWindowID(_mainWindow))
 	{
-		switch (_event.window.event)
+		switch ((int)(_event.window.event))
 		{
 		case SDL_WINDOWEVENT_CLOSE:
 			// If window is closed, take this as the user quitting
 			// In the future, this must be made more elegant.
-			return false;
+			continueGame = false;
 			break;
 		default:
+			//std::cout << (int)(_event.window.event);
 			break;
 		}
 	}
 
+	// This will allow the topmost gamestate to handle any events given to the window
+	// (Preventing lower gamestates from taking input i.e. when a pause menu overlay is up)
 	std::vector<GameState*>::iterator it = _stateStack.end();
 	it--;
-
     (*it)->HandleEvents(&_event);
 
     // The player has not quit the game, so return false
-	return true;
+	return continueGame;
 }
 
 void Game::Update()
@@ -196,8 +205,8 @@ void Game::Update()
         }
     }
 
-    // Almost deprecated ***
-	_entities.UpdateAll();
+    // deprecated ***
+	//_entities.UpdateAll();
 }
 
 void Game::Render(float interpolation)
@@ -219,8 +228,8 @@ void Game::Render(float interpolation)
         }
     }
 
-    // Almost deprecated ***
-	_entities.RenderAll(interpolation);
+    // deprecated ***
+	//_entities.RenderAll(interpolation);
 
 	// Draw (present) the renderer to the screen
 	SDL_RenderPresent(_mainRenderer);

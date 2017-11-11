@@ -5,6 +5,14 @@ launchGame
 Debug/*
 .idea/*
 cmake-build-debug/*
+Win32/*
+x64/*
+
+# VS Stuff
+.vs/*
+*.vcxproj
+*.vcxproj.*
+*.sln
 
 # CMake Stuff
 CMakeCache.txt

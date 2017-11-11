@@ -1,4 +1,4 @@
-#include "../entityCollection.h"
+#include "../include/entityCollection.h"
 
 #include <iostream>
 
@@ -181,7 +181,7 @@ void EntityCollection::UpdateAll()
 	{
         // Uncomment to debug Update() on different entities
         //std::cerr << it->first << std::endl;
-		if (it->second != nullptr)
+		if (it->second != nullptr && it->second->active())
 		{
 			it->second->Update();
 		}
@@ -199,7 +199,7 @@ void EntityCollection::RenderAll(float interpolation)
 	{
         // Uncomment to debug Render() on different entities
         //std::cerr << it->first << std::endl;
-		if (it->second != nullptr)
+		if (it->second != nullptr && it->second->visible())
 		{
 			it->second->Render(interpolation);
 		}

@@ -1,5 +1,5 @@
 //#include <entities.h>
-#include "../gameState.h"
+#include "../include/gameState.h"
 
 GameState::~GameState()
 {

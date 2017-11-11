@@ -1,4 +1,4 @@
-#include "../../states/pauseMenu.h"
+#include "../../include/states/pauseMenu.h"
 
 #define ClassName StatePauseMenu
 

@@ -4,7 +4,7 @@
 
 #include "entityCollection.h"
 #include "enumerations.h"
-#include "SDL2/SDL.h"
+#include "SDL.h"
 
 class GameState;
 

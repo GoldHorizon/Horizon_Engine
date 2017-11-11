@@ -1,20 +1,24 @@
-#include "../entity.h"
-#include "../globals.h"
-#include "../constants.h"
+#include "../include/entity.h"
+#include "../include/globals.h"
+#include "../include/constants.h"
 
 #include <iostream>
 #include <math.h>
+//#include <filesystem>
 
-#include "SDL2/SDL_image.h"
+#include "SDL_image.h"
 
-Entity::Entity():
+Entity::Entity() :
 	_image(nullptr),
 	_renderer(globalRenderer),
 	_ID(0),
+	_active(true),
+	_visible(true),
 	_x(0),
 	_y(0),
 	_direction(0),
 	_speed(0),
+	_imageAlpha(1),
 	_imageAngle(0),
 	_imageWidth(0),
 	_imageHeight(0)
@@ -31,10 +35,13 @@ Entity::Entity(SDL_Renderer* renderer):
 	_image(nullptr),
 	_renderer(renderer),
 	_ID(0),
+	_active(true),
+	_visible(true),
 	_x(0),
 	_y(0),
 	_direction(0),
 	_speed(0),
+	_imageAlpha(1),
 	_imageAngle(0),
 	_imageWidth(0),
 	_imageHeight(0)
@@ -54,6 +61,8 @@ Entity::~Entity()
 
 void Entity::LoadFromFile(const std::string file)
 {
+	//std::string fullPath = std::experimental::filesystem::current_path().string() + "\\" + file;
+	
 	// Create a temporary surface to load our image onto
 	SDL_Surface* tempSurface;
 	tempSurface = IMG_Load(file.c_str());
@@ -70,11 +79,9 @@ void Entity::LoadFromFile(const std::string file)
 	}
 	else
 	{
-		std::cout << "Error loading file: " + file << std::endl;
-	}//	else
-	//	{
-	//		//std::cout << "Error: _image not found..." << std::endl;
-	//	}
+		//std::cout << "Error loading file: " + fullPath << std::endl;
+		std::cout << IMG_GetError() << std::endl;
+	}
 }
 
 void Entity::FreeMemory()
@@ -99,14 +106,14 @@ void Entity::Update()
 
 void Entity::Render(float interpolation)
 {
-	// Only attempt to render if we have successfully loaded an image
-	if (_image != nullptr)
+	// Only attempt to render if we have successfully loaded an image and it is visible
+	if (_image != nullptr && _visible)
 	{
 		// Create a set of ints to use for drawing position (use interpolation to predict movement)
 		int xx = static_cast<int>(_x) - _imageOrigin.x
-			   + static_cast<int>(cos(_direction * PI / 180) * _speed * interpolation);
+			   + static_cast<int>(cos(_direction * PI / 180) * _speed * (_active * interpolation));
 		int yy = static_cast<int>(_y) - _imageOrigin.y
-			   + static_cast<int>(sin(_direction * PI / 180) * _speed * interpolation);
+			   + static_cast<int>(sin(_direction * PI / 180) * _speed * (_active * interpolation));
 
 		// Create a rectangle to put on display
 		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
@@ -218,42 +225,46 @@ int Entity::ID() const
 {
 	return _ID;
 }
-
+bool Entity::active() const
+{
+	return _active;
+}
+bool Entity::visible() const
+{
+	return _visible;
+}
 float Entity::x() const
 {
 	return _x;
 }
-
 float Entity::y() const
 {
 	return _y;
 }
-
 float Entity::direction() const
 {
 	return _direction;
 }
-
 float Entity::speed() const
 {
 	return _speed;
 }
-
+float Entity::imageAlpha() const
+{
+	return _imageAlpha;
+}
 double Entity::imageAngle() const
 {
 	return _imageAngle;
 }
-
 SDL_Point Entity::imageOrigin() const
 {
 	return _imageOrigin;
 }
-
 int Entity::imageWidth() const
 {
 	return _imageWidth;
 }
-
 int Entity::imageHeight() const
 {
 	return _imageHeight;
@@ -266,50 +277,57 @@ void Entity::SetID(int ID)
 {
 	_ID = ID;
 }
-
+void Entity::SetActive(bool active)
+{
+	_active = active;
+}
+void Entity::SetVisible(bool visible)
+{
+	_visible = visible;
+}
 void Entity::SetX(float x)
 {
 	_x = x;
 }
-
 void Entity::SetY(float y)
 {
 	_y = y;
 }
-
 void Entity::SetDirection(float direction)
 {
 	_direction = direction;
 }
-
 void Entity::SetSpeed(float speed)
 {
 	_speed = speed;
 }
-
+void Entity::SetImageAlpha(float alpha)
+{
+	_imageAlpha = alpha;
+	if (SDL_SetTextureAlphaMod(_image, (int)(_imageAlpha * 255)) != 0)
+	{
+		std::cout << IMG_GetError() << std::endl;
+	}
+}
 void Entity::SetImageAngle(double angle)
 {
 	_imageAngle = angle;
 }
-
 void Entity::SetImageOrigin(int x, int y)
 {
 	_imageOrigin.x = x;
 	_imageOrigin.y = y;
 }
-
 void Entity::SetImageOrigin(SDL_Point pos)
 {
 	_imageOrigin.x = pos.x;
 	_imageOrigin.y = pos.y;
 }
-
 void Entity::SetPosition(float x, float y)
 {
 	_x = x;
 	_y = y;
 }
-
 void Entity::SetPosition(SDL_Point pos)
 {
 	_x = pos.x;

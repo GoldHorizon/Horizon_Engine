@@ -1,5 +1,5 @@
-#include "../ball.h"
-#include "../constants.h"
+#include "../include/ball.h"
+#include "../include/constants.h"
 
 #include <iostream>
 #include <math.h>
