@@ -6,6 +6,9 @@
 // Program start
 int main(int argc, char** argv)
 {
+	// Entry point for debug
+	//std::cout << "Entry point" << std::endl;
+
 	Game mainGame;
 
 	// Initialize the game, return error if it failed
@@ -25,7 +28,7 @@ int main(int argc, char** argv)
 	{
 		loops = 0;
 
-		while (SDL_GetTicks() > nextGameTick && loops < MAX_FRAMESKIP)
+		while (SDL_GetTicks() > nextGameTick && loops < MAX_FRAMESKIP && gameIsRunning)
 		{
 			gameIsRunning = mainGame.GetInput();
 

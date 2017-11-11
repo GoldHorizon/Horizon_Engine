@@ -37,7 +37,9 @@ int Game::Initialize()
    	}
 	// STEP 1
 	// Initialize SDL using SDL_Init
-	if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
+	// Note: Using SDL_INIT_EVERYTHING slows startup considerably on 32-bit versions
+	// Consider implementing startup of subsystems in threads?
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) == -1)
 	{
 		// If it fails, output error message and quit
 		std::cout << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
@@ -78,7 +80,7 @@ int Game::Initialize()
 
 	// If all is well, set the game state and return something besides -1
 	//ChangeState(StateTitleScreen::Instance());
-    PushState(StatePlaying::Instance());
+    //PushState(StatePlaying::Instance());
 
 	//TEMPball (now located in ball.cpp/ball.h)
 	//Ball* myBall = new Ball;
@@ -140,13 +142,16 @@ void Game::PopState()
 
 bool Game::GetInput()
 {
+	// For the method, assume we are continuing
+	bool continueGame = true;
+
 	// Poll the system for an event of some kind
 	SDL_PollEvent(&_event);
 
 	// STEP 1: Process Input
 
 	// There will eventually be a switch statement here to
-	// determine what game state we are in
+	// determine what game state we are in (Maybe?)
 
 	// If our event is a keyboard button press
 	if (_event.type == SDL_KEYDOWN)
@@ -154,34 +159,36 @@ bool Game::GetInput()
 		switch (_event.key.keysym.scancode)
 		{
 		case SDL_SCANCODE_ESCAPE:
-			return false;
+			continueGame = false;
 			break;
 
 		default:
 			break;
 		}
 	}
-	else if (_event.type == SDL_WINDOWEVENT)
+	else if (_event.type == SDL_WINDOWEVENT && _event.window.windowID == SDL_GetWindowID(_mainWindow))
 	{
-		switch (_event.window.event)
+		switch ((int)(_event.window.event))
 		{
 		case SDL_WINDOWEVENT_CLOSE:
 			// If window is closed, take this as the user quitting
 			// In the future, this must be made more elegant.
-			return false;
+			continueGame = false;
 			break;
 		default:
+			//std::cout << (int)(_event.window.event);
 			break;
 		}
 	}
 
+	// This will allow the topmost gamestate to handle any events given to the window
+	// (Preventing lower gamestates from taking input i.e. when a pause menu overlay is up)
 	std::vector<GameState*>::iterator it = _stateStack.end();
 	it--;
-
     (*it)->HandleEvents(&_event);
 
     // The player has not quit the game, so return false
-	return true;
+	return continueGame;
 }
 
 void Game::Update()

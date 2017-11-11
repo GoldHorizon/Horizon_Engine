@@ -13,13 +13,13 @@ ClassName::~ClassName()
 
 void ClassName::Initialize()
 {
-    Player* mainPlayer = new Player();
-    _entities.AddEntity("MainPlayer", mainPlayer);
-
-    Ball* playingBall = new Ball();
-    playingBall->SetDirection(15);
-    playingBall->LoadFromFile("images/Paddle.png");
-    _entities.AddEntity("PlayingBall", playingBall);
+    //Player* mainPlayer = new Player();
+    //_entities.AddEntity("MainPlayer", mainPlayer);
+	//
+    //Ball* playingBall = new Ball();
+    //playingBall->SetDirection(15);
+    //playingBall->LoadFromFile("images/Paddle.png");
+    //_entities.AddEntity("PlayingBall", playingBall);
 }
 
 void ClassName::Cleanup()
