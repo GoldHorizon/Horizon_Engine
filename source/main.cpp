@@ -17,8 +17,13 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
+    // Start tick counter
 	unsigned int nextGameTick = SDL_GetTicks();
+
+    // Variable used to track how many updates happened
 	int loops;
+
+    // Variable used to keep track of how much to accomodate for processor speed
 	float interpolation;
 
 	// Whether or not game is still running
@@ -28,12 +33,16 @@ int main(int argc, char** argv)
 	{
 		loops = 0;
 
+		// Check if we have lots of time to process things before the next frame
 		while (SDL_GetTicks() > nextGameTick && loops < MAX_FRAMESKIP && gameIsRunning)
 		{
+            // Get input from keyboard and mouse
 			gameIsRunning = mainGame.GetInput();
 
+            // Update entities in the game
 			mainGame.Update();
 
+            // Skip ticks and add loops until we have processed up to the next frame
 			nextGameTick += SKIP_TICKS;
 			loops++;
 
@@ -49,7 +58,10 @@ int main(int argc, char** argv)
 		//std::cout << interpolation << std::endl;
 	}
 
-	// userQuit : If the user has somehow exited the application
+//
+//  OLD GAME LOOP
+//
+// userQuit : If the user has somehow exited the application
 //	bool userQuit = false;
 //
 //	long startTime = SDL_GetTicks();

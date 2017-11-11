@@ -13,8 +13,8 @@ ClassName::~ClassName()
 
 void ClassName::Initialize()
 {
-    //Player* mainPlayer = new Player();
-    //_entities.AddEntity("MainPlayer", mainPlayer);
+    Player* mainPlayer = new Player();
+    _entities.AddEntity("MainPlayer", mainPlayer);
 	//
     //Ball* playingBall = new Ball();
     //playingBall->SetDirection(15);
