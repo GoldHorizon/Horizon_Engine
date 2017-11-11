@@ -12,6 +12,8 @@
 
 #include <iostream>
 
+#include <iostream>
+
 Game::Game():
 	_mainWindow(0),
 	_mainRenderer(0)
