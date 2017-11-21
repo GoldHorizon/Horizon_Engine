@@ -1,7 +1,9 @@
+### Linux Makefile ###
+
 ###
 ### Variables
 ###
-executable := launchGame
+executable := launchEngine.sh
 
 objects := 	main.o \
 			game.o \
@@ -20,6 +22,10 @@ flags := -lSDL2 \
 		 -lm \
 		 -lstdc++
 
+#CFLAGS = -c -Wall -Iinclude
+#options := -c -g -Wall -Iinclude -I/usr/include/SDL2
+options := -c -g -Wall -I/usr/include/SDL2
+
 ###
 ### Main make program
 ###
@@ -29,38 +35,38 @@ all : $(objects)
 ###
 ### Source files
 ###
-main.o 				: source/main.cpp game.h constants.h
-	gcc -c source/main.cpp
+main.o 				: source/main.cpp include/game.h include/constants.h
+	gcc $(options) source/main.cpp
 
-game.o 				: source/game.cpp game.h entityCollection.h enumerations.h
-	gcc -c source/game.cpp
+game.o 				: source/game.cpp include/game.h include/entityCollection.h include/enumerations.h
+	gcc $(options) source/game.cpp
 
-globals.o 			: source/globals.cpp globals.h
-	gcc -c source/globals.cpp
+globals.o 			: source/globals.cpp include/globals.h
+	gcc $(options) source/globals.cpp
 
-entity.o 			: source/entity.cpp entity.h globals.h constants.h
-	gcc -c source/entity.cpp
+entity.o 			: source/entity.cpp include/entity.h include/globals.h include/constants.h
+	gcc $(options) source/entity.cpp
 
-entityCollection.o  : source/entityCollection.cpp entityCollection.h
-	gcc -c source/entityCollection.cpp
+entityCollection.o  : source/entityCollection.cpp include/entityCollection.h
+	gcc $(options) source/entityCollection.cpp
 
-ball.o				: source/ball.cpp ball.h constants.h
-	gcc -c source/ball.cpp
+ball.o				: source/ball.cpp include/ball.h include/constants.h
+	gcc $(options) source/ball.cpp
 
 player.o			: source/player.cpp
-	gcc -c source/player.cpp
+	gcc $(options) source/player.cpp
 
-gameState.o 		: source/gameState.cpp gameState.h
-	gcc -c source/gameState.cpp
+gameState.o 		: source/gameState.cpp include/gameState.h
+	gcc $(options) source/gameState.cpp
 
 ###
 ### List of game states to be compiled ###
 ###
-playing.o			: source/states/playing.cpp states/playing.h
-	gcc -c source/states/playing.cpp
+playing.o			: source/states/playing.cpp include/states/playing.h
+	gcc $(options) source/states/playing.cpp
 
-uninitialized.o		: source/states/uninitialized.cpp states/uninitialized.h
-	gcc -c source/states/uninitialized.cpp
+uninitialized.o		: source/states/uninitialized.cpp include/states/uninitialized.h
+	gcc $(options) source/states/uninitialized.cpp
 ###
 ### Cleans object and executable files (Debug stuff)
 ###

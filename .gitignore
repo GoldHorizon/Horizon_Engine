@@ -1,5 +1,5 @@
-# Executable Files
-launchGame
+# Linux Executable Files
+*.sh
 
 # Debug Folders
 Debug/*
