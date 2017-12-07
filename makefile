@@ -31,6 +31,7 @@ options := -c -g -Wall -I/usr/include/SDL2
 ###
 all : $(objects)
 	gcc -g -o $(executable) $(objects) $(flags)
+	mv $(objects) build/
 
 ###
 ### Source files
