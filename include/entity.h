@@ -65,6 +65,8 @@ public:
 	float y() const;				// Returns the y position
 	float direction() const;		// Returns movement direction
 	float speed() const;			// Returns movement speed
+    float hspeed() const;           // Returns horizontal speed
+    float vspeed() const;           // Returns verticcal speed
 	float imageAlpha() const;		// Returns alpha of image
 	double imageAngle() const;		// Returns the angle
 	SDL_Point imageOrigin() const;	// Returns the origin
@@ -81,6 +83,8 @@ public:
 	void SetY(float y);					// Sets the new y position
 	void SetDirection(float direction);	// Sets the movement direction
 	void SetSpeed(float speed);			// Sets the movement speed
+	void SetHSpeed(float hspeed);		// Sets the movement hspeed
+	void SetVSpeed(float vspeed);		// Sets the movement vspeed
 	void SetImageAlpha(float alpha);	// Sets the image alpha
 	void SetImageAngle(double angle);	// Sets the angle
 	void SetImageOrigin(int x, int y);	// Sets the origin
@@ -102,6 +106,8 @@ private:
 	float _y;				// Current y position of image
 	float _direction;		// Direction the entity is moving
 	float _speed;			// Speed the entity is moving at
+    float _hspeed;          // Horizontal speed of entity
+    float _vspeed;          // Vertical speed of entity
 	float _imageAlpha;		// Alpha of image
 	double _imageAngle;		// Angle of image
 	SDL_Point _imageOrigin;	// Origin of image

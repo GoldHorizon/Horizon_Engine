@@ -18,6 +18,8 @@ Entity::Entity() :
 	_y(0),
 	_direction(0),
 	_speed(0),
+    _hspeed(0),
+    _vspeed(0),
 	_imageAlpha(1),
 	_imageAngle(0),
 	_imageWidth(0),
@@ -41,6 +43,8 @@ Entity::Entity(SDL_Renderer* renderer):
 	_y(0),
 	_direction(0),
 	_speed(0),
+    _hspeed(0),
+    _vspeed(0),
 	_imageAlpha(1),
 	_imageAngle(0),
 	_imageWidth(0),
@@ -101,7 +105,10 @@ void Entity::HandleEvents(SDL_Event*)
 
 void Entity::Update()
 {
+	float xdir = (cos(direction() * PI / 180) * speed());
+	float ydir = (sin(direction() * PI / 180) * speed());
 
+	Move(xdir, ydir);
 }
 
 void Entity::Render(float interpolation)
@@ -249,6 +256,14 @@ float Entity::speed() const
 {
 	return _speed;
 }
+float Entity::hspeed() const
+{
+	return _hspeed;
+}
+float Entity::vspeed() const
+{
+	return _vspeed;
+}
 float Entity::imageAlpha() const
 {
 	return _imageAlpha;
@@ -296,10 +311,44 @@ void Entity::SetY(float y)
 void Entity::SetDirection(float direction)
 {
 	_direction = direction;
+    
+    while(_direction >= 360)
+    {
+        _direction -= 360;
+    }
+    while(_direction < 0)
+    {
+        _direction += 360;
+    }
+    
+    // Change hspeed/vspeed
+    _hspeed = cos(_direction * PI / 180) * _speed;
+    _vspeed = sin(_direction * PI / 180) * _speed;
 }
 void Entity::SetSpeed(float speed)
 {
+    float diff = speed / _speed;
 	_speed = speed;
+
+    // Change hspeed/vspeed
+    _hspeed *= diff;
+    _vspeed *= diff;
+}
+void Entity::SetHSpeed(float hspeed)
+{
+	_hspeed = hspeed;
+
+    // Change speed/direction
+    _speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
+    _direction = atan(_vspeed / _hspeed);
+}
+void Entity::SetVSpeed(float vspeed)
+{
+	_vspeed = vspeed;
+
+    // Change speed/direction
+    _speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
+    _direction = atan(_vspeed / _hspeed);
 }
 void Entity::SetImageAlpha(float alpha)
 {

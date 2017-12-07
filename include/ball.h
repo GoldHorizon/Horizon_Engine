@@ -8,5 +8,6 @@ class Ball:
 public:
 	Ball();
 
+    void HandleEvents(SDL_Event*);
 	void Update();
 };

@@ -105,24 +105,7 @@ void Player::HandleEvents(SDL_Event* event)
 
 void Player::Update()
 {
-	float xdir = (cos(direction() * PI / 180) * speed());
-	float ydir = (sin(direction() * PI / 180) * speed());
-
-//	if (x() < 0 || x() > SCREEN_WIDTH)
-//	{
-//		SetDirection(180 - direction());
-//		xdir = -xdir;
-//		SetSpeed(speed() + 0.1);
-//	}
-//
-//	if (y() < 0 || y() > SCREEN_HEIGHT)
-//	{
-//		SetDirection(360 - direction());
-//		ydir = -ydir;
-//		SetSpeed(speed() + 0.1);
-//	}
-
-	Move(xdir, ydir);
+    Entity::Update();
 }
 
 Entity* Player::NewInstance()
