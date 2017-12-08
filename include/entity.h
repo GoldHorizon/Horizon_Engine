@@ -113,4 +113,6 @@ private:
 	SDL_Point _imageOrigin;	// Origin of image
 	int _imageWidth;		// Width of the image
 	int _imageHeight;		// Height of the image
+
+	void CalculateSpeedDir();	// Calculates speed and direction based on hspeed and vspeed
 };

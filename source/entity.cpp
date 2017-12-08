@@ -338,55 +338,15 @@ void Entity::SetHSpeed(float hspeed)
 {
 	_hspeed = hspeed;
 
-    // Change speed/direction
-    if (_hspeed != 0)
-    {
-        _direction = atan(_vspeed / _hspeed) / PI * 180;
-        if (_hspeed < 0)
-        {
-            _direction = 180 - _direction;
-        }
-    }
-    else
-    {
-        if (_vspeed > 0)
-        {
-            _direction = 90;
-        }
-        else if (_vspeed < 0)
-        {
-            _direction = 270;
-        }
-    }
-
-    _speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
+	// Change speed/direction
+	CalculateSpeedDir();
 }
 void Entity::SetVSpeed(float vspeed)
 {
 	_vspeed = vspeed;
 
-    // Change speed/direction
-    if (_hspeed != 0)
-    {
-        _direction = atan(_vspeed / _hspeed) / PI * 180;
-        if (_hspeed < 0)
-        {
-            _direction = 180 - _direction;
-        }
-    }
-    else
-    {
-        if (_vspeed > 0)
-        {
-            _direction = 90;
-        }
-        else if (_vspeed < 0)
-        {
-            _direction = 270;
-        }
-    }
-
-    _speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
+	// Change speed/direction
+	CalculateSpeedDir();
 }
 void Entity::SetImageAlpha(float alpha)
 {
@@ -421,3 +381,28 @@ void Entity::SetPosition(SDL_Point pos)
 	_y = pos.y;
 }
 
+void Entity::CalculateSpeedDir()
+{
+	// Change speed/direction
+	if (_hspeed != 0)
+	{
+		_direction = atan(_vspeed / _hspeed) / PI * 180;
+		if (_hspeed > 0)
+		{
+			_direction = 180 - _direction;
+		}
+	}
+	else
+	{
+		if (_vspeed > 0)
+		{
+			_direction = 90;
+		}
+		else if (_vspeed < 0)
+		{
+			_direction = 270;
+		}
+	}
+
+	_speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
+}
