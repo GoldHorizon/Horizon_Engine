@@ -14,15 +14,15 @@ void Ball::HandleEvents(SDL_Event* event)
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
-    if (state[SDL_SCANCODE_W] ^ state[SDL_SCANCODE_S])
+    if (state[SDL_SCANCODE_S] ^ state[SDL_SCANCODE_W])
     {
         if (vspeed() > -4)
         {
-            SetVSpeed(vspeed() - (0.1 * state[SDL_SCANCODE_W]));
+            SetVSpeed(vspeed() - (0.1 * state[SDL_SCANCODE_S]));
         }
         if (vspeed() < 4)
         {
-            SetVSpeed(vspeed() + (0.1 * state[SDL_SCANCODE_S]));
+            SetVSpeed(vspeed() + (0.1 * state[SDL_SCANCODE_W]));
         }
     }
 
@@ -42,6 +42,8 @@ void Ball::HandleEvents(SDL_Event* event)
 void Ball::Update()
 {
     Entity::Update();
+
+    std::cout << "Speeds:" << std::endl << hspeed() << std::endl << vspeed() << std::endl << speed() << std::endl << direction() << std::endl << std::endl;
 
 }
 

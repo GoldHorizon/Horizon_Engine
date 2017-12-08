@@ -339,16 +339,54 @@ void Entity::SetHSpeed(float hspeed)
 	_hspeed = hspeed;
 
     // Change speed/direction
+    if (_hspeed != 0)
+    {
+        _direction = atan(_vspeed / _hspeed) / PI * 180;
+        if (_hspeed < 0)
+        {
+            _direction = 180 - _direction;
+        }
+    }
+    else
+    {
+        if (_vspeed > 0)
+        {
+            _direction = 90;
+        }
+        else if (_vspeed < 0)
+        {
+            _direction = 270;
+        }
+    }
+
     _speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
-    _direction = atan(_vspeed / _hspeed);
 }
 void Entity::SetVSpeed(float vspeed)
 {
 	_vspeed = vspeed;
 
     // Change speed/direction
+    if (_hspeed != 0)
+    {
+        _direction = atan(_vspeed / _hspeed) / PI * 180;
+        if (_hspeed < 0)
+        {
+            _direction = 180 - _direction;
+        }
+    }
+    else
+    {
+        if (_vspeed > 0)
+        {
+            _direction = 90;
+        }
+        else if (_vspeed < 0)
+        {
+            _direction = 270;
+        }
+    }
+
     _speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
-    _direction = atan(_vspeed / _hspeed);
 }
 void Entity::SetImageAlpha(float alpha)
 {
