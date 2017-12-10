@@ -15,11 +15,10 @@ void ClassName::Initialize()
 {
     Player* mainPlayer = new Player();
     _entities.AddEntity("MainPlayer", mainPlayer);
-	//
-    //Ball* playingBall = new Ball();
-    //playingBall->SetDirection(15);
-    //playingBall->LoadFromFile("images/Paddle.png");
-    //_entities.AddEntity("PlayingBall", playingBall);
+
+    Ball* testBall = new Ball();
+    testBall->SetPosition(100, 100);
+    _entities.AddEntity("TestBall", testBall);
 }
 
 void ClassName::Cleanup()

@@ -6,48 +6,69 @@
 
 Ball::Ball()
 {
-	SetDirection(0);
-	SetSpeed(10);
+    LoadFromFile("images/Player.png");
+    SetImageOrigin(this->imageWidth() / 2, this->imageHeight() / 2);
+}
+
+void Ball::HandleEvents(SDL_Event* event)
+{
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
+
+	if (state[SDL_SCANCODE_W] ^ state[SDL_SCANCODE_S])
+	{
+		if (vspeed() > -4)
+		{
+			SetVSpeed(vspeed() - (0.1 * state[SDL_SCANCODE_W]));
+		}
+		if (vspeed() < 4)
+		{
+			SetVSpeed(vspeed() + (0.1 * state[SDL_SCANCODE_S]));
+		}
+	}
+
+	if (state[SDL_SCANCODE_A] ^ state[SDL_SCANCODE_D])
+	{
+		if (hspeed() > -4)
+		{
+			SetHSpeed(hspeed() - (0.1 * state[SDL_SCANCODE_A]));
+		}
+		if (hspeed() < 4)
+		{
+			SetHSpeed(hspeed() + (0.1 * state[SDL_SCANCODE_D]));
+		}
+	}
+
+	if (state[SDL_SCANCODE_UP])
+		SetSpeed(speed() + 0.1);
+
+	if (state[SDL_SCANCODE_DOWN])
+		SetSpeed(speed() - 0.1);
+
+	if (state[SDL_SCANCODE_LEFT])
+		SetDirection(direction() - 2);
+
+	if (state[SDL_SCANCODE_RIGHT])
+		SetDirection(direction() + 2);
+
+	if (state[SDL_SCANCODE_SPACE])
+	{
+		SetSpeed(0);
+		SetDirection(0);
+	}
 }
 
 void Ball::Update()
 {
-	float xdir = (cos(direction() * PI / 180) * speed());
-	float ydir = (sin(direction() * PI / 180) * speed());
+    Entity::Update();
 
-	if (x() < 0 || x() > SCREEN_WIDTH)
-	{
-		SetDirection(180 - direction());
-		xdir = -xdir;
-		SetSpeed(speed() + 0.1);
-	}
-
-	if (y() < 0 || y() > SCREEN_HEIGHT)
-	{
-		SetDirection(360 - direction());
-		ydir = -ydir;
-		SetSpeed(speed() + 0.1);
-	}
-
-//	while (direction() > 360)
-//	{
-//		SetDirection(direction() - 360);
-//	}
-//  while (direction() < 0)
-//  {
-//      SetDirection(direction() + 360);
-//  }
-
-	SetImageAngle(imageAngle() + 1);
-
-//	while (imageAngle() > 360)
-//	{
-//		SetDirection(imageAngle() - 360);
-//	}
-//  while (imageAngle() < 0)
-//  {
-//      SetDirection(imageAngle() + 360);
-//  }
-
-	Move(xdir, ydir);
+	// DEBUG
+	/*
+    std::cout << "Speeds:" << std::endl 
+		<< hspeed() << std::endl 
+		<< vspeed() << std::endl 
+		<< speed() << std::endl 
+		<< direction() << std::endl 
+		<< atan(vspeed() / hspeed()) / PI * 180 << std::endl;
+	*/
 }
+
