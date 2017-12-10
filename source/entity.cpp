@@ -327,12 +327,21 @@ void Entity::SetDirection(float direction)
 }
 void Entity::SetSpeed(float speed)
 {
-    float diff = speed / _speed;
-	_speed = speed;
+	if (_speed != 0)
+	{
+		float diff = speed / _speed;
 
-    // Change hspeed/vspeed
-    _hspeed *= diff;
-    _vspeed *= diff;
+		// Change hspeed/vspeed
+		_hspeed *= diff;
+		_vspeed *= diff;
+	}
+	else
+	{
+		_hspeed = cos(_direction * PI / 180) * speed;
+		_vspeed = sin(_direction * PI / 180) * speed;
+	}
+
+	_speed = speed;
 }
 void Entity::SetHSpeed(float hspeed)
 {
@@ -389,7 +398,11 @@ void Entity::CalculateSpeedDir()
 		_direction = atan(_vspeed / _hspeed) / PI * 180;
 		if (_hspeed > 0)
 		{
-			_direction = 180 - _direction;
+			//_direction = 180 - _direction;
+		}
+		else
+		{
+			_direction = 180 + _direction;
 		}
 	}
 	else
@@ -402,6 +415,15 @@ void Entity::CalculateSpeedDir()
 		{
 			_direction = 270;
 		}
+	}
+
+	while (_direction >= 360)
+	{
+		_direction -= 360;
+	}
+	while (_direction < 0)
+	{
+		_direction += 360;
 	}
 
 	_speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
