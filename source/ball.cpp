@@ -61,12 +61,14 @@ void Ball::Update()
 {
     Entity::Update();
 
+	// DEBUG
+	/*
     std::cout << "Speeds:" << std::endl 
 		<< hspeed() << std::endl 
 		<< vspeed() << std::endl 
 		<< speed() << std::endl 
 		<< direction() << std::endl 
 		<< atan(vspeed() / hspeed()) / PI * 180 << std::endl;
-
+	*/
 }
 
