@@ -1,5 +1,4 @@
 #include "../include/game.h"
-#include <iostream>
 #include "../include/globals.h"
 #include "../include/constants.h"
 #include "../include/ball.h"
@@ -9,8 +8,6 @@
 #include "../include/states/titleScreen.h"
 #include "../include/states/options.h"
 #include "../include/states/pauseMenu.h"
-
-#include <iostream>
 
 #include <iostream>
 
