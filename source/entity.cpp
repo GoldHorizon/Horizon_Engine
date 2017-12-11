@@ -63,7 +63,7 @@ Entity::~Entity()
 	FreeMemory();
 }
 
-void Entity::LoadFromFile(const std::string file)
+void Entity::LoadFromFile(const std::string file, int spriteWidth, int spriteHeight)
 {
 	//std::string fullPath = std::experimental::filesystem::current_path().string() + "\\" + file;
 	

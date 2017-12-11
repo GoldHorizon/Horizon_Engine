@@ -1,7 +1,7 @@
 #pragma once
 
-//#include "header.h"
 #include "SDL.h"
+
 #include <string>
 
 class Entity
@@ -18,8 +18,10 @@ public:
 	 * Class Methods
 	 */
 	// LoadFromFile() 	- Load the texture from a file
-	//	file:		string with filepath to image
-	void LoadFromFile(const std::string file);
+	//	file:			string with filepath to image
+	//	spriteWidth:	width of individual sprites if loading sprite sheet
+	//	spriteHeight:	height of individual sprites if loading sprite sheet
+	void LoadFromFile(const std::string file, int spriteWidth = 0, int spriteHeight = 0);
 
 	// FreeMemory() 	- Frees the texture memory used
 	void FreeMemory();
@@ -94,10 +96,12 @@ public:
 
 private:
 
-	// _image			- Image stored in the drawable
+	// _image				- Image stored in the drawable
 	SDL_Texture* _image;
-	// _renderer		- Renderer we draw to for this drawable
+	// _renderer			- Renderer we draw to for this drawable
 	SDL_Renderer* _renderer;
+	// _spriteDimensions	- Dimensions of individual sprite, if using sprite sheet
+	SDL_Point _spriteDimensions;
 
 	int _ID;				// ID of the entity
 	bool _active;			// If entity is active or not
@@ -113,6 +117,8 @@ private:
 	SDL_Point _imageOrigin;	// Origin of image
 	int _imageWidth;		// Width of the image
 	int _imageHeight;		// Height of the image
+
+	float _imageSpeed;		// Speed animation plays at
 
 	void CalculateSpeedDir();	// Calculates speed and direction based on hspeed and vspeed
 };
