@@ -501,22 +501,39 @@ void Entity::AdvanceImage()
 
 	_lastImageTime = SDL_GetTicks();
 
-	if (_imageTimer > _imageSpeed)
+	// If imageSpeed is positive, we progress forwards through animation
+	if (_imageSpeed > 0)
 	{
-		if (_imageSpeed > 0)
+		if (_imageTimer > _imageSpeed)
 		{
 			_imageTimer -= _imageSpeed;
 			_imageIndex++;
 		}
-		else
+	}
+	// If imageSpeed is negative, we step backwards through animation
+	else if (_imageSpeed < 0)
+	{
+		if (_imageTimer > abs(_imageSpeed))
 		{
-			_imageTimer = 0;
+			_imageTimer -= abs(_imageSpeed);
+			_imageIndex--;
 		}
 	}
+	// If imageSpeed is 0 reset timer and do nothing
+	else
+	{
+		_imageTimer = 0;
+	}
 
+	// If we overflow on imageIndex, go back to beginning
 	if (_imageIndex >= (_imageWidth / _spriteDimensions.x))
 	{
 		_imageIndex -= (_imageWidth / _spriteDimensions.x);
+	}
+	// If we underflow imageIndex, go to end
+	if (_imageIndex < 0)
+	{
+		_imageIndex += (_imageWidth / _spriteDimensions.x);
 	}
 
 	// DEBUG

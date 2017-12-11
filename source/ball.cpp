@@ -10,13 +10,14 @@ Ball::Ball()
     SetImageOrigin(16, 16);
 
 	SetImageIndex(0);
-	SetImageSpeed(75);
+	SetImageSpeed(-1000);
 }
 
 void Ball::HandleEvents(SDL_Event* event)
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
+	// WASD adjusts hspeed/vspeed individually
 	if (state[SDL_SCANCODE_W] ^ state[SDL_SCANCODE_S])
 	{
 		if (vspeed() > -4)
@@ -28,7 +29,6 @@ void Ball::HandleEvents(SDL_Event* event)
 			SetVSpeed(vspeed() + (0.1 * state[SDL_SCANCODE_S]));
 		}
 	}
-
 	if (state[SDL_SCANCODE_A] ^ state[SDL_SCANCODE_D])
 	{
 		if (hspeed() > -4)
@@ -41,6 +41,7 @@ void Ball::HandleEvents(SDL_Event* event)
 		}
 	}
 
+	// Directional Keys "drive" the ball, can turn or speed up/slow down
 	if (state[SDL_SCANCODE_UP])
 		SetSpeed(speed() + 0.1);
 
@@ -53,6 +54,7 @@ void Ball::HandleEvents(SDL_Event* event)
 	if (state[SDL_SCANCODE_RIGHT])
 		SetDirection(direction() + 2);
 
+	// Space stops all motion
 	if (state[SDL_SCANCODE_SPACE])
 	{
 		SetSpeed(0);
