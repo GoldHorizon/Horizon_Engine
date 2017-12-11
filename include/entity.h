@@ -77,6 +77,9 @@ public:
 	int imageSpeed() const;			// Returns image speed
 	int imageIndex() const;			// Returns image index
 
+	// Returns sprite dimensions for sprite sheets
+	SDL_Point Entity::spriteDimensions() const;
+
 	/*
 	 * Set Methods
 	 */
