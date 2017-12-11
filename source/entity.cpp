@@ -18,12 +18,17 @@ Entity::Entity() :
 	_y(0),
 	_direction(0),
 	_speed(0),
-    _hspeed(0),
-    _vspeed(0),
+	_hspeed(0),
+	_vspeed(0),
 	_imageAlpha(1),
 	_imageAngle(0),
 	_imageWidth(0),
-	_imageHeight(0)
+	_imageHeight(0),
+	_spriteDimensions({ 0, 0 }),
+	_imageSpeed(0),
+	_imageTimer(0),
+	_lastImageTime(0),
+	_imageIndex(0)
 {
 	_imageOrigin = {0, 0};
 
@@ -48,7 +53,12 @@ Entity::Entity(SDL_Renderer* renderer):
 	_imageAlpha(1),
 	_imageAngle(0),
 	_imageWidth(0),
-	_imageHeight(0)
+	_imageHeight(0),
+	_spriteDimensions({ 0, 0 }),
+	_imageSpeed(0),
+	_imageTimer(0),
+	_lastImageTime(0),
+	_imageIndex(0)
 {
 	_imageOrigin = {0, 0};
 
@@ -75,11 +85,24 @@ void Entity::LoadFromFile(const std::string file, int spriteWidth, int spriteHei
 	{
 		// Set our attributes to match image properties
 		_image = SDL_CreateTextureFromSurface(_renderer, tempSurface);
+
 		_imageWidth = tempSurface->w;
 		_imageHeight = tempSurface->h;
+		// If we are loading in is not a sprite sheet:
+		if (spriteWidth != 0 && spriteHeight != 0)
+		{
+			_spriteDimensions.x = spriteWidth;
+			_spriteDimensions.y = spriteHeight;
+		}
 
 		// Free up our surface when we're done
 		SDL_FreeSurface(tempSurface);
+
+		// DEBUG
+		std::cout << _imageWidth << std::endl
+			<< _imageHeight << std::endl
+			<< _spriteDimensions.x << std::endl
+			<< _spriteDimensions.y << std::endl << std::endl;
 	}
 	else
 	{
@@ -109,6 +132,11 @@ void Entity::Update()
 	float ydir = (sin(direction() * PI / 180) * speed());
 
 	Move(xdir, ydir);
+
+	if (_spriteDimensions.x != 0)
+	{
+		AdvanceImage();
+	}
 }
 
 void Entity::Render(float interpolation)
@@ -122,10 +150,32 @@ void Entity::Render(float interpolation)
 		int yy = static_cast<int>(_y) - _imageOrigin.y
 			   + static_cast<int>(sin(_direction * PI / 180) * _speed * (_active * interpolation));
 
-		// Create a rectangle to put on display
-		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
+		SDL_Rect* sourceImage = nullptr;
+		SDL_Rect* displayImage = nullptr;
+		// Create a rectangle for select image index
+		if (_spriteDimensions.x != 0 && _spriteDimensions.y != 0)
+		{
+			sourceImage = new SDL_Rect { _spriteDimensions.x * _imageIndex, 0, _spriteDimensions.x, _imageHeight };
 
-		SDL_RenderCopyEx(_renderer, _image, nullptr, &displayImage, _imageAngle, &_imageOrigin, SDL_FLIP_NONE);
+			// DEBUG
+			//std::cout << sourceImage->x << "   " << sourceImage->w << "   " << sourceImage->y << "   " << sourceImage->h << std::endl;
+
+			// Create a rectangle to put on display
+			displayImage = new SDL_Rect{ xx, yy, _spriteDimensions.x, _spriteDimensions.y };
+		}
+		else
+		{
+			// Create a rectangle to put on display
+			displayImage = new SDL_Rect{ xx, yy, _imageWidth, _imageHeight };
+		}
+
+
+		SDL_RenderCopyEx(_renderer, _image, sourceImage, displayImage, _imageAngle, &_imageOrigin, SDL_FLIP_NONE);
+
+		// Free memory of image
+		if (sourceImage != nullptr)
+			delete sourceImage;
+		delete displayImage;
 	}
 }
 
@@ -284,6 +334,14 @@ int Entity::imageHeight() const
 {
 	return _imageHeight;
 }
+int Entity::imageSpeed() const
+{
+	return _imageSpeed;
+}
+int Entity::imageIndex() const
+{
+	return _imageIndex;
+}
 
 /*
  * Set Methods
@@ -379,6 +437,15 @@ void Entity::SetImageOrigin(SDL_Point pos)
 	_imageOrigin.x = pos.x;
 	_imageOrigin.y = pos.y;
 }
+void Entity::SetImageSpeed(int speed)
+{
+	_imageSpeed = speed;
+}
+void Entity::SetImageIndex(int index)
+{
+	_imageIndex = index;
+}
+
 void Entity::SetPosition(float x, float y)
 {
 	_x = x;
@@ -427,4 +494,31 @@ void Entity::CalculateSpeedDir()
 	}
 
 	_speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
+}
+void Entity::AdvanceImage()
+{
+	_imageTimer += SDL_GetTicks() - _lastImageTime;
+
+	_lastImageTime = SDL_GetTicks();
+
+	if (_imageTimer > _imageSpeed)
+	{
+		if (_imageSpeed > 0)
+		{
+			_imageTimer -= _imageSpeed;
+			_imageIndex++;
+		}
+		else
+		{
+			_imageTimer = 0;
+		}
+	}
+
+	if (_imageIndex >= (_imageWidth / _spriteDimensions.x))
+	{
+		_imageIndex -= (_imageWidth / _spriteDimensions.x);
+	}
+
+	// DEBUG
+	std::cout << _imageTimer << std::endl;
 }

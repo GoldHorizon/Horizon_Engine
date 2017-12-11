@@ -8,6 +8,9 @@ Ball::Ball()
 {
 	LoadFromFile("images/Player.png");
 	SetImageOrigin(this->imageWidth() / 2, this->imageHeight() / 2);
+
+	SetImageIndex(0);
+	SetImageSpeed(75);
 }
 
 void Ball::HandleEvents(SDL_Event* event)
