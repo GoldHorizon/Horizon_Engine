@@ -6,8 +6,11 @@
 
 Ball::Ball()
 {
-    LoadFromFile("images/Player.png");
-    SetImageOrigin(this->imageWidth() / 2, this->imageHeight() / 2);
+    LoadFromFile("images/shrinking_circle.png", 32, 32);
+    SetImageOrigin(16, 16);
+
+	SetImageIndex(0);
+	SetImageSpeed(75);
 }
 
 void Ball::HandleEvents(SDL_Event* event)

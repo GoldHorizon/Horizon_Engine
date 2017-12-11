@@ -74,6 +74,8 @@ public:
 	SDL_Point imageOrigin() const;	// Returns the origin
 	int imageWidth() const;			// Returns the width of the image
 	int imageHeight() const;		// Returns the height of the image
+	int imageSpeed() const;			// Returns image speed
+	int imageIndex() const;			// Returns image index
 
 	/*
 	 * Set Methods
@@ -91,6 +93,9 @@ public:
 	void SetImageAngle(double angle);	// Sets the angle
 	void SetImageOrigin(int x, int y);	// Sets the origin
 	void SetImageOrigin(SDL_Point pos);	// Sets the origin
+	void SetImageSpeed(int speed);		// Sets image speed in ms
+	void SetImageIndex(int index);		// Sets image index
+
 	void SetPosition(float x, float y);	// Shortcut to set position
 	void SetPosition(SDL_Point pos);	// Shortcut to set position
 
@@ -115,10 +120,14 @@ private:
 	float _imageAlpha;		// Alpha of image
 	double _imageAngle;		// Angle of image
 	SDL_Point _imageOrigin;	// Origin of image
-	int _imageWidth;		// Width of the image
-	int _imageHeight;		// Height of the image
+	int _imageWidth;		// Width of the loaded image
+	int _imageHeight;		// Height of the loaded image
 
-	float _imageSpeed;		// Speed animation plays at
+	int _imageSpeed;		// Speed animation plays at (in ms)
+	int _imageTimer;		// Timer for image animation
+	int _lastImageTime;		// Complements image timer
+	int _imageIndex;		// Current frame of sprite being displayed
 
 	void CalculateSpeedDir();	// Calculates speed and direction based on hspeed and vspeed
+	void AdvanceImage();		// Calculates if and when to increment imageIndex
 };
