@@ -17,7 +17,7 @@ void ClassName::Initialize()
     _entities.AddEntity("MainPlayer", mainPlayer);
 
     Ball* testBall = new Ball();
-    testBall->SetPosition(90, 90);
+    testBall->SetPosition(128, 128);
     _entities.AddEntity("TestBall", testBall);
 }
 
