@@ -342,6 +342,10 @@ int Entity::imageIndex() const
 {
 	return _imageIndex;
 }
+SDL_Point Entity::spriteDimensions() const
+{
+	return _spriteDimensions;
+}
 
 /*
  * Set Methods
