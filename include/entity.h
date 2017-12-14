@@ -78,7 +78,7 @@ public:
 	int imageIndex() const;			// Returns image index
 
 	// Returns sprite dimensions for sprite sheets
-	SDL_Point Entity::spriteDimensions() const;
+	SDL_Point spriteDimensions() const;
 
 	/*
 	 * Set Methods
@@ -108,8 +108,6 @@ private:
 	SDL_Texture* _image;
 	// _renderer			- Renderer we draw to for this drawable
 	SDL_Renderer* _renderer;
-	// _spriteDimensions	- Dimensions of individual sprite, if using sprite sheet
-	SDL_Point _spriteDimensions;
 
 	int _ID;				// ID of the entity
 	bool _active;			// If entity is active or not
@@ -125,6 +123,9 @@ private:
 	SDL_Point _imageOrigin;	// Origin of image
 	int _imageWidth;		// Width of the loaded image
 	int _imageHeight;		// Height of the loaded image
+
+	// _spriteDimensions	- Dimensions of individual sprite, if using sprite sheet
+	SDL_Point _spriteDimensions;
 
 	int _imageSpeed;		// Speed animation plays at (in ms)
 	int _imageTimer;		// Timer for image animation

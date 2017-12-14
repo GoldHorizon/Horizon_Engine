@@ -73,4 +73,5 @@ uninitialized.o		: source/states/uninitialized.cpp include/states/uninitialized.
 ### Cleans object and executable files (Debug stuff)
 ###
 clean :
-	rm -f $(executable) $(objects)
+	rm -fr ./build
+	rm -f $(executable)
