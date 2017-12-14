@@ -541,5 +541,5 @@ void Entity::AdvanceImage()
 	}
 
 	// DEBUG
-	std::cout << _imageTimer << std::endl;
+	//std::cout << _imageTimer << std::endl;
 }
