@@ -6,14 +6,22 @@
 
 Ball::Ball()
 {
-    LoadFromFile("images/Player.png");
-    SetImageOrigin(this->imageWidth() / 2, this->imageHeight() / 2);
+	// Load sprite sheet, setting individual sprite (frame) size to 32x32
+    LoadFromFile("images/shrinking_circle.png", 32, 32);
+
+	// Set image origin to be center of sprite (NOT loaded image)
+    SetImageOrigin(spriteDimensions().x / 2, spriteDimensions().y / 2);
+
+	// Set image speed in ms 
+	//SetImageIndex(0);
+	SetImageSpeed(100);
 }
 
 void Ball::HandleEvents(SDL_Event* event)
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
+	// WASD adjusts hspeed/vspeed individually
 	if (state[SDL_SCANCODE_W] ^ state[SDL_SCANCODE_S])
 	{
 		if (vspeed() > -4)
@@ -25,7 +33,6 @@ void Ball::HandleEvents(SDL_Event* event)
 			SetVSpeed(vspeed() + (0.1 * state[SDL_SCANCODE_S]));
 		}
 	}
-
 	if (state[SDL_SCANCODE_A] ^ state[SDL_SCANCODE_D])
 	{
 		if (hspeed() > -4)
@@ -38,6 +45,7 @@ void Ball::HandleEvents(SDL_Event* event)
 		}
 	}
 
+	// Directional Keys "drive" the ball, can turn or speed up/slow down
 	if (state[SDL_SCANCODE_UP])
 		SetSpeed(speed() + 0.1);
 
@@ -50,6 +58,7 @@ void Ball::HandleEvents(SDL_Event* event)
 	if (state[SDL_SCANCODE_RIGHT])
 		SetDirection(direction() + 2);
 
+	// Space stops all motion
 	if (state[SDL_SCANCODE_SPACE])
 	{
 		SetSpeed(0);

@@ -1,7 +1,7 @@
 #pragma once
 
-//#include "header.h"
 #include "SDL.h"
+
 #include <string>
 
 class Entity
@@ -18,8 +18,10 @@ public:
 	 * Class Methods
 	 */
 	// LoadFromFile() 	- Load the texture from a file
-	//	file:		string with filepath to image
-	void LoadFromFile(const std::string file);
+	//	file:			string with filepath to image
+	//	spriteWidth:	width of individual sprites if loading sprite sheet
+	//	spriteHeight:	height of individual sprites if loading sprite sheet
+	void LoadFromFile(const std::string file, int spriteWidth = 0, int spriteHeight = 0);
 
 	// FreeMemory() 	- Frees the texture memory used
 	void FreeMemory();
@@ -63,6 +65,7 @@ public:
 	bool visible() const;
 	float x() const;				// Returns the x position
 	float y() const;				// Returns the y position
+    float depth() const;            // Returns image depth
 	float direction() const;		// Returns movement direction
 	float speed() const;			// Returns movement speed
     float hspeed() const;           // Returns horizontal speed
@@ -72,6 +75,11 @@ public:
 	SDL_Point imageOrigin() const;	// Returns the origin
 	int imageWidth() const;			// Returns the width of the image
 	int imageHeight() const;		// Returns the height of the image
+	int imageSpeed() const;			// Returns image speed
+	int imageIndex() const;			// Returns image index
+
+	// Returns sprite dimensions for sprite sheets
+	SDL_Point spriteDimensions() const;
 
 	/*
 	 * Set Methods
@@ -81,6 +89,7 @@ public:
 	void SetVisible(bool visible);		// Sets if entity is visible
 	void SetX(float x);					// Sets the new x position
 	void SetY(float y);					// Sets the new y position
+    void SetDepth(float depth);         // Sets the image depth
 	void SetDirection(float direction);	// Sets the movement direction
 	void SetSpeed(float speed);			// Sets the movement speed
 	void SetHSpeed(float hspeed);		// Sets the movement hspeed
@@ -89,14 +98,17 @@ public:
 	void SetImageAngle(double angle);	// Sets the angle
 	void SetImageOrigin(int x, int y);	// Sets the origin
 	void SetImageOrigin(SDL_Point pos);	// Sets the origin
+	void SetImageSpeed(int speed);		// Sets image speed in ms
+	void SetImageIndex(int index);		// Sets image index
+
 	void SetPosition(float x, float y);	// Shortcut to set position
 	void SetPosition(SDL_Point pos);	// Shortcut to set position
 
 private:
 
-	// _image			- Image stored in the drawable
+	// _image				- Image stored in the drawable
 	SDL_Texture* _image;
-	// _renderer		- Renderer we draw to for this drawable
+	// _renderer			- Renderer we draw to for this drawable
 	SDL_Renderer* _renderer;
 
 	int _ID;				// ID of the entity
@@ -104,6 +116,7 @@ private:
 	bool _visible;			// If entity's image is visible
 	float _x;				// Current x position of image
 	float _y;				// Current y position of image
+    float _depth;           // Depth of image (greater value = further back)
 	float _direction;		// Direction the entity is moving
 	float _speed;			// Speed the entity is moving at
     float _hspeed;          // Horizontal speed of entity
@@ -111,8 +124,17 @@ private:
 	float _imageAlpha;		// Alpha of image
 	double _imageAngle;		// Angle of image
 	SDL_Point _imageOrigin;	// Origin of image
-	int _imageWidth;		// Width of the image
-	int _imageHeight;		// Height of the image
+	int _imageWidth;		// Width of the loaded image
+	int _imageHeight;		// Height of the loaded image
+
+	// _spriteDimensions	- Dimensions of individual sprite, if using sprite sheet
+	SDL_Point _spriteDimensions;
+
+	int _imageSpeed;		// Speed animation plays at (in ms)
+	int _imageTimer;		// Timer for image animation
+	int _lastImageTime;		// Complements image timer
+	int _imageIndex;		// Current frame of sprite being displayed
 
 	void CalculateSpeedDir();	// Calculates speed and direction based on hspeed and vspeed
+	void AdvanceImage();		// Calculates if and when to increment imageIndex
 };

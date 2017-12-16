@@ -30,7 +30,9 @@ options := -c -g -Wall -I/usr/include/SDL2
 ### Main make program
 ###
 all : $(objects)
+	make clean
 	gcc -g -o $(executable) $(objects) $(flags)
+	mkdir build/
 	mv $(objects) build/
 
 ###
@@ -72,4 +74,5 @@ uninitialized.o		: source/states/uninitialized.cpp include/states/uninitialized.
 ### Cleans object and executable files (Debug stuff)
 ###
 clean :
-	rm -f $(executable) $(objects)
+	rm -fr ./build
+	rm -f $(executable)
