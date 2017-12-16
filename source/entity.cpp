@@ -298,6 +298,10 @@ float Entity::y() const
 {
 	return _y;
 }
+float Entity::depth() const
+{
+	return _depth;
+}
 float Entity::direction() const
 {
 	return _direction;
@@ -369,6 +373,10 @@ void Entity::SetX(float x)
 void Entity::SetY(float y)
 {
 	_y = y;
+}
+void Entity::SetDepth(float depth)
+{
+	_depth = depth;
 }
 void Entity::SetDirection(float direction)
 {
