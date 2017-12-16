@@ -30,6 +30,7 @@ options := -c -g -Wall -I/usr/include/SDL2
 ### Main make program
 ###
 all : $(objects)
+	make clean
 	gcc -g -o $(executable) $(objects) $(flags)
 	mkdir build/
 	mv $(objects) build/
