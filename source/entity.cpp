@@ -8,34 +8,8 @@
 
 #include "SDL_image.h"
 
-Entity::Entity() :
-	_image(nullptr),
-	_renderer(globalRenderer),
-	_ID(0),
-	_active(true),
-	_visible(true),
-	_x(0),
-	_y(0),
-	_direction(0),
-	_speed(0),
-	_hspeed(0),
-	_vspeed(0),
-	_imageAlpha(1),
-	_imageAngle(0),
-	_imageWidth(0),
-	_imageHeight(0),
-	_spriteDimensions({ 0, 0 }),
-	_imageSpeed(0),
-	_imageTimer(0),
-	_lastImageTime(0),
-	_imageIndex(0)
+Entity::Entity() : Entity(globalRenderer)
 {
-	_imageOrigin = {0, 0};
-
-	if (globalRenderer == nullptr)
-	{
-		std::cerr << "Error: Cannot instantiate object - globalRenderer not set!" << std::endl;
-	}
 }
 
 Entity::Entity(SDL_Renderer* renderer):
@@ -46,6 +20,7 @@ Entity::Entity(SDL_Renderer* renderer):
 	_visible(true),
 	_x(0),
 	_y(0),
+	_depth(0),
 	_direction(0),
 	_speed(0),
     _hspeed(0),
