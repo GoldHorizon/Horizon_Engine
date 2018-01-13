@@ -6,8 +6,8 @@
 
 Ball::Ball()
 {
-    LoadFromFile("images/Player.png");
-    SetImageOrigin(this->imageWidth() / 2, this->imageHeight() / 2);
+	LoadFromFile("images/Player.png");
+	SetImageOrigin(this->imageWidth() / 2, this->imageHeight() / 2);
 }
 
 void Ball::HandleEvents(SDL_Event* event)
@@ -59,15 +59,15 @@ void Ball::HandleEvents(SDL_Event* event)
 
 void Ball::Update()
 {
-    Entity::Update();
+	Entity::Update();
 
 	// DEBUG
 	/*
-    std::cout << "Speeds:" << std::endl 
-		<< hspeed() << std::endl 
-		<< vspeed() << std::endl 
-		<< speed() << std::endl 
-		<< direction() << std::endl 
+	std::cout << "Speeds:" << std::endl
+		<< hspeed() << std::endl
+		<< vspeed() << std::endl
+		<< speed() << std::endl
+		<< direction() << std::endl
 		<< atan(vspeed() / hspeed()) / PI * 180 << std::endl;
 	*/
 }

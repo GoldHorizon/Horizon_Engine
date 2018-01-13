@@ -1,6 +1,9 @@
 # Linux Executable Files
 *.sh
 
+# Vim swap files
+*.swp
+
 # Debug Folders
 Debug/*
 .idea/*
