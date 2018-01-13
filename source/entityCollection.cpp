@@ -26,8 +26,8 @@ int EntityCollection::GetCount() const
 
 Entity* const EntityCollection::GetByName(std::string name) const
 {
-	// eMap == std::map<std::string, Entity*>
-	eMap::const_iterator it = _collection.begin();
+	// eList == std::map<std::string, Entity*>
+	eList::const_iterator it = _collection.begin();
 
 	it = _collection.find(name);
 
@@ -43,8 +43,8 @@ Entity* const EntityCollection::GetByName(std::string name) const
 
 Entity* const EntityCollection::GetByID(int ID) const
 {
-	// eMap == std::map<std::string, Entity*>
-	eMap::const_iterator it = _collection.begin();
+	// eList == std::map<std::string, Entity*>
+	eList::const_iterator it = _collection.begin();
 
 	while (it != _collection.end() && it->second->ID() != ID)
 	{
@@ -63,8 +63,8 @@ Entity* const EntityCollection::GetByID(int ID) const
 
 Entity* const EntityCollection::GetByIndex(unsigned int index) const
 {
-	// eMap == std::map<std::string, Entity*>
-	eMap::const_iterator it = _collection.begin();
+	// eList == std::map<std::string, Entity*>
+	eList::const_iterator it = _collection.begin();
 
 	if (index < _collection.size())
 	{
@@ -87,8 +87,8 @@ void EntityCollection::AddEntity(std::string name, Entity* entity)
 	}
 	else
 	{
-		// eMap == std::map<std::string, Entity*>
-		eMap::const_iterator it = _collection.end();
+		// eList == std::map<std::string, Entity*>
+		eList::const_iterator it = _collection.end();
 		it--;
 
 		entity->SetID(it->second->ID() + 1);
@@ -104,8 +104,8 @@ void EntityCollection::AddEntity(std::string name, Entity* entity)
 
 void EntityCollection::RemoveByName(std::string name)
 {
-	// eMap == std::map<std::string, Entity*>
-	eMap::const_iterator it = _collection.begin();
+	// eList == std::map<std::string, Entity*>
+	eList::const_iterator it = _collection.begin();
 
 	it = _collection.find(name);
 
@@ -119,8 +119,8 @@ void EntityCollection::RemoveByName(std::string name)
 
 void EntityCollection::RemoveByID(int ID)
 {
-	// eMap == std::map<std::string, Entity*>
-	eMap::const_iterator it = _collection.begin();
+	// eList == std::map<std::string, Entity*>
+	eList::const_iterator it = _collection.begin();
 
 	while (it != _collection.end() && it->second->ID() != ID)
 	{
@@ -137,8 +137,8 @@ void EntityCollection::RemoveByID(int ID)
 
 void EntityCollection::RemoveByIndex(unsigned int index)
 {
-	// eMap == std::map<std::string, Entity*>
-	eMap::const_iterator it = _collection.begin();
+	// eList == std::map<std::string, Entity*>
+	eList::const_iterator it = _collection.begin();
 
 	if (index < _collection.size())
 	{
@@ -158,8 +158,8 @@ void EntityCollection::RemoveByIndex(unsigned int index)
 
 void EntityCollection::HandleAllEvents(SDL_Event* event)
 {
-	// eMap == std::map<std::string, Entity*>
-	eMap::const_iterator it = _collection.begin();
+	// eList == std::map<std::string, Entity*>
+	eList::const_iterator it = _collection.begin();
 
 	while (it != _collection.end())
 	{
@@ -174,8 +174,8 @@ void EntityCollection::HandleAllEvents(SDL_Event* event)
 
 void EntityCollection::UpdateAll()
 {
-	// eMap == std::map<std::string, Entity*>
-	eMap::const_iterator it = _collection.begin();
+	// eList == std::map<std::string, Entity*>
+	eList::const_iterator it = _collection.begin();
 
 	while (it != _collection.end())
 	{
@@ -192,8 +192,8 @@ void EntityCollection::UpdateAll()
 
 void EntityCollection::RenderAll(float interpolation)
 {
-	// eMap == std::map<std::string, Entity*>
-	eMap::const_iterator it = _collection.begin();
+	// eList == std::map<std::string, Entity*>
+	eList::const_iterator it = _collection.begin();
 
 	while (it != _collection.end())
 	{
