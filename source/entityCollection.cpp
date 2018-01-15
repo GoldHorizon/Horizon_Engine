@@ -1,210 +1,282 @@
 #include "../include/entityCollection.h"
+#include "../include/globals.h"
 
 #include <iostream>
 
 EntityCollection::EntityCollection()
 {
-
+	nextID = 0;
 }
 
 EntityCollection::~EntityCollection()
 {
-	while (_collection.size() > 0)
+	while (_REALcollection.size() > 0)
 	{
-		if (_collection.begin()->second != nullptr)
-		{
-			delete _collection.begin()->second;
-		}
-		_collection.erase(_collection.begin());
+		_REALcollection.erase(_REALcollection.begin());	
 	}
 }
 
 int EntityCollection::GetCount() const
 {
-	return _collection.size();
+	return _REALcollection.size();
 }
 
 Entity* EntityCollection::GetByName(std::string name) const
 {
 	// eList == std::map<std::string, Entity*>
-	eList::const_iterator it = _collection.begin();
+	eListt::const_iterator itt = _REALcollection.begin();
+//	it = _collection.find(name);
+//
+//	if (it != _collection.end())
+//	{
+//		return it->second;
+//	}
+//	else
+//	{
+//		return nullptr;
+//	}
 
-	it = _collection.find(name);
-
-	if (it != _collection.end())
+	// Doesn't work while entity doesn't have a name attribute
+	while (itt != _REALcollection.end())
 	{
-		return it->second;
-	}
-	else
-	{
+		name = "";
 		return nullptr;
 	}
+	return nullptr;	
 }
 
 Entity* EntityCollection::GetByID(int ID) const
 {
 	// eList == std::map<std::string, Entity*>
-	eList::const_iterator it = _collection.begin();
+//	eList::const_iterator it = _collection.begin();
+	eListt::const_iterator itt = _REALcollection.begin();
 
-	while (it != _collection.end() && it->second->ID() != ID)
+	while (itt != _REALcollection.end())
 	{
-		it++;
+		if ((*itt)->ID() == ID)
+		{
+			return (*itt);
+		}
 	}
+	return nullptr;
 
-	if (it != _collection.end())
-	{
-		return it->second;
-	}
-	else
-	{
-		return nullptr;
-	}
+//	while (it != _collection.end() && it->second->ID() != ID)
+//	{
+//		it++;
+//	}
+//
+//	if (it != _collection.end())
+//	{
+//		return it->second;
+//	}
+//	else
+//	{
+//		return nullptr;
+//	}
 }
 
 Entity* EntityCollection::GetByIndex(unsigned int index) const
 {
 	// eList == std::map<std::string, Entity*>
-	eList::const_iterator it = _collection.begin();
+//	eList::const_iterator it = _collection.begin();
+	eListt::const_iterator itt = _REALcollection.begin();
 
-	if (index < _collection.size())
+	if (index < _REALcollection.size())
 	{
 		for (unsigned int i = 0; i < index; i++)
 		{
-			it++;
+			itt++;
 		}
-
-		return it->second;
+		return (*itt);
 	}
+
+//	if (index < _collection.size())
+//	{
+//		for (unsigned int i = 0; i < index; i++)
+//		{
+//			it++;
+//		}
+//
+//		return it->second;
+//	}
 
 	return nullptr;
 }
 
 void EntityCollection::AddEntity(std::string name, Entity* entity)
 {
-	if (_collection.size() == 0)
-	{
-		entity->SetID(0);
-	}
-	else
-	{
-		// eList == std::map<std::string, Entity*>
-		eList::const_iterator it = _collection.end();
-		it--;
+//	if (_collection.size() == 0)
+//	{
+//		entity->SetID(0);
+//	}
+//	else
+//	{
+//		// eList == std::map<std::string, Entity*>
+//		eList::const_iterator it = _collection.end();
+//		it--;
+//
+//		entity->SetID(it->second->ID() + 1);
+//	}
+//
+//	std::pair<std::string, Entity*> object;
+//
+//	object.first = name;
+//	object.second = entity;
+//
+//	_collection.insert(object);
 
-		entity->SetID(it->second->ID() + 1);
-	}
+	// Need to insert name into entity later
+	name = "";	
 
-	std::pair<std::string, Entity*> object;
-
-	object.first = name;
-	object.second = entity;
-
-	_collection.insert(object);
+	entity->SetID(nextID++);
+	
+	_REALcollection.push_back(entity);
 }
 
 void EntityCollection::RemoveByName(std::string name)
 {
 	// eList == std::map<std::string, Entity*>
-	eList::const_iterator it = _collection.begin();
-
-	it = _collection.find(name);
-
-	if (it != _collection.end())
-	{
-		delete it->second;
-
-		_collection.erase(it);
-	}
+//	eList::const_iterator it = _collection.begin();
+//
+//	it = _collection.find(name);
+//
+//	if (it != _collection.end())
+//	{
+//		delete it->second;
+//
+//		_collection.erase(it);
+//	}
 }
 
 void EntityCollection::RemoveByID(int ID)
 {
 	// eList == std::map<std::string, Entity*>
-	eList::const_iterator it = _collection.begin();
+	eListt::const_iterator itt = _REALcollection.begin();
+//	eList::const_iterator it = _collection.begin();
+//
+//	while (it != _collection.end() && it->second->ID() != ID)
+//	{
+//		it++;
+//	}
+//
+//	if (it != _collection.end())
+//	{
+//		delete it->second;
+//
+//		_collection.erase(it);
+//	}
 
-	while (it != _collection.end() && it->second->ID() != ID)
+	while (itt != _REALcollection.end() && (*itt)->ID() != ID)
 	{
-		it++;
+		itt++;
 	}
 
-	if (it != _collection.end())
+	if (itt != _REALcollection.end())
 	{
-		delete it->second;
+		delete (*itt);
 
-		_collection.erase(it);
+		_REALcollection.erase(itt);
 	}
 }
 
 void EntityCollection::RemoveByIndex(unsigned int index)
 {
 	// eList == std::map<std::string, Entity*>
-	eList::const_iterator it = _collection.begin();
-
-	if (index < _collection.size())
+	eListt::const_iterator itt = _REALcollection.begin();
+//	eList::const_iterator it = _collection.begin();
+//
+//	if (index < _collection.size())
+//	{
+//		for (unsigned int i = 0; i < index; i++)
+//		{
+//			it++;
+//		}
+//
+//		if (it->second != nullptr)
+//		{
+//			delete it->second;
+//
+//			_collection.erase(it);
+//		}
+//	}
+	
+	if (index < _REALcollection.size())
 	{
 		for (unsigned int i = 0; i < index; i++)
 		{
-			it++;
+			itt++;
 		}
 
-		if (it->second != nullptr)
+		if ((*itt) != nullptr)
 		{
-			delete it->second;
+			delete (*itt);
 
-			_collection.erase(it);
-		}
+			_REALcollection.erase(itt);
+		}		
 	}
 }
 
 void EntityCollection::HandleAllEvents(SDL_Event* event)
 {
 	// eList == std::map<std::string, Entity*>
-	eList::const_iterator it = _collection.begin();
+//	eList::const_iterator it = _collection.begin();
+//
+//	while (it != _collection.end())
+//	{
+//		if (it->second != nullptr)
+//		{
+//			it->second->HandleEvents(event);
+//		}
+//
+//		it++;
+//	}
+	
+	eListt::const_iterator itt = _REALcollection.begin();
 
-	while (it != _collection.end())
+	while (itt != _REALcollection.end())
 	{
-		if (it->second != nullptr)
+		if ((*itt) != nullptr)
 		{
-			it->second->HandleEvents(event);
+			(*itt)->HandleEvents(event);
 		}
 
-		it++;
+		itt++;
 	}
 }
 
 void EntityCollection::UpdateAll()
 {
 	// eList == std::map<std::string, Entity*>
-	eList::const_iterator it = _collection.begin();
+	eListt::const_iterator itt = _REALcollection.begin();
 
-	while (it != _collection.end())
+	while (itt != _REALcollection.end())
 	{
-        // Uncomment to debug Update() on different entities
-        //std::cerr << it->first << std::endl;
-		if (it->second != nullptr && it->second->active())
+		// Uncomment to debug Update() on different entities
+		//std::cerr << it->first << std::endl;
+		if ((*itt) != nullptr && (*itt)->active())
 		{
-			it->second->Update();
+			(*itt)->Update();
 		}
 
-		it++;
+		itt++;
 	}
 }
 
 void EntityCollection::RenderAll(float interpolation)
 {
 	// eList == std::map<std::string, Entity*>
-	eList::const_iterator it = _collection.begin();
+	eListt::const_iterator itt = _REALcollection.begin();
 
-	while (it != _collection.end())
+	while (itt != _REALcollection.end())
 	{
-        // Uncomment to debug Render() on different entities
-        //std::cerr << it->first << std::endl;
-		if (it->second != nullptr && it->second->visible())
+		// Uncomment to debug Render() on different entities
+		//std::cerr << it->first << std::endl;
+		if ((*itt) != nullptr && (*itt)->visible())
 		{
-			it->second->Render(interpolation);
+			(*itt)->Render(interpolation);
 		}
 
-		it++;
+		itt++;
 	}
 }
 

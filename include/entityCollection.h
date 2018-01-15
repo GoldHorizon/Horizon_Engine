@@ -2,10 +2,11 @@
 
 #include <string>
 #include <map>
+#include <list>
 
 #include "entity.h"
 
-typedef std::map<std::string, Entity*> eList;
+typedef std::list<Entity*> eListt;
 
 class EntityCollection
 {
@@ -69,5 +70,7 @@ class EntityCollection
 		 */
 	private:
 		// _collection			// Collection of entities
-		eList _collection;
+		eListt _REALcollection;
+
+		int nextID;
 };
