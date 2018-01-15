@@ -8,6 +8,11 @@
 
 typedef std::list<Entity*> eList;
 
+template <typename T> bool PComp(const T * const &a, const T * const &b)
+{
+	return *a < *b;
+}
+
 class EntityCollection
 {
 	public:

@@ -18,7 +18,13 @@ void ClassName::Initialize()
 
     Ball* testBall = new Ball();
     testBall->SetPosition(128, 128);
+    testBall->SetDepth(-10);
     _entities.AddEntity("TestBall", testBall);
+
+    Ball* testBall2 = new Ball();
+    testBall2->SetPosition(256, 512);
+    testBall2->SetDepth(10);
+    _entities.AddEntity("TestBall2", testBall2);
 }
 
 void ClassName::Cleanup()
