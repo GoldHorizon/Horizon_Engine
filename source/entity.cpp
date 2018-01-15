@@ -482,6 +482,7 @@ void Entity::CalculateSpeedDir()
 
 	_speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
 }
+
 void Entity::AdvanceImage()
 {
 	_imageTimer += SDL_GetTicks() - _lastImageTime;
@@ -525,4 +526,29 @@ void Entity::AdvanceImage()
 
 	// DEBUG
 	//std::cout << _imageTimer << std::endl;
+}
+
+bool operator<(const Entity &el, const Entity &er)
+{
+	return el._depth < er._depth;
+}
+bool operator>(const Entity &el, const Entity &er)
+{
+	return el._depth > er._depth;
+}
+bool operator<=(const Entity &el, const Entity &er)
+{
+	return el._depth <= er._depth;
+}
+bool operator>=(const Entity &el, const Entity &er)
+{
+	return el._depth >= er._depth;
+}
+bool operator==(const Entity &el, const Entity &er)
+{
+	return el._depth == er._depth;
+}
+bool operator!=(const Entity &el, const Entity &er)
+{
+	return el._depth != er._depth;
 }

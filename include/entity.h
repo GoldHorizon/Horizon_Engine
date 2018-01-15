@@ -137,4 +137,21 @@ class Entity
 
 		void CalculateSpeedDir();	// Calculates speed and direction based on hspeed and vspeed
 		void AdvanceImage();		// Calculates if and when to increment imageIndex
+
+		/*
+		 * Operator Overloads
+		 */
+		friend bool operator<(const Entity &el, const Entity &er);
+		friend bool operator>(const Entity &el, const Entity &er);
+		friend bool operator<=(const Entity &el, const Entity &er);
+		friend bool operator>=(const Entity &el, const Entity &er);
+		friend bool operator==(const Entity &el, const Entity &er);
+		friend bool operator!=(const Entity &el, const Entity &er);
 };
+
+bool operator<(const Entity &el, const Entity &er);
+bool operator>(const Entity &el, const Entity &er);
+bool operator<=(const Entity &el, const Entity &er);
+bool operator>=(const Entity &el, const Entity &er);
+bool operator==(const Entity &el, const Entity &er);
+bool operator!=(const Entity &el, const Entity &er);
