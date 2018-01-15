@@ -6,7 +6,7 @@
 
 #include "entity.h"
 
-typedef std::list<Entity*> eListt;
+typedef std::list<Entity*> eList;
 
 class EntityCollection
 {
@@ -70,7 +70,7 @@ class EntityCollection
 		 */
 	private:
 		// _collection			// Collection of entities
-		eListt _REALcollection;
+		eList _collection;
 
 		int nextID;
 };
