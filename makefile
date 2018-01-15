@@ -20,7 +20,7 @@ flags := -lSDL2 \
 	-lSDL2main \
 	-lSDL2_image \
 	-lm \
-	-std=c++11
+	-lstdc++
 
 #CFLAGS = -c -Wall -Iinclude
 #options := -c -g -Wall -Iinclude -I/usr/include/SDL2
