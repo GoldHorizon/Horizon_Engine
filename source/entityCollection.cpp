@@ -151,6 +151,7 @@ void EntityCollection::UpdateAll()
 void EntityCollection::RenderAll(float interpolation)
 {
 	_collection.sort(PComp<Entity>);
+	_collection.reverse();
 
 	eList::const_iterator it = _collection.begin();
 
