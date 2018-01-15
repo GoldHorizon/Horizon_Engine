@@ -24,15 +24,15 @@ class EntityCollection
 
 		// GetByName()		- Return the entity with specified name
 		//	name:		string with name of entity
-		Entity* const GetByName(std::string name) const;
+		Entity* GetByName(std::string name) const;
 
 		// GetByID()		- Return the entity with specified ID
 		//	ID:			int with entity's ID
-		Entity* const GetByID(int ID) const;
+		Entity* GetByID(int ID) const;
 
 		// GetByIndex()		- Return the entity at specified index
 		//	index:		index entity is at
-		Entity* const GetByIndex(unsigned int index) const;
+		Entity* GetByIndex(unsigned int index) const;
 
 		// AddEntity()		- Add an entity into the collection
 		//	name:		name of the entity being added

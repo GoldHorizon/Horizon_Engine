@@ -1,8 +1,9 @@
 # Linux Executable Files
 *.sh
 
-# Vim swap files
+# Vim files
 *.swp
+compile_commands.json
 
 # Debug Folders
 Debug/*

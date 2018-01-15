@@ -24,7 +24,7 @@ int EntityCollection::GetCount() const
 	return _collection.size();
 }
 
-Entity* const EntityCollection::GetByName(std::string name) const
+Entity* EntityCollection::GetByName(std::string name) const
 {
 	// eList == std::map<std::string, Entity*>
 	eList::const_iterator it = _collection.begin();
@@ -41,7 +41,7 @@ Entity* const EntityCollection::GetByName(std::string name) const
 	}
 }
 
-Entity* const EntityCollection::GetByID(int ID) const
+Entity* EntityCollection::GetByID(int ID) const
 {
 	// eList == std::map<std::string, Entity*>
 	eList::const_iterator it = _collection.begin();
@@ -61,7 +61,7 @@ Entity* const EntityCollection::GetByID(int ID) const
 	}
 }
 
-Entity* const EntityCollection::GetByIndex(unsigned int index) const
+Entity* EntityCollection::GetByIndex(unsigned int index) const
 {
 	// eList == std::map<std::string, Entity*>
 	eList::const_iterator it = _collection.begin();
