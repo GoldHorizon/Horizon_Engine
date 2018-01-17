@@ -43,7 +43,7 @@ class EntityCollection
 		// AddEntity()		- Add an entity into the collection
 		//	name:		name of the entity being added
 		//	entity:		pointer to the entity to add
-		void AddEntity(std::string name, Entity* entity);
+		void AddEntity(Entity* entity);
 
 		// RemoveByName()	- Remove an entity with the specified name
 		//	name:		name of entity to remove

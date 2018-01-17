@@ -60,6 +60,7 @@ class Entity
 		/*
 		 * Get Methods
 		 */
+		std::string name() const;	// Returns name of entity
 		int ID() const;					// Returns entity ID
 		bool active() const;
 		bool visible() const;
@@ -84,6 +85,7 @@ class Entity
 		/*
 		 * Set Methods
 		 */
+		void SetName(std::string name);		// Sets entity name
 		void SetID(int ID);					// Sets entity ID
 		void SetActive(bool active);		// Sets if entity is active
 		void SetVisible(bool visible);		// Sets if entity is visible
@@ -111,6 +113,7 @@ class Entity
 		// _renderer			- Renderer we draw to for this drawable
 		SDL_Renderer* _renderer;
 
+		std::string _name;
 		int _ID;				// ID of the entity
 		bool _active;			// If entity is active or not
 		bool _visible;			// If entity's image is visible

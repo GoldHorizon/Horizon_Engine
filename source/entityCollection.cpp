@@ -28,8 +28,10 @@ Entity* EntityCollection::GetByName(std::string name) const
 	// Doesn't work while entity doesn't have a name attribute
 	while (it != _collection.end())
 	{
-		name = "";
-		return nullptr;
+		if ((*it)->name() == name)
+		{
+			return (*it);
+		}
 	}
 	return nullptr;	
 }
@@ -64,11 +66,8 @@ Entity* EntityCollection::GetByIndex(unsigned int index) const
 	return nullptr;
 }
 
-void EntityCollection::AddEntity(std::string name, Entity* entity)
+void EntityCollection::AddEntity(Entity* entity)
 {
-	// Need to insert name into entity later
-	name = "";	
-
 	entity->SetID(nextID++);
 	
 	_collection.push_back(entity);
@@ -76,7 +75,17 @@ void EntityCollection::AddEntity(std::string name, Entity* entity)
 
 void EntityCollection::RemoveByName(std::string name)
 {
-	name = "";
+	eList::const_iterator it = _collection.begin();
+
+	// Doesn't work while entity doesn't have a name attribute
+	while (it != _collection.end())
+	{
+		if ((*it)->name() == name)
+		{
+			delete (*it);
+			_collection.erase(it);
+		}
+	}
 }
 
 void EntityCollection::RemoveByID(int ID)

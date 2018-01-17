@@ -15,6 +15,7 @@ Entity::Entity() : Entity(globalRenderer)
 Entity::Entity(SDL_Renderer* renderer):
 	_image(nullptr),
 	_renderer(renderer),
+	_name(""),
 	_ID(0),
 	_active(true),
 	_visible(true),
@@ -253,6 +254,10 @@ Entity* Entity::NewInstance()
 /*
  * Get Methods
  */
+std::string Entity::name() const
+{
+	return _name;
+}
 int Entity::ID() const
 {
 	return _ID;
@@ -329,6 +334,10 @@ SDL_Point Entity::spriteDimensions() const
 /*
  * Set Methods
  */
+void Entity::SetName(std::string name)
+{
+	_name = name;
+}
 void Entity::SetID(int ID)
 {
 	_ID = ID;

@@ -14,17 +14,20 @@ ClassName::~ClassName()
 void ClassName::Initialize()
 {
     Player* mainPlayer = new Player();
-    _entities.AddEntity("MainPlayer", mainPlayer);
+    mainPlayer->SetName("MainPlayer");
+    _entities.AddEntity(mainPlayer);
 
     Ball* testBall = new Ball();
     testBall->SetPosition(128, 128);
     testBall->SetDepth(-10);
-    _entities.AddEntity("TestBall", testBall);
+    testBall->SetName("TestBall");
+    _entities.AddEntity(testBall);
 
     Ball* testBall2 = new Ball();
     testBall2->SetPosition(256, 512);
     testBall2->SetDepth(10);
-    _entities.AddEntity("TestBall2", testBall2);
+    testBall2->SetName("TestBall2");
+    _entities.AddEntity(testBall2);
 }
 
 void ClassName::Cleanup()
