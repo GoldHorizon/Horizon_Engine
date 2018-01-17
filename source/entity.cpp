@@ -8,48 +8,24 @@
 
 #include "SDL_image.h"
 
-Entity::Entity() :
-	_image(nullptr),
-	_renderer(globalRenderer),
-	_ID(0),
-	_active(true),
-	_visible(true),
-	_x(0),
-	_y(0),
-	_direction(0),
-	_speed(0),
-	_hspeed(0),
-	_vspeed(0),
-	_imageAlpha(1),
-	_imageAngle(0),
-	_imageWidth(0),
-	_imageHeight(0),
-	_spriteDimensions({ 0, 0 }),
-	_imageSpeed(0),
-	_imageTimer(0),
-	_lastImageTime(0),
-	_imageIndex(0)
+Entity::Entity() : Entity(globalRenderer)
 {
-	_imageOrigin = {0, 0};
-
-	if (globalRenderer == nullptr)
-	{
-		std::cerr << "Error: Cannot instantiate object - globalRenderer not set!" << std::endl;
-	}
 }
 
 Entity::Entity(SDL_Renderer* renderer):
 	_image(nullptr),
 	_renderer(renderer),
+	_name(""),
 	_ID(0),
 	_active(true),
 	_visible(true),
 	_x(0),
 	_y(0),
+	_depth(0),
 	_direction(0),
 	_speed(0),
-    _hspeed(0),
-    _vspeed(0),
+	_hspeed(0),
+	_vspeed(0),
 	_imageAlpha(1),
 	_imageAngle(0),
 	_imageWidth(0),
@@ -76,7 +52,7 @@ Entity::~Entity()
 void Entity::LoadFromFile(const std::string file, int spriteWidth, int spriteHeight)
 {
 	//std::string fullPath = std::experimental::filesystem::current_path().string() + "\\" + file;
-	
+
 	// Create a temporary surface to load our image onto
 	SDL_Surface* tempSurface;
 	tempSurface = IMG_Load(file.c_str());
@@ -146,9 +122,9 @@ void Entity::Render(float interpolation)
 	{
 		// Create a set of ints to use for drawing position (use interpolation to predict movement)
 		int xx = static_cast<int>(_x) - _imageOrigin.x
-			   + static_cast<int>(cos(_direction * PI / 180) * _speed * (_active * interpolation));
+			+ static_cast<int>(cos(_direction * PI / 180) * _speed * (_active * interpolation));
 		int yy = static_cast<int>(_y) - _imageOrigin.y
-			   + static_cast<int>(sin(_direction * PI / 180) * _speed * (_active * interpolation));
+			+ static_cast<int>(sin(_direction * PI / 180) * _speed * (_active * interpolation));
 
 		SDL_Rect* sourceImage = nullptr;
 		SDL_Rect* displayImage = nullptr;
@@ -278,6 +254,10 @@ Entity* Entity::NewInstance()
 /*
  * Get Methods
  */
+std::string Entity::name() const
+{
+	return _name;
+}
 int Entity::ID() const
 {
 	return _ID;
@@ -354,6 +334,10 @@ SDL_Point Entity::spriteDimensions() const
 /*
  * Set Methods
  */
+void Entity::SetName(std::string name)
+{
+	_name = name;
+}
 void Entity::SetID(int ID)
 {
 	_ID = ID;
@@ -381,19 +365,19 @@ void Entity::SetDepth(float depth)
 void Entity::SetDirection(float direction)
 {
 	_direction = direction;
-    
-    while(_direction >= 360)
-    {
-        _direction -= 360;
-    }
-    while(_direction < 0)
-    {
-        _direction += 360;
-    }
-    
-    // Change hspeed/vspeed
-    _hspeed = cos(_direction * PI / 180) * _speed;
-    _vspeed = sin(_direction * PI / 180) * _speed;
+
+	while(_direction >= 360)
+	{
+		_direction -= 360;
+	}
+	while(_direction < 0)
+	{
+		_direction += 360;
+	}
+
+	// Change hspeed/vspeed
+	_hspeed = cos(_direction * PI / 180) * _speed;
+	_vspeed = sin(_direction * PI / 180) * _speed;
 }
 void Entity::SetSpeed(float speed)
 {
@@ -507,6 +491,7 @@ void Entity::CalculateSpeedDir()
 
 	_speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
 }
+
 void Entity::AdvanceImage()
 {
 	_imageTimer += SDL_GetTicks() - _lastImageTime;
@@ -550,4 +535,29 @@ void Entity::AdvanceImage()
 
 	// DEBUG
 	//std::cout << _imageTimer << std::endl;
+}
+
+bool operator<(const Entity &el, const Entity &er)
+{
+	return el._depth < er._depth;
+}
+bool operator>(const Entity &el, const Entity &er)
+{
+	return el._depth > er._depth;
+}
+bool operator<=(const Entity &el, const Entity &er)
+{
+	return el._depth <= er._depth;
+}
+bool operator>=(const Entity &el, const Entity &er)
+{
+	return el._depth >= er._depth;
+}
+bool operator==(const Entity &el, const Entity &er)
+{
+	return el._depth == er._depth;
+}
+bool operator!=(const Entity &el, const Entity &er)
+{
+	return el._depth != er._depth;
 }

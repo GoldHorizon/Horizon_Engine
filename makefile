@@ -6,21 +6,21 @@
 executable := launchEngine.sh
 
 objects := 	main.o \
-			game.o \
-			globals.o \
-			entity.o \
-			entityCollection.o \
-			ball.o \
-			player.o \
-			gameState.o \
-			playing.o \
-			uninitialized.o
+		game.o \
+		globals.o \
+		entity.o \
+		entityCollection.o \
+		ball.o \
+		player.o \
+		gameState.o \
+		playing.o \
+		uninitialized.o
 
 flags := -lSDL2 \
-		 -lSDL2main \
-		 -lSDL2_image \
-		 -lm \
-		 -lstdc++
+	-lSDL2main \
+	-lSDL2_image \
+	-lm \
+	-lstdc++
 
 #CFLAGS = -c -Wall -Iinclude
 #options := -c -g -Wall -Iinclude -I/usr/include/SDL2
@@ -29,7 +29,7 @@ options := -c -g -Wall -I/usr/include/SDL2
 ###
 ### Main make program
 ###
-all : $(objects)
+all :	$(objects)
 	make clean
 	gcc -g -o $(executable) $(objects) $(flags)
 	mkdir -p build/
@@ -70,9 +70,11 @@ playing.o			: source/states/playing.cpp include/states/playing.h
 
 uninitialized.o		: source/states/uninitialized.cpp include/states/uninitialized.h
 	gcc $(options) source/states/uninitialized.cpp
+
 ###
 ### Cleans object and executable files (Debug stuff)
 ###
 clean :
 	rm -fr ./build
 	rm -f $(executable)
+
