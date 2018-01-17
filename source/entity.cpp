@@ -75,10 +75,10 @@ void Entity::LoadFromFile(const std::string file, int spriteWidth, int spriteHei
 		SDL_FreeSurface(tempSurface);
 
 		// DEBUG
-		std::cout << _imageWidth << std::endl
-			<< _imageHeight << std::endl
-			<< _spriteDimensions.x << std::endl
-			<< _spriteDimensions.y << std::endl << std::endl;
+		//std::cout << _imageWidth << std::endl
+		//	<< _imageHeight << std::endl
+		//	<< _spriteDimensions.x << std::endl
+		//	<< _spriteDimensions.y << std::endl << std::endl;
 	}
 	else
 	{
