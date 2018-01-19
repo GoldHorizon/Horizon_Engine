@@ -9,6 +9,7 @@
 #include "../include/states/options.h"
 #include "../include/states/pauseMenu.h"
 
+#include <SDL_ttf.h>
 #include <iostream>
 
 Game::Game():
@@ -25,6 +26,7 @@ Game::Game():
 
 Game::~Game()
 {
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -46,6 +48,9 @@ int Game::Initialize()
 		std::cout << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
 		return -1;
 	}
+
+	// Also initialize TTF, for fonts
+	TTF_Init();
 
 	// STEP 2
 	// Setup our main window with an SDL_Window pointer
