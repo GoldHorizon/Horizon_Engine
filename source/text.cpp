@@ -6,12 +6,13 @@
 
 #include "SDL_ttf.h"
 
-Text::Text()
+Text::Text(): Text("")
 {
 	
 }
 
 Text::Text(std::string text):
+    _font(nullptr),
 	_text(text),
 	_renderer(globalRenderer),
 	_x(0),
@@ -63,7 +64,111 @@ void Text::Render()
 	}
 }
 
+TTF_Font* Text::font() const
+{
+    return _font;
+}
+
+std::string Text::text() const
+{
+    return _text;
+}
+
+float Text::x() const
+{
+    return _x;
+}   
+
+float Text::y() const
+{
+    return _y;
+}
+
+float Text::depth() const
+{
+    return _depth;
+}
+
+float Text::textAlpha() const
+{
+    return _textAlpha;
+}
+
+double Text::textAngle() const
+{
+    return _textAngle;
+}
+
+SDL_Point Text::textOrigin() const
+{
+    return _textOrigin;
+}
+
+int Text::textWidth() const
+{
+    return _textWidth;
+}
+
+int Text::textHeight() const
+{
+    return _textHeight;
+}
+
+void Text::SetFont(TTF_Font* font)
+{
+    _font = font;
+}
+
 void Text::SetText(std::string text)
 {
 	_text = text;	
 }
+
+void Text::SetX(float x)					// Sets the new x position
+{
+    _x = x;
+}
+
+void Text::SetY(float y)					// Sets the new y position
+{
+    _y = y;
+}
+
+void Text::SetDepth(float depth)          // Sets the text depth
+{
+    _depth = depth;
+}
+
+void Text::SetImageAlpha(float alpha) 	// Sets the text alpha
+{
+    _textAlpha = alpha;
+}
+
+void Text::SetImageAngle(double angle)	// Sets the angle
+{
+    _textAngle = angle;
+}
+
+void Text::SetImageOrigin(int x, int y)	// Sets the origin
+{
+    _textOrigin = {x, y};
+}
+
+void Text::SetImageOrigin(SDL_Point pos)	// Sets the origin
+{
+    _textOrigin = pos;
+}
+
+void Text::SetPosition(float x, float y)	// Shortcut to set position
+{
+    _x = x;
+    _y = y;
+}
+
+void Text::SetPosition(SDL_Point pos) 	// Shortcut to set position
+{
+    _x = pos.x;
+    _y = pos.y;
+}
+
+

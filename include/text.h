@@ -1,15 +1,17 @@
 #pragma once
 
+#include <string>
+
+#include "entity.h"
+
 #include "SDL.h"
 #include "SDL_ttf.h"
 
-#include <string>
-
-class Text
+class Text: private Entity
 {
 	public:
 		/*
-		 * Constructors/Destructors
+		 *  Constructors/Destructors
 		 */
 		Text();
 		Text(std::string text);
@@ -27,7 +29,8 @@ class Text
 		/*
 		 * Get Methods
 		 */
-		std::string text() const;
+        TTF_Font* font() const;         // Returns the font used
+		std::string text() const;       // Returns the text displayed
 		float x() const;				// Returns the x position
 		float y() const;				// Returns the y position
 		float depth() const;            // Returns text depth
@@ -35,12 +38,13 @@ class Text
 		double textAngle() const;		// Returns the angle
 		SDL_Point textOrigin() const;	// Returns the origin
 		int textWidth() const;			// Returns the width of the text
-		int textHeight() const;		// Returns the height of the text
+		int textHeight() const;		    // Returns the height of the text
 
 		/*
 		 * Set Methods
 		 */
-		void SetText(std::string text);		//
+        void SetFont(TTF_Font* font);       // Sets the font being used
+		void SetText(std::string text);		// Sets the text being displayed
 		void SetX(float x);					// Sets the new x position
 		void SetY(float y);					// Sets the new y position
 		void SetDepth(float depth);         // Sets the text depth
@@ -53,6 +57,9 @@ class Text
 		void SetPosition(SDL_Point pos);	// Shortcut to set position
 
 	private:
+
+        // _font                - Font associated with the text
+        TTF_Font* _font;
 
 		// _text				- Image stored in the drawable
 		std::string _text;
