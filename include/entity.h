@@ -23,6 +23,10 @@ class Entity
 		//	spriteHeight:	height of individual sprites if loading sprite sheet
 		void LoadFromFile(const std::string file, int spriteWidth = 0, int spriteHeight = 0);
 
+		// SetImate()		- Load an existing image in code into entity
+		//	image:			preexisting texture to use
+		void LoadFromSurface(SDL_Surface* surface);
+
 		// FreeMemory() 	- Frees the texture memory used
 		void FreeMemory();
 
@@ -60,6 +64,9 @@ class Entity
 		/*
 		 * Get Methods
 		 */
+		SDL_Texture* image() const;
+		SDL_Renderer* renderer() const;
+
 		std::string name() const;	// Returns name of entity
 		int ID() const;					// Returns entity ID
 		bool active() const;
@@ -85,6 +92,7 @@ class Entity
 		/*
 		 * Set Methods
 		 */
+
 		void SetName(std::string name);		// Sets entity name
 		void SetID(int ID);					// Sets entity ID
 		void SetActive(bool active);		// Sets if entity is active

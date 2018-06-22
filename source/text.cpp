@@ -6,23 +6,18 @@
 
 #include "SDL_ttf.h"
 
-Text::Text(): Text("")
+Text::Text(): Text("", nullptr)
 {
 	
 }
 
-Text::Text(std::string text):
-    _font(nullptr),
+Text::Text(std::string text, Font* font) :
+	_font(font),
 	_text(text),
-	_renderer(globalRenderer),
-	_x(0),
-	_y(0),
-	_depth(0),
 	_textAlpha(1),
 	_textAngle(0),
-	_textOrigin({0, 0}),
-	_textWidth(0),
-	_textHeight(0)
+	_textOrigin({ 0, 0 }),
+	_color(DEFAULT_COLOR)
 {
 	SetText(text);
 }
@@ -32,19 +27,13 @@ Text::~Text()
 	FreeMemory();
 }
 
-void Text::FreeMemory()
+void Text::Render(float interpolation)
 {
-	if (_texture != nullptr)
-	{
-		SDL_DestroyTexture(_texture);
-		_textWidth = 0;
-		_textHeight = 0;
-		_text = "";
-	}
-}
+	Entity::Render(interpolation);
 
-void Text::Render()
-{
+	std::cout << spriteDimensions().x << ", " << spriteDimensions().y << std::endl;
+
+	/*
 	if (_texture != nullptr)
 	{
 		int xx = static_cast<int>(_x) - _textOrigin.x;
@@ -62,9 +51,10 @@ void Text::Render()
 				delete sourceImage;
 		delete displayImage;
 	}
+	*/
 }
 
-TTF_Font* Text::font() const
+Font* Text::font() const
 {
     return _font;
 }
@@ -72,21 +62,6 @@ TTF_Font* Text::font() const
 std::string Text::text() const
 {
     return _text;
-}
-
-float Text::x() const
-{
-    return _x;
-}   
-
-float Text::y() const
-{
-    return _y;
-}
-
-float Text::depth() const
-{
-    return _depth;
 }
 
 float Text::textAlpha() const
@@ -104,39 +79,37 @@ SDL_Point Text::textOrigin() const
     return _textOrigin;
 }
 
-int Text::textWidth() const
+SDL_Color Text::color() const
 {
-    return _textWidth;
+	return _color;
 }
 
-int Text::textHeight() const
-{
-    return _textHeight;
-}
-
-void Text::SetFont(TTF_Font* font)
+void Text::SetFont(Font* font)
 {
     _font = font;
 }
 
 void Text::SetText(std::string text)
 {
-	_text = text;	
-}
+	_text = text;
 
-void Text::SetX(float x)					// Sets the new x position
-{
-    _x = x;
-}
+	if (_font == nullptr)
+	{
+		std::cerr << "Cannot change text, no font specified!" << std::endl;
+		return;
+	}
+	
+	SDL_Surface* tempSurface = TTF_RenderText_Solid(_font->font(), _text.c_str(), _color);
 
-void Text::SetY(float y)					// Sets the new y position
-{
-    _y = y;
-}
-
-void Text::SetDepth(float depth)          // Sets the text depth
-{
-    _depth = depth;
+	if (tempSurface != nullptr)
+	{
+		LoadFromSurface(tempSurface);
+		SDL_FreeSurface(tempSurface);
+	}
+	else
+	{
+		std::cerr << TTF_GetError() << std::endl;
+	}
 }
 
 void Text::SetImageAlpha(float alpha) 	// Sets the text alpha
@@ -159,16 +132,7 @@ void Text::SetImageOrigin(SDL_Point pos)	// Sets the origin
     _textOrigin = pos;
 }
 
-void Text::SetPosition(float x, float y)	// Shortcut to set position
+void Text::SetColor(SDL_Color color)	// Sets the color of the text
 {
-    _x = x;
-    _y = y;
+	_color = color;
 }
-
-void Text::SetPosition(SDL_Point pos) 	// Shortcut to set position
-{
-    _x = pos.x;
-    _y = pos.y;
-}
-
-

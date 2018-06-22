@@ -4,6 +4,9 @@
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 640;
 
+const int DEFAULT_FONT_SIZE = 12;
+const SDL_Color DEFAULT_COLOR = { 0, 0, 0 };
+
 // Used in variable step game loop, not sure if chrono uses MS though...
 // http://gameprogrammingpatterns.com/game-loop.html
 //const double MS_PER_UPDATE = 0.0005;

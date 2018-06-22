@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "SDL"
+#include "SDL.h"
 #include "SDL_ttf.h"
 
 class Font
@@ -11,23 +11,33 @@ class Font
         /*
          *  Constructors/Destructors
          */
-        Font();
-        Font(std::string);
+        Font(std::string name);
+		Font(std::string name, int size);
         ~Font();
+
+		/*
+		 *	Class Methods
+		 */
+		void LoadFont(std::string file);
+		void LoadFont(std::string file, int size);
+		bool FreeFont();
 
         /*
          *  Get Methods
          */
         int size() const;
         std::string name() const;
+		TTF_Font* font() const;
 
         /*
          *  Set Methods
          */
-        void SetSize();
-        void SetName();
+        void SetSize(int size);
+        void SetName(std::string name);
 
     private:
         std::string _name;
+		std::string _file;
+		int _size;
         TTF_Font* _sdl_font;
-}
+};
