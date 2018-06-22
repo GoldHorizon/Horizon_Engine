@@ -24,6 +24,9 @@ class Text: public Entity
 		// Render()			- Renders the texture to its current position
 		void Render(float interpolation);
 
+		// Update()
+		void Update();
+
 		/*
 		 * Get Methods
 		 */

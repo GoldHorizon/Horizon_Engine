@@ -90,7 +90,10 @@ void Entity::LoadFromFile(const std::string file, int spriteWidth, int spriteHei
 
 void Entity::LoadFromSurface(SDL_Surface* surface)
 {
-	if (surface != nullptr && _image == nullptr)
+	if (_image != nullptr)
+		FreeMemory();
+
+	if (surface != nullptr)
 	{
 		_image = SDL_CreateTextureFromSurface(_renderer, surface);
 
@@ -99,7 +102,7 @@ void Entity::LoadFromSurface(SDL_Surface* surface)
 	}
 	else
 	{
-		std::cerr << "Error loading from surface to image. Consider freeing memory?" << std::endl;
+		std::cerr << "Error loading null surface." << std::endl;
 	}
 
 }

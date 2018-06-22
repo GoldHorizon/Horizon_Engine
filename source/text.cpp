@@ -54,6 +54,11 @@ void Text::Render(float interpolation)
 	*/
 }
 
+void Text::Update()
+{
+	SetText(text() + "a");
+}
+
 Font* Text::font() const
 {
     return _font;
