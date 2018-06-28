@@ -25,7 +25,7 @@ class Text: public Entity
 		//void Render(float interpolation);
 
 		// Update()
-		void Update() = 0;
+		//void Update() = 0;
 
 		// UpdateImage()	- Update the text image based on text/font/wrap
 		void UpdateImage();

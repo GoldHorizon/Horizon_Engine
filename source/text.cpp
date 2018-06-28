@@ -1,5 +1,4 @@
 #include "../include/text.h"
-#include "../include/globals.h"
 #include "../include/constants.h"
 
 #include <iostream>
