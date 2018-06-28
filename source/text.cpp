@@ -14,10 +14,9 @@ Text::Text(): Text("", nullptr)
 Text::Text(std::string text, Font* font) :
 	_font(font),
 	_text(text),
-	_textAlpha(1),
-	_textAngle(0),
-	_textOrigin({ 0, 0 }),
-	_color(DEFAULT_COLOR)
+	_color(DEFAULT_COLOR),
+	_maxWidth(0),
+	_wrap(false)
 {
 	SetText(text);
 }
@@ -27,11 +26,12 @@ Text::~Text()
 	FreeMemory();
 }
 
+/*
 void Text::Render(float interpolation)
 {
 	Entity::Render(interpolation);
 
-	std::cout << spriteDimensions().x << ", " << spriteDimensions().y << std::endl;
+	//std::cout << spriteDimensions().x << ", " << spriteDimensions().y << std::endl;
 
 	/*
 	if (_texture != nullptr)
@@ -51,60 +51,30 @@ void Text::Render(float interpolation)
 				delete sourceImage;
 		delete displayImage;
 	}
-	*/
+	* /
 }
+*/
 
-void Text::Update()
+//void Text::Update()
+//{
+//	// Test wrapping
+//	//SetText(text() + "a ");
+//}
+
+void Text::UpdateImage()
 {
-	SetText(text() + "a");
-}
-
-Font* Text::font() const
-{
-    return _font;
-}
-
-std::string Text::text() const
-{
-    return _text;
-}
-
-float Text::textAlpha() const
-{
-    return _textAlpha;
-}
-
-double Text::textAngle() const
-{
-    return _textAngle;
-}
-
-SDL_Point Text::textOrigin() const
-{
-    return _textOrigin;
-}
-
-SDL_Color Text::color() const
-{
-	return _color;
-}
-
-void Text::SetFont(Font* font)
-{
-    _font = font;
-}
-
-void Text::SetText(std::string text)
-{
-	_text = text;
-
 	if (_font == nullptr)
 	{
 		std::cerr << "Cannot change text, no font specified!" << std::endl;
 		return;
 	}
-	
-	SDL_Surface* tempSurface = TTF_RenderText_Solid(_font->font(), _text.c_str(), _color);
+
+	SDL_Surface* tempSurface;
+
+	if (_wrap)
+		tempSurface = TTF_RenderText_Blended_Wrapped(_font->font(), _text.c_str(), _color, _maxWidth);
+	else
+		tempSurface = TTF_RenderText_Solid(_font->font(), _text.c_str(), _color);
 
 	if (tempSurface != nullptr)
 	{
@@ -117,27 +87,79 @@ void Text::SetText(std::string text)
 	}
 }
 
-void Text::SetImageAlpha(float alpha) 	// Sets the text alpha
+Font* Text::font() const
 {
-    _textAlpha = alpha;
+    return _font;
 }
 
-void Text::SetImageAngle(double angle)	// Sets the angle
+std::string Text::text() const
 {
-    _textAngle = angle;
+    return _text;
 }
 
-void Text::SetImageOrigin(int x, int y)	// Sets the origin
+SDL_Color Text::color() const
 {
-    _textOrigin = {x, y};
+	return _color;
 }
 
-void Text::SetImageOrigin(SDL_Point pos)	// Sets the origin
+int Text::maxWidth() const
 {
-    _textOrigin = pos;
+	return _maxWidth;
+}
+
+bool Text::wrap() const
+{
+	return _wrap;
+}
+
+void Text::SetFont(Font* font)
+{
+    _font = font;
+}
+
+void Text::SetText(std::string text)
+{
+	_text = text;
+
+	UpdateImage();
 }
 
 void Text::SetColor(SDL_Color color)	// Sets the color of the text
 {
 	_color = color;
+}
+
+void Text::SetMaxWidth(int maxWidth)
+{
+	_maxWidth = maxWidth;
+}
+
+void Text::SetWrap(bool wrap)
+{
+	_wrap = wrap;
+}
+
+bool operator<(const Text &el, const Text &er)
+{
+	return (el.text() < er.text());
+}
+bool operator>(const Text &el, const Text &er)
+{
+	return (el.text() > er.text());
+}
+bool operator<=(const Text &el, const Text &er)
+{
+	return (el.text() <= er.text());
+}
+bool operator>=(const Text &el, const Text &er)
+{
+	return (el.text() >= er.text());
+}
+bool operator==(const Text &el, const Text &er)
+{
+	return (el.text() == er.text());
+}
+bool operator!=(const Text &el, const Text &er)
+{
+	return (el.text() != er.text());
 }

@@ -38,6 +38,9 @@ void ClassName::Initialize()
 
 	Text* testTextLabel = new Text("This is just a test label!!!", testFont);
 	testTextLabel->SetPosition({ 128, 300 });
+	testTextLabel->SetMaxWidth(128);
+	testTextLabel->SetWrap(true);
+	testTextLabel->SetDepth(-40);
 
 	_entities.AddEntity(testTextLabel);
 }

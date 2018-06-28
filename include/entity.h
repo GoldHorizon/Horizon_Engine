@@ -23,8 +23,8 @@ class Entity
 		//	spriteHeight:	height of individual sprites if loading sprite sheet
 		void LoadFromFile(const std::string file, int spriteWidth = 0, int spriteHeight = 0);
 
-		// SetImate()		- Load an existing image in code into entity
-		//	image:			preexisting texture to use
+		// LoadFromSurface()	- Load an existing image in code into entity
+		//	image:				preexisting texture to use
 		void LoadFromSurface(SDL_Surface* surface);
 
 		// FreeMemory() 	- Frees the texture memory used
