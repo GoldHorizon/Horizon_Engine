@@ -9,6 +9,8 @@
 #include "../include/states/options.h"
 #include "../include/states/pauseMenu.h"
 
+#include <SDL.h>
+#include <SDL_ttf.h>
 #include <iostream>
 
 Game::Game():
@@ -25,6 +27,7 @@ Game::Game():
 
 Game::~Game()
 {
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -43,9 +46,18 @@ int Game::Initialize()
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) == -1)
 	{
 		// If it fails, output error message and quit
-		std::cout << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
+		std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
 		return -1;
 	}
+
+	if (TTF_Init() == -1) {
+		//printf("TTF_Init: %s\n", TTF_GetError());
+		//exit(2);
+		std::cerr << "Failed to initialize SDL_TTF: " << TTF_GetError() << std::endl;
+	}
+
+	// Also initialize TTF, for fonts
+	TTF_Init();
 
 	// STEP 2
 	// Setup our main window with an SDL_Window pointer
@@ -53,7 +65,7 @@ int Game::Initialize()
 	// Check to make sure it properly created the window
 	if (_mainWindow == nullptr)
 	{
-		std::cout << "Failed to create window: " << SDL_GetError() << std::endl;
+		std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
 		return -1;
 	}
 
@@ -64,7 +76,7 @@ int Game::Initialize()
 	// Check to see that is created the renderer
 	if (_mainRenderer == nullptr)
 	{
-		std::cout << "Failed to create renderer: " << SDL_GetError() << std::endl;
+		std::cerr << "Failed to create renderer: " << SDL_GetError() << std::endl;
 		return -1;
 	}
 
@@ -75,7 +87,7 @@ int Game::Initialize()
 	//		  Will refrain from doing too much error checking, only where appropriate
 	if (SDL_RenderSetLogicalSize(_mainRenderer, SCREEN_WIDTH, SCREEN_HEIGHT) == -1)
 	{
-		std::cout << "Failed to set renderer resolution: " << SDL_GetError() << std::endl;
+		std::cerr << "Failed to set renderer resolution: " << SDL_GetError() << std::endl;
 		return -1;
 	}
 

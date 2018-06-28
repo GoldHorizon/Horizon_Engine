@@ -64,7 +64,8 @@ void Entity::LoadFromFile(const std::string file, int spriteWidth, int spriteHei
 
 		_imageWidth = tempSurface->w;
 		_imageHeight = tempSurface->h;
-		// If we are loading in is not a sprite sheet:
+
+		// If what we are loading in is not a sprite sheet:
 		if (spriteWidth != 0 && spriteHeight != 0)
 		{
 			_spriteDimensions.x = spriteWidth;
@@ -85,6 +86,25 @@ void Entity::LoadFromFile(const std::string file, int spriteWidth, int spriteHei
 		//std::cout << "Error loading file: " + fullPath << std::endl;
 		std::cout << IMG_GetError() << std::endl;
 	}
+}
+
+void Entity::LoadFromSurface(SDL_Surface* surface)
+{
+	if (_image != nullptr)
+		FreeMemory();
+
+	if (surface != nullptr)
+	{
+		_image = SDL_CreateTextureFromSurface(_renderer, surface);
+
+		_imageWidth = surface->w;
+		_imageHeight = surface->h;
+	}
+	else
+	{
+		std::cerr << "Error loading null surface." << std::endl;
+	}
+
 }
 
 void Entity::FreeMemory()
@@ -254,6 +274,16 @@ Entity* Entity::NewInstance()
 /*
  * Get Methods
  */
+SDL_Texture* Entity::image() const
+{
+	return _image;
+}
+
+SDL_Renderer* Entity::renderer() const
+{
+	return _renderer;
+}
+
 std::string Entity::name() const
 {
 	return _name;

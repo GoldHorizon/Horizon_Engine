@@ -14,11 +14,14 @@ objects := 	main.o \
 		player.o \
 		gameState.o \
 		playing.o \
-		uninitialized.o
+		uninitialized.o \
+		text.o \
+		font.o
 
 flags := -lSDL2 \
 	-lSDL2main \
 	-lSDL2_image \
+	-lSDL2_ttf \
 	-lm \
 	-lstdc++
 
@@ -61,6 +64,12 @@ player.o			: source/player.cpp
 
 gameState.o 		: source/gameState.cpp include/gameState.h
 	gcc $(options) source/gameState.cpp
+
+text.o				: source/text.cpp include/text.h include/constants.h
+	gcc $(options) source/text.cpp
+	
+font.o				: source/font.cpp include/font.h include/constants.h
+	gcc $(options) source/font.cpp
 
 ###
 ### List of game states to be compiled ###

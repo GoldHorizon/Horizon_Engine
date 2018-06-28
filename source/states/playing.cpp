@@ -1,6 +1,8 @@
 #include "../../include/states/playing.h"
 #include "../../include/ball.h"
 #include "../../include/player.h"
+#include "../../include/font.h"
+#include "../../include/text.h"
 
 #define ClassName StatePlaying
 
@@ -15,6 +17,7 @@ void ClassName::Initialize()
 {
     Player* mainPlayer = new Player();
     mainPlayer->SetName("MainPlayer");
+	mainPlayer->SetDepth(-20);
     _entities.AddEntity(mainPlayer);
 
     Ball* testBall = new Ball();
@@ -28,6 +31,18 @@ void ClassName::Initialize()
     testBall2->SetDepth(10);
     testBall2->SetName("TestBall2");
     _entities.AddEntity(testBall2);
+
+	// Test loading fonts/texts
+	Font* testFont = new Font("Test Font");
+	testFont->LoadFont("assets/Inconsolata-Regular.ttf", 12);
+
+	Text* testTextLabel = new Text("This is just a test label!!!", testFont);
+	testTextLabel->SetPosition({ 128, 300 });
+	testTextLabel->SetMaxWidth(128);
+	testTextLabel->SetWrap(true);
+	testTextLabel->SetDepth(-40);
+
+	_entities.AddEntity(testTextLabel);
 }
 
 void ClassName::Cleanup()
