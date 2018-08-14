@@ -1,9 +1,10 @@
-### Linux Makefile ###
+### Makefile ###
 
 ###
 ### Variables
 ###
-executable := launchEngine.sh
+compiler := g++
+executable := launchEngine
 
 objects := 	main.o \
 		game.o \
@@ -18,67 +19,106 @@ objects := 	main.o \
 		text.o \
 		font.o
 
-flags := -lSDL2 \
-	-lSDL2main \
-	-lSDL2_image \
-	-lSDL2_ttf \
-	-lm \
-	-lstdc++
+win32_flags :=	-lmingw32 \
+		-lSDL2main \
+		-lSDL2 \
+		-lSDL2_image \
+		-lSDL2_ttf \
+		-lstdc++ 
+		#-lm \
+
+### NOT IMPLEMENTED
+win64_flags :=	-m64 \
+		-lSDL2main \
+		-lSDL2 \
+		-lSDL2_image \
+		-lSDL2_ttf \
+		-lstdc++
+		#-lmingw \
+		#-lm \
+
 
 #CFLAGS = -c -Wall -Iinclude
 #options := -c -g -Wall -Iinclude -I/usr/include/SDL2
-options := -c -g -Wall -I/usr/include/SDL2
+#options := -c -g -Wall -I/usr/include/SDL2 -I../../Workspace/Libraries/SDL2/SDL2-2.0.8/include/
+
+win32_inc_path := -IC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl32\include\SDL2
+win32_lib_path := -LC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl32\lib
+win64_inc_path := -IC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl64\include\SDL2
+win64_lib_path := -LC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl64\lib
+
+win32_gcc_flags = -c -Wall -w -Wl,-subsystem,windows $(win32_inc_path) -static-libstdc++
+win64_gcc_flags = -c -Wall -w -Wl,-subsystem,windows $(win64_inc_path) -static-libstdc++
+
+#ifeq ($(target), win32)
+#	options := -c -g -Wall $(win32_inc_path)
+#else
+#	options := -c -g -Wall $(win64_inc_path)
+#endif
 
 ###
 ### Main make program
 ###
 all :	$(objects)
 	make clean
-	gcc -g -o $(executable) $(objects) $(flags)
+	$(compiler) $(objects) $(win32_inc_path) $(win32_lib_path) $(win32_flags) -o $(executable)
 	mkdir -p build/
 	mv $(objects) build/
 
+#win64 :	$(objects)
+#	make clean
+#	$(compiler) $(objects) $(win64_inc_path) $(win64_lib_path) $(win64_flags) -o $(executable)
+#	mkdir -p build/
+#	mv $(objects) build/
+#
+#win32 :	$(objects)
+#	make clean
+#	gcc -g -o $(executable) $(objects) $(win32_flags)
+#	mkdir -p build/
+#	mv $(objects) build/
+#
+#lin32 :
 ###
 ### Source files
 ###
 main.o 				: source/main.cpp include/game.h include/constants.h
-	gcc $(options) source/main.cpp
+	gcc $(win32_gcc_flags) source/main.cpp
 
 game.o 				: source/game.cpp include/game.h include/entityCollection.h include/enumerations.h
-	gcc $(options) source/game.cpp
+	gcc $(win32_gcc_flags) source/game.cpp
 
 globals.o 			: source/globals.cpp include/globals.h
-	gcc $(options) source/globals.cpp
+	gcc $(win32_gcc_flags) source/globals.cpp
 
 entity.o 			: source/entity.cpp include/entity.h include/globals.h include/constants.h
-	gcc $(options) source/entity.cpp
+	gcc $(win32_gcc_flags) source/entity.cpp
 
 entityCollection.o  : source/entityCollection.cpp include/entityCollection.h
-	gcc $(options) source/entityCollection.cpp
+	gcc $(win32_gcc_flags) source/entityCollection.cpp
 
 ball.o				: source/ball.cpp include/ball.h include/constants.h
-	gcc $(options) source/ball.cpp
+	gcc $(win32_gcc_flags) source/ball.cpp
 
 player.o			: source/player.cpp
-	gcc $(options) source/player.cpp
+	gcc $(win32_gcc_flags) source/player.cpp
 
 gameState.o 		: source/gameState.cpp include/gameState.h
-	gcc $(options) source/gameState.cpp
+	gcc $(win32_gcc_flags) source/gameState.cpp
 
 text.o				: source/text.cpp include/text.h include/constants.h
-	gcc $(options) source/text.cpp
+	gcc $(win32_gcc_flags) source/text.cpp
 	
 font.o				: source/font.cpp include/font.h include/constants.h
-	gcc $(options) source/font.cpp
+	gcc $(win32_gcc_flags) source/font.cpp
 
 ###
 ### List of game states to be compiled ###
 ###
-playing.o			: source/states/playing.cpp include/states/playing.h
-	gcc $(options) source/states/playing.cpp
+playing.o		: source/states/playing.cpp include/states/playing.h
+	gcc $(win32_gcc_flags) source/states/playing.cpp
 
 uninitialized.o		: source/states/uninitialized.cpp include/states/uninitialized.h
-	gcc $(options) source/states/uninitialized.cpp
+	gcc $(win32_gcc_flags) source/states/uninitialized.cpp
 
 ###
 ### Cleans object and executable files (Debug stuff)
@@ -86,4 +126,3 @@ uninitialized.o		: source/states/uninitialized.cpp include/states/uninitialized.
 clean :
 	rm -fr ./build
 	rm -f $(executable)
-

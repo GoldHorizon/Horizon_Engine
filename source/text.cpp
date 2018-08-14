@@ -32,7 +32,7 @@ void Text::Render(float interpolation)
 
 	//std::cout << spriteDimensions().x << ", " << spriteDimensions().y << std::endl;
 
-	/*
+	
 	if (_texture != nullptr)
 	{
 		int xx = static_cast<int>(_x) - _textOrigin.x;
@@ -50,7 +50,7 @@ void Text::Render(float interpolation)
 				delete sourceImage;
 		delete displayImage;
 	}
-	* /
+	
 }
 */
 

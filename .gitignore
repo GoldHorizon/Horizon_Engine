@@ -3,6 +3,7 @@
 
 # Vim files
 *.swp
+*~
 compile_commands.json
 
 # Debug Folders
@@ -11,6 +12,7 @@ Debug/*
 cmake-build-debug/*
 Win32/*
 x64/*
+sdl/*
 
 # VS Stuff
 .vs/*
