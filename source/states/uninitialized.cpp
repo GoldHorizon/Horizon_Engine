@@ -19,16 +19,6 @@ void ClassName::Cleanup()
 
 }
 
-void ClassName::Pause()
-{
-
-}
-
-void ClassName::Resume()
-{
-
-}
-
 int ClassName::HandleEvents(SDL_Event*)
 {
 

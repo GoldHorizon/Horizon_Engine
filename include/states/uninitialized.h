@@ -11,7 +11,7 @@ class StateUninitialized:
 	 * Constructors/Destructors
 	 */
 protected:
-    ClassName() {SetType(GameStateType::UNINITIALIZED);}
+    ClassName() {SetType(GameStateType::UNINITIALIZED); Resume();}
 public:
     ~StateUninitialized();
 	/*
@@ -19,9 +19,6 @@ public:
 	 */
     void Initialize();
     void Cleanup();
-
-    void Pause();
-    void Resume();
 
     int HandleEvents(SDL_Event*);
     void Update();

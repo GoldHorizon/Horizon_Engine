@@ -11,7 +11,7 @@ class StatePlaying:
 	 * Constructors/Destructors
 	 */
 protected:
-    ClassName() {SetType(GameStateType::PLAYING_GAME);}
+    ClassName() {SetType(GameStateType::PLAYING_GAME); Resume(); }
 public:
     ~StatePlaying();
 	/*
@@ -19,9 +19,6 @@ public:
 	 */
     void Initialize();
     void Cleanup();
-
-    void Pause();
-    void Resume();
 
     int HandleEvents(SDL_Event*);
     void Update();

@@ -50,16 +50,6 @@ void ClassName::Cleanup()
 
 }
 
-void ClassName::Pause()
-{
-
-}
-
-void ClassName::Resume()
-{
-
-}
-
 int ClassName::HandleEvents(SDL_Event* event)
 {
 	_entities.HandleAllEvents(event);
@@ -86,7 +76,8 @@ int ClassName::HandleEvents(SDL_Event* event)
 
 void ClassName::Update()
 {
-    _entities.UpdateAll();
+	if (!IsPaused())
+		_entities.UpdateAll();
 }
 
 void ClassName::Render(float interpolation)

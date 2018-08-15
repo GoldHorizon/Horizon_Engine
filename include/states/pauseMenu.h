@@ -11,7 +11,7 @@ class StatePauseMenu:
 	 * Constructors/Destructors
 	 */
 protected:
-    ClassName() {SetType(GameStateType::PAUSE_MENU);}
+    ClassName() {SetType(GameStateType::PAUSE_MENU); Resume();}
 public:
     ~StatePauseMenu();
 	/*
@@ -19,9 +19,6 @@ public:
 	 */
     void Initialize();
     void Cleanup();
-
-    void Pause();
-    void Resume();
 
     int HandleEvents(SDL_Event*);
     void Update();
