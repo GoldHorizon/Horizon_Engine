@@ -9,3 +9,9 @@ enum class GameStateType
 	PLAYING_GAME,
 	PAUSE_MENU
 };
+
+enum KEY_EVENTS {
+	GAME_QUIT,
+	OPEN_MENU,
+	CLOSE_MENU
+};

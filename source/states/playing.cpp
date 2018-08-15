@@ -60,9 +60,28 @@ void ClassName::Resume()
 
 }
 
-void ClassName::HandleEvents(SDL_Event* event)
+int ClassName::HandleEvents(SDL_Event* event)
 {
-    _entities.HandleAllEvents(event);
+	_entities.HandleAllEvents(event);
+
+//	const Uint8 *state = SDL_GetKeyboardState(NULL);
+//
+//	if (state[SDL_SCANCODE_ESCAPE])
+//	{
+//		return OPEN_MENU;
+//	}
+
+	if (event->type == SDL_KEYDOWN)
+	{
+		switch (event->key.keysym.sym)
+		{
+		case SDLK_ESCAPE:
+			if (event->key.repeat == 0)
+				return OPEN_MENU;
+		}
+	}
+
+	return 0;
 }
 
 void ClassName::Update()

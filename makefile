@@ -16,6 +16,7 @@ objects := 	main.o \
 		gameState.o \
 		playing.o \
 		uninitialized.o \
+		pauseMenu.o \
 		text.o \
 		font.o
 
@@ -47,7 +48,7 @@ win32_lib_path := -LC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl32\lib
 win64_inc_path := -IC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl64\include\SDL2
 win64_lib_path := -LC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl64\lib
 
-win32_gcc_flags = -c -Wall -w -Wl,-subsystem,windows $(win32_inc_path) -static-libstdc++
+win32_gcc_flags = -c -Wall -w -Wl,-subsystem,windows $(win32_inc_path) -IC:\Users\Nick\Documents\Git\SDL_Engine\include -static-libstdc++
 win64_gcc_flags = -c -Wall -w -Wl,-subsystem,windows $(win64_inc_path) -static-libstdc++
 
 #ifeq ($(target), win32)
@@ -120,9 +121,22 @@ playing.o		: source/states/playing.cpp include/states/playing.h
 uninitialized.o		: source/states/uninitialized.cpp include/states/uninitialized.h
 	gcc $(win32_gcc_flags) source/states/uninitialized.cpp
 
+pauseMenu.o		: source/states/pauseMenu.cpp include/states/pauseMenu.h
+	gcc $(win32_gcc_flags) source/states/pauseMenu.cpp
+
 ###
 ### Cleans object and executable files (Debug stuff)
 ###
 clean :
 	rm -fr ./build
 	rm -f $(executable)
+
+cleanobjects :
+	rm -f *.o
+
+###
+###
+###
+run :
+	make all
+	./launchEngine.exe
