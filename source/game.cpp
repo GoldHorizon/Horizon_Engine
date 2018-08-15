@@ -199,13 +199,17 @@ bool Game::GetInput()
 			switch (event_response)
 			{
 			case CLOSE_MENU:
-				_stateStack.pop_back();
+				if ((*it)->GetType() == GameStateType::MAIN_MENU) {
+					_stateStack.pop_back();
+				}
 				break;
 
 			case OPEN_MENU:
+				if ((*it)->GetType() == GameStateType::PLAYING_GAME) {
 				// @todo: reimplement pause as boolean in game state class, to stop processing updates (but continue updating the display
 				//(*it)->Pause();
-				PushState(StatePauseMenu::Instance());
+					PushState(StatePauseMenu::Instance());
+				}
 				break;
 
 			case GAME_QUIT:
