@@ -40,7 +40,7 @@ int ClassName::HandleEvents(SDL_Event* event)
 {
 	if (event->type == SDL_KEYDOWN)
 	{
-		std::cout << std::to_string(event->key.timestamp) << "   " << std::to_string(event->key.repeat) << std::endl;
+		//std::cout << std::to_string(event->key.timestamp) << "   " << std::to_string(event->key.repeat) << std::endl;
 		switch (event->key.keysym.sym)
 		{
 		case SDLK_ESCAPE:

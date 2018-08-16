@@ -167,7 +167,6 @@ bool Game::GetInput()
 		// If our event is a keyboard button press
 		if (_event.type == SDL_KEYDOWN)
 		{
-			std::cout << "Just pressed key " << std::to_string(_event.key.keysym.scancode) << std::endl;
 			switch (_event.key.keysym.scancode)
 			{
 				// Used to end game, managed in pause menu now
@@ -181,7 +180,6 @@ bool Game::GetInput()
 		}
 		else if (_event.type == SDL_WINDOWEVENT && _event.window.windowID == SDL_GetWindowID(_mainWindow))
 		{
-			std::cout << "Window event " << std::endl;
 			switch ((int)(_event.window.event))
 			{
 			case SDL_WINDOWEVENT_CLOSE:
@@ -209,6 +207,7 @@ bool Game::GetInput()
 			case CLOSE_MENU:
 				std::cout << "Closing menu..." << std::endl;
 				if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
+					_stateStack.back()->Cleanup();
 					_stateStack.pop_back();
 					_stateStack.back()->Resume();
 				}

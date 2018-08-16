@@ -7,36 +7,36 @@ compiler := g++
 executable := launchEngine
 
 objects := 	main.o \
-		game.o \
-		globals.o \
-		entity.o \
-		entityCollection.o \
-		ball.o \
-		player.o \
-		gameState.o \
-		playing.o \
-		uninitialized.o \
-		pauseMenu.o \
-		text.o \
-		font.o
+			game.o \
+			globals.o \
+			entity.o \
+			entityCollection.o \
+			ball.o \
+			player.o \
+			gameState.o \
+			playing.o \
+			uninitialized.o \
+			pauseMenu.o \
+			text.o \
+			font.o
 
 win32_flags :=	-lmingw32 \
-		-lSDL2main \
-		-lSDL2 \
-		-lSDL2_image \
-		-lSDL2_ttf \
-		-lstdc++ 
-		#-lm \
+				-lSDL2main \
+				-lSDL2 \
+				-lSDL2_image \
+				-lSDL2_ttf \
+				-lstdc++ 
+				#-lm \
 
 ### NOT IMPLEMENTED
 win64_flags :=	-m64 \
-		-lSDL2main \
-		-lSDL2 \
-		-lSDL2_image \
-		-lSDL2_ttf \
-		-lstdc++
-		#-lmingw \
-		#-lm \
+				-lSDL2main \
+				-lSDL2 \
+				-lSDL2_image \
+				-lSDL2_ttf \
+				-lstdc++
+				#-lmingw \
+				#-lm \
 
 
 #CFLAGS = -c -Wall -Iinclude
@@ -60,11 +60,13 @@ win64_gcc_flags = -c -Wall -w -Wl,-subsystem,windows $(win64_inc_path) -static-l
 ###
 ### Main make program
 ###
-all :	$(objects)
-	make clean
-	$(compiler) $(objects) $(win32_inc_path) $(win32_lib_path) $(win32_flags) -o $(executable)
-	mkdir -p build/
-	mv $(objects) build/
+all : $(executable)
+
+$(executable): 	$(objects)
+				make clean
+				$(compiler) $(objects) $(win32_inc_path) $(win32_lib_path) $(win32_flags) -o $(executable)
+				mkdir -p build/
+				mv $(objects) build/
 
 #win64 :	$(objects)
 #	make clean
@@ -82,6 +84,9 @@ all :	$(objects)
 ###
 ### Source files
 ###
+all_files			:  
+	$(objects)
+
 main.o 				: source/main.cpp include/game.h include/constants.h
 	gcc $(win32_gcc_flags) source/main.cpp
 
@@ -135,7 +140,7 @@ cleanobjects :
 	rm -f *.o
 
 ###
-###
+### Compiles/links program normally, then runs it
 ###
 run :
 	make all
