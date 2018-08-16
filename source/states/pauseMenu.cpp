@@ -2,6 +2,7 @@
 #include "globals.h"
 #include "enumerations.h"
 #include "constants.h"
+#include "globals.h"
 
 #include <iostream>
 #include <string>
@@ -12,17 +13,27 @@ ClassName* ClassName::_thisInstance = nullptr;
 
 ClassName::~ClassName()
 {
-
+	Cleanup();
 }
 
 void ClassName::Initialize()
 {
-    
+	//Draw menu title
+	Text* menuTitle = new Text("Menu", menuTitleFont);
+	menuTitle->SetPosition({ SCREEN_WIDTH / 2, 160 });
+	menuTitle->SetColor(SDL_Color({255, 255, 0, 255}));
+	menuTitle->SetAlign(ALIGN_CENTER);
+	menuTitle->UpdateImage();
+
+	_entities.AddEntity(menuTitle);
 }
 
 void ClassName::Cleanup()
 {
-
+	while (_entities.GetCount() > 0)
+	{
+		_entities.RemoveByIndex(0);
+	}
 }
 
 int ClassName::HandleEvents(SDL_Event* event)
@@ -41,8 +52,8 @@ int ClassName::HandleEvents(SDL_Event* event)
 
 void ClassName::Update()
 {
-//	if (!IsPaused())
-//		_entities.UpdateAll();
+	if (!IsPaused())
+		_entities.UpdateAll();
 }
 
 void ClassName::Render(float interpolation)
@@ -57,6 +68,8 @@ void ClassName::Render(float interpolation)
 	SDL_RenderFillRect(globalRenderer, draw_rect);
 
 	delete draw_rect;
+
+    _entities.RenderAll(interpolation);
 }
 
 #ifdef ClassName

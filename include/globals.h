@@ -2,6 +2,10 @@
 
 #include "SDL.h"
 
+#include "font.h"
+#include "text.h"
+
 extern SDL_Renderer* globalRenderer;
-extern int window_width;
-extern int window_height;
+
+extern Font* defaultFont;
+extern Font* menuTitleFont;

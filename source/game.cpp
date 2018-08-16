@@ -97,7 +97,15 @@ int Game::Initialize()
 	//ChangeState(StateTitleScreen::Instance());
     ChangeState(StatePlaying::Instance());
 
+	LoadFonts();
+
 	return 0;
+}
+
+void Game::LoadFonts()
+{
+//	defaultFont = new Font("Test Font", "assets/Inconsolata-Regular.ttf", 12);
+	menuTitleFont = new Font("MenuTitle", "assets/Inconsolata-Regular.ttf", 36);
 }
 
 void Game::ChangeState(GameState* newState)

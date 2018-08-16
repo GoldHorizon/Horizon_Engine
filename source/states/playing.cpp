@@ -10,7 +10,7 @@ ClassName* ClassName::_thisInstance = nullptr;
 
 ClassName::~ClassName()
 {
-
+	Cleanup();
 }
 
 void ClassName::Initialize()
@@ -47,7 +47,10 @@ void ClassName::Initialize()
 
 void ClassName::Cleanup()
 {
-
+	while (_entities.GetCount() > 0)
+	{
+		_entities.RemoveByIndex(0);
+	}
 }
 
 int ClassName::HandleEvents(SDL_Event* event)
