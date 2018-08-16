@@ -2,7 +2,7 @@
 #include "globals.h"
 #include "enumerations.h"
 #include "constants.h"
-#include "globals.h"
+#include "drawing.h"
 
 #include <iostream>
 #include <string>
@@ -25,7 +25,15 @@ void ClassName::Initialize()
 	menuTitle->SetAlign(ALIGN_CENTER);
 	menuTitle->UpdateImage();
 
+	//Draw menu options
+	Text* menuOptionResume = new Text("Resume", menuOptionFont);
+	menuOptionResume->SetPosition({ SCREEN_WIDTH / 2, 320 });
+	menuOptionResume->SetColor(SDL_Color({255, 255, 255, 255}));
+	menuOptionResume->SetAlign(ALIGN_CENTER);
+	menuOptionResume->UpdateImage();
+
 	_entities.AddEntity(menuTitle);
+	_entities.AddEntity(menuOptionResume);
 }
 
 void ClassName::Cleanup()
@@ -58,16 +66,20 @@ void ClassName::Update()
 
 void ClassName::Render(float interpolation)
 {
-	SDL_Rect* draw_rect = new SDL_Rect;
-	draw_rect->x = 128;
-	draw_rect->y = 128;
-	draw_rect->w = SCREEN_WIDTH - 256;
-	draw_rect->h = SCREEN_HEIGHT - 256;
+	//SDL_Rect* draw_rect = new SDL_Rect;
+	//draw_rect->x = 128;
+	//draw_rect->y = 128;
+	//draw_rect->w = SCREEN_WIDTH - 256;
+	//draw_rect->h = SCREEN_HEIGHT - 256;
 	
-	SDL_SetRenderDrawColor(globalRenderer, 0, 80, 80, 200);
-	SDL_RenderFillRect(globalRenderer, draw_rect);
+	//SDL_SetRenderDrawColor(globalRenderer, 0, 80, 80, 200);
+	//SDL_RenderFillRect(globalRenderer, draw_rect);
 
-	delete draw_rect;
+	//delete draw_rect;
+	
+	DrawRect({128, 128, SCREEN_WIDTH - 256, SCREEN_HEIGHT - 256}, {0, 80, 80, 255});
+	// For testing
+	//DrawRect(0, 0, 32, 32, 255, 0, 0, 255);
 
     _entities.RenderAll(interpolation);
 }

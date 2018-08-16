@@ -9,3 +9,4 @@ extern SDL_Renderer* globalRenderer;
 
 extern Font* defaultFont;
 extern Font* menuTitleFont;
+extern Font* menuOptionFont;

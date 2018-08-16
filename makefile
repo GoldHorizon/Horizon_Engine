@@ -126,7 +126,7 @@ playing.o		: source/states/playing.cpp include/states/playing.h
 uninitialized.o		: source/states/uninitialized.cpp include/states/uninitialized.h
 	gcc $(win32_gcc_flags) source/states/uninitialized.cpp
 
-pauseMenu.o		: source/states/pauseMenu.cpp include/states/pauseMenu.h
+pauseMenu.o		: source/states/pauseMenu.cpp include/states/pauseMenu.h include/drawing.h
 	gcc $(win32_gcc_flags) source/states/pauseMenu.cpp
 
 ###

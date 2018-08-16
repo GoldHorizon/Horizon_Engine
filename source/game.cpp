@@ -106,6 +106,7 @@ void Game::LoadFonts()
 {
 //	defaultFont = new Font("Test Font", "assets/Inconsolata-Regular.ttf", 12);
 	menuTitleFont = new Font("MenuTitle", "assets/Inconsolata-Regular.ttf", 36);
+	menuOptionFont = new Font("MenuOption", "assets/Inconsolata-Regular.ttf", 24);
 }
 
 void Game::ChangeState(GameState* newState)
