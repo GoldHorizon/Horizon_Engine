@@ -19,21 +19,30 @@ ClassName::~ClassName()
 void ClassName::Initialize()
 {
 	//Draw menu title
-	Text* menuTitle = new Text("Menu", menuTitleFont);
-	menuTitle->SetPosition({ SCREEN_WIDTH / 2, 160 });
-	menuTitle->SetColor(SDL_Color({255, 255, 0, 255}));
-	menuTitle->SetAlign(ALIGN_CENTER);
-	menuTitle->UpdateImage();
+	//Text* menuTitle = new Text("Menu", menuTitleFont);
+	//menuTitle->SetPosition({ SCREEN_WIDTH / 2, 160 });
+	//menuTitle->SetColor(SDL_Color({255, 255, 0, 255}));
+	//menuTitle->SetAlign(ALIGN_CENTER);
+	//menuTitle->UpdateImage();
 
 	//Draw menu options
-	Text* menuOptionResume = new Text("Resume", menuOptionFont);
-	menuOptionResume->SetPosition({ SCREEN_WIDTH / 2, 320 });
-	menuOptionResume->SetColor(SDL_Color({255, 255, 255, 255}));
-	menuOptionResume->SetAlign(ALIGN_CENTER);
-	menuOptionResume->UpdateImage();
+	//Text* menuOptionResume = new Text("Resume", menuOptionFont);
+	//menuOptionResume->SetPosition({ SCREEN_WIDTH / 2, 320 });
+	//menuOptionResume->SetColor(SDL_Color({255, 255, 255, 255}));
+	//menuOptionResume->SetAlign(ALIGN_CENTER);
+	//menuOptionResume->UpdateImage();
+
+	Text* menuTitle = CreateText("Menu", menuTitleFont, { SCREEN_WIDTH / 2, 160 }, SDL_Color({255, 255, 0, 255}), ALIGN_CENTER);
+	Text* menuOptionResume = CreateText("Resume", menuOptionFont, { SCREEN_WIDTH / 2, 320 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	Text* menuOptionRestart = CreateText("Restart", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 32 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	Text* menuOptionOptions = CreateText("Options", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 64 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	Text* menuOptionQuit = CreateText("Quit", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 96 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
 
 	_entities.AddEntity(menuTitle);
 	_entities.AddEntity(menuOptionResume);
+	_entities.AddEntity(menuOptionRestart);
+	_entities.AddEntity(menuOptionOptions);
+	_entities.AddEntity(menuOptionQuit);
 }
 
 void ClassName::Cleanup()
