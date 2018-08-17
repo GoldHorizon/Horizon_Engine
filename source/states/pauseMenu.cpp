@@ -52,7 +52,6 @@ void ClassName::Initialize()
 	_menuList[3] = menuOptionQuit;
 
 	UpdateMenu();
-
 }
 
 void ClassName::Cleanup()
@@ -81,14 +80,14 @@ int ClassName::HandleEvents(SDL_Event* event)
 		case SDLK_DOWN:
 			_menuOptionSelected++;
 			if (_menuOptionSelected >= MENU_SIZE) _menuOptionSelected -= MENU_SIZE;
-			std::cout << "Menu Option Selected: " << _menuOptionSelected << std::endl;
+			//std::cout << "Menu Option Selected: " << _menuOptionSelected << std::endl;
 			UpdateMenu();
 			break;
 
 		case SDLK_UP:
 			_menuOptionSelected--;
 			if (_menuOptionSelected < 0) _menuOptionSelected += MENU_SIZE;
-			std::cout << "Menu Option Selected: " << _menuOptionSelected << std::endl;
+			//std::cout << "Menu Option Selected: " << _menuOptionSelected << std::endl;
 			UpdateMenu();
 			break;
 
@@ -143,18 +142,8 @@ void ClassName::UpdateMenu()
 
 void ClassName::Render(float interpolation)
 {
-	//SDL_Rect* draw_rect = new SDL_Rect;
-	//draw_rect->x = 128;
-	//draw_rect->y = 128;
-	//draw_rect->w = SCREEN_WIDTH - 256;
-	//draw_rect->h = SCREEN_HEIGHT - 256;
-	
-	//SDL_SetRenderDrawColor(globalRenderer, 0, 80, 80, 200);
-	//SDL_RenderFillRect(globalRenderer, draw_rect);
-
-	//delete draw_rect;
-	
 	DrawRect({128, 128, SCREEN_WIDTH - 256, SCREEN_HEIGHT - 256}, {0, 80, 80, 255});
+
 	// For testing
 	//DrawRect(0, 0, 32, 32, 255, 0, 0, 255);
 
