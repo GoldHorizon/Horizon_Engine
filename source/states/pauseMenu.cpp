@@ -43,6 +43,16 @@ void ClassName::Initialize()
 	_entities.AddEntity(menuOptionRestart);
 	_entities.AddEntity(menuOptionOptions);
 	_entities.AddEntity(menuOptionQuit);
+	
+	_menuOptionSelected = 0;
+
+	_menuList[0] = menuOptionResume;
+	_menuList[1] = menuOptionRestart;
+	_menuList[2] = menuOptionOptions;
+	_menuList[3] = menuOptionQuit;
+
+	UpdateMenu();
+
 }
 
 void ClassName::Cleanup()
@@ -51,6 +61,9 @@ void ClassName::Cleanup()
 	{
 		_entities.RemoveByIndex(0);
 	}
+//  NOT NEEDED: the above takes care of all entities, INCLUDING items in the menu
+//	for (int i = 0; i < MENU_SIZE; i++)
+//		if (_menuList[i] != nullptr) delete _menuList[i];
 }
 
 int ClassName::HandleEvents(SDL_Event* event)
@@ -63,14 +76,69 @@ int ClassName::HandleEvents(SDL_Event* event)
 		case SDLK_ESCAPE:
 			if (event->key.repeat == 0)
 				return CLOSE_MENU;
+			break;
+
+		case SDLK_DOWN:
+			_menuOptionSelected++;
+			if (_menuOptionSelected >= MENU_SIZE) _menuOptionSelected -= MENU_SIZE;
+			std::cout << "Menu Option Selected: " << _menuOptionSelected << std::endl;
+			UpdateMenu();
+			break;
+
+		case SDLK_UP:
+			_menuOptionSelected--;
+			if (_menuOptionSelected < 0) _menuOptionSelected += MENU_SIZE;
+			std::cout << "Menu Option Selected: " << _menuOptionSelected << std::endl;
+			UpdateMenu();
+			break;
+
+		case SDLK_RETURN:
+			switch (_menuOptionSelected)
+			{
+			case 0:
+				return CLOSE_MENU;
+				break;
+
+			case 1:
+				// Send signal to game to restart current level
+				break;
+
+			case 2:
+				// Send signal to game to open options menu
+				break;
+
+			case 3:
+				// Send signal to game to exit the game!
+				return GAME_QUIT; 
+				break;
+			}
 		}
 	}
+
+	return -1;
 }
 
 void ClassName::Update()
 {
 	if (!IsPaused())
 		_entities.UpdateAll();
+}
+
+void ClassName::UpdateMenu()
+{
+	for (int i = 0; i < MENU_SIZE; i++)
+	{
+		if (_menuOptionSelected == i)
+		{
+			_menuList[i]->SetColor(SDL_Color({0, 255, 255, 255}));
+			_menuList[i]->UpdateImage();
+		}
+		else
+		{
+			_menuList[i]->SetColor(SDL_Color({255, 255, 255, 255}));
+			_menuList[i]->UpdateImage();
+		}
+	}
 }
 
 void ClassName::Render(float interpolation)

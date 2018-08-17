@@ -74,7 +74,7 @@ int ClassName::HandleEvents(SDL_Event* event)
 		}
 	}
 
-	return 0;
+	return -1;
 }
 
 void ClassName::Update()

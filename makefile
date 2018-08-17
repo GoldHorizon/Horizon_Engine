@@ -65,8 +65,8 @@ all : $(executable)
 $(executable): 	$(objects)
 				make clean
 				$(compiler) $(objects) $(win32_inc_path) $(win32_lib_path) $(win32_flags) -o $(executable)
-				mkdir -p build/
-				mv $(objects) build/
+				#mkdir -p build/
+				#mv $(objects) build/
 
 #win64 :	$(objects)
 #	make clean
@@ -133,7 +133,7 @@ pauseMenu.o		: source/states/pauseMenu.cpp include/states/pauseMenu.h include/dr
 ### Cleans object and executable files (Debug stuff)
 ###
 clean :
-	rm -fr ./build
+	#rm -fr ./build
 	rm -f $(executable)
 
 cleanobjects :

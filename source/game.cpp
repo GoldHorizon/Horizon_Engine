@@ -208,8 +208,11 @@ bool Game::GetInput()
 			case CLOSE_MENU:
 				std::cout << "Closing menu..." << std::endl;
 				if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
+					std::cout << "Start cleanup..." << std::endl;
 					_stateStack.back()->Cleanup();
+					std::cout << "Start pop_back..." << std::endl;
 					_stateStack.pop_back();
+					std::cout << "Start resume..." << std::endl;
 					_stateStack.back()->Resume();
 				}
 				break;
@@ -224,6 +227,7 @@ bool Game::GetInput()
 				break;
 
 			case GAME_QUIT:
+				continueGame = false;
 				break;
 
 			default:
