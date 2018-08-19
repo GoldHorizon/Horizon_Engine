@@ -13,6 +13,8 @@ objects := 	main.o \
 		entityCollection.o \
 		ball.o \
 		player.o \
+		file.o \
+		level.o \
 		gameState.o \
 		playing.o \
 		uninitialized.o \
@@ -99,8 +101,14 @@ entityCollection.o  : source/entityCollection.cpp include/entityCollection.h
 ball.o				: source/ball.cpp include/ball.h include/constants.h
 	gcc $(win32_gcc_flags) source/ball.cpp
 
-player.o			: source/player.cpp
+player.o			: source/player.cpp include/player.h
 	gcc $(win32_gcc_flags) source/player.cpp
+
+file.o				: source/file.cpp include/file.h
+	gcc $(win32_gcc_flags) source/file.cpp
+
+level.o				: source/level.cpp include/level.h include/file.h
+	gcc $(win32_gcc_flags) source/level.cpp
 
 gameState.o 		: source/gameState.cpp include/gameState.h
 	gcc $(win32_gcc_flags) source/gameState.cpp
