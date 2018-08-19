@@ -25,6 +25,7 @@ void Player::HandleEvents(SDL_Event* event)
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	int calcDirection = 0;
 
+	// We use SDL_GetKeyboardState for continuous button presses, not key down events
 	if ((state[SDL_SCANCODE_W] ^ state[SDL_SCANCODE_S]) || (state[SDL_SCANCODE_A] ^ state[SDL_SCANCODE_D]))
 	{
 		SetSpeed(4);

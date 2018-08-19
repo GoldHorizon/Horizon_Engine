@@ -2,6 +2,7 @@
 #include "../include/globals.h"
 #include "../include/constants.h"
 #include "../include/ball.h"
+#include "enumerations.h"
 
 #include "../include/states/playing.h"
 #include "../include/states/uninitialized.h"
@@ -12,6 +13,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <iostream>
+#include <string>
 
 Game::Game():
 	_mainWindow(0),
@@ -95,7 +97,16 @@ int Game::Initialize()
 	//ChangeState(StateTitleScreen::Instance());
     ChangeState(StatePlaying::Instance());
 
+	LoadFonts();
+
 	return 0;
+}
+
+void Game::LoadFonts()
+{
+//	defaultFont = new Font("Test Font", "assets/Inconsolata-Regular.ttf", 12);
+	menuTitleFont = new Font("MenuTitle", "assets/Inconsolata-Regular.ttf", 36);
+	menuOptionFont = new Font("MenuOption", "assets/Inconsolata-Regular.ttf", 24);
 }
 
 void Game::ChangeState(GameState* newState)
@@ -144,48 +155,83 @@ bool Game::GetInput()
 	// For the method, assume we are continuing
 	bool continueGame = true;
 
+	int event_response = -1;
+
 	// Poll the system for an event of some kind
-	SDL_PollEvent(&_event);
-
-	// STEP 1: Process Input
-
-	// There will eventually be a switch statement here to
-	// determine what game state we are in (Maybe?)
-
-	// If our event is a keyboard button press
-	if (_event.type == SDL_KEYDOWN)
+	if (SDL_PollEvent(&_event))
 	{
-		switch (_event.key.keysym.scancode)
-		{
-		case SDL_SCANCODE_ESCAPE:
-			continueGame = false;
-			break;
+		// STEP 1: Process Input
 
-		default:
-			break;
+		// There will eventually be a switch statement here to
+		// determine what game state we are in (Maybe?)
+
+		// If our event is a keyboard button press
+		if (_event.type == SDL_KEYDOWN)
+		{
+			switch (_event.key.keysym.scancode)
+			{
+				// Used to end game, managed in pause menu now
+	//		case SDL_SCANCODE_ESCAPE:
+	//			continueGame = false;
+	//			break;
+
+			default:
+				break;
+			}
+		}
+		else if (_event.type == SDL_WINDOWEVENT && _event.window.windowID == SDL_GetWindowID(_mainWindow))
+		{
+			switch ((int)(_event.window.event))
+			{
+			case SDL_WINDOWEVENT_CLOSE:
+				// If window is closed, take this as the user quitting
+				// In the future, this must be made more elegant.
+				std::cout << "Close window event" << std::endl;
+				continueGame = false;
+				break;
+			default:
+				//std::cout << (int)(_event.window.event);
+				break;
+			}
+		}
+
+		// This will allow the topmost gamestate to handle any events given to the window
+		// (Preventing lower gamestates from taking input i.e. when a pause menu overlay is up)
+		std::vector<GameState*>::iterator it = _stateStack.end();
+		it--;
+		event_response = (*it)->HandleEvents(&_event);
+
+		if (event_response != -1)
+		{
+			switch (event_response)
+			{
+			case CLOSE_MENU:
+				//std::cout << "Closing menu..." << std::endl;
+				if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
+					_stateStack.back()->Cleanup();
+					_stateStack.pop_back();
+					_stateStack.back()->Resume();
+				}
+				break;
+
+			case OPEN_MENU:
+				//std::cout << "Opening menu..." << std::endl;
+				if ((*it)->GetType() == GameStateType::PLAYING_GAME) {
+				// @todo: reimplement pause as boolean in game state class, to stop processing updates (but continue updating the display
+					(*it)->Pause();
+					PushState(StatePauseMenu::Instance());
+				}
+				break;
+
+			case GAME_QUIT:
+				continueGame = false;
+				break;
+
+			default:
+				break;
+			}
 		}
 	}
-	else if (_event.type == SDL_WINDOWEVENT && _event.window.windowID == SDL_GetWindowID(_mainWindow))
-	{
-		switch ((int)(_event.window.event))
-		{
-		case SDL_WINDOWEVENT_CLOSE:
-			// If window is closed, take this as the user quitting
-			// In the future, this must be made more elegant.
-			continueGame = false;
-			break;
-		default:
-			//std::cout << (int)(_event.window.event);
-			break;
-		}
-	}
-
-	// This will allow the topmost gamestate to handle any events given to the window
-	// (Preventing lower gamestates from taking input i.e. when a pause menu overlay is up)
-	std::vector<GameState*>::iterator it = _stateStack.end();
-	it--;
-    (*it)->HandleEvents(&_event);
-
     // The player has not quit the game, so return false
 	return continueGame;
 }

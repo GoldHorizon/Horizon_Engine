@@ -13,6 +13,7 @@ class Font
          */
         Font(std::string name);
 		Font(std::string name, int size);
+		Font(std::string name, std::string file, int size);
         ~Font();
 
 		/*

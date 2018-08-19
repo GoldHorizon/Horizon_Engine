@@ -8,7 +8,8 @@ GameState::~GameState()
 
 void GameState::ChangeState(Game* gameReference, GameState* nextState)
 {
-    gameReference->ChangeState(nextState);
+	//    Pretty sure this wouldn't work, would break call stack
+//    gameReference->ChangeState(nextState);
 }
 
 GameStateType GameState::GetType()
@@ -24,4 +25,19 @@ void GameState::SetType(GameStateType type)
 EntityCollection& GameState::Entities()
 {
     return _entities;
+}
+
+void GameState::Pause()
+{
+	_paused = true;
+}
+
+void GameState::Resume()
+{
+	_paused = false;
+}
+
+bool GameState::IsPaused()
+{
+	return _paused;
 }

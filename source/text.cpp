@@ -15,7 +15,8 @@ Text::Text(std::string text, Font* font) :
 	_text(text),
 	_color(DEFAULT_COLOR),
 	_maxWidth(0),
-	_wrap(false)
+	_wrap(false),
+	_align(ALIGN_LEFT)
 {
 	SetText(text);
 }
@@ -75,6 +76,14 @@ void Text::UpdateImage()
 	else
 		tempSurface = TTF_RenderText_Solid(_font->font(), _text.c_str(), _color);
 
+	if (_align != ALIGN_LEFT)
+	{
+		if (_align == ALIGN_CENTER)
+			SetImageOrigin(tempSurface->w/2, 0);
+		else if (_align == ALIGN_RIGHT)
+			SetImageOrigin(tempSurface->w, 0);
+	}
+
 	if (tempSurface != nullptr)
 	{
 		LoadFromSurface(tempSurface);
@@ -111,6 +120,11 @@ bool Text::wrap() const
 	return _wrap;
 }
 
+TextAlignment Text::align() const
+{
+	return _align;
+}
+
 void Text::SetFont(Font* font)
 {
     _font = font;
@@ -136,6 +150,11 @@ void Text::SetMaxWidth(int maxWidth)
 void Text::SetWrap(bool wrap)
 {
 	_wrap = wrap;
+}
+
+void Text::SetAlign(TextAlignment align)
+{
+	_align = align;
 }
 
 bool operator<(const Text &el, const Text &er)

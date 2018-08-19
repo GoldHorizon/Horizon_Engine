@@ -3,17 +3,21 @@
 
 #include <iostream>
 
-Font::Font(std::string name) : Font(name, DEFAULT_FONT_SIZE)
+Font::Font(std::string name) : Font(name, "", DEFAULT_FONT_SIZE)
 {
-
 }
 
-Font::Font(std::string name, int size)
+Font::Font(std::string name, int size) : Font(name, "", size)
+{
+}
+		
+Font::Font(std::string name, std::string file, int size)
 {
 	_sdl_font = nullptr;
 
 	SetName(name);
-	SetSize(size);
+
+	if (file != "") LoadFont(file, size);
 }
 
 Font::~Font()

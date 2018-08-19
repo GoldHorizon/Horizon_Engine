@@ -7,35 +7,36 @@ compiler := g++
 executable := launchEngine
 
 objects := 	main.o \
-		game.o \
-		globals.o \
-		entity.o \
-		entityCollection.o \
-		ball.o \
-		player.o \
-		gameState.o \
-		playing.o \
-		uninitialized.o \
-		text.o \
-		font.o
+			game.o \
+			globals.o \
+			entity.o \
+			entityCollection.o \
+			ball.o \
+			player.o \
+			gameState.o \
+			playing.o \
+			uninitialized.o \
+			pauseMenu.o \
+			text.o \
+			font.o
 
 win32_flags :=	-lmingw32 \
-		-lSDL2main \
-		-lSDL2 \
-		-lSDL2_image \
-		-lSDL2_ttf \
-		-lstdc++ 
-		#-lm \
+				-lSDL2main \
+				-lSDL2 \
+				-lSDL2_image \
+				-lSDL2_ttf \
+				-lstdc++ 
+				#-lm \
 
 ### NOT IMPLEMENTED
 win64_flags :=	-m64 \
-		-lSDL2main \
-		-lSDL2 \
-		-lSDL2_image \
-		-lSDL2_ttf \
-		-lstdc++
-		#-lmingw \
-		#-lm \
+				-lSDL2main \
+				-lSDL2 \
+				-lSDL2_image \
+				-lSDL2_ttf \
+				-lstdc++
+				#-lmingw \
+				#-lm \
 
 
 #CFLAGS = -c -Wall -Iinclude
@@ -47,7 +48,7 @@ win32_lib_path := -LC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl32\lib
 win64_inc_path := -IC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl64\include\SDL2
 win64_lib_path := -LC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl64\lib
 
-win32_gcc_flags = -c -Wall -w -Wl,-subsystem,windows $(win32_inc_path) -static-libstdc++
+win32_gcc_flags = -c -Wall -w -Wl,-subsystem,windows $(win32_inc_path) -IC:\Users\Nick\Documents\Git\SDL_Engine\include -static-libstdc++
 win64_gcc_flags = -c -Wall -w -Wl,-subsystem,windows $(win64_inc_path) -static-libstdc++
 
 #ifeq ($(target), win32)
@@ -59,11 +60,13 @@ win64_gcc_flags = -c -Wall -w -Wl,-subsystem,windows $(win64_inc_path) -static-l
 ###
 ### Main make program
 ###
-all :	$(objects)
-	make clean
-	$(compiler) $(objects) $(win32_inc_path) $(win32_lib_path) $(win32_flags) -o $(executable)
-	mkdir -p build/
-	mv $(objects) build/
+all : $(executable)
+
+$(executable): 	$(objects)
+				make clean
+				$(compiler) $(objects) $(win32_inc_path) $(win32_lib_path) $(win32_flags) -o $(executable)
+				#mkdir -p build/
+				#mv $(objects) build/
 
 #win64 :	$(objects)
 #	make clean
@@ -81,6 +84,9 @@ all :	$(objects)
 ###
 ### Source files
 ###
+all_files			:  
+	$(objects)
+
 main.o 				: source/main.cpp include/game.h include/constants.h
 	gcc $(win32_gcc_flags) source/main.cpp
 
@@ -120,9 +126,22 @@ playing.o		: source/states/playing.cpp include/states/playing.h
 uninitialized.o		: source/states/uninitialized.cpp include/states/uninitialized.h
 	gcc $(win32_gcc_flags) source/states/uninitialized.cpp
 
+pauseMenu.o		: source/states/pauseMenu.cpp include/states/pauseMenu.h include/drawing.h
+	gcc $(win32_gcc_flags) source/states/pauseMenu.cpp
+
 ###
 ### Cleans object and executable files (Debug stuff)
 ###
 clean :
-	rm -fr ./build
+	#rm -fr ./build
 	rm -f $(executable)
+
+cleanobjects :
+	rm -f *.o
+
+###
+### Compiles/links program normally, then runs it
+###
+run :
+	make all
+	./launchEngine.exe
