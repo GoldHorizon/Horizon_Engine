@@ -109,3 +109,39 @@ void Font::SetName(std::string name)
 {
 	_name = name;
 }
+
+std::string Font::Serialize()
+{
+	std::string serialize_string = "Font ";
+
+	serialize_string += _name + " "
+		+ _file + " "
+		+ std::to_string(_size);
+
+	return serialize_string;
+}
+
+void Font::Unserialize(std::string str)
+{
+	std::stringstream stream(str);
+	std::string temp;
+
+	stream >> temp;
+	while (stream)
+	{
+		//std::cout << temp << std::endl;
+		stream >> temp;
+		if (temp == "Font") 
+		{
+			stream >> _name;
+			stream >> _file;
+			stream >> _size;
+
+			LoadFont(_file, _size);
+
+			break;
+		}
+	}
+}
+
+

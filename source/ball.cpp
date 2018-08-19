@@ -81,3 +81,17 @@ void Ball::Update()
 	*/
 }
 
+std::string Ball::Serialize()
+{
+	std::string serialize_string = Entity::Serialize();
+
+	serialize_string += "Ball ";
+	// @@Future: Add player's member attributes to string
+
+	return serialize_string;
+}
+
+void Ball::Unserialize(std::string str)
+{
+	Entity::Unserialize(str);
+}

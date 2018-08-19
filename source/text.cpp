@@ -157,6 +157,55 @@ void Text::SetAlign(TextAlignment align)
 	_align = align;
 }
 
+std::string Text::Serialize()
+{
+	std::string serialize_string = Entity::Serialize();
+
+	serialize_string += "Text ";
+
+	serialize_string += _text + " "
+		+ std::to_string(_color.r) + " "
+		+ std::to_string(_color.g) + " "
+		+ std::to_string(_color.b) + " "
+		+ std::to_string(_color.a) + " "
+		+ std::to_string(_maxWidth) + " "
+		+ std::to_string(_wrap) + " "
+		+ std::to_string((int)(_align));
+
+	return serialize_string;
+}
+
+void Text::Unserialize(std::string str)
+{
+	Entity::Unserialize(str);
+
+	std::stringstream stream(str);
+	std::string temp;
+
+	stream >> temp;
+	while (stream)
+	{
+		//std::cout << temp << std::endl;
+		stream >> temp;
+		if (temp == "Text") 
+		{
+			stream >> _color.r;
+			stream >> _color.g;
+			stream >> _color.b;
+			stream >> _color.a;
+			stream >> _maxWidth;
+			stream >> _wrap;
+			int a;
+			stream >> a;
+			_align = static_cast<TextAlignment>(a);
+
+			UpdateImage();
+
+			break;
+		}
+	}
+}
+
 bool operator<(const Text &el, const Text &er)
 {
 	return (el.text() < er.text());
