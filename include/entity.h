@@ -3,6 +3,7 @@
 #include "SDL.h"
 
 #include <string>
+#include <sstream>
 
 class Entity
 {
@@ -60,6 +61,9 @@ class Entity
 
 		// NewInstance()    - Returns a new entity of a certain type
 		virtual Entity* NewInstance();
+
+		virtual std::string Serialize();			// Save object into a string
+		virtual void Unserialize(std::string);
 
 		/*
 		 * Get Methods

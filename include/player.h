@@ -4,6 +4,7 @@
 #include "SDL.h"
 #include "entity.h"
 #include <string>
+#include <sstream>
 
 class Player: public Entity
 {
@@ -27,7 +28,10 @@ public:
 
 	// Render()			- Renders the texture to its current position
 	//void Render(float interpolation);
+	
+	std::string Serialize();
 
+	void Unserialize(std::string);
 
 private:
 

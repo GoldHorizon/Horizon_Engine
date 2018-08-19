@@ -24,6 +24,4 @@ private:
 	std::string _name;
 
 	eVector _objectList;
-	
-
 };

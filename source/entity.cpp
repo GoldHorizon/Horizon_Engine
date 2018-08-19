@@ -271,6 +271,82 @@ Entity* Entity::NewInstance()
 	return nullptr;
 }
 
+std::string Entity::Serialize()
+{
+	std::string serialize_string = "Empty";
+
+	serialize_string = "Entity ";
+	serialize_string += _name + " "
+		+ std::to_string(_active) + " "
+		+ std::to_string(_visible) + " "
+		+ std::to_string(_x) + " "
+		+ std::to_string(_y) + " "
+		+ std::to_string(_depth) + " "
+		+ std::to_string(_direction) + " "
+		+ std::to_string(_speed) + " "
+		+ std::to_string(_hspeed) + " "
+		+ std::to_string(_vspeed) + " "
+		+ std::to_string(_imageAlpha) + " "
+		+ std::to_string(_imageAngle) + " "
+		+ std::to_string(_imageWidth) + " "
+		+ std::to_string(_imageHeight) + " "
+		+ std::to_string(_imageSpeed) + " "
+		+ std::to_string(_imageTimer) + " "
+		+ std::to_string(_lastImageTime) + " "
+		+ std::to_string(_imageIndex) + " "
+		+ std::to_string(_imageOrigin.x) + " "
+		+ std::to_string(_imageOrigin.y) + " "
+		+ std::to_string(_spriteDimensions.x) + " "
+		+ std::to_string(_spriteDimensions.y) + " ";
+
+	return serialize_string;
+}
+
+void Entity::Unserialize(std::string str)
+{
+	std::stringstream stream(str);
+	std::string temp;
+
+	stream >> temp;
+	if (temp == "Entity")
+	{
+		stream >> _name;
+		stream >> _active;	
+		stream >> _visible;	
+		stream >> _x;	
+		stream >> _y;	
+		stream >> _depth;
+		stream >> _direction;
+		stream >> _speed;
+		stream >> _hspeed;
+		stream >> _vspeed;
+		stream >> _imageAlpha;
+		stream >> _imageAngle;
+		stream >> _imageWidth;
+		stream >> _imageHeight;
+		stream >> _imageSpeed;
+		stream >> _imageTimer;
+		stream >> _lastImageTime;
+		stream >> _imageIndex;
+		stream >> _imageOrigin.x;
+		stream >> _imageOrigin.y;
+		stream >> _spriteDimensions.x;
+		stream >> _spriteDimensions.y;
+	}
+	else
+	{
+		std::cout << "ERROR: Entity serialized string is invalid!" << std::endl;
+	}
+
+	//stream >> temp;
+	//while (stream)
+	//{
+	//	std::cout << temp << std::endl;
+	//	stream >> temp;
+	//	if (temp == "Player") break;
+	//}
+}
+
 /*
  * Get Methods
  */

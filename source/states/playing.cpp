@@ -49,27 +49,28 @@ void ClassName::Initialize()
 	// Begin testing file input/output
 	File testFile;
 
-	testFile.OpenFile("test_file.txt", false, true);
-	testFile.PrintData();
+	//testFile.OpenFile("test_file.txt", false, true);
 
 	// I/O here
 	sVector* svp = testFile.GetDataVector();
-	svp->push_back("This is the first string being written");
-	svp->push_back("Here is the second one");
-	svp->push_back("Number 3");
-	svp->push_back("This is the last one!");
-	
-	testFile.WriteFileData();
+	//std::cout << "Entering serialize method" << std::endl;
+	//std::string temp = mainPlayer->Serialize();
+	//std::cout << temp << std::endl;
+	//
+	//svp->push_back(temp);
 
-	testFile.CloseFile();
-	testFile.PrintData();
+	//testFile.WriteFileData();
+
+	//testFile.CloseFile();
+	//testFile.PrintData();
 	svp->clear();
-	testFile.PrintData();
 
 	testFile.OpenFile("test_file.txt");
 
 	testFile.ReadFileAll();
 	testFile.PrintData();
+
+	mainPlayer->Unserialize(svp->back());
 
 	testFile.CloseFile();
 }
