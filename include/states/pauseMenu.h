@@ -1,8 +1,11 @@
 #pragma once
 
 #include "../gameState.h"
+#include "text.h"
 
 #define ClassName StatePauseMenu
+
+const int MENU_SIZE = 4;
 
 class StatePauseMenu:
     public GameState
@@ -11,7 +14,7 @@ class StatePauseMenu:
 	 * Constructors/Destructors
 	 */
 protected:
-    ClassName() {SetType(GameStateType::PAUSE_MENU);}
+    ClassName() {SetType(GameStateType::PAUSE_MENU); Resume();}
 public:
     ~StatePauseMenu();
 	/*
@@ -20,11 +23,9 @@ public:
     void Initialize();
     void Cleanup();
 
-    void Pause();
-    void Resume();
-
-    void HandleEvents(SDL_Event*);
+    int HandleEvents(SDL_Event*);
     void Update();
+	void UpdateMenu();
     void Render(float interpolation);
 
     static ClassName* Instance()
@@ -39,6 +40,9 @@ public:
 
 private:
     static ClassName* _thisInstance;
+
+	Text* _menuList[MENU_SIZE];
+	int _menuOptionSelected;
 };
 
 #ifdef ClassName

@@ -1,8 +1,8 @@
 #pragma once
 
 // Graphics/Display Constants
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 640;
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 720;
 
 const int DEFAULT_FONT_SIZE = 12;
 const SDL_Color DEFAULT_COLOR = { 0, 0, 0 };

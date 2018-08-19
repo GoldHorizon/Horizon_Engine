@@ -10,7 +10,7 @@ ClassName* ClassName::_thisInstance = nullptr;
 
 ClassName::~ClassName()
 {
-
+	Cleanup();
 }
 
 void ClassName::Initialize()
@@ -47,27 +47,40 @@ void ClassName::Initialize()
 
 void ClassName::Cleanup()
 {
-
+	while (_entities.GetCount() > 0)
+	{
+		_entities.RemoveByIndex(0);
+	}
 }
 
-void ClassName::Pause()
+int ClassName::HandleEvents(SDL_Event* event)
 {
+	_entities.HandleAllEvents(event);
 
-}
+//	const Uint8 *state = SDL_GetKeyboardState(NULL);
+//
+//	if (state[SDL_SCANCODE_ESCAPE])
+//	{
+//		return OPEN_MENU;
+//	}
 
-void ClassName::Resume()
-{
+	if (event->type == SDL_KEYDOWN)
+	{
+		switch (event->key.keysym.sym)
+		{
+		case SDLK_ESCAPE:
+			if (event->key.repeat == 0)
+				return OPEN_MENU;
+		}
+	}
 
-}
-
-void ClassName::HandleEvents(SDL_Event* event)
-{
-    _entities.HandleAllEvents(event);
+	return -1;
 }
 
 void ClassName::Update()
 {
-    _entities.UpdateAll();
+	if (!IsPaused())
+		_entities.UpdateAll();
 }
 
 void ClassName::Render(float interpolation)

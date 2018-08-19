@@ -4,6 +4,7 @@
 
 #include "entity.h"
 #include "font.h"
+#include "enumerations.h"
 
 #include "SDL.h"
 #include "SDL_ttf.h"
@@ -38,6 +39,7 @@ class Text: public Entity
 		SDL_Color color() const;		// Returns the color of the text
 		int maxWidth() const;
 		bool wrap() const;
+		TextAlignment align() const;
 
 		/*
 		 * Set Methods
@@ -47,6 +49,7 @@ class Text: public Entity
 		void SetColor(SDL_Color color);		// Sets the text color
 		void SetMaxWidth(int maxWidth);
 		void SetWrap(bool wrap);
+		void SetAlign(TextAlignment align);
 
 	private:
 
@@ -59,6 +62,7 @@ class Text: public Entity
 		SDL_Color _color;		// Color of the text
 		int _maxWidth;			// Max width of the text before it stops/wraps
 		bool _wrap;
+		TextAlignment _align;
 
 		/*
 		 * Operator Overloads

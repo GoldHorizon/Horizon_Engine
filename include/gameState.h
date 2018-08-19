@@ -23,10 +23,7 @@ public:
     virtual void Initialize() = 0;
     virtual void Cleanup() = 0;
 
-    virtual void Pause() = 0;
-    virtual void Resume() = 0;
-
-    virtual void HandleEvents(SDL_Event*) = 0;
+    virtual int HandleEvents(SDL_Event*) = 0;
     virtual void Update() = 0;
     virtual void Render(float interpolation) = 0;
 
@@ -48,11 +45,16 @@ public:
     // Entities()			- Returns entity collection
     EntityCollection& Entities();
 
+    void Pause();
+    void Resume();
+    bool IsPaused();
+
 private:
     // NOTE: Goes in all inherited states
     //static GameState* _thisInstance;
 
     GameStateType _type;
+    bool _paused;
 
 protected:
     void SetType(GameStateType type);
