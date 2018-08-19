@@ -3,6 +3,7 @@
 #include "../../include/player.h"
 #include "../../include/font.h"
 #include "../../include/text.h"
+#include "file.h"
 
 #define ClassName StatePlaying
 
@@ -41,8 +42,36 @@ void ClassName::Initialize()
 	testTextLabel->SetMaxWidth(128);
 	testTextLabel->SetWrap(true);
 	testTextLabel->SetDepth(-40);
+	// End test loading fonts/texts
 
 	_entities.AddEntity(testTextLabel);
+
+	// Begin testing file input/output
+	File testFile;
+
+	testFile.OpenFile("test_file.txt", false, true);
+	testFile.PrintData();
+
+	// I/O here
+	sVector* svp = testFile.GetDataVector();
+	svp->push_back("This is the first string being written");
+	svp->push_back("Here is the second one");
+	svp->push_back("Number 3");
+	svp->push_back("This is the last one!");
+	
+	testFile.WriteFileData();
+
+	testFile.CloseFile();
+	testFile.PrintData();
+	svp->clear();
+	testFile.PrintData();
+
+	testFile.OpenFile("test_file.txt");
+
+	testFile.ReadFileAll();
+	testFile.PrintData();
+
+	testFile.CloseFile();
 }
 
 void ClassName::Cleanup()
