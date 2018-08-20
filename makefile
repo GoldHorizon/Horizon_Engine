@@ -128,7 +128,7 @@ font.o				: source/font.cpp include/font.h include/constants.h
 ###
 ### List of game states to be compiled ###
 ###
-playing.o		: source/states/playing.cpp include/states/playing.h
+playing.o		: source/states/playing.cpp include/states/playing.h include/engineMethods.h
 	gcc $(win32_gcc_flags) source/states/playing.cpp
 
 uninitialized.o		: source/states/uninitialized.cpp include/states/uninitialized.h

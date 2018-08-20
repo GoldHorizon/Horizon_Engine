@@ -1,11 +1,7 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "../include/entity.h"
-
-typedef std::vector<Entity*> eVector;
+#include "types.h"
+#include "entity.h"
 
 class Level
 {

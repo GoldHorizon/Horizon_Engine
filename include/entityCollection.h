@@ -1,12 +1,7 @@
 #pragma once
 
-#include <string>
-#include <map>
-#include <list>
-
 #include "entity.h"
-
-typedef std::list<Entity*> eList;
+#include "types.h"
 
 template <typename T> bool PComp(const T * const &a, const T * const &b)
 {

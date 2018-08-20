@@ -1,11 +1,9 @@
 #pragma once
 
-#include <string>
-#include <vector>
 #include <fstream>
 #include <iostream>
 
-typedef std::vector<std::string> sVector;
+#include "types.h"
 
 class File
 {

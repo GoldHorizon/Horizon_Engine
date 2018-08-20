@@ -4,6 +4,7 @@
 #include "../../include/font.h"
 #include "../../include/text.h"
 #include "file.h"
+#include "engineMethods.h"
 
 #define ClassName StatePlaying
 
@@ -64,6 +65,10 @@ void ClassName::Initialize()
 
 	testFile.CloseFile();
 	testFile.PrintData();
+
+	//sVector testV;
+	ParseSerializedString(testTextLabel->Serialize());
+
 	//svp->clear();
 
 	//testFile.OpenFile("test_file.txt");
