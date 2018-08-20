@@ -66,8 +66,14 @@ void ClassName::Initialize()
 	testFile.CloseFile();
 	testFile.PrintData();
 
-	//sVector testV;
-	ParseSerializedString(testTextLabel->Serialize());
+	sVector* testV;
+	testV = ParseSerializedString(testTextLabel->Serialize());
+
+	for (int i = 0; i < testV->size(); i++)
+	{
+		std::cout << (*testV)[i] << std::endl;
+	}
+	delete testV;
 
 	//svp->clear();
 

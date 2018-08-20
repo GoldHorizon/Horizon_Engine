@@ -5,9 +5,9 @@
 
 #include "types.h"
 
-sVector ParseSerializedString(std::string str)
+sVector* ParseSerializedString(std::string str)
 {
-	sVector strList;
+	sVector* strList = new sVector;
 
 	std::stringstream stream(str);
 	std::string temp;
@@ -21,7 +21,8 @@ sVector ParseSerializedString(std::string str)
 			if (temp.at(temp.length() - 1) == '"')
 			{
 				std::string total = temp.substr(1, temp.length() - 2);
-				std::cout << total << std::endl;
+				//std::cout << total << std::endl;
+				strList->push_back(total);
 			}
 			else
 			{
@@ -37,12 +38,14 @@ sVector ParseSerializedString(std::string str)
 				}
 
 				total += " " + temp.substr(0, temp.length() - 1);
-				std::cout << total << std::endl;
+				//std::cout << total << std::endl;
+				strList->push_back(total);
 			}
 		}
 		else
 		{
-				std::cout << temp << std::endl;
+			//std::cout << temp << std::endl;
+			strList->push_back(temp);
 		}
 		stream >> temp;
 	}
