@@ -170,7 +170,9 @@ std::string Text::Serialize()
 		+ std::to_string(_color.a) + " "
 		+ std::to_string(_maxWidth) + " "
 		+ std::to_string(_wrap) + " "
-		+ std::to_string((int)(_align));
+		+ std::to_string(static_cast<int>(_align));
+
+	serialize_string += " " + _font->Serialize();
 
 	return serialize_string;
 }
@@ -186,9 +188,9 @@ void Text::Unserialize(std::string str)
 	while (stream)
 	{
 		//std::cout << temp << std::endl;
-		stream >> temp;
 		if (temp == "Text") 
 		{
+			stream >> _text;
 			stream >> _color.r;
 			stream >> _color.g;
 			stream >> _color.b;
@@ -200,9 +202,13 @@ void Text::Unserialize(std::string str)
 			_align = static_cast<TextAlignment>(a);
 
 			UpdateImage();
+			
+			_font->Unserialize(str);
 
 			break;
 		}
+
+		stream >> temp;
 	}
 }
 

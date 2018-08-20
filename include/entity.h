@@ -122,6 +122,7 @@ class Entity
 
 		// _image				- Image stored in the drawable
 		SDL_Texture* _image;
+		std::string  _imagePath;
 		// _renderer			- Renderer we draw to for this drawable
 		SDL_Renderer* _renderer;
 

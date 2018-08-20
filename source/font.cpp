@@ -130,7 +130,6 @@ void Font::Unserialize(std::string str)
 	while (stream)
 	{
 		//std::cout << temp << std::endl;
-		stream >> temp;
 		if (temp == "Font") 
 		{
 			stream >> _name;
@@ -141,6 +140,8 @@ void Font::Unserialize(std::string str)
 
 			break;
 		}
+
+		stream >> temp;
 	}
 }
 

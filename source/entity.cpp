@@ -14,6 +14,7 @@ Entity::Entity() : Entity(globalRenderer)
 
 Entity::Entity(SDL_Renderer* renderer):
 	_image(nullptr),
+	_imagePath(""),
 	_renderer(renderer),
 	_name(""),
 	_ID(0),
@@ -75,6 +76,8 @@ void Entity::LoadFromFile(const std::string file, int spriteWidth, int spriteHei
 		// Free up our surface when we're done
 		SDL_FreeSurface(tempSurface);
 
+		_imagePath = file;
+
 		// DEBUG
 		//std::cout << _imageWidth << std::endl
 		//	<< _imageHeight << std::endl
@@ -96,6 +99,7 @@ void Entity::LoadFromSurface(SDL_Surface* surface)
 	if (surface != nullptr)
 	{
 		_image = SDL_CreateTextureFromSurface(_renderer, surface);
+		_imagePath = "";
 
 		_imageWidth = surface->w;
 		_imageHeight = surface->h;
@@ -276,7 +280,8 @@ std::string Entity::Serialize()
 	std::string serialize_string = "Empty";
 
 	serialize_string = "Entity ";
-	serialize_string += _name + " "
+	serialize_string += _imagePath + " "
+		+ _name + " "
 		+ std::to_string(_active) + " "
 		+ std::to_string(_visible) + " "
 		+ std::to_string(_x) + " "
@@ -310,6 +315,7 @@ void Entity::Unserialize(std::string str)
 	stream >> temp;
 	if (temp == "Entity")
 	{
+		stream >> _imagePath;
 		stream >> _name;
 		stream >> _active;	
 		stream >> _visible;	
