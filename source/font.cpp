@@ -114,8 +114,8 @@ std::string Font::Serialize()
 {
 	std::string serialize_string = "Font ";
 
-	serialize_string += _name + " "
-		+ _file + " "
+	serialize_string += "\"" + _name + "\"" + " "
+		+ "\"" + _file + "\"" + " "
 		+ std::to_string(_size);
 
 	return serialize_string;

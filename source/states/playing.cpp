@@ -47,23 +47,23 @@ void ClassName::Initialize()
 	_entities.AddEntity(testTextLabel);
 
 	// Begin testing file input/output
-	//File testFile;
+	File testFile;
 
-	//testFile.OpenFile("test_file.txt", false, true);
+	testFile.OpenFile("test_file.txt", false, true);
 
-	//// I/O here
-	//sVector* svp = testFile.GetDataVector();
-	//std::cout << "Entering serialize method" << std::endl;
-	//
-	//svp->push_back(mainPlayer->Serialize());
-	//svp->push_back(testBall->Serialize());
-	//svp->push_back(testBall2->Serialize());
-	////svp->push_back(testTextLabel->Serialize());
+	// I/O here
+	sVector* svp = testFile.GetDataVector();
+	std::cout << "Entering serialize method" << std::endl;
+	
+	svp->push_back(mainPlayer->Serialize());
+	svp->push_back(testBall->Serialize());
+	svp->push_back(testBall2->Serialize());
+	svp->push_back(testTextLabel->Serialize());
 
-	//testFile.WriteFileData();
+	testFile.WriteFileData();
 
-	//testFile.CloseFile();
-	//testFile.PrintData();
+	testFile.CloseFile();
+	testFile.PrintData();
 	//svp->clear();
 
 	//testFile.OpenFile("test_file.txt");

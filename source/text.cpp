@@ -163,7 +163,7 @@ std::string Text::Serialize()
 
 	serialize_string += "Text ";
 
-	serialize_string += _text + " "
+	serialize_string += "\"" + _text + "\"" + " "
 		+ std::to_string(_color.r) + " "
 		+ std::to_string(_color.g) + " "
 		+ std::to_string(_color.b) + " "

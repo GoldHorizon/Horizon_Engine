@@ -14,9 +14,9 @@ Entity::Entity() : Entity(globalRenderer)
 
 Entity::Entity(SDL_Renderer* renderer):
 	_image(nullptr),
-	_imagePath(""),
+	_imagePath("nopath"),
 	_renderer(renderer),
-	_name(""),
+	_name("noname"),
 	_ID(0),
 	_active(true),
 	_visible(true),
@@ -99,7 +99,7 @@ void Entity::LoadFromSurface(SDL_Surface* surface)
 	if (surface != nullptr)
 	{
 		_image = SDL_CreateTextureFromSurface(_renderer, surface);
-		_imagePath = "";
+		_imagePath = "nopath";
 
 		_imageWidth = surface->w;
 		_imageHeight = surface->h;
@@ -280,8 +280,8 @@ std::string Entity::Serialize()
 	std::string serialize_string = "Empty";
 
 	serialize_string = "Entity ";
-	serialize_string += _imagePath + " "
-		+ _name + " "
+	serialize_string += "\"" + _imagePath + "\"" + " "
+		+ "\"" + _name + "\"" + " "
 		+ std::to_string(_active) + " "
 		+ std::to_string(_visible) + " "
 		+ std::to_string(_x) + " "
@@ -448,7 +448,14 @@ SDL_Point Entity::spriteDimensions() const
  */
 void Entity::SetName(std::string name)
 {
-	_name = name;
+	if (name != "")
+	{
+		_name = name;
+	}
+	else
+	{
+		_name = "noname";
+	}
 }
 void Entity::SetID(int ID)
 {
