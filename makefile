@@ -20,7 +20,8 @@ objects 	:= 	main.o \
 				uninitialized.o \
 				pauseMenu.o \
 				text.o \
-				font.o
+				font.o \
+				engineMethods.o
 
 win32_flags :=	-lmingw32 \
 				-lSDL2main \
@@ -124,6 +125,9 @@ text.o				: source/text.cpp include/text.h include/constants.h
 	
 font.o				: source/font.cpp include/font.h include/constants.h
 	gcc $(win32_gcc_flags) source/font.cpp
+
+engineMethods.o		: source/engineMethods.cpp include/engineMethods.h
+	gcc $(win32_gcc_flags) source/engineMethods.cpp
 
 ###
 ### List of game states to be compiled ###

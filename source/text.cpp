@@ -1,5 +1,6 @@
 #include "../include/text.h"
 #include "../include/constants.h"
+#include "engineMethods.h"
 
 #include <iostream>
 
@@ -181,35 +182,62 @@ void Text::Unserialize(std::string str)
 {
 	Entity::Unserialize(str);
 
-	std::stringstream stream(str);
-	std::string temp;
+	sVector* list = ParseSerializedString(str);
 
-	stream >> temp;
-	while (stream)
+	int index = 0;
+
+	while ((*list)[index] != "Text" && index < list->size())
+		index++;
+
+	if ((*list)[index++] == "Text")
 	{
-		//std::cout << temp << std::endl;
-		if (temp == "Text") 
-		{
-			stream >> _text;
-			stream >> _color.r;
-			stream >> _color.g;
-			stream >> _color.b;
-			stream >> _color.a;
-			stream >> _maxWidth;
-			stream >> _wrap;
-			int a;
-			stream >> a;
-			_align = static_cast<TextAlignment>(a);
+		_text			= (*list)[index++];
+		_color.r		= stoi((*list)[index++]);
+		_color.g		= stoi((*list)[index++]);
+		_color.b		= stoi((*list)[index++]);
+		_color.a		= stoi((*list)[index++]);
+		_maxWidth		= stoi((*list)[index++]);
+		_wrap			= (*list)[index++] == "1" ? true : false;
+		int a;
+		a				= stoi((*list)[index++]);
+		_align = static_cast<TextAlignment>(a);
 
-			UpdateImage();
-			
-			_font->Unserialize(str);
+		UpdateImage();
 
-			break;
-		}
-
-		stream >> temp;
+		_font->Unserialize(str);
 	}
+			
+	delete list;
+
+	//std::stringstream stream(str);
+	//std::string temp;
+
+	//stream >> temp;
+	//while (stream)
+	//{
+	//	//std::cout << temp << std::endl;
+	//	if (temp == "Text") 
+	//	{
+	//		stream >> _text;
+	//		stream >> _color.r;
+	//		stream >> _color.g;
+	//		stream >> _color.b;
+	//		stream >> _color.a;
+	//		stream >> _maxWidth;
+	//		stream >> _wrap;
+	//		int a;
+	//		stream >> a;
+	//		_align = static_cast<TextAlignment>(a);
+
+	//		UpdateImage();
+
+	//		_font->Unserialize(str);
+
+	//		break;
+	//	}
+
+	//	stream >> temp;
+	//}
 }
 
 bool operator<(const Text &el, const Text &er)

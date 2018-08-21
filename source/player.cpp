@@ -1,5 +1,6 @@
 #include "../include/player.h"
 #include "../include/constants.h"
+#include "engineMethods.h"
 
 #include <iostream>
 #include <math.h>

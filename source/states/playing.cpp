@@ -4,7 +4,6 @@
 #include "../../include/font.h"
 #include "../../include/text.h"
 #include "file.h"
-#include "engineMethods.h"
 
 #define ClassName StatePlaying
 
@@ -18,73 +17,77 @@ ClassName::~ClassName()
 void ClassName::Initialize()
 {
     Player* mainPlayer = new Player();
-    mainPlayer->SetName("MainPlayer");
-	mainPlayer->SetDepth(-20);
+    //mainPlayer->SetName("MainPlayer");
+	//mainPlayer->SetDepth(-20);
     _entities.AddEntity(mainPlayer);
 
     Ball* testBall = new Ball();
-    testBall->SetPosition(128, 128);
-    testBall->SetDepth(-10);
-    testBall->SetName("TestBall");
+    //testBall->SetPosition(128, 128);
+    //testBall->SetDepth(-10);
+    //testBall->SetName("TestBall");
     _entities.AddEntity(testBall);
 
     Ball* testBall2 = new Ball();
-    testBall2->SetPosition(256, 512);
-    testBall2->SetDepth(10);
-    testBall2->SetName("TestBall2");
+    //testBall2->SetPosition(256, 512);
+    //testBall2->SetDepth(10);
+    //testBall2->SetName("TestBall2");
     _entities.AddEntity(testBall2);
 
-	// Test loading fonts/texts
+	//// Test loading fonts/texts
 	Font* testFont = new Font("Test Font");
 	testFont->LoadFont("assets/Inconsolata-Regular.ttf", 12);
 
 	Text* testTextLabel = new Text("This is just a test label!!!", testFont);
-	testTextLabel->SetPosition({ 128, 300 });
-	testTextLabel->SetMaxWidth(128);
-	testTextLabel->SetWrap(true);
-	testTextLabel->SetDepth(-40);
+	//testTextLabel->SetPosition({ 128, 300 });
+	//testTextLabel->SetMaxWidth(128);
+	//testTextLabel->SetWrap(true);
+	//testTextLabel->SetDepth(-40);
 	// End test loading fonts/texts
 
 	_entities.AddEntity(testTextLabel);
 
-	// Begin testing file input/output
+	//// Begin testing file input/output
 	File testFile;
 
-	testFile.OpenFile("test_file.txt", false, true);
+	//testFile.OpenFile("test_file.txt", false, true);
 
-	// I/O here
+	//// I/O here
 	sVector* svp = testFile.GetDataVector();
-	std::cout << "Entering serialize method" << std::endl;
-	
-	svp->push_back(mainPlayer->Serialize());
-	svp->push_back(testBall->Serialize());
-	svp->push_back(testBall2->Serialize());
-	svp->push_back(testTextLabel->Serialize());
+	//std::cout << "Entering serialize method" << std::endl;
+	//
+	//svp->push_back(mainPlayer->Serialize());
+	//svp->push_back(testBall->Serialize());
+	//svp->push_back(testBall2->Serialize());
+	//svp->push_back(testTextLabel->Serialize());
 
-	testFile.WriteFileData();
+	//testFile.WriteFileData();
 
-	testFile.CloseFile();
-	testFile.PrintData();
+	//testFile.CloseFile();
+	//testFile.PrintData();
 
-	sVector* testV;
-	testV = ParseSerializedString(testTextLabel->Serialize());
+	//sVector* testV;
+	//testV = ParseSerializedString(testTextLabel->Serialize());
 
-	for (int i = 0; i < testV->size(); i++)
-	{
-		std::cout << (*testV)[i] << std::endl;
-	}
-	delete testV;
+	//for (int i = 0; i < testV->size(); i++)
+	//{
+	//	std::cout << (*testV)[i] << std::endl;
+	//}
+	//delete testV;
 
 	//svp->clear();
 
-	//testFile.OpenFile("test_file.txt");
+	testFile.OpenFile("test_file.txt");
 
-	//testFile.ReadFileAll();
-	//testFile.PrintData();
+	testFile.ReadFileAll();
+	testFile.PrintData();
 
-	//mainPlayer->Unserialize(svp->back());
+	mainPlayer		->Unserialize((*svp)[0]);
+	testBall		->Unserialize((*svp)[1]);
+	testBall2		->Unserialize((*svp)[2]);
+	testTextLabel	->Unserialize((*svp)[3]);
 
-	//testFile.CloseFile();
+	testFile.CloseFile();
+	//// End testing file Input/Output
 }
 
 void ClassName::Cleanup()

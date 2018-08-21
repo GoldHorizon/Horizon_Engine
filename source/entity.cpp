@@ -1,6 +1,7 @@
 #include "../include/entity.h"
 #include "../include/globals.h"
 #include "../include/constants.h"
+#include "engineMethods.h"
 
 #include <iostream>
 #include <math.h>
@@ -309,40 +310,76 @@ std::string Entity::Serialize()
 
 void Entity::Unserialize(std::string str)
 {
-	std::stringstream stream(str);
-	std::string temp;
+	sVector* list = ParseSerializedString(str);
 
-	stream >> temp;
-	if (temp == "Entity")
+	int index = 0;
+
+	while ((*list)[index] != "Entity" && index < list->size())
+		index++;
+
+	if ((*list)[index++] == "Entity")
 	{
-		stream >> _imagePath;
-		stream >> _name;
-		stream >> _active;	
-		stream >> _visible;	
-		stream >> _x;	
-		stream >> _y;	
-		stream >> _depth;
-		stream >> _direction;
-		stream >> _speed;
-		stream >> _hspeed;
-		stream >> _vspeed;
-		stream >> _imageAlpha;
-		stream >> _imageAngle;
-		stream >> _imageWidth;
-		stream >> _imageHeight;
-		stream >> _imageSpeed;
-		stream >> _imageTimer;
-		stream >> _lastImageTime;
-		stream >> _imageIndex;
-		stream >> _imageOrigin.x;
-		stream >> _imageOrigin.y;
-		stream >> _spriteDimensions.x;
-		stream >> _spriteDimensions.y;
+		_imagePath 			= (*list)[index++];
+		_name 				= (*list)[index++];
+		_active 			= (*list)[index++] == "1" ? true : false;	
+		_visible 			= (*list)[index++] == "1" ? true : false;	
+		_x					= std::stof((*list)[index++]);	
+		_y					= std::stof((*list)[index++]);
+		_depth 				= std::stof((*list)[index++]);
+		_direction 			= std::stof((*list)[index++]);
+		_speed 				= std::stof((*list)[index++]);
+		_hspeed 			= std::stof((*list)[index++]);
+		_vspeed 			= std::stof((*list)[index++]);
+		_imageAlpha 		= std::stof((*list)[index++]);
+		_imageAngle 		= std::stod((*list)[index++]);
+		_imageWidth 		= std::stoi((*list)[index++]);
+		_imageHeight 		= std::stoi((*list)[index++]);
+		_imageSpeed 		= std::stoi((*list)[index++]);
+		_imageTimer 		= std::stoi((*list)[index++]);
+		_lastImageTime 		= std::stoi((*list)[index++]);
+		_imageIndex 		= std::stoi((*list)[index++]);
+		_imageOrigin.x 		= std::stoi((*list)[index++]);
+		_imageOrigin.y 		= std::stoi((*list)[index++]);
+		_spriteDimensions.x = std::stoi((*list)[index++]);
+		_spriteDimensions.y = std::stoi((*list)[index++]);
 	}
-	else
-	{
-		std::cout << "ERROR: Entity serialized string is invalid!" << std::endl;
-	}
+
+	delete list;
+
+	//std::stringstream stream(str);
+	//std::string temp;
+
+	//stream >> temp;
+	//if (temp == "Entity")
+	//{
+	//	stream >> _imagePath;
+	//	stream >> _name;
+	//	stream >> _active;	
+	//	stream >> _visible;	
+	//	stream >> _x;	
+	//	stream >> _y;	
+	//	stream >> _depth;
+	//	stream >> _direction;
+	//	stream >> _speed;
+	//	stream >> _hspeed;
+	//	stream >> _vspeed;
+	//	stream >> _imageAlpha;
+	//	stream >> _imageAngle;
+	//	stream >> _imageWidth;
+	//	stream >> _imageHeight;
+	//	stream >> _imageSpeed;
+	//	stream >> _imageTimer;
+	//	stream >> _lastImageTime;
+	//	stream >> _imageIndex;
+	//	stream >> _imageOrigin.x;
+	//	stream >> _imageOrigin.y;
+	//	stream >> _spriteDimensions.x;
+	//	stream >> _spriteDimensions.y;
+	//}
+	//else
+	//{
+	//	std::cout << "ERROR: Entity serialized string is invalid!" << std::endl;
+	//}
 
 	//stream >> temp;
 	//while (stream)
