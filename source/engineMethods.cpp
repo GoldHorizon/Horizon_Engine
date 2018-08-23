@@ -1,5 +1,7 @@
 #include "engineMethods.h"
-#include "types.h"
+#include "player.h"
+#include "text.h"
+#include "ball.h"
 
 #include <sstream>
 #include <iostream>
@@ -50,4 +52,40 @@ sVector* ParseSerializedString(std::string str)
 	}
 
 	return strList;
+}
+
+Entity* CreateSerializedObject(std::string str)
+{
+	if (str.find("@Entity") == -1)
+	{
+		std::cout << "Error: Trying to create serialized object that is not an entity!" << std::endl;
+		return nullptr;
+	}
+
+	Entity* obj;
+
+	if (str.find("@Player") != -1)
+	{
+		obj = new Player;
+		obj->Unserialize(str);	
+		return obj;
+	}
+
+	if (str.find("@Text") != -1)
+	{
+		std::cout << "Found text object to unserialized" << std::endl;
+		obj = new Text;
+		obj->Unserialize(str);	
+		std::cout << "Created text object, returning it..." << std::endl;
+		return obj;
+	}
+
+	if (str.find("@Ball") != -1)
+	{
+		obj = new Ball;
+		obj->Unserialize(str);	
+		return obj;
+	}
+
+	return nullptr;
 }

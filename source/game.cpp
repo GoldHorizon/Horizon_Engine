@@ -60,6 +60,8 @@ int Game::Initialize()
 
 	// Also initialize TTF, for fonts
 	TTF_Init();
+	// After doing that, load global fonts for our use.
+	LoadFonts();
 
 	// STEP 2
 	// Setup our main window with an SDL_Window pointer
@@ -97,16 +99,18 @@ int Game::Initialize()
 	//ChangeState(StateTitleScreen::Instance());
     ChangeState(StatePlaying::Instance());
 
-	LoadFonts();
-
 	return 0;
 }
 
 void Game::LoadFonts()
 {
-//	defaultFont = new Font("Test Font", "assets/Inconsolata-Regular.ttf", 12);
+	defaultFont = new Font("DefaultFont", "assets/Inconsolata-Regular.ttf", 12);
 	menuTitleFont = new Font("MenuTitle", "assets/Inconsolata-Regular.ttf", 36);
 	menuOptionFont = new Font("MenuOption", "assets/Inconsolata-Regular.ttf", 24);
+
+	fontList[0] = defaultFont;
+	fontList[1] = menuTitleFont;
+	fontList[2] = menuOptionFont;
 }
 
 void Game::ChangeState(GameState* newState)

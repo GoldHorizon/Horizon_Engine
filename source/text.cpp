@@ -1,6 +1,7 @@
 #include "../include/text.h"
 #include "../include/constants.h"
 #include "engineMethods.h"
+#include "globals.h"
 
 #include <iostream>
 
@@ -19,7 +20,8 @@ Text::Text(std::string text, Font* font) :
 	_wrap(false),
 	_align(ALIGN_LEFT)
 {
-	SetText(text);
+	if (_font != nullptr)
+		SetText(text);
 }
 
 Text::~Text()
@@ -162,7 +164,7 @@ std::string Text::Serialize()
 {
 	std::string serialize_string = Entity::Serialize();
 
-	serialize_string += "Text ";
+	serialize_string += "@Text ";
 
 	serialize_string += "\"" + _text + "\"" + " "
 		+ std::to_string(_color.r) + " "
@@ -173,7 +175,8 @@ std::string Text::Serialize()
 		+ std::to_string(_wrap) + " "
 		+ std::to_string(static_cast<int>(_align));
 
-	serialize_string += " " + _font->Serialize();
+	//serialize_string += " " + _font->Serialize();
+	serialize_string += " \"" + _font->name() + "\"";
 
 	return serialize_string;
 }
@@ -186,10 +189,10 @@ void Text::Unserialize(std::string str)
 
 	int index = 0;
 
-	while ((*list)[index] != "Text" && index < list->size())
+	while ((*list)[index] != "@Text" && index < list->size())
 		index++;
 
-	if ((*list)[index++] == "Text")
+	if ((*list)[index++] == "@Text")
 	{
 		_text			= (*list)[index++];
 		_color.r		= stoi((*list)[index++]);
@@ -202,9 +205,27 @@ void Text::Unserialize(std::string str)
 		a				= stoi((*list)[index++]);
 		_align = static_cast<TextAlignment>(a);
 
-		UpdateImage();
+		std::string f	= (*list)[index++];
 
-		_font->Unserialize(str);
+		if (_font != nullptr) { 
+			delete _font;
+			_font = nullptr;
+		}
+
+		for (int i = 0; i < FONT_COUNT; i++)
+		{
+			if (f == fontList[i]->name()) {
+				_font = fontList[i];
+				std::cout << "Found font with name " + f << std::endl;
+				break;
+			}
+		}
+
+		if (_font == nullptr)
+			std::cout << "Error: Could not deserialize to a global font" << std::endl;
+
+		UpdateImage();
+		//_font->Unserialize(str);
 	}
 			
 	delete list;

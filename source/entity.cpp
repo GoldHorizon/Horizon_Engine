@@ -278,9 +278,9 @@ Entity* Entity::NewInstance()
 
 std::string Entity::Serialize()
 {
-	std::string serialize_string = "Empty";
+	std::string serialize_string;
 
-	serialize_string = "Entity ";
+	serialize_string = "@Entity ";
 	serialize_string += "\"" + _imagePath + "\"" + " "
 		+ "\"" + _name + "\"" + " "
 		+ std::to_string(_active) + " "
@@ -314,10 +314,10 @@ void Entity::Unserialize(std::string str)
 
 	int index = 0;
 
-	while ((*list)[index] != "Entity" && index < list->size())
+	while ((*list)[index] != "@Entity" && index < list->size())
 		index++;
 
-	if ((*list)[index++] == "Entity")
+	if ((*list)[index++] == "@Entity")
 	{
 		_imagePath 			= (*list)[index++];
 		_name 				= (*list)[index++];
@@ -346,48 +346,6 @@ void Entity::Unserialize(std::string str)
 
 	delete list;
 
-	//std::stringstream stream(str);
-	//std::string temp;
-
-	//stream >> temp;
-	//if (temp == "Entity")
-	//{
-	//	stream >> _imagePath;
-	//	stream >> _name;
-	//	stream >> _active;	
-	//	stream >> _visible;	
-	//	stream >> _x;	
-	//	stream >> _y;	
-	//	stream >> _depth;
-	//	stream >> _direction;
-	//	stream >> _speed;
-	//	stream >> _hspeed;
-	//	stream >> _vspeed;
-	//	stream >> _imageAlpha;
-	//	stream >> _imageAngle;
-	//	stream >> _imageWidth;
-	//	stream >> _imageHeight;
-	//	stream >> _imageSpeed;
-	//	stream >> _imageTimer;
-	//	stream >> _lastImageTime;
-	//	stream >> _imageIndex;
-	//	stream >> _imageOrigin.x;
-	//	stream >> _imageOrigin.y;
-	//	stream >> _spriteDimensions.x;
-	//	stream >> _spriteDimensions.y;
-	//}
-	//else
-	//{
-	//	std::cout << "ERROR: Entity serialized string is invalid!" << std::endl;
-	//}
-
-	//stream >> temp;
-	//while (stream)
-	//{
-	//	std::cout << temp << std::endl;
-	//	stream >> temp;
-	//	if (temp == "Player") break;
-	//}
 }
 
 /*

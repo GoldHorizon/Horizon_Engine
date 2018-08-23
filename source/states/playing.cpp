@@ -4,6 +4,8 @@
 #include "../../include/font.h"
 #include "../../include/text.h"
 #include "file.h"
+#include "engineMethods.h"
+#include "globals.h"
 
 #define ClassName StatePlaying
 
@@ -16,35 +18,32 @@ ClassName::~ClassName()
 
 void ClassName::Initialize()
 {
-    Player* mainPlayer = new Player();
-    mainPlayer->SetName("MainPlayer");
-	mainPlayer->SetDepth(-20);
-    _entities.AddEntity(mainPlayer);
+    //Player* mainPlayer = new Player();
+    //mainPlayer->SetName("MainPlayer");
+	//mainPlayer->SetDepth(-20);
+    //_entities.AddEntity(mainPlayer);
 
-    Ball* testBall = new Ball();
-    testBall->SetPosition(128, 128);
-    testBall->SetDepth(-10);
-    testBall->SetName("TestBall");
-    _entities.AddEntity(testBall);
+    //Ball* testBall = new Ball();
+    //testBall->SetPosition(128, 128);
+    //testBall->SetDepth(-10);
+    //testBall->SetName("TestBall");
+    //_entities.AddEntity(testBall);
 
-    Ball* testBall2 = new Ball();
-    testBall2->SetPosition(256, 512);
-    testBall2->SetDepth(10);
-    testBall2->SetName("TestBall2");
-    _entities.AddEntity(testBall2);
+    //Ball* testBall2 = new Ball();
+    //testBall2->SetPosition(256, 512);
+    //testBall2->SetDepth(10);
+    //testBall2->SetName("TestBall2");
+    //_entities.AddEntity(testBall2);
 
 	//// Test loading fonts/texts
-	Font* testFont = new Font("Test Font");
-	testFont->LoadFont("assets/Inconsolata-Regular.ttf", 12);
-
-	Text* testTextLabel = new Text("This is just a test label!!!", testFont);
-	testTextLabel->SetPosition({ 128, 300 });
-	testTextLabel->SetMaxWidth(128);
-	testTextLabel->SetWrap(true);
-	testTextLabel->SetDepth(-40);
+	//Text* testTextLabel = new Text("This is just a test label!!!", defaultFont);
+	//testTextLabel->SetPosition({ 600, 300 });
+	//testTextLabel->SetMaxWidth(128);
+	//testTextLabel->SetWrap(true);
+	//testTextLabel->SetDepth(-40);
+	//_entities.AddEntity(testTextLabel);
 	// End test loading fonts/texts
 
-	_entities.AddEntity(testTextLabel);
 
 	//// Begin testing file input/output
 	File testFile;
@@ -76,17 +75,28 @@ void ClassName::Initialize()
 
 	//svp->clear();
 
-	//testFile.OpenFile("test_file.txt");
+	testFile.OpenFile("test_file.txt");
 
-	//testFile.ReadFileAll();
-	//testFile.PrintData();
+	testFile.ReadFileAll();
+	testFile.PrintData();
+
+	for (int i = 0; i < svp->size(); i++)
+	{
+		Entity* test = nullptr;
+		test = CreateSerializedObject((*svp)[i]);
+		if (test == nullptr)
+			std::cout << "Error: Could not create serialized object from string " << i << " (returned -1 to playing.cpp)" << std::endl;
+		else
+			_entities.AddEntity(test);
+
+	}
 
 	//mainPlayer		->Unserialize((*svp)[0]);
 	//testBall		->Unserialize((*svp)[1]);
 	//testBall2		->Unserialize((*svp)[2]);
 	//testTextLabel	->Unserialize((*svp)[3]);
 
-	//testFile.CloseFile();
+	testFile.CloseFile();
 	//// End testing file Input/Output
 }
 

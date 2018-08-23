@@ -119,7 +119,7 @@ std::string Player::Serialize()
 {
 	std::string serialize_string = Entity::Serialize();
 
-	serialize_string += "Player ";
+	serialize_string += "@Player ";
 	// @@Future: Add player's member attributes to string
 
 	return serialize_string;
