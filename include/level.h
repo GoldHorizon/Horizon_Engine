@@ -12,8 +12,11 @@ public:
 	~Level();
 
 	void SetFileName(std::string levelName);
+	std::string GetFileName();
 	void SaveToFile();
-	void LoadFromFile(std::string levelName);
+	void LoadFromFile();
+
+	eVector* GetObjectList();
 
 private:
 
