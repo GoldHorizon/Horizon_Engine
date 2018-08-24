@@ -80,6 +80,7 @@ void ClassName::Initialize()
 	testFile.ReadFileAll();
 	testFile.PrintData();
 
+	// Base unserialization loop
 	for (int i = 0; i < svp->size(); i++)
 	{
 		Entity* test = nullptr;
