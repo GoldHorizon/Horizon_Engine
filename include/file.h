@@ -1,9 +1,9 @@
 #pragma once
 
+#include "types.h"
+
 #include <fstream>
 #include <iostream>
-
-#include "types.h"
 
 class File
 {
@@ -19,6 +19,8 @@ public:
 	void ReadFileLine(int line = -1);
 	void WriteFileData();
 	void WriteFileLine(std::string data);
+
+	bool IsOpen();
 
 	void SetFilePos(std::ios_base::seekdir pos, int offset = 0);
 

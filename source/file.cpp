@@ -85,6 +85,11 @@ void File::WriteFileLine(std::string data)
 	else std::cout << "File not open!" << std::endl;
 }
 
+bool File::IsOpen()
+{
+	return _file.is_open();
+}
+
 void File::SetFilePos(std::ios_base::seekdir pos, int offset)
 {
 	if (_file.is_open())

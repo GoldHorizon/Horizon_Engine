@@ -177,3 +177,8 @@ void EntityCollection::RenderAll(float interpolation)
 	}
 }
 
+Entity* EntityCollection::operator[](int ID)
+{
+	return GetByIndex(ID);
+}
+

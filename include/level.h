@@ -2,6 +2,7 @@
 
 #include "types.h"
 #include "entity.h"
+#include "entityCollection.h"
 
 class Level
 {
@@ -16,11 +17,12 @@ public:
 	void SaveToFile();
 	void LoadFromFile();
 
-	eVector* GetObjectList();
+	EntityCollection* GetObjectList();
 
 private:
 
 	std::string _name;
 
-	eVector _objectList;
+	//eVector _objectList;
+	EntityCollection _objectList;
 };

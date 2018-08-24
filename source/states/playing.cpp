@@ -89,7 +89,6 @@ void ClassName::Initialize()
 			std::cout << "Error: Could not create serialized object from string " << i << " (returned -1 to playing.cpp)" << std::endl;
 		else
 			_entities.AddEntity(test);
-
 	}
 
 	//mainPlayer		->Unserialize((*svp)[0]);
