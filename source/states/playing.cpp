@@ -18,6 +18,7 @@ ClassName::~ClassName()
 
 void ClassName::Initialize()
 {
+	AddLevel("test_file.txt");
     //Player* mainPlayer = new Player();
     //mainPlayer->SetName("MainPlayer");
 	//mainPlayer->SetDepth(-20);
@@ -46,8 +47,8 @@ void ClassName::Initialize()
 
 
 	//// Begin testing file input/output
-	File testFile;
-	sVector* svp = testFile.GetDataVector();
+	//File testFile;
+	//sVector* svp = testFile.GetDataVector();
 
 	//testFile.OpenFile("test_file.txt", false, true);
 
@@ -75,28 +76,28 @@ void ClassName::Initialize()
 
 	//svp->clear();
 
-	testFile.OpenFile("test_file.txt");
+	//testFile.OpenFile("test_file.txt");
 
-	testFile.ReadFileAll();
-	testFile.PrintData();
+	//testFile.ReadFileAll();
+	//testFile.PrintData();
 
 	// Base unserialization loop
-	for (int i = 0; i < svp->size(); i++)
-	{
-		Entity* test = nullptr;
-		test = CreateSerializedObject((*svp)[i]);
-		if (test == nullptr)
-			std::cout << "Error: Could not create serialized object from string " << i << " (returned -1 to playing.cpp)" << std::endl;
-		else
-			_entities.AddEntity(test);
-	}
+	//for (int i = 0; i < svp->size(); i++)
+	//{
+	//	Entity* test = nullptr;
+	//	test = CreateSerializedObject((*svp)[i]);
+	//	if (test == nullptr)
+	//		std::cout << "Error: Could not create serialized object from string " << i << " (returned -1 to playing.cpp)" << std::endl;
+	//	else
+	//		_entities.AddEntity(test);
+	//}
 
 	//mainPlayer		->Unserialize((*svp)[0]);
 	//testBall		->Unserialize((*svp)[1]);
 	//testBall2		->Unserialize((*svp)[2]);
 	//testTextLabel	->Unserialize((*svp)[3]);
 
-	testFile.CloseFile();
+	//testFile.CloseFile();
 	//// End testing file Input/Output
 }
 
@@ -106,11 +107,27 @@ void ClassName::Cleanup()
 	{
 		_entities.RemoveByIndex(0);
 	}
+
+	if (_levelList.size() > 0)
+	{
+		for (int i = 0; i < _levelList.size(); i++)
+		{
+			delete _levelList[i];
+		}
+	}
 }
 
 int ClassName::HandleEvents(SDL_Event* event)
 {
 	_entities.HandleAllEvents(event);
+
+	if (_levelList.size() > 0)
+	{
+		for (int i = 0; i < _levelList.size(); i++)
+		{
+			_levelList[i]->HandleAllEvents(event);
+		}
+	}
 
 //	const Uint8 *state = SDL_GetKeyboardState(NULL);
 //
@@ -138,8 +155,9 @@ void ClassName::Update()
 	{
 		_entities.UpdateAll();
 
-		if (_levelList.size() < 0)
+		if (_levelList.size() > 0)
 		{
+			//std::cout << "DEBUG: we have a level" << std::endl;
 			for (int i = 0; i < _levelList.size(); i++)
 			{
 				_levelList[i]->UpdateAll();
@@ -152,11 +170,11 @@ void ClassName::Render(float interpolation)
 {
     _entities.RenderAll(interpolation);
 
-	if (_levelList.size() < 0)
+	if (_levelList.size() > 0)
 	{
 		for (int i = 0; i < _levelList.size(); i++)
 		{
-			_levelList[i]->UpdateAll();
+			_levelList[i]->RenderAll(interpolation);
 		}
 	}
 }
@@ -171,7 +189,7 @@ void ClassName::AddLevel(std::string name)
 	}
 	else
 	{
-		_levelList.push_back(newLevel);		
+		AddLevel(newLevel);
 	}
 }
 

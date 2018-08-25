@@ -62,27 +62,25 @@ Entity* CreateSerializedObject(std::string str)
 		return nullptr;
 	}
 
-	Entity* obj;
+	Entity* obj = nullptr;
 
 	if (str.find("@Player") != -1)
 	{
 		obj = new Player;
-		obj->Unserialize(str);	
-		return obj;
 	}
 
 	if (str.find("@Text") != -1)
 	{
-		std::cout << "Found text object to unserialized" << std::endl;
 		obj = new Text;
-		obj->Unserialize(str);	
-		std::cout << "Created text object, returning it..." << std::endl;
-		return obj;
 	}
 
 	if (str.find("@Ball") != -1)
 	{
 		obj = new Ball;
+	}
+
+	if (obj != nullptr)
+	{
 		obj->Unserialize(str);	
 		return obj;
 	}

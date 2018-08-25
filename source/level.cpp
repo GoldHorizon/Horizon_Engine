@@ -9,9 +9,9 @@ Level::Level() : Level("")
 {
 }
 
-Level::Level(std::string levelName) :
-	_name(levelName)
+Level::Level(std::string levelName)
 {
+	SetFileName(levelName);
 }
 
 Level::~Level()
@@ -57,7 +57,7 @@ bool Level::LoadFromFile()
 
 	levelFile.OpenFile(_name);
 
-	if (levelFile.IsOpen())
+	if (!levelFile.IsOpen())
 	{
 		std::cout << "Error: Trying to load level file from non-existent level" << std::endl;
 		return false;
@@ -65,6 +65,7 @@ bool Level::LoadFromFile()
 
 	sVector* svp = levelFile.GetDataVector();
 	levelFile.ReadFileAll();
+	//levelFile.PrintData();
 
 	for (int i = 0; i < svp->size(); i++)
 	{
@@ -73,7 +74,9 @@ bool Level::LoadFromFile()
 		if (obj == nullptr)
 			std::cout << "Error: Could not create serialized object from string " << i << " (returned -1 to playing.cpp)" << std::endl;
 		else
+		{
 			AddEntity(obj);
+		}
 	}
 
 	levelFile.CloseFile();
@@ -84,7 +87,9 @@ bool Level::LoadFromFile()
 
 void Level::AddEntity(Entity* obj)
 {
-	AddEntity(obj);
+	//AddEntity(obj);
+	//
+	EntityCollection::AddEntity(obj);
 
 	const SDL_Point p = {obj->x(), obj->y()};
 
