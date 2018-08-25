@@ -5,7 +5,7 @@
 
 #define ClassName StatePauseMenu
 
-const int MENU_SIZE = 4;
+const int MENU_SIZE = 5;
 
 class StatePauseMenu:
     public GameState

@@ -33,14 +33,17 @@ void ClassName::Initialize()
 	//menuOptionResume->UpdateImage();
 
 	Text* menuTitle = CreateText("Menu", menuTitleFont, { SCREEN_WIDTH / 2, 160 }, SDL_Color({255, 255, 0, 255}), ALIGN_CENTER);
-	Text* menuOptionResume = CreateText("Resume", menuOptionFont, { SCREEN_WIDTH / 2, 320 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
-	Text* menuOptionRestart = CreateText("Restart", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 32 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	Text* menuOptionResume = CreateText("Resume", menuOptionFont, { SCREEN_WIDTH / 2, 320 - 32 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	Text* menuOptionRestart = CreateText("Restart", menuOptionFont, { SCREEN_WIDTH / 2, 320 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	// Dev option: Level editor
+	Text* menuOptionEdit = CreateText("Edit", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 32 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
 	Text* menuOptionOptions = CreateText("Options", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 64 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
 	Text* menuOptionQuit = CreateText("Quit", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 96 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
 
 	_entities.AddEntity(menuTitle);
 	_entities.AddEntity(menuOptionResume);
 	_entities.AddEntity(menuOptionRestart);
+	_entities.AddEntity(menuOptionEdit);
 	_entities.AddEntity(menuOptionOptions);
 	_entities.AddEntity(menuOptionQuit);
 	
@@ -48,8 +51,9 @@ void ClassName::Initialize()
 
 	_menuList[0] = menuOptionResume;
 	_menuList[1] = menuOptionRestart;
-	_menuList[2] = menuOptionOptions;
-	_menuList[3] = menuOptionQuit;
+	_menuList[2] = menuOptionEdit;
+	_menuList[3] = menuOptionOptions;
+	_menuList[4] = menuOptionQuit;
 
 	UpdateMenu();
 }
@@ -103,10 +107,14 @@ int ClassName::HandleEvents(SDL_Event* event)
 				break;
 
 			case 2:
-				// Send signal to game to open options menu
+				// Send signal to game to open level editor
 				break;
 
 			case 3:
+				// Send signal to game to open options menu
+				break;
+
+			case 4:
 				// Send signal to game to exit the game!
 				return GAME_QUIT; 
 				break;
