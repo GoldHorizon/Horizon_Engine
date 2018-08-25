@@ -1,6 +1,9 @@
 #pragma once
 
 #include "../gameState.h"
+#include "level.h"
+
+#include <vector>
 
 #define ClassName StatePlaying
 
@@ -24,6 +27,9 @@ public:
     void Update();
     void Render(float interpolation);
 
+	void AddLevel(std::string name);
+	void AddLevel(Level* level);
+
     static ClassName* Instance()
     {
         if (_thisInstance == nullptr)
@@ -36,6 +42,8 @@ public:
 
 private:
     static ClassName* _thisInstance;
+
+	std::vector<Level*> _levelList;
 };
 
 #ifdef ClassName

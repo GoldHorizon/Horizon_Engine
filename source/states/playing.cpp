@@ -135,12 +135,49 @@ int ClassName::HandleEvents(SDL_Event* event)
 void ClassName::Update()
 {
 	if (!IsPaused())
+	{
 		_entities.UpdateAll();
+
+		if (_levelList.size() < 0)
+		{
+			for (int i = 0; i < _levelList.size(); i++)
+			{
+				_levelList[i]->UpdateAll();
+			}
+		}
+	}
 }
 
 void ClassName::Render(float interpolation)
 {
     _entities.RenderAll(interpolation);
+
+	if (_levelList.size() < 0)
+	{
+		for (int i = 0; i < _levelList.size(); i++)
+		{
+			_levelList[i]->UpdateAll();
+		}
+	}
+}
+
+void ClassName::AddLevel(std::string name)
+{
+	Level* newLevel = new Level(name);
+
+	if (!newLevel->LoadFromFile())
+	{
+		std::cout << "Error: Could not add level! Level was not found" << std::endl;
+	}
+	else
+	{
+		_levelList.push_back(newLevel);		
+	}
+}
+
+void ClassName::AddLevel(Level* level)
+{
+	_levelList.push_back(level);
 }
 
 #ifdef ClassName

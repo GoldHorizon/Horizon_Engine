@@ -49,8 +49,10 @@ void Level::SaveToFile()
 	levelFile.CloseFile();
 }
 
-void Level::LoadFromFile()
+bool Level::LoadFromFile()
 {
+	bool success = false;
+
 	File levelFile;
 
 	levelFile.OpenFile(_name);
@@ -58,7 +60,7 @@ void Level::LoadFromFile()
 	if (levelFile.IsOpen())
 	{
 		std::cout << "Error: Trying to load level file from non-existent level" << std::endl;
-		return;
+		return false;
 	}
 
 	sVector* svp = levelFile.GetDataVector();
@@ -75,6 +77,9 @@ void Level::LoadFromFile()
 	}
 
 	levelFile.CloseFile();
+	success = true;
+
+	return success;
 }
 
 void Level::AddEntity(Entity* obj)
