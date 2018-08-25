@@ -70,9 +70,10 @@ class EntityCollection
 		/*
 		 * Set Methods
 		 */
-	private:
+	protected:
 		// _collection			// Collection of entities
 		eList _collection;
 
+	private:
 		int nextID;
 };

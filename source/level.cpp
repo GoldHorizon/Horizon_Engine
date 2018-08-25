@@ -40,9 +40,9 @@ void Level::SaveToFile()
 
 	sVector* svp = levelFile.GetDataVector();
 
-	for (int i = 0; i < _objectList.GetCount(); i++)
+	for (int i = 0; i < GetCount(); i++)
 	{
-		svp->push_back(_objectList[i]->Serialize());
+		svp->push_back(GetByIndex(i)->Serialize());
 	}
 
 	levelFile.WriteFileData();
@@ -71,7 +71,7 @@ void Level::LoadFromFile()
 		if (obj == nullptr)
 			std::cout << "Error: Could not create serialized object from string " << i << " (returned -1 to playing.cpp)" << std::endl;
 		else
-			_objectList.AddEntity(obj);
+			AddEntity(obj);
 	}
 
 	levelFile.CloseFile();
@@ -79,7 +79,7 @@ void Level::LoadFromFile()
 
 void Level::AddEntity(Entity* obj)
 {
-	_objectList.AddEntity(obj);
+	AddEntity(obj);
 
 	const SDL_Point p = {obj->x(), obj->y()};
 
@@ -99,7 +99,7 @@ void Level::RemoveEntity(Entity* obj)
 
 void Level::RemoveEntity(int index)
 {
-	Entity* ep = _objectList.GetByIndex(index);
+	Entity* ep = GetByIndex(index);
 	if (ep != nullptr)
 	{
 		peMap::iterator it;
@@ -110,7 +110,7 @@ void Level::RemoveEntity(int index)
 		if (it != _pointList.end())
 			_pointList.erase(it);
 
-		_objectList.RemoveByIndex(index);
+		RemoveByIndex(index);
 	}
 }
 
@@ -124,9 +124,9 @@ void Level::RemoveEntity(int x, int y)
 	Entity* ep = nullptr;
 	Entity* temp;
 	int index;
-	for (index = 0; index < _objectList.GetCount(); index++)
+	for (index = 0; index < GetCount(); index++)
 	{
-		temp = _objectList.GetByIndex(index);
+		temp = GetByIndex(index);
 		if (temp->x() == x && temp->y() == y)
 		{
 			ep = temp;
@@ -134,7 +134,7 @@ void Level::RemoveEntity(int x, int y)
 		}
 	}
 
-	if (ep != nullptr && index < _objectList.GetCount())
+	if (ep != nullptr && index < GetCount())
 	{
 		peMap::iterator it;
 
@@ -144,7 +144,7 @@ void Level::RemoveEntity(int x, int y)
 		if (it != _pointList.end())
 			_pointList.erase(it);
 
-		_objectList.RemoveByIndex(index);
+		RemoveByIndex(index);
 	}
 }
 
@@ -152,10 +152,10 @@ void Level::RemoveLastEntity()
 {
 	int count;
 
-	_objectList.RemoveByIndex(count - 1);
+	RemoveByIndex(count - 1);
 }
 
-EntityCollection* Level::GetObjectList()
-{
-	return &_objectList;
-}
+//EntityCollection* Level::GetObjectList()
+//{
+//	return &_objectList;
+//}

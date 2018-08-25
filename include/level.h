@@ -6,7 +6,7 @@
 
 #include <map>
 
-class Level
+class Level : public EntityCollection
 {
 public:
 	Level();
@@ -28,13 +28,10 @@ public:
 	void RemoveEntity(int x, int y);
 	void RemoveLastEntity();
 
-	EntityCollection* GetObjectList();
+	//EntityCollection* GetObjectList();
 
 private:
-
 	std::string _name;
-
-	EntityCollection _objectList;
 
 	peMap _pointList;
 };
