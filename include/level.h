@@ -4,6 +4,8 @@
 #include "entity.h"
 #include "entityCollection.h"
 
+#include <map>
+
 class Level
 {
 public:
@@ -17,12 +19,22 @@ public:
 	void SaveToFile();
 	void LoadFromFile();
 
+	void AddEntity(Entity* obj);
+	void AddEntity(Entity* obj, int x, int y);
+	
+	void RemoveEntity(Entity* obj);
+	void RemoveEntity(int index);
+	void RemoveEntity(SDL_Point point);
+	void RemoveEntity(int x, int y);
+	void RemoveLastEntity();
+
 	EntityCollection* GetObjectList();
 
 private:
 
 	std::string _name;
 
-	//eVector _objectList;
 	EntityCollection _objectList;
+
+	peMap _pointList;
 };

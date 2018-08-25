@@ -89,3 +89,8 @@ Entity* CreateSerializedObject(std::string str)
 
 	return nullptr;
 }
+
+bool operator<(const SDL_Point &lhs, const SDL_Point &rhs) 
+{
+    return (lhs.x < rhs.x) || ((lhs.x == rhs.x) && (lhs.y < rhs.y));
+}

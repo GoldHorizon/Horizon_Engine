@@ -77,6 +77,84 @@ void Level::LoadFromFile()
 	levelFile.CloseFile();
 }
 
+void Level::AddEntity(Entity* obj)
+{
+	_objectList.AddEntity(obj);
+
+	const SDL_Point p = {obj->x(), obj->y()};
+
+	_pointList.insert(pePair(p, obj));
+}
+
+void Level::AddEntity(Entity* obj, int x, int y)
+{
+	obj->SetPosition(x, y);
+	AddEntity(obj);
+}
+
+void Level::RemoveEntity(Entity* obj)
+{
+	// @Todo: if needed
+}
+
+void Level::RemoveEntity(int index)
+{
+	Entity* ep = _objectList.GetByIndex(index);
+	if (ep != nullptr)
+	{
+		peMap::iterator it;
+
+		SDL_Point point = {ep->x(), ep->y()};
+		it = _pointList.find(point);
+
+		if (it != _pointList.end())
+			_pointList.erase(it);
+
+		_objectList.RemoveByIndex(index);
+	}
+}
+
+void Level::RemoveEntity(SDL_Point point)
+{
+	RemoveEntity(point.x, point.y);
+}
+
+void Level::RemoveEntity(int x, int y)
+{
+	Entity* ep = nullptr;
+	Entity* temp;
+	int index;
+	for (index = 0; index < _objectList.GetCount(); index++)
+	{
+		temp = _objectList.GetByIndex(index);
+		if (temp->x() == x && temp->y() == y)
+		{
+			ep = temp;
+			break;
+		}
+	}
+
+	if (ep != nullptr && index < _objectList.GetCount())
+	{
+		peMap::iterator it;
+
+		SDL_Point point = {ep->x(), ep->y()};
+		it = _pointList.find(point);
+
+		if (it != _pointList.end())
+			_pointList.erase(it);
+
+		_objectList.RemoveByIndex(index);
+	}
+}
+
+void Level::RemoveLastEntity()
+{
+	int count;
+
+	_objectList.RemoveByIndex(count - 1);
+}
+
 EntityCollection* Level::GetObjectList()
 {
 	return &_objectList;
