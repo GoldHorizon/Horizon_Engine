@@ -28,6 +28,9 @@ public:
 	void UpdateMenu();
     void Render(float interpolation);
 
+	void AddMenuOption(std::string option, int pos = -1);
+	void SwapMenuOption(std::string option, int pos);
+
     static ClassName* Instance()
     {
         if (_thisInstance == nullptr)

@@ -7,7 +7,8 @@ enum class GameStateType
 	MAIN_MENU,
 	OPTIONS,
 	PLAYING_GAME,
-	PAUSE_MENU
+	PAUSE_MENU,
+	LEVEL_EDITOR
 };
 
 enum KeyEvents {

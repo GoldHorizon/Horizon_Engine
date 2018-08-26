@@ -18,6 +18,9 @@ ClassName::~ClassName()
 
 void ClassName::Initialize()
 {
+	for (int i = 0; i < MENU_SIZE; i++)
+		_menuList[i] = nullptr;
+
 	//Draw menu title
 	//Text* menuTitle = new Text("Menu", menuTitleFont);
 	//menuTitle->SetPosition({ SCREEN_WIDTH / 2, 160 });
@@ -32,29 +35,35 @@ void ClassName::Initialize()
 	//menuOptionResume->SetAlign(ALIGN_CENTER);
 	//menuOptionResume->UpdateImage();
 
-	Text* menuTitle = CreateText("Menu", menuTitleFont, { SCREEN_WIDTH / 2, 160 }, SDL_Color({255, 255, 0, 255}), ALIGN_CENTER);
-	Text* menuOptionResume = CreateText("Resume", menuOptionFont, { SCREEN_WIDTH / 2, 320 - 32 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
-	Text* menuOptionRestart = CreateText("Restart", menuOptionFont, { SCREEN_WIDTH / 2, 320 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
-	// Dev option: Level editor
-	Text* menuOptionEdit = CreateText("Edit", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 32 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
-	Text* menuOptionOptions = CreateText("Options", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 64 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
-	Text* menuOptionQuit = CreateText("Quit", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 96 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	//Text* menuOptionResume = CreateText("Resume", menuOptionFont, { SCREEN_WIDTH / 2, 320 - 32 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	//Text* menuOptionRestart = CreateText("Restart", menuOptionFont, { SCREEN_WIDTH / 2, 320 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	//// Dev option: Level editor
+	//Text* menuOptionEdit = CreateText("Edit", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 32 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	//Text* menuOptionOptions = CreateText("Options", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 64 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	//Text* menuOptionQuit = CreateText("Quit", menuOptionFont, { SCREEN_WIDTH / 2, 320 + 96 }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
 
-	_entities.AddEntity(menuTitle);
-	_entities.AddEntity(menuOptionResume);
-	_entities.AddEntity(menuOptionRestart);
-	_entities.AddEntity(menuOptionEdit);
-	_entities.AddEntity(menuOptionOptions);
-	_entities.AddEntity(menuOptionQuit);
+	//_entities.AddEntity(menuOptionResume);
+	//_entities.AddEntity(menuOptionRestart);
+	//_entities.AddEntity(menuOptionEdit);
+	//_entities.AddEntity(menuOptionOptions);
+	//_entities.AddEntity(menuOptionQuit);
+
+	//_menuList[0] = menuOptionResume;
+	//_menuList[1] = menuOptionRestart;
+	//_menuList[2] = menuOptionEdit;
+	//_menuList[3] = menuOptionOptions;
+	//_menuList[4] = menuOptionQuit;
 	
+	Text* menuTitle = CreateText("Menu", menuTitleFont, { SCREEN_WIDTH / 2, 160 }, SDL_Color({255, 255, 0, 255}), ALIGN_CENTER);
+	_entities.AddEntity(menuTitle);
+
+	AddMenuOption("Resume");
+	AddMenuOption("Restart");
+	AddMenuOption("Edit");
+	AddMenuOption("Options");
+	AddMenuOption("Quit");
+
 	_menuOptionSelected = 0;
-
-	_menuList[0] = menuOptionResume;
-	_menuList[1] = menuOptionRestart;
-	_menuList[2] = menuOptionEdit;
-	_menuList[3] = menuOptionOptions;
-	_menuList[4] = menuOptionQuit;
-
 	UpdateMenu();
 }
 
@@ -135,6 +144,9 @@ void ClassName::UpdateMenu()
 {
 	for (int i = 0; i < MENU_SIZE; i++)
 	{
+		if (_menuList[i] == nullptr)
+			continue;
+
 		if (_menuOptionSelected == i)
 		{
 			_menuList[i]->SetColor(SDL_Color({0, 255, 255, 255}));
@@ -157,6 +169,46 @@ void ClassName::Render(float interpolation)
 
     _entities.RenderAll(interpolation);
 }
+
+void ClassName::AddMenuOption(std::string option, int pos)
+{
+	int index = pos;
+
+	if (index == -1)
+	{
+		index = 0;
+		while (_menuList[index] != nullptr && index < MENU_SIZE)
+			index++;
+	}
+	else
+	{
+		index = pos;
+	}
+
+	if (index < 0 || index >= MENU_SIZE)
+	{
+		std::cout << "Error: Cannot add menu option, list is full" << std::endl;
+		return;
+	}
+
+	Text* menuOption = CreateText(option, menuOptionFont, { SCREEN_WIDTH / 2, 320 - 32 + (index * 32) }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+
+	//std::cout << "Adding Entity..." << std::endl;
+	_entities.AddEntity(menuOption);
+	//std::cout << "Adding MenuOption " << index << "..." << std::endl;
+	_menuList[index] = menuOption;
+	//std::cout << "Updating menu..." << std::endl;
+	//std::cout << "Updating menu..." << std::endl;
+
+	UpdateMenu();
+}
+
+void ClassName::SwapMenuOption(std::string option, int pos)
+{
+
+}
+
+
 
 #ifdef ClassName
 #undef ClassName

@@ -19,6 +19,7 @@ objects 	:= 	main.o \
 				playing.o \
 				uninitialized.o \
 				pauseMenu.o \
+				editor.o \
 				text.o \
 				font.o \
 				engineMethods.o
@@ -135,11 +136,14 @@ engineMethods.o		: source/engineMethods.cpp include/engineMethods.h
 playing.o		: source/states/playing.cpp include/states/playing.h include/engineMethods.h
 	gcc $(win32_gcc_flags) source/states/playing.cpp
 
-uninitialized.o		: source/states/uninitialized.cpp include/states/uninitialized.h
+uninitialized.o	: source/states/uninitialized.cpp include/states/uninitialized.h
 	gcc $(win32_gcc_flags) source/states/uninitialized.cpp
 
 pauseMenu.o		: source/states/pauseMenu.cpp include/states/pauseMenu.h include/drawing.h
 	gcc $(win32_gcc_flags) source/states/pauseMenu.cpp
+
+editor.o		: source/states/editor.cpp include/states/editor.h include/gameState.h include/level.h
+	gcc $(win32_gcc_flags) source/states/editor.cpp
 
 ###
 ### Cleans object and executable files (Debug stuff)
