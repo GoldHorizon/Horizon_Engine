@@ -2,6 +2,8 @@
 #include "drawing.h"
 #include "constants.h"
 
+#include <iostream>
+
 #define ClassName StateEditor
 
 ClassName* ClassName::_thisInstance = nullptr;
@@ -34,6 +36,21 @@ int ClassName::HandleEvents(SDL_Event* event)
 		case SDLK_ESCAPE:
 			if (event->key.repeat == 0)
 				return OPEN_MENU;
+			break;
+		case SDLK_SLASH:
+			if (event->key.repeat == 0)
+				_drawGrid = !_drawGrid;
+			break;
+		case SDLK_F1:
+			std::cout << "Saving level..." << std::endl;
+			// @todo
+			break;
+		case SDLK_F2:
+			std::cout << "Loading level..." << std::endl;
+			// @todo
+			break;
+
+
 		}
 	}
 
@@ -54,11 +71,14 @@ void ClassName::Render(float interpolation)
     _entities.RenderAll(interpolation);
 
 	// Drawing grid
-	for (int j = _gridSize; j < SCREEN_HEIGHT; j += _gridSize) {
-		DrawLine(0, j, SCREEN_WIDTH, j, SDL_Color {50, 50, 50, 255});
-	}
-	for (int i = _gridSize; i < SCREEN_WIDTH; i += _gridSize) {
-		DrawLine(i, 0, i, SCREEN_HEIGHT, SDL_Color {50, 50, 50, 255});
+	if (_drawGrid)
+	{
+		for (int j = _gridSize; j < SCREEN_HEIGHT; j += _gridSize) {
+			DrawLine(0, j, SCREEN_WIDTH, j, SDL_Color {50, 50, 50, 255});
+		}
+		for (int i = _gridSize; i < SCREEN_WIDTH; i += _gridSize) {
+			DrawLine(i, 0, i, SCREEN_HEIGHT, SDL_Color {50, 50, 50, 255});
+		}
 	}
 }
 
