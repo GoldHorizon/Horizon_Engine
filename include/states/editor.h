@@ -39,6 +39,9 @@ private:
     static ClassName* _thisInstance;
 
 	//std::vector<Level*> _levelList;
+	// Editing values
+	bool _drawGrid;
+	int _gridSize;
 };
 
 #ifdef ClassName

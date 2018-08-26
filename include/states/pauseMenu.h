@@ -54,6 +54,7 @@ private:
 
 	Text* _menuList[MENU_SIZE];
 	int _menuOptionSelected;
+
 };
 
 #ifdef ClassName
