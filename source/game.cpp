@@ -9,6 +9,7 @@
 #include "../include/states/titleScreen.h"
 #include "../include/states/options.h"
 #include "../include/states/pauseMenu.h"
+#include "states/editor.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -117,7 +118,7 @@ void Game::ChangeState(GameState* newState)
 {
     while (!_stateStack.empty())
     {
-        _stateStack.back()->Cleanup();
+        //_stateStack.back()->Cleanup();
         _stateStack.pop_back();
     }
 
@@ -131,6 +132,9 @@ void Game::ChangeState(GameState* newState)
 				break;
 
 			case GameStateType::PLAYING_GAME:
+				break;
+
+			case GameStateType::LEVEL_EDITOR:
 				break;
 
 			default:
@@ -150,7 +154,7 @@ void Game::PushState(GameState* newState)
 
 void Game::PopState()
 {
-    _stateStack.back()->Cleanup();
+    //_stateStack.back()->Cleanup();
     _stateStack.pop_back();
 }
 
@@ -224,17 +228,31 @@ bool Game::GetInput()
 				// @todo: reimplement pause as boolean in game state class, to stop processing updates (but continue updating the display
 					(*it)->Pause();
 					PushState(StatePauseMenu::Instance());
-					//StatePauseMenu::Instance()->ChangeMenuOption("Play", 2);
+					StatePauseMenu::Instance()->SetSelectedOption(0);
+					StatePauseMenu::Instance()->ChangeMenuOption("Edit", 2);
+					//StatePauseMenu::Instance()->RemoveMenuOption(2);
+				}
+
+				if ((*it)->GetType() == GameStateType::LEVEL_EDITOR) {
+				// @todo: reimplement pause as boolean in game state class, to stop processing updates (but continue updating the display
+					(*it)->Pause();
+					PushState(StatePauseMenu::Instance());
+					StatePauseMenu::Instance()->SetSelectedOption(0);
+					StatePauseMenu::Instance()->ChangeMenuOption("Play", 2);
 					//StatePauseMenu::Instance()->RemoveMenuOption(2);
 				}
 				break;
 
 			case LEVEL_EDITOR:
 				std::cout << "Changing to level editor..." << std::endl;
+				ChangeState(StateEditor::Instance());
+				StateEditor::Instance()->Resume(); 
 				break;
 
 			case PLAY_MODE:
 				std::cout << "Changing back to play mode..." << std::endl;
+				ChangeState(StatePlaying::Instance());
+				StatePlaying::Instance()->Resume(); 
 				break;
 
 			case GAME_QUIT:

@@ -30,8 +30,8 @@ public:
         if (_thisInstance == nullptr)
         {
             _thisInstance = new ClassName;
+			_thisInstance->Initialize();
         }
-        _thisInstance->Initialize();
         return _thisInstance;
     }
 

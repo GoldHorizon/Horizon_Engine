@@ -36,6 +36,9 @@ public:
 	void RemoveMenuOption(std::string option);
 	void RemoveMenuOption(int pos);
 
+	int GetSelectedOption();
+	void SetSelectedOption(int pos);
+
     static ClassName* Instance()
     {
         if (_thisInstance == nullptr)

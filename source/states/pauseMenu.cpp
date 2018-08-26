@@ -232,6 +232,9 @@ void ClassName::AddMenuOption(std::string option, int pos)
 
 void ClassName::ChangeMenuOption(std::string option, int pos)
 {
+	if (_menuList[pos] != nullptr && _menuList[pos]->text() == option)
+		return;
+
 	RemoveMenuOption(pos);
 	AddMenuOption(option, pos);
 }
@@ -265,6 +268,21 @@ void ClassName::RemoveMenuOption(int pos)
 	}
 }
 
+int ClassName::GetSelectedOption()
+{
+	return _menuOptionSelected;
+}
+
+void ClassName::SetSelectedOption(int pos)
+{
+	if (pos >= 0 && pos < MENU_SIZE) {
+		_menuOptionSelected = pos;	
+		UpdateMenu();
+	}
+	else {
+		std::cout << "Error: Trying to set pause menu option to invalid option number (out of range)" << std::endl;
+	}
+}
 
 #ifdef ClassName
 #undef ClassName

@@ -2,6 +2,8 @@
 
 #define ClassName StateEditor
 
+ClassName* ClassName::_thisInstance = nullptr;
+
 ClassName::~ClassName()
 {
 
