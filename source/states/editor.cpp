@@ -18,6 +18,8 @@ void ClassName::Initialize()
 	// Set editing values
 	_drawGrid = true;
 	_gridSize = 32;
+
+	_levelName = "";
 }
 
 void ClassName::Cleanup()
@@ -41,12 +43,24 @@ int ClassName::HandleEvents(SDL_Event* event)
 			if (event->key.repeat == 0)
 				_drawGrid = !_drawGrid;
 			break;
+
 		case SDLK_F1:
 			std::cout << "Saving level..." << std::endl;
+			SaveLevel();
 			// @todo
 			break;
 		case SDLK_F2:
 			std::cout << "Loading level..." << std::endl;
+			LoadLevel();
+			// @todo
+			break;
+		case SDLK_F3:
+			std::cout << "Changing level..." << std::endl;
+			std::string level = "";
+
+			// Get level string somehow...?
+			// @todo: time for console?
+			SetLevel(level);
 			// @todo
 			break;
 
@@ -80,6 +94,28 @@ void ClassName::Render(float interpolation)
 			DrawLine(i, 0, i, SCREEN_HEIGHT, SDL_Color {50, 50, 50, 255});
 		}
 	}
+}
+
+void ClassName::SaveLevel()
+{
+	if (_levelName != "")
+		_currentLevel.SaveToFile();
+}
+
+bool ClassName::LoadLevel()
+{
+	if (_levelName != "")
+		return _currentLevel.LoadFromFile();
+	else
+		return false;
+}
+
+void ClassName::SetLevel(std::string name)
+{
+	_levelName = name;
+
+	if (_levelName != "")
+		_currentLevel.SetFileName(name);
 }
 
 #ifdef ClassName

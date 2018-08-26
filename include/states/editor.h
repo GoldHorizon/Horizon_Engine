@@ -25,6 +25,10 @@ public:
 	void Update();
 	void Render(float interpolation);
 
+	void SaveLevel();
+	bool LoadLevel();
+	void SetLevel(std::string name);
+
     static ClassName* Instance()
     {
         if (_thisInstance == nullptr)
@@ -39,6 +43,9 @@ private:
     static ClassName* _thisInstance;
 
 	//std::vector<Level*> _levelList;
+	Level _currentLevel;
+
+	std::string _levelName;
 	// Editing values
 	bool _drawGrid;
 	int _gridSize;
