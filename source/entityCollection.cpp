@@ -85,6 +85,8 @@ void EntityCollection::RemoveByName(std::string name)
 			delete (*it);
 			_collection.erase(it);
 		}
+
+		it++;
 	}
 }
 

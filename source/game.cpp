@@ -212,7 +212,7 @@ bool Game::GetInput()
 			case CLOSE_MENU:
 				//std::cout << "Closing menu..." << std::endl;
 				if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
-					_stateStack.back()->Cleanup();
+					//_stateStack.back()->Cleanup();
 					_stateStack.pop_back();
 					_stateStack.back()->Resume();
 				}
@@ -224,7 +224,17 @@ bool Game::GetInput()
 				// @todo: reimplement pause as boolean in game state class, to stop processing updates (but continue updating the display
 					(*it)->Pause();
 					PushState(StatePauseMenu::Instance());
+					//StatePauseMenu::Instance()->ChangeMenuOption("Play", 2);
+					//StatePauseMenu::Instance()->RemoveMenuOption(2);
 				}
+				break;
+
+			case LEVEL_EDITOR:
+				std::cout << "Changing to level editor..." << std::endl;
+				break;
+
+			case PLAY_MODE:
+				std::cout << "Changing back to play mode..." << std::endl;
 				break;
 
 			case GAME_QUIT:
@@ -232,6 +242,7 @@ bool Game::GetInput()
 				break;
 
 			default:
+				std::cout << "Unimplemented option selected..." << std::endl;
 				break;
 			}
 		}

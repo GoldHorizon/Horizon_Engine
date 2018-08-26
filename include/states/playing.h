@@ -14,7 +14,10 @@ class StatePlaying:
 	 * Constructors/Destructors
 	 */
 protected:
-    ClassName() {SetType(GameStateType::PLAYING_GAME); Resume(); }
+    ClassName() {
+		SetType(GameStateType::PLAYING_GAME); 
+		Resume(); 
+	}
 public:
     ~StatePlaying();
 	/*
@@ -35,8 +38,8 @@ public:
         if (_thisInstance == nullptr)
         {
             _thisInstance = new ClassName;
+        	_thisInstance->Initialize();
         }
-        _thisInstance->Initialize();
         return _thisInstance;
     }
 

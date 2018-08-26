@@ -14,7 +14,11 @@ enum class GameStateType
 enum KeyEvents {
 	GAME_QUIT,
 	OPEN_MENU,
-	CLOSE_MENU
+	CLOSE_MENU,
+	OPTIONS_MENU,
+	RESTART,
+	LEVEL_EDITOR,
+	PLAY_MODE
 };
 
 enum TextAlignment {
