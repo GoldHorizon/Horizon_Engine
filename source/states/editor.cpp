@@ -56,12 +56,15 @@ int ClassName::HandleEvents(SDL_Event* event)
 			break;
 		case SDLK_F3:
 			std::cout << "Changing level..." << std::endl;
-			std::string level = "";
 
 			// Get level string somehow...?
 			// @todo: time for console?
+			std::string level = "";
+
+			// DEBUG!!!!
+			std::getline(std::cin, level);
+
 			SetLevel(level);
-			// @todo
 			break;
 
 
@@ -84,6 +87,9 @@ void ClassName::Render(float interpolation)
 	// We will render objects, but not update them
     _entities.RenderAll(interpolation);
 
+	// Draw level entities, without updating them
+	_currentLevel.RenderAll(interpolation);
+
 	// Drawing grid
 	if (_drawGrid)
 	{
@@ -104,15 +110,26 @@ void ClassName::SaveLevel()
 
 bool ClassName::LoadLevel()
 {
-	if (_levelName != "")
-		return _currentLevel.LoadFromFile();
-	else
-		return false;
+	if (_levelName != "") {
+		bool result = false;
+		result = _currentLevel.LoadFromFile();
+
+		if (result)
+		{
+			std::cout << "Loaded " << _levelName << std::endl;
+
+		}
+		
+		return result;
+	}
+	else { return false; }
 }
 
 void ClassName::SetLevel(std::string name)
 {
 	_levelName = name;
+
+	std::cout << "Setting level to " << name << "..." << std::endl;
 
 	if (_levelName != "")
 		_currentLevel.SetFileName(name);
