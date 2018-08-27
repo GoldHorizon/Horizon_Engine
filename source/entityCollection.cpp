@@ -127,6 +127,15 @@ void EntityCollection::RemoveByIndex(unsigned int index)
 	}
 }
 
+void EntityCollection::ClearEntities()
+{
+	while (_collection.size() > 0)
+	{
+		delete _collection.back();
+		_collection.pop_back();
+	}
+}
+
 void EntityCollection::HandleAllEvents(SDL_Event* event)
 {
 	eList::const_iterator it = _collection.begin();

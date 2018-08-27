@@ -52,6 +52,9 @@ class EntityCollection
 		//	index:		index at which to remove entity
 		void RemoveByIndex(unsigned int index);
 
+		// ClearEntities() 	- Remove all entities from the collection
+		void ClearEntities();
+
 		// HandleAllEvents()- Handles events (such as input) for all entities in collection
 		void HandleAllEvents(SDL_Event*);
 

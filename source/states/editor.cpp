@@ -1,6 +1,7 @@
 #include "states/editor.h"
 #include "drawing.h"
 #include "constants.h"
+#include "ball.h"
 
 #include <iostream>
 
@@ -71,6 +72,26 @@ int ClassName::HandleEvents(SDL_Event* event)
 		}
 	}
 
+	if (event->type == SDL_MOUSEBUTTONDOWN)
+	{
+		int x, y;
+		SDL_GetMouseState(&x, &y);
+
+		x = x - (x % _gridSize);
+		y = y - (y % _gridSize);
+
+		// Try to create ball at coords.
+		Ball* ball = new Ball();
+		ball->SetPosition(x, y);
+		ball->SetName("ANUBALL");
+
+		//_entities.AddEntity(ball);
+		if (_levelName != "")
+		{
+			_currentLevel.AddEntity(ball);
+		}
+	}
+
 	return -1;
 }
 
@@ -78,6 +99,7 @@ void ClassName::Update()
 {
 	if (!IsPaused())
 	{
+		// Only updates entities local to editor, NOT _currentLevel's entities
 		_entities.UpdateAll();
 	}
 }
@@ -106,18 +128,20 @@ void ClassName::SaveLevel()
 {
 	if (_levelName != "")
 		_currentLevel.SaveToFile();
+
+	// @todo: Save entities that were added to the _currentLevel's collection through the editor onto file.
 }
 
 bool ClassName::LoadLevel()
 {
 	if (_levelName != "") {
 		bool result = false;
+
 		result = _currentLevel.LoadFromFile();
 
 		if (result)
 		{
 			std::cout << "Loaded " << _levelName << std::endl;
-
 		}
 		
 		return result;
@@ -131,8 +155,10 @@ void ClassName::SetLevel(std::string name)
 
 	std::cout << "Setting level to " << name << "..." << std::endl;
 
-	if (_levelName != "")
+	if (_levelName != "") {
 		_currentLevel.SetFileName(name);
+		LoadLevel();
+	}
 }
 
 #ifdef ClassName

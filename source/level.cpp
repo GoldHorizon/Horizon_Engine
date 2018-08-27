@@ -62,6 +62,8 @@ bool Level::LoadFromFile()
 		std::cout << "Error: Trying to load level file from non-existent level" << std::endl;
 		return false;
 	}
+	
+	ClearEntities();
 
 	sVector* svp = levelFile.GetDataVector();
 	levelFile.ReadFileAll();
