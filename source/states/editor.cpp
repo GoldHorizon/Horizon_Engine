@@ -85,6 +85,7 @@ int ClassName::HandleEvents(SDL_Event* event)
 		ball->SetPosition(x, y);
 		ball->SetName("ANUBALL");
 
+		// Breaks if we add to our own entity list, then try to load
 		//_entities.AddEntity(ball);
 		if (_levelName != "")
 		{
@@ -116,10 +117,10 @@ void ClassName::Render(float interpolation)
 	if (_drawGrid)
 	{
 		for (int j = _gridSize; j < SCREEN_HEIGHT; j += _gridSize) {
-			DrawLine(0, j, SCREEN_WIDTH, j, SDL_Color {50, 50, 50, 255});
+			DrawLine(0, j, SCREEN_WIDTH, j, SDL_Color {180, 180, 180, 255});
 		}
 		for (int i = _gridSize; i < SCREEN_WIDTH; i += _gridSize) {
-			DrawLine(i, 0, i, SCREEN_HEIGHT, SDL_Color {50, 50, 50, 255});
+			DrawLine(i, 0, i, SCREEN_HEIGHT, SDL_Color {180, 180, 180, 255});
 		}
 	}
 }
