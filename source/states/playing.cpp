@@ -199,6 +199,24 @@ void ClassName::ChangeLevel(std::string name)
 	}
 }
 
+Level* ClassName::GetLevel()
+{
+	if (_levelList.size() == 1)
+	{
+		return _levelList[0];
+	}
+	if (_levelList.size() == 0)
+	{
+		std::cout << "Error: No level in level list" << std::endl;
+	}
+	else if (_levelList.size() > 1)
+	{
+		std::cout << "Error: More than 1 level in level list" << std::endl;
+	}
+
+	return nullptr;
+}
+
 void ClassName::Restart()
 {
 	for (int i = 0; i < _levelList.size(); i++)

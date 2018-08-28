@@ -245,9 +245,17 @@ bool Game::GetInput()
 				break;
 
 			case LEVEL_EDITOR:
-				std::cout << "Changing to level editor..." << std::endl;
-				ChangeState(StateEditor::Instance());
-				StateEditor::Instance()->Resume(); 
+				{
+					std::cout << "Changing to level editor..." << std::endl;
+					ChangeState(StateEditor::Instance());
+
+					Level* temp = StatePlaying::Instance()->GetLevel();
+					if (temp != nullptr) {
+						StateEditor::Instance()->SetLevel(temp->GetFileName());
+					}
+
+					StateEditor::Instance()->Resume(); 
+				}
 				break;
 
 			case PLAY_MODE:
@@ -260,7 +268,7 @@ bool Game::GetInput()
 
 			case RESTART:
 				StatePlaying::Instance()->Restart();
-				StateEditor::Instance()->LoadLevel();
+				StateEditor::Instance()->ResetLevel();
 
 				if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 					//_stateStack.back()->Cleanup();

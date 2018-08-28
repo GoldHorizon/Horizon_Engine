@@ -283,7 +283,7 @@ void ClassName::SetLevel(std::string name)
 {
 	_levelName = name;
 
-	std::cout << "Setting level to " << name << "..." << std::endl;
+	std::cout << "Setting editor level to " << name << "..." << std::endl;
 
 	if (_levelName != "") {
 		_currentLevel.SetFileName(name);
@@ -291,9 +291,19 @@ void ClassName::SetLevel(std::string name)
 	}
 }
 
+void ClassName::SetLevel(Level* level)
+{
+	std::cout << "Setting editor level to " << level->GetFileName() << "..." << std::endl;
+}
+
 std::string ClassName::GetLevel()
 {
 	return _levelName;
+}
+
+void ClassName::ResetLevel()
+{
+	_currentLevel.ClearEntities();
 }
 
 #ifdef ClassName

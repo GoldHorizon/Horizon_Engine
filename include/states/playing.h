@@ -34,6 +34,8 @@ public:
 	void AddLevel(Level* level);
 
 	void ChangeLevel(std::string name);
+	
+	Level* GetLevel();
 
 	void Restart();
 

@@ -13,7 +13,6 @@ Wall::Wall()
 void Wall::Update()
 {
 	Entity::Update();
-
 }
 
 Entity* Wall::NewInstance()
