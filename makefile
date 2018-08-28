@@ -16,14 +16,15 @@ objects 	:= 	main.o \
 				file.o \
 				level.o \
 				gameState.o \
-				playing.o \
-				uninitialized.o \
-				pauseMenu.o \
-				editor.o \
 				text.o \
 				font.o \
 				engineMethods.o \
-				drawing.o
+				drawing.o \
+				wall.o \
+				playing.o \
+				uninitialized.o \
+				pauseMenu.o \
+				editor.o
 
 win32_flags :=	-lmingw32 \
 				-lSDL2main \
@@ -133,6 +134,9 @@ engineMethods.o		: source/engineMethods.cpp include/engineMethods.h
 
 drawing.o			: source/drawing.cpp include/drawing.h include/globals.h include/text.h
 	gcc $(win32_gcc_flags) source/drawing.cpp
+
+wall.o				: source/wall.cpp include/wall.h
+	gcc $(win32_gcc_flags) source/wall.cpp
 
 ###
 ### List of game states to be compiled ###
