@@ -73,48 +73,28 @@ int ClassName::HandleEvents(SDL_Event* event)
 	}
 
 	else if (event->type == SDL_MOUSEBUTTONDOWN && 
-			event->button.state == SDL_PRESSED &&
 			event->button.clicks == 1)
 	{
-		int x = event->button.x;
-		int y = event->button.y;
-
-		x = x - (x % _gridSize);
-		y = y - (y % _gridSize);
-
 		if (event->button.button == SDL_BUTTON_LEFT) {
-
-			std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
-			if (_currentLevel.CheckPoint(x, y) == true) {
-				// Delete the existing entity at this location
-				_currentLevel.RemoveEntity(x, y);
-			}
-
-			// Try to create ball at coords.
-			Ball* ball = new Ball();
-			ball->SetPosition(x, y);
-			ball->SetName("ANUBALL");
-
-			// Breaks if we add to our own entity list, then try to load
-			//_entities.AddEntity(ball);
-			if (_levelName != "")
-			{
-				_currentLevel.AddEntity(ball);
-			}
-
-			// Debug
-			std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
-			std::cout << "Count: " << _currentLevel.GetCount() << std::endl;
+			_isCreating = true;
+			if (_isDeleting) _isDeleting = false;	
 		}
 		else if (event->button.button == SDL_BUTTON_RIGHT) {
-
-			std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
-			if (_currentLevel.CheckPoint(x, y) == true) {
-				// Delete the existing entity at this location
-				_currentLevel.RemoveEntity(x, y);
-			}
+			_isDeleting = true;
+			if (_isCreating) _isCreating = false;	
 		}
 	}
+	else if (event->type == SDL_MOUSEBUTTONUP &&
+			event->button.clicks == 1) 
+	{
+		if (event->button.button == SDL_BUTTON_LEFT) {
+			_isCreating = false;
+		}
+		else if (event->button.button == SDL_BUTTON_RIGHT) {
+			_isDeleting = false;
+		}
+	}
+
 
 	return -1;
 }
@@ -128,12 +108,48 @@ void ClassName::Update()
 
 		// Put editor entity addition/deletion in here?
 
+		if (_isCreating || _isDeleting) {
+			int x, y;
 
+			SDL_GetMouseState(&x, &y);
+			
+			x = x - (x % _gridSize);
+			y = y - (y % _gridSize);
 
+			if (_isCreating) {
 
+				//std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
+				if (_currentLevel.CheckPoint(x, y) == true) {
+					// Delete the existing entity at this location
+					_currentLevel.RemoveEntity(x, y);
+				}
 
+				// Try to create ball at coords.
+				Ball* ball = new Ball();
+				ball->SetPosition(x, y);
+				ball->SetName("ANUBALL");
 
+				// Breaks if we add to our own entity list, then try to load
+				//_entities.AddEntity(ball);
+				if (_levelName != "")
+				{
+					_currentLevel.AddEntity(ball);
+				}
 
+				// Debug
+				//std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
+				//std::cout << "Count: " << _currentLevel.GetCount() << std::endl;
+			}
+
+			if (_isDeleting) {
+
+				//std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
+				if (_currentLevel.CheckPoint(x, y) == true) {
+					// Delete the existing entity at this location
+					_currentLevel.RemoveEntity(x, y);
+				}
+			}
+		}
 	}
 }
 

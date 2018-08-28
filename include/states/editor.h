@@ -49,6 +49,9 @@ private:
 	// Editing values
 	bool _drawGrid;
 	int _gridSize;
+
+	bool _isCreating;
+	bool _isDeleting;
 };
 
 #ifdef ClassName
