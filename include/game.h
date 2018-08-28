@@ -35,7 +35,7 @@ public:
     void PushState (GameState* newState);
 
     // PopState()           - Pop the latest state from the top of the stack
-    void PopState ();
+    void PopState();
 
 	// GetInput()			- Retrieves global window input, returns quit value
 	bool GetInput();

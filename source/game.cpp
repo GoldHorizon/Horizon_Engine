@@ -139,7 +139,7 @@ void Game::ChangeState(GameState* newState)
 				break;
 
 			default:
-				std::cerr << "ERROR: Trying to change to error state" << std::endl;
+				//std::cerr << "ERROR: Trying to change to error state" << std::endl;
 				//_stateStack.push_back(StateUninitialized::Instance());
 				break;
 		}
@@ -256,6 +256,17 @@ bool Game::GetInput()
 
 				StatePlaying::Instance()->ChangeLevel(StateEditor::Instance()->GetLevel());
 				StatePlaying::Instance()->Resume(); 
+				break;
+
+			case RESTART:
+				StatePlaying::Instance()->Restart();
+				StateEditor::Instance()->LoadLevel();
+
+				if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
+					//_stateStack.back()->Cleanup();
+					_stateStack.pop_back();
+					_stateStack.back()->Resume();
+				}
 				break;
 
 			case GAME_QUIT:

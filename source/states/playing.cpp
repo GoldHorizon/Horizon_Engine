@@ -199,6 +199,14 @@ void ClassName::ChangeLevel(std::string name)
 	}
 }
 
+void ClassName::Restart()
+{
+	for (int i = 0; i < _levelList.size(); i++)
+	{
+		_levelList[i]->LoadFromFile();
+	}
+}
+
 #ifdef ClassName
 #undef ClassName
 #endif

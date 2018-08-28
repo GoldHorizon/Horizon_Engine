@@ -35,6 +35,8 @@ public:
 
 	void ChangeLevel(std::string name);
 
+	void Restart();
+
     static ClassName* Instance()
     {
         if (_thisInstance == nullptr)
