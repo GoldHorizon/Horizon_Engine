@@ -49,9 +49,12 @@ private:
 	// Editing values
 	bool _drawGrid;
 	int _gridSize;
+	EditorEntityType _entityType;
 
+	// If user is creating/deleting any entities
 	bool _isCreating;
 	bool _isDeleting;
+
 };
 
 #ifdef ClassName

@@ -11,6 +11,12 @@ enum class GameStateType
 	LEVEL_EDITOR
 };
 
+enum class EditorEntityType {
+	PLAYER = 0,
+	BALL,
+	Count
+};
+
 enum KeyEvents {
 	GAME_QUIT,
 	OPEN_MENU,

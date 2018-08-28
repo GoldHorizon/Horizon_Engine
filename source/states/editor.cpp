@@ -1,7 +1,9 @@
 #include "states/editor.h"
 #include "drawing.h"
 #include "constants.h"
+#include "player.h"
 #include "ball.h"
+#include "text.h"
 
 #include <iostream>
 
@@ -16,11 +18,15 @@ ClassName::~ClassName()
 
 void ClassName::Initialize()
 {
+	_levelName = "another_test2.txt";
+
 	// Set editing values
 	_drawGrid = true;
 	_gridSize = 32;
+	_entityType = EditorEntityType::PLAYER;
 
-	_levelName = "";
+	_isCreating = false;
+	_isDeleting = false;
 }
 
 void ClassName::Cleanup()
@@ -58,17 +64,15 @@ int ClassName::HandleEvents(SDL_Event* event)
 		case SDLK_F3:
 			std::cout << "Changing level..." << std::endl;
 
-			// Get level string somehow...?
-			// @todo: time for console?
 			std::string level = "";
 
 			// DEBUG!!!!
+			// Get level string somehow...?
+			// @todo: time for console?
 			std::getline(std::cin, level);
 
 			SetLevel(level);
 			break;
-
-
 		}
 	}
 
@@ -95,6 +99,23 @@ int ClassName::HandleEvents(SDL_Event* event)
 		}
 	}
 
+	else if (event->type == SDL_MOUSEWHEEL)
+	{
+		if (event->wheel.y > 0)
+		{
+			_entityType = static_cast<EditorEntityType>((static_cast<int>(_entityType)) + 1);	
+
+			if (static_cast<int>(_entityType) >= static_cast<int>(EditorEntityType::Count))
+				_entityType = static_cast<EditorEntityType>(0);
+		}
+		else if (event->wheel.y < 0)
+		{
+			_entityType = static_cast<EditorEntityType>((static_cast<int>(_entityType)) - 1);	
+
+			if (static_cast<int>(_entityType) < 0)
+				_entityType = static_cast<EditorEntityType>(static_cast<int>(EditorEntityType::Count) - 1);
+		}
+	}
 
 	return -1;
 }
@@ -125,15 +146,43 @@ void ClassName::Update()
 				}
 
 				// Try to create ball at coords.
-				Ball* ball = new Ball();
-				ball->SetPosition(x, y);
-				ball->SetName("ANUBALL");
+				// @todo: find a way to select the entity we want to create...
+				//////////////////////
+				//
+				// Entity Selection
+				//
+				//////////////////////
+				Entity* obj;
+
+				switch (_entityType)
+				{
+					case EditorEntityType::PLAYER:
+						obj = new Player();
+						break;
+
+					case EditorEntityType::BALL:
+						obj = new Ball();
+						break;
+
+					// Probably won't want to add text...
+					//case EditorEntityType::TEXT:
+					//	obj = new Text();
+					//	std::string text;
+					//	std::getline(std::cin, text);
+					//	static_cast<Text*>(obj)->SetText(text);
+					//	break;
+
+					default:
+						std::cout << "Error: Trying to add entity to level of invalid type (not in enum class)" << std::endl;
+				}
+
+				obj->SetPosition(x, y);
 
 				// Breaks if we add to our own entity list, then try to load
 				//_entities.AddEntity(ball);
 				if (_levelName != "")
 				{
-					_currentLevel.AddEntity(ball);
+					_currentLevel.AddEntity(obj);
 				}
 
 				// Debug
