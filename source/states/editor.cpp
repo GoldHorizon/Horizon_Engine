@@ -3,7 +3,7 @@
 #include "constants.h"
 #include "player.h"
 #include "ball.h"
-#include "text.h"
+#include "wall.h"
 
 #include <iostream>
 
@@ -169,6 +169,10 @@ void ClassName::Update()
 						obj = new Ball();
 						break;
 
+					case EditorEntityType::WALL:
+						obj = new Wall();
+						break;
+
 					// Probably won't want to add text...
 					//case EditorEntityType::TEXT:
 					//	obj = new Text();
@@ -238,6 +242,10 @@ void ClassName::Render(float interpolation)
 
 			case EditorEntityType::BALL:
 				_textType.SetText("Ball");				
+				break;
+
+			case EditorEntityType::WALL:
+				_textType.SetText("Wall");
 				break;
 
 			default:
