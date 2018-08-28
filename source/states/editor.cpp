@@ -72,24 +72,47 @@ int ClassName::HandleEvents(SDL_Event* event)
 		}
 	}
 
-	if (event->type == SDL_MOUSEBUTTONDOWN)
+	else if (event->type == SDL_MOUSEBUTTONDOWN && 
+			event->button.state == SDL_PRESSED &&
+			event->button.clicks == 1)
 	{
-		int x, y;
-		SDL_GetMouseState(&x, &y);
+		int x = event->button.x;
+		int y = event->button.y;
 
 		x = x - (x % _gridSize);
 		y = y - (y % _gridSize);
 
-		// Try to create ball at coords.
-		Ball* ball = new Ball();
-		ball->SetPosition(x, y);
-		ball->SetName("ANUBALL");
+		if (event->button.button == SDL_BUTTON_LEFT) {
 
-		// Breaks if we add to our own entity list, then try to load
-		//_entities.AddEntity(ball);
-		if (_levelName != "")
-		{
-			_currentLevel.AddEntity(ball);
+			std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
+			if (_currentLevel.CheckPoint(x, y) == true) {
+				// Delete the existing entity at this location
+				_currentLevel.RemoveEntity(x, y);
+			}
+
+			// Try to create ball at coords.
+			Ball* ball = new Ball();
+			ball->SetPosition(x, y);
+			ball->SetName("ANUBALL");
+
+			// Breaks if we add to our own entity list, then try to load
+			//_entities.AddEntity(ball);
+			if (_levelName != "")
+			{
+				_currentLevel.AddEntity(ball);
+			}
+
+			// Debug
+			std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
+			std::cout << "Count: " << _currentLevel.GetCount() << std::endl;
+		}
+		else if (event->button.button == SDL_BUTTON_RIGHT) {
+
+			std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
+			if (_currentLevel.CheckPoint(x, y) == true) {
+				// Delete the existing entity at this location
+				_currentLevel.RemoveEntity(x, y);
+			}
 		}
 	}
 
@@ -102,6 +125,15 @@ void ClassName::Update()
 	{
 		// Only updates entities local to editor, NOT _currentLevel's entities
 		_entities.UpdateAll();
+
+		// Put editor entity addition/deletion in here?
+
+
+
+
+
+
+
 	}
 }
 

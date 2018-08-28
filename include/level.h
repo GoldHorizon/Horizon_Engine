@@ -28,7 +28,7 @@ public:
 	void RemoveEntity(int x, int y);
 	void RemoveLastEntity();
 
-	//EntityCollection* GetObjectList();
+	bool CheckPoint(int x, int y);
 
 private:
 	std::string _name;

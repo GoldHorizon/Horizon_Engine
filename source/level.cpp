@@ -167,7 +167,10 @@ void Level::RemoveLastEntity()
 	RemoveByIndex(count - 1);
 }
 
-//EntityCollection* Level::GetObjectList()
-//{
-//	return &_objectList;
-//}
+
+bool Level::CheckPoint(int x, int y)
+{
+	peMap::iterator it = _pointList.find(SDL_Point {x, y});
+
+	return (it != _pointList.end());
+}
