@@ -106,14 +106,14 @@ int ClassName::HandleEvents(SDL_Event* event)
 
 	else if (event->type == SDL_MOUSEWHEEL)
 	{
-		if (event->wheel.y > 0)
+		if (event->wheel.y < 0)
 		{
 			_entityType = static_cast<EditorEntityType>((static_cast<int>(_entityType)) + 1);	
 
 			if (static_cast<int>(_entityType) >= static_cast<int>(EditorEntityType::Count))
 				_entityType = static_cast<EditorEntityType>(0);
 		}
-		else if (event->wheel.y < 0)
+		else if (event->wheel.y > 0)
 		{
 			_entityType = static_cast<EditorEntityType>((static_cast<int>(_entityType)) - 1);	
 
