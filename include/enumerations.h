@@ -14,6 +14,7 @@ enum class GameStateType
 enum class EditorEntityType {
 	PLAYER = 0,
 	BALL,
+	WALL,
 	Count
 };
 

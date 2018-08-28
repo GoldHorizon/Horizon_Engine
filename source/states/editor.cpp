@@ -157,7 +157,7 @@ void ClassName::Update()
 				// Entity Selection
 				//
 				//////////////////////
-				Entity* obj;
+				Entity* obj = nullptr;
 
 				switch (_entityType)
 				{
@@ -180,6 +180,8 @@ void ClassName::Update()
 					default:
 						std::cout << "Error: Trying to add entity to level of invalid type (not in enum class)" << std::endl;
 				}
+
+				if (obj == nullptr) return;
 
 				obj->SetPosition(x, y);
 
