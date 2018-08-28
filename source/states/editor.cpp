@@ -18,7 +18,7 @@ ClassName::~ClassName()
 
 void ClassName::Initialize()
 {
-	_levelName = "another_test2.txt";
+	_levelName = "";
 
 	// Set editing values
 	_drawGrid = true;
@@ -27,6 +27,11 @@ void ClassName::Initialize()
 
 	_isCreating = false;
 	_isDeleting = false;
+
+	_drawType = true;
+	_textType.SetFont(defaultFont);
+	_textType.SetPosition(8, 8);
+	Entities().AddEntity(&_textType);
 }
 
 void ClassName::Cleanup()
@@ -218,6 +223,23 @@ void ClassName::Render(float interpolation)
 		}
 		for (int i = _gridSize; i < SCREEN_WIDTH; i += _gridSize) {
 			DrawLine(i, 0, i, SCREEN_HEIGHT, SDL_Color {180, 180, 180, 255});
+		}
+	}
+
+	if (_drawType)
+	{
+		switch (_entityType)
+		{
+			case EditorEntityType::PLAYER:
+				_textType.SetText("Player");				
+				break;
+
+			case EditorEntityType::BALL:
+				_textType.SetText("Ball");				
+				break;
+
+			default:
+				_textType.SetText("Invalid");
 		}
 	}
 }

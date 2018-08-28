@@ -66,6 +66,7 @@ void Text::Render(float interpolation)
 
 void Text::UpdateImage()
 {
+	//std::cout << "DEBUG: Updating image" << std::endl;
 	if (_font == nullptr)
 	{
 		std::cerr << "Cannot change text, no font specified!" << std::endl;

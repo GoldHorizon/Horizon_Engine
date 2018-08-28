@@ -2,6 +2,7 @@
 
 #include "gameState.h"
 #include "level.h"
+#include "text.h"
 
 #define ClassName StateEditor
 
@@ -50,6 +51,8 @@ private:
 	bool _drawGrid;
 	int _gridSize;
 	EditorEntityType _entityType;
+	bool _drawType;
+	Text _textType;
 
 	// If user is creating/deleting any entities
 	bool _isCreating;
