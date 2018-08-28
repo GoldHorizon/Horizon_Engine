@@ -2,6 +2,7 @@
 #include "player.h"
 #include "text.h"
 #include "ball.h"
+#include "wall.h"
 
 #include <sstream>
 #include <iostream>
@@ -77,6 +78,11 @@ Entity* CreateSerializedObject(std::string str)
 	if (str.find("@Ball") != -1)
 	{
 		obj = new Ball;
+	}
+
+	if (str.find("@Wall") != -1)
+	{
+		obj = new Wall;
 	}
 
 	if (obj != nullptr)
