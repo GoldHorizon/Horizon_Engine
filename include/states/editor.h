@@ -29,6 +29,7 @@ public:
 	void SaveLevel();
 	bool LoadLevel();
 	void SetLevel(std::string name);
+	std::string GetLevel();
 
     static ClassName* Instance()
     {

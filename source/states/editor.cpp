@@ -283,6 +283,11 @@ void ClassName::SetLevel(std::string name)
 	}
 }
 
+std::string ClassName::GetLevel()
+{
+	return _levelName;
+}
+
 #ifdef ClassName
 #undef ClassName
 #endif

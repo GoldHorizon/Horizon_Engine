@@ -128,7 +128,8 @@ void Game::ChangeState(GameState* newState)
 		switch(type)
 		{
 			case GameStateType::MAIN_MENU:
-				// Create buttons here
+				// Create buttons here???
+				// Probably not, do that in main menu state class...
 				break;
 
 			case GameStateType::PLAYING_GAME:
@@ -252,6 +253,8 @@ bool Game::GetInput()
 			case PLAY_MODE:
 				std::cout << "Changing back to play mode..." << std::endl;
 				ChangeState(StatePlaying::Instance());
+
+				StatePlaying::Instance()->ChangeLevel(StateEditor::Instance()->GetLevel());
 				StatePlaying::Instance()->Resume(); 
 				break;
 

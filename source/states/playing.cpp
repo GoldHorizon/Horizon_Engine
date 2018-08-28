@@ -19,6 +19,8 @@ ClassName::~ClassName()
 void ClassName::Initialize()
 {
 	AddLevel("test_file.txt");
+	//AddLevel("another_test.txt");
+
     //Player* mainPlayer = new Player();
     //mainPlayer->SetName("MainPlayer");
 	//mainPlayer->SetDepth(-20);
@@ -30,12 +32,6 @@ void ClassName::Initialize()
     //testBall->SetName("TestBall");
     //_entities.AddEntity(testBall);
 
-    //Ball* testBall2 = new Ball();
-    //testBall2->SetPosition(256, 512);
-    //testBall2->SetDepth(10);
-    //testBall2->SetName("TestBall2");
-    //_entities.AddEntity(testBall2);
-
 	//// Test loading fonts/texts
 	//Text* testTextLabel = new Text("This is just a test label!!!", defaultFont);
 	//testTextLabel->SetPosition({ 600, 300 });
@@ -46,24 +42,16 @@ void ClassName::Initialize()
 	// End test loading fonts/texts
 
 
-	//// Begin testing file input/output
 	//File testFile;
 	//sVector* svp = testFile.GetDataVector();
 
 	//testFile.OpenFile("test_file.txt", false, true);
 
-	//// I/O here
-	//std::cout << "Entering serialize method" << std::endl;
-	//
 	//svp->push_back(mainPlayer->Serialize());
-	//svp->push_back(testBall->Serialize());
-	//svp->push_back(testBall2->Serialize());
-	//svp->push_back(testTextLabel->Serialize());
 
 	//testFile.WriteFileData();
 
 	//testFile.CloseFile();
-	//testFile.PrintData();
 
 	//sVector* testV;
 	//testV = ParseSerializedString(testTextLabel->Serialize());
@@ -92,10 +80,7 @@ void ClassName::Initialize()
 	//		_entities.AddEntity(test);
 	//}
 
-	//mainPlayer		->Unserialize((*svp)[0]);
 	//testBall		->Unserialize((*svp)[1]);
-	//testBall2		->Unserialize((*svp)[2]);
-	//testTextLabel	->Unserialize((*svp)[3]);
 
 	//testFile.CloseFile();
 	//// End testing file Input/Output
@@ -196,6 +181,22 @@ void ClassName::AddLevel(std::string name)
 void ClassName::AddLevel(Level* level)
 {
 	_levelList.push_back(level);
+}
+
+void ClassName::ChangeLevel(std::string name)
+{
+	_levelList.clear();
+
+	Level* newLevel = new Level(name);
+
+	if (!newLevel->LoadFromFile())
+	{
+		std::cout << "Error: Could not add level! Level was not found" << std::endl;
+	}
+	else
+	{
+		AddLevel(newLevel);
+	}
 }
 
 #ifdef ClassName

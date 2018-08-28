@@ -33,6 +33,8 @@ public:
 	void AddLevel(std::string name);
 	void AddLevel(Level* level);
 
+	void ChangeLevel(std::string name);
+
     static ClassName* Instance()
     {
         if (_thisInstance == nullptr)
