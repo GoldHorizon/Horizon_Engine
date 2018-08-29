@@ -50,6 +50,8 @@ public:
 	// Entities()			- General function, returns main entity collection
 	EntityCollection& Entities();
 
+	void CloseConsole();
+
 private:
 	// _mainWindow		- main window to render to
 	SDL_Window* _mainWindow;

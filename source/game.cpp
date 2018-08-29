@@ -10,6 +10,7 @@
 #include "../include/states/options.h"
 #include "../include/states/pauseMenu.h"
 #include "states/editor.h"
+#include "states/console.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -171,39 +172,6 @@ bool Game::GetInput()
 	{
 		// STEP 1: Process Input
 
-		// There will eventually be a switch statement here to
-		// determine what game state we are in (Maybe?)
-
-		// If our event is a keyboard button press
-		if (_event.type == SDL_KEYDOWN)
-		{
-			switch (_event.key.keysym.scancode)
-			{
-				// Used to end game, managed in pause menu now
-	//		case SDL_SCANCODE_ESCAPE:
-	//			continueGame = false;
-	//			break;
-
-			default:
-				break;
-			}
-		}
-		else if (_event.type == SDL_WINDOWEVENT && _event.window.windowID == SDL_GetWindowID(_mainWindow))
-		{
-			switch ((int)(_event.window.event))
-			{
-			case SDL_WINDOWEVENT_CLOSE:
-				// If window is closed, take this as the user quitting
-				// In the future, this must be made more elegant.
-				std::cout << "Close window event" << std::endl;
-				continueGame = false;
-				break;
-			default:
-				//std::cout << (int)(_event.window.event);
-				break;
-			}
-		}
-
 		// This will allow the topmost gamestate to handle any events given to the window
 		// (Preventing lower gamestates from taking input i.e. when a pause menu overlay is up)
 		std::vector<GameState*>::iterator it = _stateStack.end();
@@ -269,22 +237,16 @@ bool Game::GetInput()
 			case RESTART:
 				StatePlaying::Instance()->Restart();
 				StateEditor::Instance()->ResetLevel();
-
-				if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
+if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 					//_stateStack.back()->Cleanup();
 					_stateStack.pop_back();
 					_stateStack.back()->Resume();
 				}
 				break;
 
-			case CLOSE_CONSOLE:
-				if ((*it)->GetType() == GameStateType::CONSOLE)
-				{
-					_stateStack.pop_back();
-					_stateStack.back()->Resume();
-				}
-
-				break;
+			//case CLOSE_CONSOLE: 
+			//	CloseConsole();
+			//	break;
 
 			case GAME_QUIT:
 				continueGame = false;
@@ -295,6 +257,55 @@ bool Game::GetInput()
 				break;
 			}
 		}
+
+		// If our event is a keyboard button press
+		if (_event.type == SDL_KEYDOWN)
+		{
+			switch (_event.key.keysym.sym)
+			{
+			case SDLK_BACKQUOTE:
+				std::cout << "Pressed backquote! ";
+				if (_stateStack.back()->GetType() == GameStateType::CONSOLE)
+				{
+					std::cout << "Console open, closing... " << std::endl;
+					StateConsole::Instance()->Close();
+				}
+				else
+				{
+					PushState(StateConsole::Instance());
+					std::cout << "Console closed, opening ";
+					if (_event.key.keysym.mod == KMOD_LSHIFT)
+					{
+						std::cout << "big..." << std::endl;
+						StateConsole::Instance()->Open(true);
+					}
+					else
+					{
+						std::cout << "small..." << std::endl;
+						StateConsole::Instance()->Open(false);
+					}
+				}
+
+			default:
+				break;
+			}
+		}
+		else if (_event.type == SDL_WINDOWEVENT && _event.window.windowID == SDL_GetWindowID(_mainWindow))
+		{
+			switch ((int)(_event.window.event))
+			{
+			case SDL_WINDOWEVENT_CLOSE:
+				// If window is closed, take this as the user quitting
+				// In the future, this must be made more elegant.
+				std::cout << "Close window event" << std::endl;
+				continueGame = false;
+				break;
+			default:
+				//std::cout << (int)(_event.window.event);
+				break;
+			}
+		}
+
 	}
     // The player has not quit the game, so return false
 	return continueGame;
@@ -313,6 +324,10 @@ void Game::Update()
 			it++;
         }
     }
+
+	// Check console (if we have it open) if it should be closed
+	if (_stateStack.back()->GetType() == GameStateType::CONSOLE && StateConsole::Instance()->IsClosed())
+		CloseConsole();
 
     // deprecated ***
 	//_entities.UpdateAll();
@@ -347,4 +362,14 @@ void Game::Render(float interpolation)
 EntityCollection& Game::Entities()
 {
 	return _entities;
+}
+
+void Game::CloseConsole()
+{
+	if (_stateStack.back()->GetType() == GameStateType::CONSOLE)
+	{
+		std::cout << "Closing console..." << std::endl;
+		_stateStack.pop_back();
+		_stateStack.back()->Resume();
+	}
 }

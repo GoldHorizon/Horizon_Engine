@@ -2,6 +2,8 @@
 #include "drawing.h"
 #include "globals.h"
 
+#include <iostream>
+
 #define ClassName StateConsole
 
 ClassName* ClassName::_thisInstance = nullptr;
@@ -25,7 +27,7 @@ void ClassName::Initialize()
 	// This is a fraction of openHeight;
 	_openHeightSmall = 0.4;
 	// This is a fraction of how fast the console opens
-	_openRate = 0.01;
+	_openRate = 0.03;
 }
 
 void ClassName::Cleanup()
@@ -40,15 +42,13 @@ int ClassName::HandleEvents(SDL_Event* event)
 		switch (event->key.keysym.sym)
 		{
 		case SDLK_ESCAPE:
-			_isOpenBig = false;
-			_isOpenSmall = false;
+			Close();
 			break;
 
 		case SDLK_BACKQUOTE:
 			if (_isOpenBig || _isOpenSmall)
 			{
-				_isOpenBig = false;
-				_isOpenSmall = false;
+				Close();
 			}
 			else
 			{
@@ -92,11 +92,17 @@ void ClassName::Update()
 
 		if (_openHeight < 0) _openHeight = 0;
 	}
+
+	if (IsClosed()) 
+	{
+		// @todo: Find way to signal to game to close the console from there...?	
+		
+	}
 }
 
 void ClassName::Render(float interpolation)
 {
-	if (_isOpenBig || _isOpenSmall) {
+	if (_openHeight > 0) {
 		DrawRect(0, 0, SCREEN_WIDTH, _openHeight, _consoleColor);
 	}
 }
@@ -110,6 +116,14 @@ void ClassName::Open(bool big)
 		_isOpenSmall = true;
 		_isOpenBig = false;
 	}
+
+	_openHeight += (SCREEN_HEIGHT * _openHeightBig) * _openRate;
+}
+
+void ClassName::Close()
+{
+	_isOpenSmall = false;
+	_isOpenBig = false;
 }
 
 void ClassName::ParseCommand(std::string str)

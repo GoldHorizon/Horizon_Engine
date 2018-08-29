@@ -30,6 +30,7 @@ public:
     void Render(float interpolation);
 
 	void Open(bool big = false);
+	void Close();
 	void ParseCommand(std::string str);
 	bool IsClosed();
 
