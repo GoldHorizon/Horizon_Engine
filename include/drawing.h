@@ -11,3 +11,5 @@ void DrawRect(int x, int y, int w, int h, SDL_Color c);
 
 void DrawLine(SDL_Point p1, SDL_Point p2, SDL_Color c);
 void DrawLine(int x1, int y1, int x2, int y2, SDL_Color c);
+
+void DrawText(std::string str, Font* font, int x, int y, TextAlignment align, SDL_Color c);

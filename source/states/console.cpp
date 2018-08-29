@@ -2,6 +2,7 @@
 #include "drawing.h"
 #include "globals.h"
 #include "engineMethods.h"
+#include "enumerations.h"
 
 #include <iostream>
 
@@ -29,6 +30,10 @@ void ClassName::Initialize()
 	_openHeightSmall = 0.3;
 	// This is a fraction of how fast the console opens
 	_openRate = 0.04;
+
+	ParseCommand("This is a nice test string! abcdefghijklmnopqrstuvwxyz");
+	ParseCommand("Second test");
+	ParseCommand("Third, final test");
 }
 
 void ClassName::Cleanup()
@@ -113,6 +118,13 @@ void ClassName::Render(float interpolation)
 	if (_openHeight > 0) {
 		DrawRect(0, 0, SCREEN_WIDTH, _openHeight, _consoleColor);
 	}
+
+	for (int i = 0; i < _history.size(); i++)
+	{
+		DrawText(_history[i], consoleFont, 8, 128 + (24 * i), ALIGN_LEFT, {255, 255, 255, 255});
+	}
+
+    _entities.RenderAll(interpolation);
 }
 
 void ClassName::Open(bool big)

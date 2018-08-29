@@ -43,3 +43,13 @@ void DrawLine(int x1, int y1, int x2, int y2, SDL_Color c)
 	SDL_RenderDrawLine(globalRenderer, x1, y1, x2, y2);
 }
 
+void DrawText(std::string str, Font* font, int x, int y, TextAlignment align, SDL_Color c)
+{
+	SDL_Surface* surface = TTF_RenderText_Solid(font->font(), str.c_str(), c);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(globalRenderer, surface);
+
+	SDL_Rect dest = {x, y, surface->w, surface->h};
+	
+	SDL_SetRenderDrawColor(globalRenderer, c.r, c.g, c.b, c.a);
+	SDL_RenderCopy(globalRenderer, texture, nullptr, &dest);
+}

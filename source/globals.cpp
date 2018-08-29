@@ -5,5 +5,6 @@ SDL_Renderer* globalRenderer = nullptr;
 Font *defaultFont = nullptr;
 Font *menuTitleFont = nullptr;
 Font *menuOptionFont = nullptr;
+Font *consoleFont = nullptr;
 
 Font *fontList[FONT_COUNT];
