@@ -53,35 +53,61 @@ int ClassName::HandleEvents(SDL_Event* event)
 			break;
 
 		case SDLK_BACKQUOTE:
-			//std::cout << "CONSOLE DETECTED BACKQUOTE" << std::endl;
-			bool lshift = event->key.keysym.mod & KMOD_LSHIFT;
+			{
+				//std::cout << "CONSOLE DETECTED BACKQUOTE" << std::endl;
+				bool lshift = event->key.keysym.mod & KMOD_LSHIFT;
 
-			if (_isOpenBig)
-			{
-				if (lshift) Close();
-				else Open(false);
+				if (_isOpenBig)
+				{
+					if (lshift) Close();
+					else Open(false);
+				}
+				else if (_isOpenSmall)
+				{
+					if (!lshift) Close();
+					else Open(true);
+				}
+				else
+				{
+					Open(event->key.keysym.mod & KMOD_LSHIFT);
+					//if (event->key.keysym.mod == KMOD_LSHIFT) {
+					//	_isOpenBig = true;
+					//	_isOpenSmall = false;
+					//} else {
+					//	_isOpenSmall = true;
+					//	_isOpenBig = false;
+					//}
+				}
 			}
-			else if (_isOpenSmall)
+			break;
+
+		case SDLK_BACKSPACE:
 			{
-				if (!lshift) Close();
-				else Open(true);
+			if (_currentLine.size() > 0)
+				_currentLine.pop_back();
 			}
-			else
+			break;
+
+		case SDLK_RETURN:
 			{
-				Open(event->key.keysym.mod & KMOD_LSHIFT);
-				//if (event->key.keysym.mod == KMOD_LSHIFT) {
-				//	_isOpenBig = true;
-				//	_isOpenSmall = false;
-				//} else {
-				//	_isOpenSmall = true;
-				//	_isOpenBig = false;
-				//}
+			if (_currentLine.size() > 0)
+				ParseCommand(_currentLine);
+				_currentLine = "";
 			}
 			break;
 		}
 	}
+	else if (event->type == SDL_TEXTINPUT)
+	{
+		_currentLine += event->text.text;
+	}
+	//else if (event->type == SDL_TEXTEDITING)
+	//{
 
-	if (IsClosed()) return CLOSE_CONSOLE;
+
+	//}
+
+	//if (IsClosed()) return CLOSE_CONSOLE;
 
 	return -1;
 }
@@ -107,10 +133,10 @@ void ClassName::Update()
 		Lerp<int>(_openHeight, 0, rate);
 	}
 
-	if (IsClosed()) 
+	if (/*!SDL_IsTextInputActive() && */IsOpen())
 	{
-		// @todo: Find way to signal to game to close the console from there...?	
-		
+		//std::cout << "Starting text input..." << std::endl;
+		SDL_StartTextInput();
 	}
 }
 
@@ -125,6 +151,12 @@ void ClassName::Render(float interpolation)
 		// First drop shadow, then text
 		DrawText(_history[i], consoleFont, 8 + 1, _openHeight - 64 - (16 * i) + 1, ALIGN_LEFT, {0, 0, 0, 255});
 		DrawText(_history[i], consoleFont, 8, _openHeight - 64 - (16 * i), ALIGN_LEFT, _textColor);
+	}
+
+	// Also draw current line being typed
+	if (_currentLine != "") {
+		DrawText(_currentLine, consoleFont, 8 + 1, _openHeight - 32 + 1, ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(_currentLine, consoleFont, 8, _openHeight - 32, ALIGN_LEFT, _textColor);
 	}
 
     //_entities.RenderAll(interpolation);
@@ -147,11 +179,35 @@ void ClassName::Close()
 {
 	_isOpenSmall = false;
 	_isOpenBig = false;
+
+	//if (SDL_IsTextInputActive())
+	//{
+	SDL_StopTextInput();
+	//}
 }
 
 void ClassName::ParseCommand(std::string str)
 {
 	_history.insert(_history.begin(), str);
+}
+
+bool ClassName::IsOpen()
+{
+	//std::cout << "_openHeight\t\t" << _openHeight << std::endl;
+	//std::cout << "_openHeightSmall\t\t" << SCREEN_HEIGHT * _openHeightSmall << std::endl;
+	//std::cout << "_openHeightBig\t\t" << SCREEN_HEIGHT * _openHeightBig << std::endl;
+	if (_isOpenSmall && _openHeight == static_cast<int>(SCREEN_HEIGHT * _openHeightSmall)) 
+	{
+		//std::cout << "IsOpenSmall" << std::endl;
+		return true;
+	}
+   	if (_isOpenBig && _openHeight == static_cast<int>(SCREEN_HEIGHT * _openHeightBig))
+	{
+		//std::cout << "IsOpenBig" << std::endl;
+		return true;
+	}
+
+	return false;
 }
 
 bool ClassName::IsClosed()

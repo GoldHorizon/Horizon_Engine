@@ -32,6 +32,7 @@ public:
 	void Open(bool big = false);
 	void Close();
 	void ParseCommand(std::string str);
+	bool IsOpen();
 	bool IsClosed();
 
     static ClassName* Instance()
@@ -53,6 +54,8 @@ private:
 	float _openRate;
 	float _openHeightBig;
 	float _openHeightSmall;
+
+	std::string _currentLine;
 
 	SDL_Color _consoleColor;
 	SDL_Color _textColor;

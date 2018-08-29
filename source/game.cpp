@@ -373,5 +373,11 @@ void Game::CloseConsole()
 		//std::cout << "Closing console..." << std::endl;
 		_stateStack.pop_back();
 		_stateStack.back()->Resume();
+
+		if (SDL_IsTextInputActive())
+		{
+			std::cout << "Stopping text input..." << std::endl;
+			SDL_StopTextInput();
+		}
 	}
 }
