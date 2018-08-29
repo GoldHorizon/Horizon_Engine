@@ -29,6 +29,10 @@ public:
     void Update();
     void Render(float interpolation);
 
+	void Open(bool big = false);
+	void ParseCommand(std::string str);
+	bool IsClosed();
+
     static ClassName* Instance()
     {
         if (_thisInstance == nullptr)
@@ -42,6 +46,16 @@ public:
 private:
     static ClassName* _thisInstance;
 
+	bool _isOpenBig;
+	bool _isOpenSmall;
+	int _openHeight;
+	float _openRate;
+	float _openHeightBig;
+	float _openHeightSmall;
+
+	SDL_Color _consoleColor;
+
+	std::vector<std::string> _history;
 };
 
 #ifdef ClassName

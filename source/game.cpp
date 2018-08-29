@@ -277,12 +277,21 @@ bool Game::GetInput()
 				}
 				break;
 
+			case CLOSE_CONSOLE:
+				if ((*it)->GetType() == GameStateType::CONSOLE)
+				{
+					_stateStack.pop_back();
+					_stateStack.back()->Resume();
+				}
+
+				break;
+
 			case GAME_QUIT:
 				continueGame = false;
 				break;
 
 			default:
-				std::cout << "Unimplemented option selected..." << std::endl;
+				std::cout << "Unimplemented key event detected..." << std::endl;
 				break;
 			}
 		}

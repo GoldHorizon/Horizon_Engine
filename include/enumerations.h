@@ -26,7 +26,8 @@ enum KeyEvents {
 	OPTIONS_MENU,
 	RESTART,
 	LEVEL_EDITOR,
-	PLAY_MODE
+	PLAY_MODE,
+	CLOSE_CONSOLE
 };
 
 enum TextAlignment {
