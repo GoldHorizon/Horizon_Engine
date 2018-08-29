@@ -24,11 +24,11 @@ void ClassName::Initialize()
 	// This is a how open the console is in terms of pixels
 	_openHeight = 0;
 	// This is a fraction of the screen height;
-	_openHeightBig = 0.7;	
+	_openHeightBig = 0.75;	
 	// This is a fraction of openHeight;
-	_openHeightSmall = 0.4;
+	_openHeightSmall = 0.3;
 	// This is a fraction of how fast the console opens
-	_openRate = 0.03;
+	_openRate = 0.04;
 }
 
 void ClassName::Cleanup()

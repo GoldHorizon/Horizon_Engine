@@ -214,7 +214,7 @@ bool Game::GetInput()
 
 			case LEVEL_EDITOR:
 				{
-					std::cout << "Changing to level editor..." << std::endl;
+					//std::cout << "Changing to level editor..." << std::endl;
 					ChangeState(StateEditor::Instance());
 
 					Level* temp = StatePlaying::Instance()->GetLevel();
@@ -227,7 +227,7 @@ bool Game::GetInput()
 				break;
 
 			case PLAY_MODE:
-				std::cout << "Changing back to play mode..." << std::endl;
+				//std::cout << "Changing back to play mode..." << std::endl;
 				ChangeState(StatePlaying::Instance());
 
 				StatePlaying::Instance()->ChangeLevel(StateEditor::Instance()->GetLevel());
@@ -253,7 +253,7 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 				break;
 
 			default:
-				std::cout << "Unimplemented key event detected..." << std::endl;
+				std::cout << "Error: Unimplemented key event detected..." << std::endl;
 				break;
 			}
 		}
@@ -264,7 +264,7 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 			switch (_event.key.keysym.sym)
 			{
 			case SDLK_BACKQUOTE:
-				std::cout << "Pressed backquote! ";
+				//std::cout << "Pressed backquote! ";
 				if (_stateStack.back()->GetType() == GameStateType::CONSOLE)
 				{
 					//std::cout << "Console open, closing... " << std::endl;
@@ -273,15 +273,15 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 				else
 				{
 					PushState(StateConsole::Instance());
-					std::cout << "Console closed, opening ";
+					//std::cout << "Console closed, opening ";
 					if (_event.key.keysym.mod & KMOD_LSHIFT)
 					{
-						std::cout << "big..." << std::endl;
+						//std::cout << "big..." << std::endl;
 						StateConsole::Instance()->Open(true);
 					}
 					else
 					{
-						std::cout << "small..." << std::endl;
+						//std::cout << "small..." << std::endl;
 						StateConsole::Instance()->Open(false);
 					}
 				}
@@ -297,7 +297,7 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 			case SDL_WINDOWEVENT_CLOSE:
 				// If window is closed, take this as the user quitting
 				// In the future, this must be made more elegant.
-				std::cout << "Close window event" << std::endl;
+				//std::cout << "Close window event" << std::endl;
 				continueGame = false;
 				break;
 			default:
@@ -368,7 +368,7 @@ void Game::CloseConsole()
 {
 	if (_stateStack.back()->GetType() == GameStateType::CONSOLE)
 	{
-		std::cout << "Closing console..." << std::endl;
+		//std::cout << "Closing console..." << std::endl;
 		_stateStack.pop_back();
 		_stateStack.back()->Resume();
 	}
