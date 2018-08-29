@@ -8,7 +8,8 @@ enum class GameStateType
 	OPTIONS,
 	PLAYING_GAME,
 	PAUSE_MENU,
-	LEVEL_EDITOR
+	LEVEL_EDITOR,
+	CONSOLE
 };
 
 enum class EditorEntityType {

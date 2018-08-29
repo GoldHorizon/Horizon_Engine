@@ -24,7 +24,8 @@ objects 	:= 	main.o \
 				playing.o \
 				uninitialized.o \
 				pauseMenu.o \
-				editor.o
+				editor.o \
+				console.o
 
 win32_flags :=	-lmingw32 \
 				-lSDL2main \
@@ -152,6 +153,9 @@ pauseMenu.o		: source/states/pauseMenu.cpp include/states/pauseMenu.h include/dr
 
 editor.o		: source/states/editor.cpp include/states/editor.h include/gameState.h include/level.h
 	gcc $(win32_gcc_flags) source/states/editor.cpp
+
+console.o		: source/states/console.cpp include/states/console.h include/gameState.h include/drawing.h
+	gcc $(win32_gcc_flags) source/states/console.cpp
 
 ###
 ### Cleans object and executable files (Debug stuff)
