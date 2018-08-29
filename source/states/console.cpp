@@ -46,13 +46,14 @@ int ClassName::HandleEvents(SDL_Event* event)
 			break;
 
 		case SDLK_BACKQUOTE:
+			std::cout << "CONSOLE DETECTED BACKQUOTE" << std::endl;
 			if (_isOpenBig || _isOpenSmall)
 			{
 				Close();
 			}
 			else
 			{
-				Open(event->key.keysym.mod == KMOD_LSHIFT);
+				Open(event->key.keysym.mod & KMOD_LSHIFT);
 				//if (event->key.keysym.mod == KMOD_LSHIFT) {
 				//	_isOpenBig = true;
 				//	_isOpenSmall = false;

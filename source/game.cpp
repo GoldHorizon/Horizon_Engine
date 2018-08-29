@@ -267,14 +267,14 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 				std::cout << "Pressed backquote! ";
 				if (_stateStack.back()->GetType() == GameStateType::CONSOLE)
 				{
-					std::cout << "Console open, closing... " << std::endl;
-					StateConsole::Instance()->Close();
+					//std::cout << "Console open, closing... " << std::endl;
+					//StateConsole::Instance()->Close();
 				}
 				else
 				{
 					PushState(StateConsole::Instance());
 					std::cout << "Console closed, opening ";
-					if (_event.key.keysym.mod == KMOD_LSHIFT)
+					if (_event.key.keysym.mod & KMOD_LSHIFT)
 					{
 						std::cout << "big..." << std::endl;
 						StateConsole::Instance()->Open(true);
