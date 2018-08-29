@@ -170,7 +170,7 @@ bool Game::GetInput()
 	int event_response = -1;
 
 	// Poll the system for an event of some kind
-	if (SDL_PollEvent(&_event))
+	while (SDL_PollEvent(&_event))
 	{
 		// STEP 1: Process Input
 

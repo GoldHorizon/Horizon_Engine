@@ -55,6 +55,7 @@ private:
 	float _openHeightSmall;
 
 	SDL_Color _consoleColor;
+	SDL_Color _textColor;
 
 	std::vector<std::string> _history;
 };

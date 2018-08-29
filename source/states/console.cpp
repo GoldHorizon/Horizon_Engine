@@ -21,8 +21,9 @@ void ClassName::Initialize()
 	_isOpenSmall = false;
 
 	_consoleColor = {0, 50, 50, 255};
+	_textColor = {255, 255, 255, 255};
 	
-	// This is a how open the console is in terms of pixels
+	// This is how open the console is in terms of pixels
 	_openHeight = 0;
 	// This is a fraction of the screen height;
 	_openHeightBig = 0.75;	
@@ -123,7 +124,7 @@ void ClassName::Render(float interpolation)
 	{
 		// First drop shadow, then text
 		DrawText(_history[i], consoleFont, 8 + 1, _openHeight - 64 - (16 * i) + 1, ALIGN_LEFT, {0, 0, 0, 255});
-		DrawText(_history[i], consoleFont, 8, _openHeight - 64 - (16 * i), ALIGN_LEFT, {255, 255, 255, 255});
+		DrawText(_history[i], consoleFont, 8, _openHeight - 64 - (16 * i), ALIGN_LEFT, _textColor);
 	}
 
     //_entities.RenderAll(interpolation);
