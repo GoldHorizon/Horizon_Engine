@@ -3,6 +3,8 @@
 #include "globals.h"
 #include "text.h"
 
+#include <iostream>
+
 Text* CreateText(std::string name, Font* font, SDL_Point pos, SDL_Color color, TextAlignment align)
 {
 	Text* text = new Text(name, font);
@@ -46,10 +48,23 @@ void DrawLine(int x1, int y1, int x2, int y2, SDL_Color c)
 void DrawText(std::string str, Font* font, int x, int y, TextAlignment align, SDL_Color c)
 {
 	SDL_Surface* surface = TTF_RenderText_Solid(font->font(), str.c_str(), c);
+	if (surface == nullptr) {
+		std::cout << "Error: Drawing text, can't make surface: ";
+		std::cout << TTF_GetError() << std::endl;
+		return;
+	}
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(globalRenderer, surface);
+	if (texture == nullptr) {
+		std::cout << "Error: Drawing text, can't make texture: ";
+		std::cout << TTF_GetError() << std::endl;
+		return;
+	}
 
 	SDL_Rect dest = {x, y, surface->w, surface->h};
 	
 	SDL_SetRenderDrawColor(globalRenderer, c.r, c.g, c.b, c.a);
 	SDL_RenderCopy(globalRenderer, texture, nullptr, &dest);
+
+	SDL_FreeSurface(surface);
+	SDL_DestroyTexture(texture);
 }

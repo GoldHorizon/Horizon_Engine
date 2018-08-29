@@ -121,10 +121,12 @@ void ClassName::Render(float interpolation)
 
 	for (int i = 0; i < _history.size(); i++)
 	{
-		DrawText(_history[i], consoleFont, 8, 128 + (24 * i), ALIGN_LEFT, {255, 255, 255, 255});
+		// First drop shadow, then text
+		DrawText(_history[i], consoleFont, 8 + 1, _openHeight - 64 - (16 * i) + 1, ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(_history[i], consoleFont, 8, _openHeight - 64 - (16 * i), ALIGN_LEFT, {255, 255, 255, 255});
 	}
 
-    _entities.RenderAll(interpolation);
+    //_entities.RenderAll(interpolation);
 }
 
 void ClassName::Open(bool big)
