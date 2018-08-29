@@ -1,5 +1,6 @@
 #include "../include/player.h"
 #include "../include/constants.h"
+#include "engineMethods.h"
 
 #include <iostream>
 #include <math.h>
@@ -26,6 +27,7 @@ void Player::HandleEvents(SDL_Event* event)
 	int calcDirection = 0;
 
 	// We use SDL_GetKeyboardState for continuous button presses, not key down events
+	// Need to check that actually...
 	if ((state[SDL_SCANCODE_W] ^ state[SDL_SCANCODE_S]) || (state[SDL_SCANCODE_A] ^ state[SDL_SCANCODE_D]))
 	{
 		SetSpeed(4);
@@ -112,4 +114,32 @@ void Player::Update()
 Entity* Player::NewInstance()
 {
     return new Player();
+}
+
+std::string Player::Serialize()
+{
+	std::string serialize_string = Entity::Serialize();
+
+	serialize_string += "@Player ";
+	// @@Future: Add player's member attributes to string
+
+	return serialize_string;
+}
+
+void Player::Unserialize(std::string str)
+{
+	Entity::Unserialize(str);
+
+	//std::stringstream stream(str);
+	//std::string temp;
+	//
+	////std::cout << "Back in player" << std::endl;
+
+	//stream >> temp;
+	//while (stream)
+	//{
+	//	//std::cout << temp << std::endl;
+	//	stream >> temp;
+	//	if (temp == "Player") break;
+	//}
 }

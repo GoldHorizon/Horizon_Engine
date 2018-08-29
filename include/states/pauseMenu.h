@@ -5,7 +5,7 @@
 
 #define ClassName StatePauseMenu
 
-const int MENU_SIZE = 4;
+const int MENU_SIZE = 5;
 
 class StatePauseMenu:
     public GameState
@@ -14,7 +14,10 @@ class StatePauseMenu:
 	 * Constructors/Destructors
 	 */
 protected:
-    ClassName() {SetType(GameStateType::PAUSE_MENU); Resume();}
+    ClassName() {
+		SetType(GameStateType::PAUSE_MENU); 
+		Resume();
+	}
 public:
     ~StatePauseMenu();
 	/*
@@ -28,13 +31,21 @@ public:
 	void UpdateMenu();
     void Render(float interpolation);
 
+	void AddMenuOption(std::string option, int pos = -1);
+	void ChangeMenuOption(std::string option, int pos);
+	void RemoveMenuOption(std::string option);
+	void RemoveMenuOption(int pos);
+
+	int GetSelectedOption();
+	void SetSelectedOption(int pos);
+
     static ClassName* Instance()
     {
         if (_thisInstance == nullptr)
         {
             _thisInstance = new ClassName;
+        	_thisInstance->Initialize();
         }
-        _thisInstance->Initialize();
         return _thisInstance;
     }
 
@@ -43,6 +54,7 @@ private:
 
 	Text* _menuList[MENU_SIZE];
 	int _menuOptionSelected;
+
 };
 
 #ifdef ClassName

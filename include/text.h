@@ -51,6 +51,9 @@ class Text: public Entity
 		void SetWrap(bool wrap);
 		void SetAlign(TextAlignment align);
 
+		std::string Serialize();
+		void Unserialize(std::string str);
+
 	private:
 
         // _font                - Font associated with the text
@@ -63,6 +66,7 @@ class Text: public Entity
 		int _maxWidth;			// Max width of the text before it stops/wraps
 		bool _wrap;
 		TextAlignment _align;
+
 
 		/*
 		 * Operator Overloads

@@ -1,12 +1,7 @@
 #pragma once
 
-#include <string>
-#include <map>
-#include <list>
-
 #include "entity.h"
-
-typedef std::list<Entity*> eList;
+#include "types.h"
 
 template <typename T> bool PComp(const T * const &a, const T * const &b)
 {
@@ -57,6 +52,9 @@ class EntityCollection
 		//	index:		index at which to remove entity
 		void RemoveByIndex(unsigned int index);
 
+		// ClearEntities() 	- Remove all entities from the collection
+		void ClearEntities();
+
 		// HandleAllEvents()- Handles events (such as input) for all entities in collection
 		void HandleAllEvents(SDL_Event*);
 
@@ -66,16 +64,19 @@ class EntityCollection
 		// RenderAll()		- Render every entity in collection
 		//	interpolation:		how much interpolation (prediction) to account for
 		void RenderAll(float interpolation);
+
 		/*
 		 * Get Methods
 		 */
+		Entity* operator[](int ID);
 
 		/*
 		 * Set Methods
 		 */
-	private:
+	protected:
 		// _collection			// Collection of entities
 		eList _collection;
 
+	private:
 		int nextID;
 };

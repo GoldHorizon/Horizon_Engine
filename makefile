@@ -6,19 +6,25 @@
 compiler := g++
 executable := launchEngine
 
-objects := 	main.o \
-			game.o \
-			globals.o \
-			entity.o \
-			entityCollection.o \
-			ball.o \
-			player.o \
-			gameState.o \
-			playing.o \
-			uninitialized.o \
-			pauseMenu.o \
-			text.o \
-			font.o
+objects 	:= 	main.o \
+				game.o \
+				globals.o \
+				entity.o \
+				entityCollection.o \
+				ball.o \
+				player.o \
+				file.o \
+				level.o \
+				gameState.o \
+				text.o \
+				font.o \
+				engineMethods.o \
+				drawing.o \
+				wall.o \
+				playing.o \
+				uninitialized.o \
+				pauseMenu.o \
+				editor.o
 
 win32_flags :=	-lmingw32 \
 				-lSDL2main \
@@ -105,8 +111,14 @@ entityCollection.o  : source/entityCollection.cpp include/entityCollection.h
 ball.o				: source/ball.cpp include/ball.h include/constants.h
 	gcc $(win32_gcc_flags) source/ball.cpp
 
-player.o			: source/player.cpp
+player.o			: source/player.cpp include/player.h
 	gcc $(win32_gcc_flags) source/player.cpp
+
+file.o				: source/file.cpp include/file.h
+	gcc $(win32_gcc_flags) source/file.cpp
+
+level.o				: source/level.cpp include/level.h include/file.h
+	gcc $(win32_gcc_flags) source/level.cpp
 
 gameState.o 		: source/gameState.cpp include/gameState.h
 	gcc $(win32_gcc_flags) source/gameState.cpp
@@ -117,17 +129,29 @@ text.o				: source/text.cpp include/text.h include/constants.h
 font.o				: source/font.cpp include/font.h include/constants.h
 	gcc $(win32_gcc_flags) source/font.cpp
 
+engineMethods.o		: source/engineMethods.cpp include/engineMethods.h
+	gcc $(win32_gcc_flags) source/engineMethods.cpp
+
+drawing.o			: source/drawing.cpp include/drawing.h include/globals.h include/text.h
+	gcc $(win32_gcc_flags) source/drawing.cpp
+
+wall.o				: source/wall.cpp include/wall.h
+	gcc $(win32_gcc_flags) source/wall.cpp
+
 ###
 ### List of game states to be compiled ###
 ###
-playing.o		: source/states/playing.cpp include/states/playing.h
+playing.o		: source/states/playing.cpp include/states/playing.h include/engineMethods.h
 	gcc $(win32_gcc_flags) source/states/playing.cpp
 
-uninitialized.o		: source/states/uninitialized.cpp include/states/uninitialized.h
+uninitialized.o	: source/states/uninitialized.cpp include/states/uninitialized.h
 	gcc $(win32_gcc_flags) source/states/uninitialized.cpp
 
 pauseMenu.o		: source/states/pauseMenu.cpp include/states/pauseMenu.h include/drawing.h
 	gcc $(win32_gcc_flags) source/states/pauseMenu.cpp
+
+editor.o		: source/states/editor.cpp include/states/editor.h include/gameState.h include/level.h
+	gcc $(win32_gcc_flags) source/states/editor.cpp
 
 ###
 ### Cleans object and executable files (Debug stuff)

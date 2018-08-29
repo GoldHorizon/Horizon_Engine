@@ -85,6 +85,8 @@ void EntityCollection::RemoveByName(std::string name)
 			delete (*it);
 			_collection.erase(it);
 		}
+
+		it++;
 	}
 }
 
@@ -122,6 +124,15 @@ void EntityCollection::RemoveByIndex(unsigned int index)
 
 			_collection.erase(it);
 		}		
+	}
+}
+
+void EntityCollection::ClearEntities()
+{
+	while (_collection.size() > 0)
+	{
+		delete _collection.back();
+		_collection.pop_back();
 	}
 }
 
@@ -175,5 +186,10 @@ void EntityCollection::RenderAll(float interpolation)
 
 		it++;
 	}
+}
+
+Entity* EntityCollection::operator[](int ID)
+{
+	return GetByIndex(ID);
 }
 

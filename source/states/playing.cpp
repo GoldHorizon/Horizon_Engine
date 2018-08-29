@@ -3,6 +3,9 @@
 #include "../../include/player.h"
 #include "../../include/font.h"
 #include "../../include/text.h"
+#include "file.h"
+#include "engineMethods.h"
+#include "globals.h"
 
 #define ClassName StatePlaying
 
@@ -15,34 +18,72 @@ ClassName::~ClassName()
 
 void ClassName::Initialize()
 {
-    Player* mainPlayer = new Player();
-    mainPlayer->SetName("MainPlayer");
-	mainPlayer->SetDepth(-20);
-    _entities.AddEntity(mainPlayer);
+	AddLevel("test_file.txt");
+	//AddLevel("another_test.txt");
 
-    Ball* testBall = new Ball();
-    testBall->SetPosition(128, 128);
-    testBall->SetDepth(-10);
-    testBall->SetName("TestBall");
-    _entities.AddEntity(testBall);
+    //Player* mainPlayer = new Player();
+    //mainPlayer->SetName("MainPlayer");
+	//mainPlayer->SetDepth(-20);
+    //_entities.AddEntity(mainPlayer);
 
-    Ball* testBall2 = new Ball();
-    testBall2->SetPosition(256, 512);
-    testBall2->SetDepth(10);
-    testBall2->SetName("TestBall2");
-    _entities.AddEntity(testBall2);
+    //Ball* testBall = new Ball();
+    //testBall->SetPosition(128, 128);
+    //testBall->SetDepth(-10);
+    //testBall->SetName("TestBall");
+    //_entities.AddEntity(testBall);
 
-	// Test loading fonts/texts
-	Font* testFont = new Font("Test Font");
-	testFont->LoadFont("assets/Inconsolata-Regular.ttf", 12);
+	//// Test loading fonts/texts
+	//Text* testTextLabel = new Text("This is just a test label!!!", defaultFont);
+	//testTextLabel->SetPosition({ 600, 300 });
+	//testTextLabel->SetMaxWidth(128);
+	//testTextLabel->SetWrap(true);
+	//testTextLabel->SetDepth(-40);
+	//_entities.AddEntity(testTextLabel);
+	// End test loading fonts/texts
 
-	Text* testTextLabel = new Text("This is just a test label!!!", testFont);
-	testTextLabel->SetPosition({ 128, 300 });
-	testTextLabel->SetMaxWidth(128);
-	testTextLabel->SetWrap(true);
-	testTextLabel->SetDepth(-40);
 
-	_entities.AddEntity(testTextLabel);
+	//File testFile;
+	//sVector* svp = testFile.GetDataVector();
+
+	//testFile.OpenFile("test_file.txt", false, true);
+
+	//svp->push_back(mainPlayer->Serialize());
+
+	//testFile.WriteFileData();
+
+	//testFile.CloseFile();
+
+	//sVector* testV;
+	//testV = ParseSerializedString(testTextLabel->Serialize());
+
+	//for (int i = 0; i < testV->size(); i++)
+	//{
+	//	std::cout << (*testV)[i] << std::endl;
+	//}
+	//delete testV;
+
+	//svp->clear();
+
+	//testFile.OpenFile("test_file.txt");
+
+	//testFile.ReadFileAll();
+	//testFile.PrintData();
+
+	// Base unserialization loop
+	//for (int i = 0; i < svp->size(); i++)
+	//{
+	//	Entity* test = nullptr;
+	//	test = CreateSerializedObject((*svp)[i]);
+	//	if (test == nullptr)
+	//		std::cout << "Error: Could not create serialized object from string " << i << " (returned -1 to playing.cpp)" << std::endl;
+	//	else
+	//		_entities.AddEntity(test);
+	//}
+
+	//testBall		->Unserialize((*svp)[1]);
+
+	//testFile.CloseFile();
+	//// End testing file Input/Output
 }
 
 void ClassName::Cleanup()
@@ -51,11 +92,27 @@ void ClassName::Cleanup()
 	{
 		_entities.RemoveByIndex(0);
 	}
+
+	if (_levelList.size() > 0)
+	{
+		for (int i = 0; i < _levelList.size(); i++)
+		{
+			delete _levelList[i];
+		}
+	}
 }
 
 int ClassName::HandleEvents(SDL_Event* event)
 {
 	_entities.HandleAllEvents(event);
+
+	if (_levelList.size() > 0)
+	{
+		for (int i = 0; i < _levelList.size(); i++)
+		{
+			_levelList[i]->HandleAllEvents(event);
+		}
+	}
 
 //	const Uint8 *state = SDL_GetKeyboardState(NULL);
 //
@@ -80,12 +137,92 @@ int ClassName::HandleEvents(SDL_Event* event)
 void ClassName::Update()
 {
 	if (!IsPaused())
+	{
 		_entities.UpdateAll();
+
+		if (_levelList.size() > 0)
+		{
+			//std::cout << "DEBUG: we have a level" << std::endl;
+			for (int i = 0; i < _levelList.size(); i++)
+			{
+				_levelList[i]->UpdateAll();
+			}
+		}
+	}
 }
 
 void ClassName::Render(float interpolation)
 {
     _entities.RenderAll(interpolation);
+
+	if (_levelList.size() > 0)
+	{
+		for (int i = 0; i < _levelList.size(); i++)
+		{
+			_levelList[i]->RenderAll(interpolation);
+		}
+	}
+}
+
+void ClassName::AddLevel(std::string name)
+{
+	Level* newLevel = new Level(name);
+
+	if (!newLevel->LoadFromFile())
+	{
+		std::cout << "Error: Could not add level! Level was not found" << std::endl;
+	}
+	else
+	{
+		AddLevel(newLevel);
+	}
+}
+
+void ClassName::AddLevel(Level* level)
+{
+	_levelList.push_back(level);
+}
+
+void ClassName::ChangeLevel(std::string name)
+{
+	_levelList.clear();
+
+	Level* newLevel = new Level(name);
+
+	if (!newLevel->LoadFromFile())
+	{
+		std::cout << "Error: Could not add level! Level was not found" << std::endl;
+	}
+	else
+	{
+		AddLevel(newLevel);
+	}
+}
+
+Level* ClassName::GetLevel()
+{
+	if (_levelList.size() == 1)
+	{
+		return _levelList[0];
+	}
+	if (_levelList.size() == 0)
+	{
+		std::cout << "Error: No level in level list" << std::endl;
+	}
+	else if (_levelList.size() > 1)
+	{
+		std::cout << "Error: More than 1 level in level list" << std::endl;
+	}
+
+	return nullptr;
+}
+
+void ClassName::Restart()
+{
+	for (int i = 0; i < _levelList.size(); i++)
+	{
+		_levelList[i]->LoadFromFile();
+	}
 }
 
 #ifdef ClassName

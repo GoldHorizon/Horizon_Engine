@@ -1,9 +1,10 @@
 #pragma once
 
-#include <string>
-
 #include "SDL.h"
 #include "SDL_ttf.h"
+
+#include <string>
+#include <sstream>
 
 class Font
 {
@@ -35,6 +36,9 @@ class Font
          */
         void SetSize(int size);
         void SetName(std::string name);
+
+		std::string Serialize();
+		void Unserialize(std::string str);
 
     private:
         std::string _name;

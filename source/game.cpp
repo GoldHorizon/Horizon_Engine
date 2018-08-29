@@ -9,6 +9,7 @@
 #include "../include/states/titleScreen.h"
 #include "../include/states/options.h"
 #include "../include/states/pauseMenu.h"
+#include "states/editor.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -60,6 +61,8 @@ int Game::Initialize()
 
 	// Also initialize TTF, for fonts
 	TTF_Init();
+	// After doing that, load global fonts for our use.
+	LoadFonts();
 
 	// STEP 2
 	// Setup our main window with an SDL_Window pointer
@@ -97,23 +100,25 @@ int Game::Initialize()
 	//ChangeState(StateTitleScreen::Instance());
     ChangeState(StatePlaying::Instance());
 
-	LoadFonts();
-
 	return 0;
 }
 
 void Game::LoadFonts()
 {
-//	defaultFont = new Font("Test Font", "assets/Inconsolata-Regular.ttf", 12);
+	defaultFont = new Font("DefaultFont", "assets/Inconsolata-Regular.ttf", 12);
 	menuTitleFont = new Font("MenuTitle", "assets/Inconsolata-Regular.ttf", 36);
 	menuOptionFont = new Font("MenuOption", "assets/Inconsolata-Regular.ttf", 24);
+
+	fontList[0] = defaultFont;
+	fontList[1] = menuTitleFont;
+	fontList[2] = menuOptionFont;
 }
 
 void Game::ChangeState(GameState* newState)
 {
     while (!_stateStack.empty())
     {
-        _stateStack.back()->Cleanup();
+        //_stateStack.back()->Cleanup();
         _stateStack.pop_back();
     }
 
@@ -123,14 +128,18 @@ void Game::ChangeState(GameState* newState)
 		switch(type)
 		{
 			case GameStateType::MAIN_MENU:
-				// Create buttons here
+				// Create buttons here???
+				// Probably not, do that in main menu state class...
 				break;
 
 			case GameStateType::PLAYING_GAME:
 				break;
 
+			case GameStateType::LEVEL_EDITOR:
+				break;
+
 			default:
-				std::cerr << "ERROR: Trying to change to error state" << std::endl;
+				//std::cerr << "ERROR: Trying to change to error state" << std::endl;
 				//_stateStack.push_back(StateUninitialized::Instance());
 				break;
 		}
@@ -146,7 +155,7 @@ void Game::PushState(GameState* newState)
 
 void Game::PopState()
 {
-    _stateStack.back()->Cleanup();
+    //_stateStack.back()->Cleanup();
     _stateStack.pop_back();
 }
 
@@ -208,7 +217,7 @@ bool Game::GetInput()
 			case CLOSE_MENU:
 				//std::cout << "Closing menu..." << std::endl;
 				if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
-					_stateStack.back()->Cleanup();
+					//_stateStack.back()->Cleanup();
 					_stateStack.pop_back();
 					_stateStack.back()->Resume();
 				}
@@ -220,6 +229,51 @@ bool Game::GetInput()
 				// @todo: reimplement pause as boolean in game state class, to stop processing updates (but continue updating the display
 					(*it)->Pause();
 					PushState(StatePauseMenu::Instance());
+					StatePauseMenu::Instance()->SetSelectedOption(0);
+					StatePauseMenu::Instance()->ChangeMenuOption("Edit", 2);
+					//StatePauseMenu::Instance()->RemoveMenuOption(2);
+				}
+
+				if ((*it)->GetType() == GameStateType::LEVEL_EDITOR) {
+				// @todo: reimplement pause as boolean in game state class, to stop processing updates (but continue updating the display
+					(*it)->Pause();
+					PushState(StatePauseMenu::Instance());
+					StatePauseMenu::Instance()->SetSelectedOption(0);
+					StatePauseMenu::Instance()->ChangeMenuOption("Play", 2);
+					//StatePauseMenu::Instance()->RemoveMenuOption(2);
+				}
+				break;
+
+			case LEVEL_EDITOR:
+				{
+					std::cout << "Changing to level editor..." << std::endl;
+					ChangeState(StateEditor::Instance());
+
+					Level* temp = StatePlaying::Instance()->GetLevel();
+					if (temp != nullptr) {
+						StateEditor::Instance()->SetLevel(temp->GetFileName());
+					}
+
+					StateEditor::Instance()->Resume(); 
+				}
+				break;
+
+			case PLAY_MODE:
+				std::cout << "Changing back to play mode..." << std::endl;
+				ChangeState(StatePlaying::Instance());
+
+				StatePlaying::Instance()->ChangeLevel(StateEditor::Instance()->GetLevel());
+				StatePlaying::Instance()->Resume(); 
+				break;
+
+			case RESTART:
+				StatePlaying::Instance()->Restart();
+				StateEditor::Instance()->ResetLevel();
+
+				if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
+					//_stateStack.back()->Cleanup();
+					_stateStack.pop_back();
+					_stateStack.back()->Resume();
 				}
 				break;
 
@@ -228,6 +282,7 @@ bool Game::GetInput()
 				break;
 
 			default:
+				std::cout << "Unimplemented option selected..." << std::endl;
 				break;
 			}
 		}

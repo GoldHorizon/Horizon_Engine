@@ -7,13 +7,25 @@ enum class GameStateType
 	MAIN_MENU,
 	OPTIONS,
 	PLAYING_GAME,
-	PAUSE_MENU
+	PAUSE_MENU,
+	LEVEL_EDITOR
+};
+
+enum class EditorEntityType {
+	PLAYER = 0,
+	BALL,
+	WALL,
+	Count
 };
 
 enum KeyEvents {
 	GAME_QUIT,
 	OPEN_MENU,
-	CLOSE_MENU
+	CLOSE_MENU,
+	OPTIONS_MENU,
+	RESTART,
+	LEVEL_EDITOR,
+	PLAY_MODE
 };
 
 enum TextAlignment {

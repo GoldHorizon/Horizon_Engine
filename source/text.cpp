@@ -1,5 +1,7 @@
 #include "../include/text.h"
 #include "../include/constants.h"
+#include "engineMethods.h"
+#include "globals.h"
 
 #include <iostream>
 
@@ -18,7 +20,8 @@ Text::Text(std::string text, Font* font) :
 	_wrap(false),
 	_align(ALIGN_LEFT)
 {
-	SetText(text);
+	if (_font != nullptr)
+		SetText(text);
 }
 
 Text::~Text()
@@ -63,6 +66,7 @@ void Text::Render(float interpolation)
 
 void Text::UpdateImage()
 {
+	//std::cout << "DEBUG: Updating image" << std::endl;
 	if (_font == nullptr)
 	{
 		std::cerr << "Cannot change text, no font specified!" << std::endl;
@@ -155,6 +159,107 @@ void Text::SetWrap(bool wrap)
 void Text::SetAlign(TextAlignment align)
 {
 	_align = align;
+}
+
+std::string Text::Serialize()
+{
+	std::string serialize_string = Entity::Serialize();
+
+	serialize_string += "@Text ";
+
+	serialize_string += "\"" + _text + "\"" + " "
+		+ std::to_string(_color.r) + " "
+		+ std::to_string(_color.g) + " "
+		+ std::to_string(_color.b) + " "
+		+ std::to_string(_color.a) + " "
+		+ std::to_string(_maxWidth) + " "
+		+ std::to_string(_wrap) + " "
+		+ std::to_string(static_cast<int>(_align));
+
+	//serialize_string += " " + _font->Serialize();
+	serialize_string += " \"" + _font->name() + "\"";
+
+	return serialize_string;
+}
+
+void Text::Unserialize(std::string str)
+{
+	Entity::Unserialize(str);
+
+	sVector* list = ParseSerializedString(str);
+
+	int index = 0;
+
+	while ((*list)[index] != "@Text" && index < list->size())
+		index++;
+
+	if ((*list)[index++] == "@Text")
+	{
+		_text			= (*list)[index++];
+		_color.r		= stoi((*list)[index++]);
+		_color.g		= stoi((*list)[index++]);
+		_color.b		= stoi((*list)[index++]);
+		_color.a		= stoi((*list)[index++]);
+		_maxWidth		= stoi((*list)[index++]);
+		_wrap			= (*list)[index++] == "1" ? true : false;
+		int a;
+		a				= stoi((*list)[index++]);
+		_align = static_cast<TextAlignment>(a);
+
+		std::string f	= (*list)[index++];
+
+		if (_font != nullptr) { 
+			delete _font;
+			_font = nullptr;
+		}
+
+		for (int i = 0; i < FONT_COUNT; i++)
+		{
+			if (f == fontList[i]->name()) {
+				_font = fontList[i];
+				std::cout << "Found font with name " + f << std::endl;
+				break;
+			}
+		}
+
+		if (_font == nullptr)
+			std::cout << "Error: Could not deserialize to a global font" << std::endl;
+
+		UpdateImage();
+		//_font->Unserialize(str);
+	}
+			
+	delete list;
+
+	//std::stringstream stream(str);
+	//std::string temp;
+
+	//stream >> temp;
+	//while (stream)
+	//{
+	//	//std::cout << temp << std::endl;
+	//	if (temp == "Text") 
+	//	{
+	//		stream >> _text;
+	//		stream >> _color.r;
+	//		stream >> _color.g;
+	//		stream >> _color.b;
+	//		stream >> _color.a;
+	//		stream >> _maxWidth;
+	//		stream >> _wrap;
+	//		int a;
+	//		stream >> a;
+	//		_align = static_cast<TextAlignment>(a);
+
+	//		UpdateImage();
+
+	//		_font->Unserialize(str);
+
+	//		break;
+	//	}
+
+	//	stream >> temp;
+	//}
 }
 
 bool operator<(const Text &el, const Text &er)

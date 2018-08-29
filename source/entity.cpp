@@ -1,6 +1,7 @@
 #include "../include/entity.h"
 #include "../include/globals.h"
 #include "../include/constants.h"
+#include "engineMethods.h"
 
 #include <iostream>
 #include <math.h>
@@ -14,8 +15,9 @@ Entity::Entity() : Entity(globalRenderer)
 
 Entity::Entity(SDL_Renderer* renderer):
 	_image(nullptr),
+	_imagePath("nopath"),
 	_renderer(renderer),
-	_name(""),
+	_name("noname"),
 	_ID(0),
 	_active(true),
 	_visible(true),
@@ -75,6 +77,8 @@ void Entity::LoadFromFile(const std::string file, int spriteWidth, int spriteHei
 		// Free up our surface when we're done
 		SDL_FreeSurface(tempSurface);
 
+		_imagePath = file;
+
 		// DEBUG
 		//std::cout << _imageWidth << std::endl
 		//	<< _imageHeight << std::endl
@@ -96,6 +100,7 @@ void Entity::LoadFromSurface(SDL_Surface* surface)
 	if (surface != nullptr)
 	{
 		_image = SDL_CreateTextureFromSurface(_renderer, surface);
+		_imagePath = "nopath";
 
 		_imageWidth = surface->w;
 		_imageHeight = surface->h;
@@ -271,6 +276,78 @@ Entity* Entity::NewInstance()
 	return nullptr;
 }
 
+std::string Entity::Serialize()
+{
+	std::string serialize_string;
+
+	serialize_string = "@Entity ";
+	serialize_string += "\"" + _imagePath + "\"" + " "
+		+ "\"" + _name + "\"" + " "
+		+ std::to_string(_active) + " "
+		+ std::to_string(_visible) + " "
+		+ std::to_string(_x) + " "
+		+ std::to_string(_y) + " "
+		+ std::to_string(_depth) + " "
+		+ std::to_string(_direction) + " "
+		+ std::to_string(_speed) + " "
+		+ std::to_string(_hspeed) + " "
+		+ std::to_string(_vspeed) + " "
+		+ std::to_string(_imageAlpha) + " "
+		+ std::to_string(_imageAngle) + " "
+		+ std::to_string(_imageWidth) + " "
+		+ std::to_string(_imageHeight) + " "
+		+ std::to_string(_imageSpeed) + " "
+		+ std::to_string(_imageTimer) + " "
+		+ std::to_string(_lastImageTime) + " "
+		+ std::to_string(_imageIndex) + " "
+		+ std::to_string(_imageOrigin.x) + " "
+		+ std::to_string(_imageOrigin.y) + " "
+		+ std::to_string(_spriteDimensions.x) + " "
+		+ std::to_string(_spriteDimensions.y) + " ";
+
+	return serialize_string;
+}
+
+void Entity::Unserialize(std::string str)
+{
+	sVector* list = ParseSerializedString(str);
+
+	int index = 0;
+
+	while ((*list)[index] != "@Entity" && index < list->size())
+		index++;
+
+	if ((*list)[index++] == "@Entity")
+	{
+		_imagePath 			= (*list)[index++];
+		_name 				= (*list)[index++];
+		_active 			= (*list)[index++] == "1" ? true : false;	
+		_visible 			= (*list)[index++] == "1" ? true : false;	
+		_x					= std::stof((*list)[index++]);	
+		_y					= std::stof((*list)[index++]);
+		_depth 				= std::stof((*list)[index++]);
+		_direction 			= std::stof((*list)[index++]);
+		_speed 				= std::stof((*list)[index++]);
+		_hspeed 			= std::stof((*list)[index++]);
+		_vspeed 			= std::stof((*list)[index++]);
+		_imageAlpha 		= std::stof((*list)[index++]);
+		_imageAngle 		= std::stod((*list)[index++]);
+		_imageWidth 		= std::stoi((*list)[index++]);
+		_imageHeight 		= std::stoi((*list)[index++]);
+		_imageSpeed 		= std::stoi((*list)[index++]);
+		_imageTimer 		= std::stoi((*list)[index++]);
+		_lastImageTime 		= std::stoi((*list)[index++]);
+		_imageIndex 		= std::stoi((*list)[index++]);
+		_imageOrigin.x 		= std::stoi((*list)[index++]);
+		_imageOrigin.y 		= std::stoi((*list)[index++]);
+		_spriteDimensions.x = std::stoi((*list)[index++]);
+		_spriteDimensions.y = std::stoi((*list)[index++]);
+	}
+
+	delete list;
+
+}
+
 /*
  * Get Methods
  */
@@ -366,7 +443,14 @@ SDL_Point Entity::spriteDimensions() const
  */
 void Entity::SetName(std::string name)
 {
-	_name = name;
+	if (name != "")
+	{
+		_name = name;
+	}
+	else
+	{
+		_name = "noname";
+	}
 }
 void Entity::SetID(int ID)
 {

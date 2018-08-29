@@ -1,5 +1,6 @@
 #include "../include/font.h"
 #include "../include/constants.h"
+#include "engineMethods.h"
 
 #include <iostream>
 
@@ -109,3 +110,58 @@ void Font::SetName(std::string name)
 {
 	_name = name;
 }
+
+std::string Font::Serialize()
+{
+	std::string serialize_string = "Font ";
+
+	serialize_string += "\"" + _name + "\"" + " "
+		+ "\"" + _file + "\"" + " "
+		+ std::to_string(_size);
+
+	return serialize_string;
+}
+
+void Font::Unserialize(std::string str)
+{
+	sVector* list = ParseSerializedString(str);
+
+	int index = 0;
+
+	while ((*list)[index] != "Font" && index < list->size())
+		index++;
+
+	if ((*list)[index++] == "Font")
+	{
+		_name		= (*list)[index++];
+		_file		= (*list)[index++];
+		_size		= std::stoi((*list)[index++]);
+
+		LoadFont(_file, _size);
+	}
+			
+	delete list;
+
+	//std::stringstream stream(str);
+	//std::string temp;
+
+	//stream >> temp;
+	//while (stream)
+	//{
+	//	//std::cout << temp << std::endl;
+	//	if (temp == "Font") 
+	//	{
+	//		stream >> _name;
+	//		stream >> _file;
+	//		stream >> _size;
+
+	//		LoadFont(_file, _size);
+
+	//		break;
+	//	}
+
+	//	stream >> temp;
+	//}
+}
+
+
