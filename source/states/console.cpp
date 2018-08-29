@@ -1,6 +1,7 @@
 #include "states/console.h"
 #include "drawing.h"
 #include "globals.h"
+#include "engineMethods.h"
 
 #include <iostream>
 
@@ -46,10 +47,18 @@ int ClassName::HandleEvents(SDL_Event* event)
 			break;
 
 		case SDLK_BACKQUOTE:
-			std::cout << "CONSOLE DETECTED BACKQUOTE" << std::endl;
-			if (_isOpenBig || _isOpenSmall)
+			//std::cout << "CONSOLE DETECTED BACKQUOTE" << std::endl;
+			bool lshift = event->key.keysym.mod & KMOD_LSHIFT;
+
+			if (_isOpenBig)
 			{
-				Close();
+				if (lshift) Close();
+				else Open(false);
+			}
+			else if (_isOpenSmall)
+			{
+				if (!lshift) Close();
+				else Open(true);
 			}
 			else
 			{
@@ -73,25 +82,23 @@ int ClassName::HandleEvents(SDL_Event* event)
 
 void ClassName::Update()
 {
+	int rate = SCREEN_HEIGHT * _openHeightBig * _openRate;
+
 	if (_isOpenBig || _isOpenSmall)
 	{
-		_openHeight += (SCREEN_HEIGHT * _openHeightBig) * _openRate;
 		if (_isOpenBig)
 		{
-			if (_openHeight >  SCREEN_HEIGHT * _openHeightBig)
-				_openHeight = (SCREEN_HEIGHT * _openHeightBig);
+			int maxHeight = SCREEN_HEIGHT * _openHeightBig;
+			Lerp<int>(_openHeight, maxHeight, rate);
 		}
 		else if (_isOpenSmall)
 		{
-			if (_openHeight >  SCREEN_HEIGHT * _openHeightSmall)
-				_openHeight = (SCREEN_HEIGHT * _openHeightSmall);
+			int maxHeight = SCREEN_HEIGHT * _openHeightSmall;
+			Lerp<int>(_openHeight, maxHeight, rate);
 		}
 	}
 	else if (_openHeight > 0) {
-		// Subtract open height until we get to 0.
-		_openHeight -= (SCREEN_HEIGHT * _openHeightBig) * _openRate;
-
-		if (_openHeight < 0) _openHeight = 0;
+		Lerp<int>(_openHeight, 0, rate);
 	}
 
 	if (IsClosed()) 
