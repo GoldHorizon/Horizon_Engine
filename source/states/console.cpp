@@ -32,9 +32,11 @@ void ClassName::Initialize()
 	// This is a fraction of how fast the console opens
 	_openRate = 0.04;
 
-	ParseCommand("This is a nice test string! abcdefghijklmnopqrstuvwxyz");
-	ParseCommand("Second test");
-	ParseCommand("Third, final test");
+	//ParseCommand("This is a nice test string! abcdefghijklmnopqrstuvwxyz");
+	//ParseCommand("Second test");
+	//ParseCommand("Third, final test");
+
+	_currentLine = "";
 }
 
 void ClassName::Cleanup()
@@ -99,7 +101,9 @@ int ClassName::HandleEvents(SDL_Event* event)
 	}
 	else if (event->type == SDL_TEXTINPUT)
 	{
-		_currentLine += event->text.text;
+		char c = event->text.text[0];
+		if (c != '`' && c != '~')
+			_currentLine += event->text.text;
 	}
 	//else if (event->type == SDL_TEXTEDITING)
 	//{
@@ -144,6 +148,8 @@ void ClassName::Render(float interpolation)
 {
 	if (_openHeight > 0) {
 		DrawRect(0, 0, SCREEN_WIDTH, _openHeight, _consoleColor);
+		DrawLine(0, _openHeight - 40, SCREEN_WIDTH, _openHeight - 40, SDL_Color {255, 255, 255, 255});
+		DrawLine(0, _openHeight - 39, SCREEN_WIDTH, _openHeight - 39, SDL_Color {0, 0, 0, 255});
 	}
 
 	for (int i = 0; i < _history.size(); i++)
@@ -164,6 +170,9 @@ void ClassName::Render(float interpolation)
 
 void ClassName::Open(bool big)
 {
+	if (IsClosed())
+		_currentLine = "";
+
 	if (big) {
 		_isOpenBig = true;
 		_isOpenSmall = false;
