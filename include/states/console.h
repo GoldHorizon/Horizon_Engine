@@ -57,6 +57,8 @@ private:
 	float _openHeightBig;
 	float _openHeightSmall;
 
+	int _cursorPosition;
+
 	std::string _currentLine;
 	std::string _savedLine;
 	int _currentLineSelected;

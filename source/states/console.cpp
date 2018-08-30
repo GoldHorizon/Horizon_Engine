@@ -40,6 +40,8 @@ void ClassName::Initialize()
 	_currentLine = "";
 	_savedLine = "";
 	_currentLineSelected = -1;
+
+	_cursorPosition = 0;
 }
 
 void ClassName::Cleanup()
@@ -95,22 +97,30 @@ int ClassName::HandleEvents(SDL_Event* event)
 					// Delete any spaces before the last word
 					while (_currentLine.size() > 0 && _currentLine.back() == ' ')
 						_currentLine.pop_back();
+
+					_cursorPosition = _currentLine.size();
 				}
 				else
 				{
 					// Delete last character
 					if (_currentLine.size() > 0)
 						_currentLine.pop_back();
+
+					_cursorPosition--;
+
+					if (_cursorPosition < 0) _cursorPosition = 0;
 				}
 			}
 			break;
 
 		case SDLK_UP:
 			SelectLine(_currentLineSelected + 1);
+			_cursorPosition = _currentLine.size();
 			break;
 
 		case SDLK_DOWN:
 			SelectLine(_currentLineSelected - 1);
+			_cursorPosition = _currentLine.size();
 			break;
 
 		case SDLK_RETURN:
@@ -120,6 +130,7 @@ int ClassName::HandleEvents(SDL_Event* event)
 					_currentLine = "";
 				
 				_currentLineSelected = -1;
+				_cursorPosition = 0;
 			}
 			break;
 		}
@@ -127,8 +138,14 @@ int ClassName::HandleEvents(SDL_Event* event)
 	else if (event->type == SDL_TEXTINPUT)
 	{
 		char c = event->text.text[0];
-		if (c != '`' && c != '~')
+		if (c != '`' && c != '~') {
 			_currentLine += event->text.text;
+			_cursorPosition++;
+		}
+	}
+	else if (event->type == SDL_TEXTEDITING)
+	{
+		std::cout << "DEBUG testin editing input?" << std::endl;
 	}
 
 	return -1;
@@ -177,6 +194,9 @@ void ClassName::Render(float interpolation)
 		DrawText(_history[i], consoleFont, 8, _openHeight - 64 - (16 * i), ALIGN_LEFT, _textColor);
 	}
 
+	// Draw the cursor
+	DrawRect((_cursorPosition * 8) + 9, static_cast<int>(_openHeight - 32), 10, 20, SDL_Color {180, 0, 0, 255});
+
 	// Also draw current line being typed
 	if (_currentLine != "") {
 		DrawText(_currentLine, consoleFont, 8 + 1, _openHeight - 32 + 1, ALIGN_LEFT, {0, 0, 0, 255});
@@ -207,10 +227,7 @@ void ClassName::Close()
 	_isOpenSmall = false;
 	_isOpenBig = false;
 
-	//if (SDL_IsTextInputActive())
-	//{
 	SDL_StopTextInput();
-	//}
 }
 
 bool ClassName::IsOpen()
@@ -257,18 +274,19 @@ void ClassName::ParseCommand(std::string str)
 {
 	if (str.size() > 0)
 	{
+		//std::cout << str.trim() << std::endl;
 		_history.insert(_history.begin(), str);
 
 		std::stringstream stream(str);
 		std::string next;
 
-		stream >> next;
+		//stream >> next;
 		//std::cout << "Command:\t\t" << next << std::endl;
-		stream >> next;
-		while (stream) {
-			//std::cout << "\tArgument:\t" << next << std::endl;	
-			stream >> next;
-		}
+		//stream >> next;
+		//while (stream) {
+		//	std::cout << "\tArgument:\t" << next << std::endl;	
+		//	stream >> next;
+		//}
 	}
 }
 
