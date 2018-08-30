@@ -5,6 +5,7 @@
 #include "enumerations.h"
 
 #include <iostream>
+#include <sstream>
 
 #define ClassName StateConsole
 
@@ -85,16 +86,35 @@ int ClassName::HandleEvents(SDL_Event* event)
 
 		case SDLK_BACKSPACE:
 			{
-			if (_currentLine.size() > 0)
-				_currentLine.pop_back();
+				if (event->key.keysym.mod & KMOD_CTRL)
+				{
+					// Delete any space behind the last word
+					while (_currentLine.size() > 0 && _currentLine.back() == ' ')
+						_currentLine.pop_back();
+
+					// Delete the last word on the line
+					if (_currentLine.size() == 0) break;
+					while (_currentLine.size() > 0 && _currentLine.back() != ' ')
+						_currentLine.pop_back();
+
+					// Delete any spaces before the last word
+					while (_currentLine.size() > 0 && _currentLine.back() == ' ')
+						_currentLine.pop_back();
+				}
+				else
+				{
+					// Delete last character
+					if (_currentLine.size() > 0)
+						_currentLine.pop_back();
+				}
 			}
 			break;
 
 		case SDLK_RETURN:
 			{
-			if (_currentLine.size() > 0)
-				ParseCommand(_currentLine);
-				_currentLine = "";
+				if (_currentLine.size() > 0)
+					ParseCommand(_currentLine);
+					_currentLine = "";
 			}
 			break;
 		}
@@ -105,13 +125,6 @@ int ClassName::HandleEvents(SDL_Event* event)
 		if (c != '`' && c != '~')
 			_currentLine += event->text.text;
 	}
-	//else if (event->type == SDL_TEXTEDITING)
-	//{
-
-
-	//}
-
-	//if (IsClosed()) return CLOSE_CONSOLE;
 
 	return -1;
 }
@@ -197,7 +210,21 @@ void ClassName::Close()
 
 void ClassName::ParseCommand(std::string str)
 {
-	_history.insert(_history.begin(), str);
+	if (str.size() > 0)
+	{
+		_history.insert(_history.begin(), str);
+
+		std::stringstream stream(str);
+		std::string next;
+
+		stream >> next;
+		std::cout << "Command:\t\t" << next << std::endl;
+		stream >> next;
+		while (stream) {
+			std::cout << "\tArgument:\t" << next << std::endl;	
+			stream >> next;
+		}
+	}
 }
 
 bool ClassName::IsOpen()
