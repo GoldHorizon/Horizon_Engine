@@ -31,9 +31,11 @@ public:
 
 	void Open(bool big = false);
 	void Close();
-	void ParseCommand(std::string str);
 	bool IsOpen();
 	bool IsClosed();
+	
+	void SelectLine(int line);
+	void ParseCommand(std::string str);
 
     static ClassName* Instance()
     {
@@ -56,6 +58,8 @@ private:
 	float _openHeightSmall;
 
 	std::string _currentLine;
+	std::string _savedLine;
+	int _currentLineSelected;
 
 	SDL_Color _consoleColor;
 	SDL_Color _textColor;

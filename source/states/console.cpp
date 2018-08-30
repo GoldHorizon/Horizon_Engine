@@ -38,6 +38,8 @@ void ClassName::Initialize()
 	//ParseCommand("Third, final test");
 
 	_currentLine = "";
+	_savedLine = "";
+	_currentLineSelected = -1;
 }
 
 void ClassName::Cleanup()
@@ -73,13 +75,6 @@ int ClassName::HandleEvents(SDL_Event* event)
 				else
 				{
 					Open(event->key.keysym.mod & KMOD_LSHIFT);
-					//if (event->key.keysym.mod == KMOD_LSHIFT) {
-					//	_isOpenBig = true;
-					//	_isOpenSmall = false;
-					//} else {
-					//	_isOpenSmall = true;
-					//	_isOpenBig = false;
-					//}
 				}
 			}
 			break;
@@ -110,11 +105,21 @@ int ClassName::HandleEvents(SDL_Event* event)
 			}
 			break;
 
+		case SDLK_UP:
+			SelectLine(_currentLineSelected + 1);
+			break;
+
+		case SDLK_DOWN:
+			SelectLine(_currentLineSelected - 1);
+			break;
+
 		case SDLK_RETURN:
 			{
 				if (_currentLine.size() > 0)
 					ParseCommand(_currentLine);
 					_currentLine = "";
+				
+				_currentLineSelected = -1;
 			}
 			break;
 		}
@@ -208,25 +213,6 @@ void ClassName::Close()
 	//}
 }
 
-void ClassName::ParseCommand(std::string str)
-{
-	if (str.size() > 0)
-	{
-		_history.insert(_history.begin(), str);
-
-		std::stringstream stream(str);
-		std::string next;
-
-		stream >> next;
-		std::cout << "Command:\t\t" << next << std::endl;
-		stream >> next;
-		while (stream) {
-			std::cout << "\tArgument:\t" << next << std::endl;	
-			stream >> next;
-		}
-	}
-}
-
 bool ClassName::IsOpen()
 {
 	//std::cout << "_openHeight\t\t" << _openHeight << std::endl;
@@ -249,6 +235,41 @@ bool ClassName::IsOpen()
 bool ClassName::IsClosed()
 {
 	return (_openHeight == 0 && !_isOpenBig && !_isOpenSmall);
+}
+
+void ClassName::SelectLine(int line)
+{
+	if (_currentLineSelected == -1 && line >= 0) {
+		_savedLine = _currentLine;	
+	}
+
+	if (line >= 0 && line < _history.size()) {
+		_currentLineSelected = line;
+		_currentLine = _history[line];
+	}
+	else if (line == -1) {
+		_currentLine = _savedLine;
+		_currentLineSelected = line;
+	}
+}
+
+void ClassName::ParseCommand(std::string str)
+{
+	if (str.size() > 0)
+	{
+		_history.insert(_history.begin(), str);
+
+		std::stringstream stream(str);
+		std::string next;
+
+		stream >> next;
+		//std::cout << "Command:\t\t" << next << std::endl;
+		stream >> next;
+		while (stream) {
+			//std::cout << "\tArgument:\t" << next << std::endl;	
+			stream >> next;
+		}
+	}
 }
 
 #ifdef ClassName
