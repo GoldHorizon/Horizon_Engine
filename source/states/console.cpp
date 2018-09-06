@@ -126,13 +126,27 @@ int ClassName::HandleEvents(SDL_Event* event)
 			break;
 
 		case SDLK_UP:
-			SelectLine(_currentLineSelected + 1);
-			_cursorPosition = _currentLine.size();
+			{
+				int i = _currentLineSelected + 1;
+				while (i < _history.size()
+						&& _history[i].type != c_line_type::INPUT) {
+					i++;
+				}
+				SelectLine(i);
+				_cursorPosition = _currentLine.size();
+			}
 			break;
 
 		case SDLK_DOWN:
-			SelectLine(_currentLineSelected - 1);
-			_cursorPosition = _currentLine.size();
+			{
+				int i = _currentLineSelected - 1;
+				while (i >= 0
+						&& _history[i].type != c_line_type::INPUT) {
+					i--;
+				}
+				SelectLine(i);
+				_cursorPosition = _currentLine.size();
+			}
 			break;
 
 		case SDLK_RETURN:
@@ -290,8 +304,10 @@ void ClassName::SelectLine(int line)
 	}
 
 	if (line >= 0 && line < _history.size()) {
-		_currentLineSelected = line;
-		_currentLine = _history[line].text;
+		if (_history[line].type == c_line_type::INPUT) {
+			_currentLineSelected = line;
+			_currentLine = _history[line].text;
+		}
 	}
 	else if (line == -1) {
 		_currentLine = _savedLine;
