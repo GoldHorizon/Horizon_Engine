@@ -35,6 +35,8 @@ Game::Game():
 
 	commands["quit"] = quit_game_command;
 	commands["exit"] = quit_game_command;
+
+	//commands["close"] = [this](sVector args) { CloseConsole(); };
 }
 
 Game::~Game()

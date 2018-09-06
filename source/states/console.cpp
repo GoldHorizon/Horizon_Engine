@@ -54,6 +54,25 @@ void ClassName::Initialize()
 		AddOutput("Argument count: " + std::to_string(args.size()));
 	};
 	commands["test"] = test_func;
+
+	// List command
+	auto list_command = [this](sVector args) {
+		std::string list;
+		std::map<std::string, std::function<void(sVector)>>::iterator it = commands.begin();
+		
+		list += it->first;
+
+		while (++it != commands.end())
+		{
+			list += ",\t";
+
+			list += it->first;
+		}
+
+		AddOutput(list);
+	};
+
+	commands["list"] = list_command;
 }
 
 void ClassName::Cleanup()
@@ -253,6 +272,8 @@ void ClassName::Open(bool big)
 {
 	if (IsClosed())
 		_currentLine = "";
+		_currentLineSelected = -1;
+		_cursorPosition = 0;
 
 	if (big) {
 		_isOpenBig = true;
