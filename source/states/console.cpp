@@ -3,9 +3,11 @@
 #include "globals.h"
 #include "engineMethods.h"
 #include "enumerations.h"
+#include "types.h"
 
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 #define ClassName StateConsole
 
@@ -22,7 +24,9 @@ void ClassName::Initialize()
 	_isOpenSmall = false;
 
 	_consoleColor = {0, 50, 50, 255};
-	_textColor = {255, 255, 255, 255};
+	_textInputColor = {255, 255, 255, 255};
+	_textOutputColor = {255, 0, 255, 255};
+	_textErrorColor = {255, 30, 40, 255};
 	
 	// This is how open the console is in terms of pixels
 	_openHeight = 0;
@@ -42,6 +46,14 @@ void ClassName::Initialize()
 	_currentLineSelected = -1;
 
 	_cursorPosition = 0;
+
+	// Test command!
+	auto test_func = [this](sVector args) {
+		//std::cout << "Argument count: " << args.size() << std::endl;
+		//std::for_each (args.begin(), args.end(), [](std::string s) { std::cout << "\t" << s << std::endl; });
+		AddOutput("Argument count: " + std::to_string(args.size()));
+	};
+	commands["test"] = test_func;
 }
 
 void ClassName::Cleanup()
@@ -190,8 +202,25 @@ void ClassName::Render(float interpolation)
 	for (int i = 0; i < _history.size(); i++)
 	{
 		// First drop shadow, then text
-		DrawText(_history[i], consoleFont, 8 + 1, _openHeight - 64 - (16 * i) + 1, ALIGN_LEFT, {0, 0, 0, 255});
-		DrawText(_history[i], consoleFont, 8, _openHeight - 64 - (16 * i), ALIGN_LEFT, _textColor);
+		DrawText(_history[i].text, consoleFont, 8 + 1, _openHeight - 64 - (16 * i) + 1, ALIGN_LEFT, {0, 0, 0, 255});
+
+		// Decide text color based on text type
+		SDL_Color *text_c;
+		switch (_history[i].type)
+		{
+			case c_line_type::INPUT:
+				text_c = &_textInputColor;
+				break;
+
+			case c_line_type::OUTPUT:
+				text_c = &_textOutputColor;
+				break;
+
+			case c_line_type::ERROR:
+				text_c = &_textErrorColor;
+				break;
+		}
+		DrawText(_history[i].text, consoleFont, 8, _openHeight - 64 - (16 * i), ALIGN_LEFT, *text_c);
 	}
 
 	// Draw the cursor
@@ -200,7 +229,7 @@ void ClassName::Render(float interpolation)
 	// Also draw current line being typed
 	if (_currentLine != "") {
 		DrawText(_currentLine, consoleFont, 8 + 1, _openHeight - 32 + 1, ALIGN_LEFT, {0, 0, 0, 255});
-		DrawText(_currentLine, consoleFont, 8, _openHeight - 32, ALIGN_LEFT, _textColor);
+		DrawText(_currentLine, consoleFont, 8, _openHeight - 32, ALIGN_LEFT, _textInputColor);
 	}
 
     //_entities.RenderAll(interpolation);
@@ -262,7 +291,7 @@ void ClassName::SelectLine(int line)
 
 	if (line >= 0 && line < _history.size()) {
 		_currentLineSelected = line;
-		_currentLine = _history[line];
+		_currentLine = _history[line].text;
 	}
 	else if (line == -1) {
 		_currentLine = _savedLine;
@@ -275,30 +304,50 @@ void ClassName::ParseCommand(std::string str)
 	if (str.size() > 0)
 	{
 		//std::cout << str.trim() << std::endl;
-		_history.insert(_history.begin(), str);
+		_history.insert(_history.begin(), c_line(str, c_line_type::INPUT));
 
 		std::stringstream stream(str);
-		std::string next;
+		std::string command;
+		std::string next_arg;
 
-		stream >> next;
-		std::cout << "Command:\t\t" << next << std::endl;
+		stream >> command;
+		//std::cout << "Command:\t\t" << next_arg << std::endl;
 
-		if (commands.find(next) != commands.end())
+		sVector args;
+
+		stream >> next_arg;
+		while (stream) {
+			//std::cout << "\tArgument:\t" << next_arg << std::endl;	
+			args.push_back(next_arg);
+			stream >> next_arg;
+		}
+
+		if (commands.find(command) != commands.end())
 		{
-			commands[next](str);
+			// Execute command with arg list given
+			commands[command](args);
 		}
 		else
 		{
-			std::cout << "Error: Could not find command " << next << "!" << std::endl;
+			//std::cout << "Error: Could not find command " << command << "!" << std::endl;
+			AddError("Error: Could not find command " + command);
 		}
-		
-		//stream >> next;
-		//while (stream) {
-		//	std::cout << "\tArgument:\t" << next << std::endl;	
-		//	stream >> next;
-		//}
 	}
 }
+
+void ClassName::AddOutput(std::string str)
+{
+	_history.insert(_history.begin(), c_line(str, c_line_type::OUTPUT));
+}
+
+void ClassName::AddError(std::string str)
+{
+	_history.insert(_history.begin(), c_line(str, c_line_type::ERROR));
+}
+
+c_line::c_line(std::string s, c_line_type t) :
+	text(s),
+	type(t) {}
 
 #ifdef ClassName
 #undef ClassName

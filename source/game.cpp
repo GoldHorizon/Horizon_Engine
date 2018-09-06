@@ -3,6 +3,7 @@
 #include "../include/constants.h"
 #include "../include/ball.h"
 #include "enumerations.h"
+#include "types.h"
 
 #include "../include/states/playing.h"
 #include "../include/states/uninitialized.h"
@@ -30,7 +31,10 @@ Game::Game():
     // Set our stack to only be uninitialized.
     _stateStack.push_back(StateUninitialized::Instance());
 
-	commands["quit"] = [this](std::string args) -> void { QuitGame(); };
+	auto quit_game_command = [this](sVector args) { QuitGame(); };
+
+	commands["quit"] = quit_game_command;
+	commands["exit"] = quit_game_command;
 }
 
 Game::~Game()

@@ -5,6 +5,9 @@
 
 #define ClassName StateConsole
 
+struct c_line;
+enum class c_line_type;
+
 class StateConsole:
 	public GameState
 {
@@ -37,6 +40,9 @@ public:
 	void SelectLine(int line);
 	void ParseCommand(std::string str);
 
+	void AddOutput(std::string str);
+	void AddError(std::string str);
+
     static ClassName* Instance()
     {
         if (_thisInstance == nullptr)
@@ -64,9 +70,26 @@ private:
 	int _currentLineSelected;
 
 	SDL_Color _consoleColor;
-	SDL_Color _textColor;
+	SDL_Color _textInputColor;
+	SDL_Color _textOutputColor;
+	SDL_Color _textErrorColor;
 
-	std::vector<std::string> _history;
+	std::vector<c_line> _history;
+};
+
+struct c_line
+{
+	c_line(std::string s, c_line_type t);
+
+	std::string text;
+	c_line_type type;
+};
+
+enum class c_line_type
+{
+	INPUT,
+	OUTPUT,
+	ERROR	
 };
 
 #ifdef ClassName
