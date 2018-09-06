@@ -280,8 +280,18 @@ void ClassName::ParseCommand(std::string str)
 		std::stringstream stream(str);
 		std::string next;
 
-		//stream >> next;
-		//std::cout << "Command:\t\t" << next << std::endl;
+		stream >> next;
+		std::cout << "Command:\t\t" << next << std::endl;
+
+		if (commands.find(next) != commands.end())
+		{
+			commands[next](str);
+		}
+		else
+		{
+			std::cout << "Error: Could not find command " << next << "!" << std::endl;
+		}
+		
 		//stream >> next;
 		//while (stream) {
 		//	std::cout << "\tArgument:\t" << next << std::endl;	

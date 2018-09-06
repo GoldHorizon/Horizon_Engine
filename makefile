@@ -32,8 +32,8 @@ win32_flags :=	-lmingw32 \
 				-lSDL2 \
 				-lSDL2_image \
 				-lSDL2_ttf \
-				-lstdc++ 
-				#-lm \
+				-lstdc++
+				#-lm
 
 ### NOT IMPLEMENTED
 win64_flags :=	-m64 \
@@ -126,7 +126,7 @@ gameState.o 		: source/gameState.cpp include/gameState.h
 
 text.o				: source/text.cpp include/text.h include/constants.h include/engineMethods.h include/globals.h
 	gcc $(win32_gcc_flags) source/text.cpp
-	
+
 font.o				: source/font.cpp include/font.h include/constants.h include/engineMethods.h
 	gcc $(win32_gcc_flags) source/font.cpp
 

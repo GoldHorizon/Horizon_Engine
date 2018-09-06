@@ -16,10 +16,12 @@
 #include <SDL_ttf.h>
 #include <iostream>
 #include <string>
+#include <functional>
 
 Game::Game():
 	_mainWindow(0),
-	_mainRenderer(0)
+	_mainRenderer(0),
+	_playing(true)
 	//_state(GameState::UNINITIALIZED)
 {
 	// Set the draw color for our renderer (rendered when renderer is cleared)
@@ -27,6 +29,8 @@ Game::Game():
 
     // Set our stack to only be uninitialized.
     _stateStack.push_back(StateUninitialized::Instance());
+
+	commands["quit"] = [this](std::string args) -> void { QuitGame(); };
 }
 
 Game::~Game()
@@ -165,7 +169,7 @@ void Game::PopState()
 bool Game::GetInput()
 {
 	// For the method, assume we are continuing
-	bool continueGame = true;
+	//bool continueGame = true;
 
 	int event_response = -1;
 
@@ -251,7 +255,7 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 			//	break;
 
 			case GAME_QUIT:
-				continueGame = false;
+			  QuitGame();
 				break;
 
 			default:
@@ -297,11 +301,11 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 			switch ((int)(_event.window.event))
 			{
 			case SDL_WINDOWEVENT_CLOSE:
-				// If window is closed, take this as the user quitting
-				// In the future, this must be made more elegant.
-				//std::cout << "Close window event" << std::endl;
-				continueGame = false;
-				break;
+			  // If window is closed, take this as the user quitting
+			  // In the future, this must be made more elegant.
+			  //std::cout << "Close window event" << std::endl;
+			  QuitGame();
+			  break;
 			default:
 				//std::cout << (int)(_event.window.event);
 				break;
@@ -309,14 +313,14 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 		}
 
 	}
-    // The player has not quit the game, so return false
-	return continueGame;
+	// The player has not quit the game, so return false
+	return _playing;
 }
 
 void Game::Update()
 {
-	// STEP 2: Update
-    if (!_stateStack.empty())
+  // STEP 2: Update
+  if (!_stateStack.empty())
     {
         std::vector<GameState*>::iterator it = _stateStack.begin();
 
@@ -380,4 +384,9 @@ void Game::CloseConsole()
 			SDL_StopTextInput();
 		}
 	}
+}
+
+void Game::QuitGame()
+{
+	_playing = false;
 }

@@ -6,6 +6,10 @@
 #include "text.h"
 #include "constants.h"
 
+#include <map>
+#include <functional>
+//#include <vector>
+
 extern SDL_Renderer* globalRenderer;
 
 extern Font *defaultFont;
@@ -14,3 +18,7 @@ extern Font *menuOptionFont;
 extern Font *consoleFont;
 
 extern Font *fontList[FONT_COUNT];
+
+// Commands?
+extern std::map<std::string, std::function<void(std::string)>> commands;
+//extern std::vector<std::function<void(std::string)>> commands_temp;
