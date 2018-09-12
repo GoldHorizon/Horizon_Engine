@@ -56,7 +56,7 @@ void ClassName::Initialize()
 	commands["test"] = test_func;
 
 	// List command
-	auto list_command = [this](sVector args) {
+	auto help_command = [this](sVector args) {
 		std::string list;
 		std::map<std::string, std::function<void(sVector)>>::iterator it = commands.begin();
 		
@@ -72,7 +72,9 @@ void ClassName::Initialize()
 		AddOutput(list);
 	};
 
-	commands["list"] = list_command;
+	commands["help"] = help_command;
+
+	//AddCommand("help", list_command, 0, 0);
 }
 
 void ClassName::Cleanup()

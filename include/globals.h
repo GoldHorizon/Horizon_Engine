@@ -22,3 +22,42 @@ extern Font *fontList[FONT_COUNT];
 
 // Commands
 extern std::map<std::string, std::function<void(sVector)>> commands;
+
+
+// Test command stuff
+//struct Command {
+//	std::string name;
+//	std::function<void(sVector)> console_command;
+//	int min_args;
+//	int max_args;
+//};
+//
+//extern std::map<std::string, Command> test_commands;
+//
+////extern void AddCommand(std::string name, auto lambda, int min_args, int max_args);
+//void AddCommand(std::string name, auto lambda, int min_args, int max_args)
+//{
+//	Command new_command;
+//	new_command.name = name;
+//	new_command.console_command = lambda;
+//	new_command.min_args = min_args;
+//	new_command.max_args = max_args;
+//
+//	auto test = [=] (auto ... more) {
+//		
+//	};
+//
+//	test_commands[name] = lambda;
+//}
+//
+//void CallCommand(std::string name, sVector argList)
+//{
+//	if (test_commands.find(name) != test_commands.end())
+//	{
+//		// Execute command with arg list given
+//		//commands[name](args);
+//		auto test = [=] (auto ... more) {
+//			
+//		};
+//	}
+//}

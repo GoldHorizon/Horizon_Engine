@@ -92,6 +92,8 @@ enum class c_line_type
 	ERROR	
 };
 
+
+
 #ifdef ClassName
 #undef ClassName
 #endif
