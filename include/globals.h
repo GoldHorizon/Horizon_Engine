@@ -18,7 +18,7 @@ extern Font *menuTitleFont;
 extern Font *menuOptionFont;
 extern Font *consoleFont;
 
-extern Font *fontList[FONT_COUNT];
+extern Font *fontList[FONT_COUNT]; // Used for serialization of text objects
 
 // Commands
 extern std::map<std::string, std::function<void(sVector)>> commands;
