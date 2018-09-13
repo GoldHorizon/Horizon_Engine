@@ -60,6 +60,9 @@ void DrawText(std::string str, Font* font, int x, int y, TextAlignment align, SD
 		return;
 	}
 
+	//std::cout << "Surface dimensions: " << surface->w << ", " << surface->h << std::endl;
+	//std::cout << "Texture dimensions: " << texture->w << ", " << texture->h << std::endl;
+
 	SDL_Rect dest = {x, y, surface->w, surface->h};
 	
 	SDL_SetRenderDrawColor(globalRenderer, c.r, c.g, c.b, c.a);
