@@ -29,9 +29,9 @@ void ClassName::Initialize()
 	_isDeleting = false;
 
 	_drawType = true;
-	_textType.SetFont(defaultFont);
-	_textType.SetPosition(8, 8);
-	Entities().AddEntity(&_textType);
+	//_textType.SetFont(defaultFont);
+	//_textType.SetPosition(8, 8);
+	//Entities().AddEntity(&_textType);
 }
 
 void ClassName::Cleanup()
@@ -234,23 +234,29 @@ void ClassName::Render(float interpolation)
 
 	if (_drawType)
 	{
+		std::string type_text = "";
 		switch (_entityType)
 		{
 			case EditorEntityType::PLAYER:
-				_textType.SetText("Player");				
+				//_textType.SetText("Player");				
+				type_text = "Player";
 				break;
 
 			case EditorEntityType::BALL:
-				_textType.SetText("Ball");				
+				//_textType.SetText("Ball");				
+				type_text = "Ball";
 				break;
 
 			case EditorEntityType::WALL:
-				_textType.SetText("Wall");
+				//_textType.SetText("Wall");
+				type_text = "Wall";
 				break;
 
 			default:
-				_textType.SetText("Invalid");
+				//_textType.SetText("Invalid");
+				type_text = "Invalid";
 		}
+		DrawText(type_text, defaultFont, 8, 8, TextAlignment::ALIGN_LEFT, {0, 0, 0, 255});
 	}
 }
 
@@ -271,23 +277,34 @@ bool ClassName::LoadLevel()
 
 		if (result)
 		{
-			std::cout << "Loaded " << _levelName << std::endl;
+			//std::cout << "Loaded level " << _levelName << std::endl;
+		}
+		else
+		{
+			std::cout << "Error: Failed to load level " << _levelName << std::endl;
 		}
 		
 		return result;
+	} else { 
+		std::cout << "Error: Cannot load empty level" << std::endl;
+		return false; 
 	}
-	else { return false; }
 }
 
 void ClassName::SetLevel(std::string name)
 {
-	_levelName = name;
+	//std::cout << "Setting editor level to " << name << "..." << std::endl;
 
-	std::cout << "Setting editor level to " << name << "..." << std::endl;
+	if (name != "") {
+		std::string oldLevel = _levelName;
 
-	if (_levelName != "") {
 		_currentLevel.SetFileName(name);
-		LoadLevel();
+		_levelName = name;
+		//std::cout << "\tAbout to open level " << _levelName << std::endl;
+		if (!LoadLevel())
+		{
+			_levelName = oldLevel;
+		}
 	}
 }
 

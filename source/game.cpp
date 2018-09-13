@@ -230,8 +230,11 @@ bool Game::GetInput()
 					ChangeState(StateEditor::Instance());
 
 					Level* temp = StatePlaying::Instance()->GetLevel();
+
 					if (temp != nullptr) {
-						StateEditor::Instance()->SetLevel(temp->GetFileName());
+						//std::cout << "Switching to editor, in level " << temp->GetFileName() << std::endl;
+						if (temp->GetFileName() != "")
+							StateEditor::Instance()->SetLevel(temp->GetFileName());
 					}
 
 					StateEditor::Instance()->Resume(); 
@@ -386,7 +389,7 @@ void Game::CloseConsole()
 
 		if (SDL_IsTextInputActive())
 		{
-			std::cout << "Stopping text input..." << std::endl;
+			//std::cout << "Stopping text input..." << std::endl;
 			SDL_StopTextInput();
 		}
 	}

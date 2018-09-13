@@ -56,7 +56,7 @@ private:
 	int _gridSize;
 	EditorEntityType _entityType;
 	bool _drawType;
-	Text _textType;
+	//Text _textType;
 
 	// If user is creating/deleting any entities
 	bool _isCreating;
