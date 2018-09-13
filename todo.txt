@@ -2,4 +2,8 @@ O - Cleanup include lines to remove ../include etc.
 O - Cleanup makefile to accurately compile each object...
 X - Fix up include hierarchy? Figure out how to properly include header files
 	Solution: Multiple definition/declaration error due to lack of abstraction. Declaration is .h, definition in .cpp, always.
-O - Redo unserialization methods. Rename to deserialization (?), and allow it to work with virtual pointers to user polymorphism to create entities automatically from the serialized file.
+O - Redo unserialization methods. Rename to deserialization (?)
+O - Fix animation bug while paused
+O - Fix input delay on ball (use player as example?)
+O - Fix empty string being chosen as current level
+O - Change level changer method to be in the console instead

@@ -619,7 +619,8 @@ void Entity::AdvanceImage()
 	{
 		if (_imageTimer > _imageSpeed)
 		{
-			_imageTimer -= _imageSpeed;
+			//_imageTimer -= _imageSpeed;
+			_imageTimer %= _imageSpeed;
 			_imageIndex++;
 		}
 	}
@@ -628,7 +629,8 @@ void Entity::AdvanceImage()
 	{
 		if (_imageTimer > abs(_imageSpeed))
 		{
-			_imageTimer -= abs(_imageSpeed);
+			//_imageTimer -= abs(_imageSpeed);
+			_imageTimer %= abs(_imageSpeed);
 			_imageIndex--;
 		}
 	}
@@ -639,12 +641,12 @@ void Entity::AdvanceImage()
 	}
 
 	// If we overflow on imageIndex, go back to beginning
-	if (_imageIndex >= (_imageWidth / _spriteDimensions.x))
+	while (_imageIndex >= (_imageWidth / _spriteDimensions.x))
 	{
 		_imageIndex -= (_imageWidth / _spriteDimensions.x);
 	}
 	// If we underflow imageIndex, go to end
-	if (_imageIndex < 0)
+	while (_imageIndex < 0)
 	{
 		_imageIndex += (_imageWidth / _spriteDimensions.x);
 	}
