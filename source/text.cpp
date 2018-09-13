@@ -217,7 +217,7 @@ void Text::Unserialize(std::string str)
 		{
 			if (f == fontList[i]->name()) {
 				_font = fontList[i];
-				std::cout << "Found font with name " + f << std::endl;
+				//std::cout << "Found font with name " + f << std::endl;
 				break;
 			}
 		}

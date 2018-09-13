@@ -3,6 +3,7 @@
 #include "../include/constants.h"
 #include "../include/ball.h"
 #include "enumerations.h"
+#include "types.h"
 
 #include "../include/states/playing.h"
 #include "../include/states/uninitialized.h"
@@ -10,15 +11,18 @@
 #include "../include/states/options.h"
 #include "../include/states/pauseMenu.h"
 #include "states/editor.h"
+#include "states/console.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <iostream>
 #include <string>
+#include <functional>
 
 Game::Game():
 	_mainWindow(0),
-	_mainRenderer(0)
+	_mainRenderer(0),
+	_playing(true)
 	//_state(GameState::UNINITIALIZED)
 {
 	// Set the draw color for our renderer (rendered when renderer is cleared)
@@ -26,6 +30,13 @@ Game::Game():
 
     // Set our stack to only be uninitialized.
     _stateStack.push_back(StateUninitialized::Instance());
+
+	auto quit_game_command = [this](sVector args) { QuitGame(); };
+
+	commands["quit"] = quit_game_command;
+	commands["exit"] = quit_game_command;
+
+	//commands["close"] = [this](sVector args) { CloseConsole(); };
 }
 
 Game::~Game()
@@ -105,13 +116,15 @@ int Game::Initialize()
 
 void Game::LoadFonts()
 {
-	defaultFont = new Font("DefaultFont", "assets/Inconsolata-Regular.ttf", 12);
-	menuTitleFont = new Font("MenuTitle", "assets/Inconsolata-Regular.ttf", 36);
-	menuOptionFont = new Font("MenuOption", "assets/Inconsolata-Regular.ttf", 24);
+	defaultFont 	= new Font("DefaultFont", 	"assets/Inconsolata-Regular.ttf", 	12);
+	menuTitleFont 	= new Font("MenuTitle", 	"assets/Inconsolata-Regular.ttf", 	36);
+	menuOptionFont 	= new Font("MenuOption", 	"assets/Inconsolata-Regular.ttf", 	24);
+	consoleFont 	= new Font("ConsoleFont", 	"assets/Inconsolata-Regular.ttf", 	16);
 
 	fontList[0] = defaultFont;
 	fontList[1] = menuTitleFont;
 	fontList[2] = menuOptionFont;
+	fontList[3] = consoleFont;
 }
 
 void Game::ChangeState(GameState* newState)
@@ -162,47 +175,14 @@ void Game::PopState()
 bool Game::GetInput()
 {
 	// For the method, assume we are continuing
-	bool continueGame = true;
+	//bool continueGame = true;
 
 	int event_response = -1;
 
 	// Poll the system for an event of some kind
-	if (SDL_PollEvent(&_event))
+	while (SDL_PollEvent(&_event))
 	{
 		// STEP 1: Process Input
-
-		// There will eventually be a switch statement here to
-		// determine what game state we are in (Maybe?)
-
-		// If our event is a keyboard button press
-		if (_event.type == SDL_KEYDOWN)
-		{
-			switch (_event.key.keysym.scancode)
-			{
-				// Used to end game, managed in pause menu now
-	//		case SDL_SCANCODE_ESCAPE:
-	//			continueGame = false;
-	//			break;
-
-			default:
-				break;
-			}
-		}
-		else if (_event.type == SDL_WINDOWEVENT && _event.window.windowID == SDL_GetWindowID(_mainWindow))
-		{
-			switch ((int)(_event.window.event))
-			{
-			case SDL_WINDOWEVENT_CLOSE:
-				// If window is closed, take this as the user quitting
-				// In the future, this must be made more elegant.
-				std::cout << "Close window event" << std::endl;
-				continueGame = false;
-				break;
-			default:
-				//std::cout << (int)(_event.window.event);
-				break;
-			}
-		}
 
 		// This will allow the topmost gamestate to handle any events given to the window
 		// (Preventing lower gamestates from taking input i.e. when a pause menu overlay is up)
@@ -246,7 +226,7 @@ bool Game::GetInput()
 
 			case LEVEL_EDITOR:
 				{
-					std::cout << "Changing to level editor..." << std::endl;
+					//std::cout << "Changing to level editor..." << std::endl;
 					ChangeState(StateEditor::Instance());
 
 					Level* temp = StatePlaying::Instance()->GetLevel();
@@ -259,7 +239,7 @@ bool Game::GetInput()
 				break;
 
 			case PLAY_MODE:
-				std::cout << "Changing back to play mode..." << std::endl;
+				//std::cout << "Changing back to play mode..." << std::endl;
 				ChangeState(StatePlaying::Instance());
 
 				StatePlaying::Instance()->ChangeLevel(StateEditor::Instance()->GetLevel());
@@ -269,32 +249,84 @@ bool Game::GetInput()
 			case RESTART:
 				StatePlaying::Instance()->Restart();
 				StateEditor::Instance()->ResetLevel();
-
-				if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
+if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 					//_stateStack.back()->Cleanup();
 					_stateStack.pop_back();
 					_stateStack.back()->Resume();
 				}
 				break;
 
+			//case CLOSE_CONSOLE: 
+			//	CloseConsole();
+			//	break;
+
 			case GAME_QUIT:
-				continueGame = false;
+			  QuitGame();
 				break;
 
 			default:
-				std::cout << "Unimplemented option selected..." << std::endl;
+				std::cout << "Error: Unimplemented key event detected..." << std::endl;
 				break;
 			}
 		}
+
+		// If our event is a keyboard button press
+		if (_event.type == SDL_KEYDOWN)
+		{
+			switch (_event.key.keysym.sym)
+			{
+			case SDLK_BACKQUOTE:
+				//std::cout << "Pressed backquote! ";
+				if (_stateStack.back()->GetType() == GameStateType::CONSOLE)
+				{
+					//std::cout << "Console open, closing... " << std::endl;
+					//StateConsole::Instance()->Close();
+				}
+				else
+				{
+					PushState(StateConsole::Instance());
+					//std::cout << "Console closed, opening ";
+					if (_event.key.keysym.mod & KMOD_LSHIFT)
+					{
+						//std::cout << "big..." << std::endl;
+						StateConsole::Instance()->Open(true);
+					}
+					else
+					{
+						//std::cout << "small..." << std::endl;
+						StateConsole::Instance()->Open(false);
+					}
+				}
+
+			default:
+				break;
+			}
+		}
+		else if (_event.type == SDL_WINDOWEVENT && _event.window.windowID == SDL_GetWindowID(_mainWindow))
+		{
+			switch ((int)(_event.window.event))
+			{
+			case SDL_WINDOWEVENT_CLOSE:
+			  // If window is closed, take this as the user quitting
+			  // In the future, this must be made more elegant.
+			  //std::cout << "Close window event" << std::endl;
+			  QuitGame();
+			  break;
+			default:
+				//std::cout << (int)(_event.window.event);
+				break;
+			}
+		}
+
 	}
-    // The player has not quit the game, so return false
-	return continueGame;
+	// The player has not quit the game, so return false
+	return _playing;
 }
 
 void Game::Update()
 {
-	// STEP 2: Update
-    if (!_stateStack.empty())
+  // STEP 2: Update
+  if (!_stateStack.empty())
     {
         std::vector<GameState*>::iterator it = _stateStack.begin();
 
@@ -304,6 +336,10 @@ void Game::Update()
 			it++;
         }
     }
+
+	// Check console (if we have it open) if it should be closed
+	if (_stateStack.back()->GetType() == GameStateType::CONSOLE && StateConsole::Instance()->IsClosed())
+		CloseConsole();
 
     // deprecated ***
 	//_entities.UpdateAll();
@@ -338,4 +374,25 @@ void Game::Render(float interpolation)
 EntityCollection& Game::Entities()
 {
 	return _entities;
+}
+
+void Game::CloseConsole()
+{
+	if (_stateStack.back()->GetType() == GameStateType::CONSOLE)
+	{
+		//std::cout << "Closing console..." << std::endl;
+		_stateStack.pop_back();
+		_stateStack.back()->Resume();
+
+		if (SDL_IsTextInputActive())
+		{
+			std::cout << "Stopping text input..." << std::endl;
+			SDL_StopTextInput();
+		}
+	}
+}
+
+void Game::QuitGame()
+{
+	_playing = false;
 }

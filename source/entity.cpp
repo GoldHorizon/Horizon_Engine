@@ -104,6 +104,8 @@ void Entity::LoadFromSurface(SDL_Surface* surface)
 
 		_imageWidth = surface->w;
 		_imageHeight = surface->h;
+
+		//std::cout << "Surface dimensions: " << surface->w << ", " << surface->h << std::endl;
 	}
 	else
 	{

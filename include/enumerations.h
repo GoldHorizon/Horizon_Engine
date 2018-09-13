@@ -8,7 +8,8 @@ enum class GameStateType
 	OPTIONS,
 	PLAYING_GAME,
 	PAUSE_MENU,
-	LEVEL_EDITOR
+	LEVEL_EDITOR,
+	CONSOLE
 };
 
 enum class EditorEntityType {
@@ -25,7 +26,8 @@ enum KeyEvents {
 	OPTIONS_MENU,
 	RESTART,
 	LEVEL_EDITOR,
-	PLAY_MODE
+	PLAY_MODE,
+	CLOSE_CONSOLE
 };
 
 enum TextAlignment {
