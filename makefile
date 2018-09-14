@@ -21,6 +21,7 @@ objects 	:= 	main.o \
 				engineMethods.o \
 				drawing.o \
 				wall.o \
+				inputManager.o \
 				playing.o \
 				uninitialized.o \
 				pauseMenu.o \
@@ -138,6 +139,9 @@ drawing.o			: source/drawing.cpp include/drawing.h include/globals.h include/tex
 
 wall.o				: source/wall.cpp include/wall.h
 	gcc $(win32_gcc_flags) source/wall.cpp
+
+inputManager.o		: source/inputManager.cpp include/inputManager.h
+	gcc $(win32_gcc_flags) source/inputManager.cpp
 
 ###
 ### List of game states to be compiled ###
