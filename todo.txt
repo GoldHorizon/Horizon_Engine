@@ -4,6 +4,7 @@ X - Fix up include hierarchy? Figure out how to properly include header files
 	Solution: Multiple definition/declaration error due to lack of abstraction. Declaration is .h, definition in .cpp, always.
 O - Redo unserialization methods. Rename to deserialization (?)
 X - Fix animation bug while paused
-O - Fix input delay on ball (use player as example?)
+O - Fix input delay on ball (use player as example?) (create input library for
+this?)
 X - Fix empty string being chosen as current level
 O - Change level changer method to be in the console instead

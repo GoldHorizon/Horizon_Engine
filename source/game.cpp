@@ -111,6 +111,29 @@ int Game::Initialize()
 	//ChangeState(StateTitleScreen::Instance());
     ChangeState(StatePlaying::Instance());
 
+
+	// Some game commands to be implemented
+	commands["changelevel"] = [this](sVector args) {
+		if (args.size() != 1) {
+			StateConsole::Instance()->AddError("Command requires 1 argument!");
+		}
+		else {
+			std::vector<GameState*>::iterator it = _stateStack.end();
+
+			while (it != _stateStack.begin())
+			{
+				it--;
+				if ((*it)->GetType() == GameStateType::PLAYING_GAME) {
+					StateConsole::Instance()->AddOutput("Changing played level");
+					StatePlaying::Instance()->ChangeLevel(args[0]);
+				} else if ((*it)->GetType() == GameStateType::LEVEL_EDITOR) {
+					StateConsole::Instance()->AddOutput("Changing edited level");
+					StateEditor::Instance()->SetLevel(args[0]);
+				}
+			}
+		}
+	};
+
 	return 0;
 }
 
