@@ -111,6 +111,33 @@ int Game::Initialize()
 	//ChangeState(StateTitleScreen::Instance());
     ChangeState(StatePlaying::Instance());
 
+
+	// Some game commands to be implemented
+	commands["changelevel"] = [this](sVector args) {
+		if (args.size() != 1) {
+			StateConsole::Instance()->AddError("Command requires 1 argument!");
+		}
+		else {
+			std::vector<GameState*>::iterator it = _stateStack.end();
+
+			while (it != _stateStack.begin())
+			{
+				it--;
+				if ((*it)->GetType() == GameStateType::PLAYING_GAME) {
+					StateConsole::Instance()->AddOutput("Changing played level");
+					StatePlaying::Instance()->ChangeLevel(args[0]);
+					return;
+				} else if ((*it)->GetType() == GameStateType::LEVEL_EDITOR) {
+					StateConsole::Instance()->AddOutput("Changing edited level");
+					StateEditor::Instance()->SetLevel(args[0]);
+					return;
+				}
+			}
+
+			StateConsole::Instance()->AddError("Not in a correct state to change levels!");
+		}
+	};
+
 	return 0;
 }
 
@@ -230,8 +257,11 @@ bool Game::GetInput()
 					ChangeState(StateEditor::Instance());
 
 					Level* temp = StatePlaying::Instance()->GetLevel();
+
 					if (temp != nullptr) {
-						StateEditor::Instance()->SetLevel(temp->GetFileName());
+						//std::cout << "Switching to editor, in level " << temp->GetFileName() << std::endl;
+						if (temp->GetFileName() != "")
+							StateEditor::Instance()->SetLevel(temp->GetFileName());
 					}
 
 					StateEditor::Instance()->Resume(); 
@@ -386,7 +416,7 @@ void Game::CloseConsole()
 
 		if (SDL_IsTextInputActive())
 		{
-			std::cout << "Stopping text input..." << std::endl;
+			//std::cout << "Stopping text input..." << std::endl;
 			SDL_StopTextInput();
 		}
 	}

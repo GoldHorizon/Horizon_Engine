@@ -24,9 +24,6 @@ public:
   // Initialize()			- Initialize SDL and other game necessities
   int Initialize();
 
-  // LoadFonts()			- Load used fonts into memory
-  void LoadFonts();
-
   // ChangeState()		- Changes state to specified state
   //	newState:		new state to change to
   void ChangeState(GameState* newState);
@@ -57,6 +54,9 @@ public:
   void QuitGame();
 
 private:
+  // LoadFonts()			- Load used fonts into memory
+  void LoadFonts();
+
   // _mainWindow		- main window to render to
   SDL_Window* _mainWindow;
   // _mainRenderer	- main renderer, renders to _mainWindow

@@ -11,7 +11,8 @@ Level::Level() : Level("")
 
 Level::Level(std::string levelName)
 {
-	SetFileName(levelName);
+	if (levelName != "")
+		SetFileName(levelName);
 }
 
 Level::~Level()
@@ -24,7 +25,7 @@ void Level::SetFileName(std::string levelName)
 	if (levelName != "")
 		_name = levelName;
 	else
-		std::cout << "Invalid level name being set" << std::endl;
+		std::cout << "Error: Invalid level name being set" << std::endl;
 }
 
 std::string Level::GetFileName()
