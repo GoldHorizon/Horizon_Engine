@@ -61,23 +61,25 @@ int ClassName::HandleEvents(SDL_Event* event)
 			SaveLevel();
 			// @todo
 			break;
+
 		case SDLK_F2:
 			std::cout << "Loading level..." << std::endl;
 			LoadLevel();
 			// @todo
 			break;
-		case SDLK_F3:
-			std::cout << "Changing level..." << std::endl;
 
-			std::string level = "";
+		//case SDLK_F3:
+		//	std::cout << "Changing level..." << std::endl;
 
-			// DEBUG!!!!
-			// Get level string somehow...?
-			// @todo: time for console?
-			std::getline(std::cin, level);
+		//	std::string level = "";
 
-			SetLevel(level);
-			break;
+		//	// DEBUG!!!!
+		//	// Get level string somehow...?
+		//	// @todo: time for console?
+		//	std::getline(std::cin, level);
+
+		//	SetLevel(level);
+		//	break;
 		}
 	}
 
