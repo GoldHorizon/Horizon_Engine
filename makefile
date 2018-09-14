@@ -23,6 +23,7 @@ objects 	:= 	main.o \
 				drawing.o \
 				wall.o \
 				camera.o \
+				inputManager.o \
 				playing.o \
 				uninitialized.o \
 				pauseMenu.o \
@@ -147,6 +148,9 @@ wall.o				: source/wall.cpp include/wall.h
 camera.o				: source/camera.cpp include/camera.h include/globals.h include/types.h include/enumerations.h
 	gcc $(win32_gcc_flags) source/camera.cpp
 	
+inputManager.o		: source/inputManager.cpp include/inputManager.h
+	gcc $(win32_gcc_flags) source/inputManager.cpp
+
 ###
 ### List of game states to be compiled ###
 ###
