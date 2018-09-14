@@ -126,11 +126,15 @@ int Game::Initialize()
 				if ((*it)->GetType() == GameStateType::PLAYING_GAME) {
 					StateConsole::Instance()->AddOutput("Changing played level");
 					StatePlaying::Instance()->ChangeLevel(args[0]);
+					return;
 				} else if ((*it)->GetType() == GameStateType::LEVEL_EDITOR) {
 					StateConsole::Instance()->AddOutput("Changing edited level");
 					StateEditor::Instance()->SetLevel(args[0]);
+					return;
 				}
 			}
+
+			StateConsole::Instance()->AddError("Not in a correct state to change levels!");
 		}
 	};
 

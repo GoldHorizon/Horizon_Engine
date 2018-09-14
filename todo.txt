@@ -7,4 +7,4 @@ X - Fix animation bug while paused
 O - Fix input delay on ball (use player as example?) (create input library for
 this?)
 X - Fix empty string being chosen as current level
-O - Change level changer method to be in the console instead
+X - Change level changer method to be in the console instead
