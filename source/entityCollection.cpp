@@ -3,6 +3,16 @@
 
 #include <iostream>
 
+bool EComp(const Entity * const &a, const Entity * const &b)
+{
+	if (*a == *b)
+	{
+		return (*a).ID() < (*b).ID();
+	}
+	else
+		return *a < *b;
+}
+
 EntityCollection::EntityCollection()
 {
 	nextID = 0;
@@ -170,7 +180,7 @@ void EntityCollection::UpdateAll()
 
 void EntityCollection::RenderAll(float interpolation)
 {
-	_collection.sort(PComp<Entity>);
+	_collection.sort(EComp);
 	_collection.reverse();
 
 	eList::const_iterator it = _collection.begin();

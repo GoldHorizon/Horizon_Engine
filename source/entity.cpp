@@ -1,6 +1,6 @@
-#include "../include/entity.h"
-#include "../include/globals.h"
-#include "../include/constants.h"
+#include "entity.h"
+#include "globals.h"
+#include "constants.h"
 #include "engineMethods.h"
 
 #include <iostream>

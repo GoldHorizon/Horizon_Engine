@@ -8,6 +8,8 @@ template <typename T> bool PComp(const T * const &a, const T * const &b)
 	return *a < *b;
 }
 
+bool EComp(const Entity * const &a, const Entity * const &b);
+
 class EntityCollection
 {
 	public:

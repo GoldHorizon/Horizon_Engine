@@ -111,7 +111,9 @@ int Game::Initialize()
 	//ChangeState(StateTitleScreen::Instance());
     ChangeState(StatePlaying::Instance());
 
-
+	//
+	// COMMANDS
+	//
 	// Some game commands to be implemented
 	commands["changelevel"] = [this](sVector args) {
 		if (args.size() != 1) {
@@ -137,6 +139,40 @@ int Game::Initialize()
 			StateConsole::Instance()->AddError("Not in a correct state to change levels!");
 		}
 	};
+
+	commands["list"] = [this](sVector args) {
+		std::vector<GameState*>::iterator it = _stateStack.end();
+
+		while (it != _stateStack.begin())
+		{
+			it--;
+
+			StateConsole::Instance()->AddOutput(std::to_string(static_cast<int>((*it)->GetType())));
+			for (int i = 0; i < (*it)->Entities().GetCount(); i++)
+			{
+				Entity* temp = (*it)->Entities().GetByIndex(i);
+
+				StateConsole::Instance()->AddOutput("\t" + temp->name());
+			}
+
+			if ((*it)->GetType() == GameStateType::PLAYING_GAME)
+			{
+				StatePlaying* ptr = dynamic_cast<StatePlaying*>((*it));
+				for (int i = 0; i < ptr->GetLevel()->GetCount(); i++)
+				{
+					Entity* temp = ptr->GetLevel()->GetByIndex(i);
+
+					StateConsole::Instance()->AddOutput("  " + std::to_string(static_cast<int>(temp->x())) 
+							+ " " + std::to_string(static_cast<int>(temp->y()))
+							+ " " + std::to_string(temp->ID())
+							+ " " + std::to_string(static_cast<int>(temp->depth())));
+				}
+			}
+		}
+	};
+	//
+	// END OF COMMANDS
+	//
 
 	return 0;
 }
