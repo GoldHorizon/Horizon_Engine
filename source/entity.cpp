@@ -94,11 +94,11 @@ void Entity::LoadFromFile(const std::string file, int spriteWidth, int spriteHei
 
 void Entity::LoadFromSurface(SDL_Surface* surface)
 {
-	if (_image != nullptr)
-		FreeMemory();
-
 	if (surface != nullptr)
 	{
+		if (_image != nullptr)
+			FreeMemory();
+
 		_image = SDL_CreateTextureFromSurface(_renderer, surface);
 		_imagePath = "nopath";
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "image.h"
+
 #include "SDL.h"
 
 #include <string>

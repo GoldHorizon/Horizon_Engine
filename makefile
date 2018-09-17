@@ -9,6 +9,7 @@ executable := launchEngine
 objects 	:= 	main.o \
 				game.o \
 				globals.o \
+				image.o \
 				entity.o \
 				entityCollection.o \
 				ball.o \
@@ -102,6 +103,9 @@ game.o 				: source/game.cpp include/game.h include/globals.h include/constants.
 
 globals.o 			: source/globals.cpp include/globals.h
 	gcc $(win32_gcc_flags) source/globals.cpp
+
+image.o				: source/image.cpp include/image.h
+	gcc $(win32_gcc_flags) source/image.cpp
 
 entity.o 			: source/entity.cpp include/entity.h include/globals.h include/constants.h include/engineMethods.h
 	gcc $(win32_gcc_flags) source/entity.cpp
