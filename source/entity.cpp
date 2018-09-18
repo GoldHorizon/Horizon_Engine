@@ -14,9 +14,9 @@ Entity::Entity() : Entity(globalRenderer)
 }
 
 Entity::Entity(SDL_Renderer* renderer):
-	_image(nullptr),
-	_imagePath("nopath"),
-	_renderer(renderer),
+	//_image(nullptr),
+	//_imagePath("nopath"),
+	//_renderer(renderer),
 	_name("noname"),
 	_ID(0),
 	_active(true),
@@ -27,23 +27,23 @@ Entity::Entity(SDL_Renderer* renderer):
 	_direction(0),
 	_speed(0),
 	_hspeed(0),
-	_vspeed(0),
-	_imageAlpha(1),
-	_imageAngle(0),
-	_imageWidth(0),
-	_imageHeight(0),
-	_spriteDimensions({ 0, 0 }),
-	_imageSpeed(0),
-	_imageTimer(0),
-	_lastImageTime(0),
-	_imageIndex(0)
+	_vspeed(0)
+	//_imageAlpha(1),
+	//_imageAngle(0),
+	//_imageWidth(0),
+	//_imageHeight(0),
+	//_spriteDimensions({ 0, 0 }),
+	//_imageSpeed(0),
+	//_imageTimer(0),
+	//_lastImageTime(0),
+	//_imageIndex(0)
 {
-	_imageOrigin = {0, 0};
+	//_imageOrigin = {0, 0};
 
-	if (renderer == nullptr)
-	{
-		std::cerr << "Error: Cannot instantiate object - globalRenderer not set!" << std::endl;
-	}
+	//if (renderer == nullptr)
+	//{
+	//	std::cerr << "Error: Cannot instantiate object - globalRenderer not set!" << std::endl;
+	//}
 }
 
 Entity::~Entity()
@@ -51,77 +51,19 @@ Entity::~Entity()
 	FreeMemory();
 }
 
-void Entity::LoadFromFile(const std::string file, int spriteWidth, int spriteHeight)
+void Entity::LoadImage(const std::string file, int spriteWidth, int spriteHeight)
 {
-	//std::string fullPath = std::experimental::filesystem::current_path().string() + "\\" + file;
-
-	// Create a temporary surface to load our image onto
-	SDL_Surface* tempSurface;
-	tempSurface = IMG_Load(file.c_str());
-
-	if (tempSurface != nullptr)
-	{
-		// Set our attributes to match image properties
-		_image = SDL_CreateTextureFromSurface(_renderer, tempSurface);
-
-		_imageWidth = tempSurface->w;
-		_imageHeight = tempSurface->h;
-
-		// If what we are loading in is not a sprite sheet:
-		if (spriteWidth != 0 && spriteHeight != 0)
-		{
-			_spriteDimensions.x = spriteWidth;
-			_spriteDimensions.y = spriteHeight;
-		}
-
-		// Free up our surface when we're done
-		SDL_FreeSurface(tempSurface);
-
-		_imagePath = file;
-
-		// DEBUG
-		//std::cout << _imageWidth << std::endl
-		//	<< _imageHeight << std::endl
-		//	<< _spriteDimensions.x << std::endl
-		//	<< _spriteDimensions.y << std::endl << std::endl;
-	}
-	else
-	{
-		//std::cout << "Error loading file: " + fullPath << std::endl;
-		std::cout << IMG_GetError() << std::endl;
-	}
+	_image.LoadFromFile(file, spriteWidth, spriteHeight);
 }
 
-void Entity::LoadFromSurface(SDL_Surface* surface)
+void Entity::LoadImage(SDL_Surface* surface)
 {
-	if (surface != nullptr)
-	{
-		if (_image != nullptr)
-			FreeMemory();
-
-		_image = SDL_CreateTextureFromSurface(_renderer, surface);
-		_imagePath = "nopath";
-
-		_imageWidth = surface->w;
-		_imageHeight = surface->h;
-
-		//std::cout << "Surface dimensions: " << surface->w << ", " << surface->h << std::endl;
-	}
-	else
-	{
-		std::cerr << "Error loading null surface." << std::endl;
-	}
-
+	_image.LoadFromSurface(surface);
 }
 
 void Entity::FreeMemory()
 {
-	if (_image != nullptr)
-	{
-		SDL_DestroyTexture(_image);
-		_imageWidth = 0;
-		_imageHeight = 0;
-	}
+	_image.FreeMemory();
 }
 
 void Entity::HandleEvents(SDL_Event*)
@@ -136,49 +78,21 @@ void Entity::Update()
 
 	Move(xdir, ydir);
 
-	if (_spriteDimensions.x != 0)
-	{
-		AdvanceImage();
-	}
+	_image.Update();
 }
 
 void Entity::Render(float interpolation)
 {
 	// Only attempt to render if we have successfully loaded an image and it is visible
-	if (_image != nullptr && _visible)
+	if (_visible)
 	{
 		// Create a set of ints to use for drawing position (use interpolation to predict movement)
-		int xx = static_cast<int>(_x) - _imageOrigin.x
+		int xx = static_cast<int>(_x)
 			+ static_cast<int>(cos(_direction * PI / 180) * _speed * (_active * interpolation));
-		int yy = static_cast<int>(_y) - _imageOrigin.y
+		int yy = static_cast<int>(_y)
 			+ static_cast<int>(sin(_direction * PI / 180) * _speed * (_active * interpolation));
 
-		SDL_Rect* sourceImage = nullptr;
-		SDL_Rect* displayImage = nullptr;
-		// Create a rectangle for select image index
-		if (_spriteDimensions.x != 0 && _spriteDimensions.y != 0)
-		{
-			sourceImage = new SDL_Rect { _spriteDimensions.x * _imageIndex, 0, _spriteDimensions.x, _imageHeight };
-
-			// DEBUG
-			//std::cout << sourceImage->x << "   " << sourceImage->w << "   " << sourceImage->y << "   " << sourceImage->h << std::endl;
-
-			// Create a rectangle to put on display
-			displayImage = new SDL_Rect{ xx, yy, _spriteDimensions.x, _spriteDimensions.y };
-		}
-		else
-		{
-			// Create a rectangle to put on display
-			displayImage = new SDL_Rect{ xx, yy, _imageWidth, _imageHeight };
-		}
-
-
-		SDL_RenderCopyEx(_renderer, _image, sourceImage, displayImage, _imageAngle, &_imageOrigin, SDL_FLIP_NONE);
-
-		// Free memory of image
-		if (sourceImage != nullptr)
-			delete sourceImage;
-		delete displayImage;
+		_image.Draw(xx, yy);
 	}
 }
 
@@ -283,8 +197,7 @@ std::string Entity::Serialize()
 	std::string serialize_string;
 
 	serialize_string = "@Entity ";
-	serialize_string += "\"" + _imagePath + "\"" + " "
-		+ "\"" + _name + "\"" + " "
+	serialize_string += "\"" + _name + "\"" + " "
 		+ std::to_string(_active) + " "
 		+ std::to_string(_visible) + " "
 		+ std::to_string(_x) + " "
@@ -293,19 +206,19 @@ std::string Entity::Serialize()
 		+ std::to_string(_direction) + " "
 		+ std::to_string(_speed) + " "
 		+ std::to_string(_hspeed) + " "
-		+ std::to_string(_vspeed) + " "
-		+ std::to_string(_imageAlpha) + " "
-		+ std::to_string(_imageAngle) + " "
-		+ std::to_string(_imageWidth) + " "
-		+ std::to_string(_imageHeight) + " "
-		+ std::to_string(_imageSpeed) + " "
-		+ std::to_string(_imageTimer) + " "
-		+ std::to_string(_lastImageTime) + " "
-		+ std::to_string(_imageIndex) + " "
-		+ std::to_string(_imageOrigin.x) + " "
-		+ std::to_string(_imageOrigin.y) + " "
-		+ std::to_string(_spriteDimensions.x) + " "
-		+ std::to_string(_spriteDimensions.y) + " ";
+		+ std::to_string(_vspeed) + " ";
+		//+ std::to_string(_imageAlpha) + " "
+		//+ std::to_string(_imageAngle) + " "
+		//+ std::to_string(_imageWidth) + " "
+		//+ std::to_string(_imageHeight) + " "
+		//+ std::to_string(_imageSpeed) + " "
+		//+ std::to_string(_imageTimer) + " "
+		//+ std::to_string(_lastImageTime) + " "
+		//+ std::to_string(_imageIndex) + " "
+		//+ std::to_string(_imageOrigin.x) + " "
+		//+ std::to_string(_imageOrigin.y) + " "
+		//+ std::to_string(_spriteDimensions.x) + " "
+		//+ std::to_string(_spriteDimensions.y) + " ";
 
 	return serialize_string;
 }
@@ -321,7 +234,7 @@ void Entity::Unserialize(std::string str)
 
 	if ((*list)[index++] == "@Entity")
 	{
-		_imagePath 			= (*list)[index++];
+		//_imagePath 			= (*list)[index++];
 		_name 				= (*list)[index++];
 		_active 			= (*list)[index++] == "1" ? true : false;	
 		_visible 			= (*list)[index++] == "1" ? true : false;	
@@ -332,18 +245,18 @@ void Entity::Unserialize(std::string str)
 		_speed 				= std::stof((*list)[index++]);
 		_hspeed 			= std::stof((*list)[index++]);
 		_vspeed 			= std::stof((*list)[index++]);
-		_imageAlpha 		= std::stof((*list)[index++]);
-		_imageAngle 		= std::stod((*list)[index++]);
-		_imageWidth 		= std::stoi((*list)[index++]);
-		_imageHeight 		= std::stoi((*list)[index++]);
-		_imageSpeed 		= std::stoi((*list)[index++]);
-		_imageTimer 		= std::stoi((*list)[index++]);
-		_lastImageTime 		= std::stoi((*list)[index++]);
-		_imageIndex 		= std::stoi((*list)[index++]);
-		_imageOrigin.x 		= std::stoi((*list)[index++]);
-		_imageOrigin.y 		= std::stoi((*list)[index++]);
-		_spriteDimensions.x = std::stoi((*list)[index++]);
-		_spriteDimensions.y = std::stoi((*list)[index++]);
+		//_imageAlpha 		= std::stof((*list)[index++]);
+		//_imageAngle 		= std::stod((*list)[index++]);
+		//_imageWidth 		= std::stoi((*list)[index++]);
+		//_imageHeight 		= std::stoi((*list)[index++]);
+		//_imageSpeed 		= std::stoi((*list)[index++]);
+		//_imageTimer 		= std::stoi((*list)[index++]);
+		//_lastImageTime 		= std::stoi((*list)[index++]);
+		//_imageIndex 		= std::stoi((*list)[index++]);
+		//_imageOrigin.x 		= std::stoi((*list)[index++]);
+		//_imageOrigin.y 		= std::stoi((*list)[index++]);
+		//_spriteDimensions.x = std::stoi((*list)[index++]);
+		//_spriteDimensions.y = std::stoi((*list)[index++]);
 	}
 
 	delete list;
@@ -353,15 +266,15 @@ void Entity::Unserialize(std::string str)
 /*
  * Get Methods
  */
-SDL_Texture* Entity::image() const
+Image* Entity::image()
 {
-	return _image;
+	return &_image;
 }
 
-SDL_Renderer* Entity::renderer() const
-{
-	return _renderer;
-}
+//SDL_Renderer* Entity::renderer() const
+//{
+//	return _renderer;
+//}
 
 std::string Entity::name() const
 {
@@ -407,38 +320,38 @@ float Entity::vspeed() const
 {
 	return _vspeed;
 }
-float Entity::imageAlpha() const
-{
-	return _imageAlpha;
-}
-double Entity::imageAngle() const
-{
-	return _imageAngle;
-}
-SDL_Point Entity::imageOrigin() const
-{
-	return _imageOrigin;
-}
-int Entity::imageWidth() const
-{
-	return _imageWidth;
-}
-int Entity::imageHeight() const
-{
-	return _imageHeight;
-}
-int Entity::imageSpeed() const
-{
-	return _imageSpeed;
-}
-int Entity::imageIndex() const
-{
-	return _imageIndex;
-}
-SDL_Point Entity::spriteDimensions() const
-{
-	return _spriteDimensions;
-}
+//float Entity::imageAlpha() const
+//{
+//	return _imageAlpha;
+//}
+//double Entity::imageAngle() const
+//{
+//	return _imageAngle;
+//}
+//SDL_Point Entity::imageOrigin() const
+//{
+//	return _imageOrigin;
+//}
+//int Entity::imageWidth() const
+//{
+//	return _imageWidth;
+//}
+//int Entity::imageHeight() const
+//{
+//	return _imageHeight;
+//}
+//int Entity::imageSpeed() const
+//{
+//	return _imageSpeed;
+//}
+//int Entity::imageIndex() const
+//{
+//	return _imageIndex;
+//}
+//SDL_Point Entity::spriteDimensions() const
+//{
+//	return _spriteDimensions;
+//}
 
 /*
  * Set Methods
@@ -527,36 +440,36 @@ void Entity::SetVSpeed(float vspeed)
 	// Change speed/direction
 	CalculateSpeedDir();
 }
-void Entity::SetImageAlpha(float alpha)
-{
-	_imageAlpha = alpha;
-	if (SDL_SetTextureAlphaMod(_image, (int)(_imageAlpha * 255)) != 0)
-	{
-		std::cout << IMG_GetError() << std::endl;
-	}
-}
-void Entity::SetImageAngle(double angle)
-{
-	_imageAngle = angle;
-}
-void Entity::SetImageOrigin(int x, int y)
-{
-	_imageOrigin.x = x;
-	_imageOrigin.y = y;
-}
-void Entity::SetImageOrigin(SDL_Point pos)
-{
-	_imageOrigin.x = pos.x;
-	_imageOrigin.y = pos.y;
-}
-void Entity::SetImageSpeed(int speed)
-{
-	_imageSpeed = speed;
-}
-void Entity::SetImageIndex(int index)
-{
-	_imageIndex = index;
-}
+//void Entity::SetImageAlpha(float alpha)
+//{
+//	_imageAlpha = alpha;
+//	if (SDL_SetTextureAlphaMod(_image, (int)(_imageAlpha * 255)) != 0)
+//	{
+//		std::cout << IMG_GetError() << std::endl;
+//	}
+//}
+//void Entity::SetImageAngle(double angle)
+//{
+//	_imageAngle = angle;
+//}
+//void Entity::SetImageOrigin(int x, int y)
+//{
+//	_imageOrigin.x = x;
+//	_imageOrigin.y = y;
+//}
+//void Entity::SetImageOrigin(SDL_Point pos)
+//{
+//	_imageOrigin.x = pos.x;
+//	_imageOrigin.y = pos.y;
+//}
+//void Entity::SetImageSpeed(int speed)
+//{
+//	_imageSpeed = speed;
+//}
+//void Entity::SetImageIndex(int index)
+//{
+//	_imageIndex = index;
+//}
 
 void Entity::SetPosition(float x, float y)
 {
@@ -608,52 +521,52 @@ void Entity::CalculateSpeedDir()
 	_speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
 }
 
-void Entity::AdvanceImage()
-{
-	_imageTimer += SDL_GetTicks() - _lastImageTime;
-
-	_lastImageTime = SDL_GetTicks();
-
-	// If imageSpeed is positive, we progress forwards through animation
-	if (_imageSpeed > 0)
-	{
-		if (_imageTimer > _imageSpeed)
-		{
-			//_imageTimer -= _imageSpeed;
-			_imageTimer %= _imageSpeed;
-			_imageIndex++;
-		}
-	}
-	// If imageSpeed is negative, we step backwards through animation
-	else if (_imageSpeed < 0)
-	{
-		if (_imageTimer > abs(_imageSpeed))
-		{
-			//_imageTimer -= abs(_imageSpeed);
-			_imageTimer %= abs(_imageSpeed);
-			_imageIndex--;
-		}
-	}
-	// If imageSpeed is 0 reset timer and do nothing
-	else
-	{
-		_imageTimer = 0;
-	}
-
-	// If we overflow on imageIndex, go back to beginning
-	while (_imageIndex >= (_imageWidth / _spriteDimensions.x))
-	{
-		_imageIndex -= (_imageWidth / _spriteDimensions.x);
-	}
-	// If we underflow imageIndex, go to end
-	while (_imageIndex < 0)
-	{
-		_imageIndex += (_imageWidth / _spriteDimensions.x);
-	}
-
-	// DEBUG
-	//std::cout << _imageTimer << std::endl;
-}
+//void Entity::AdvanceImage()
+//{
+//	_imageTimer += SDL_GetTicks() - _lastImageTime;
+//
+//	_lastImageTime = SDL_GetTicks();
+//
+//	// If imageSpeed is positive, we progress forwards through animation
+//	if (_imageSpeed > 0)
+//	{
+//		if (_imageTimer > _imageSpeed)
+//		{
+//			//_imageTimer -= _imageSpeed;
+//			_imageTimer %= _imageSpeed;
+//			_imageIndex++;
+//		}
+//	}
+//	// If imageSpeed is negative, we step backwards through animation
+//	else if (_imageSpeed < 0)
+//	{
+//		if (_imageTimer > abs(_imageSpeed))
+//		{
+//			//_imageTimer -= abs(_imageSpeed);
+//			_imageTimer %= abs(_imageSpeed);
+//			_imageIndex--;
+//		}
+//	}
+//	// If imageSpeed is 0 reset timer and do nothing
+//	else
+//	{
+//		_imageTimer = 0;
+//	}
+//
+//	// If we overflow on imageIndex, go back to beginning
+//	while (_imageIndex >= (_imageWidth / _spriteDimensions.x))
+//	{
+//		_imageIndex -= (_imageWidth / _spriteDimensions.x);
+//	}
+//	// If we underflow imageIndex, go to end
+//	while (_imageIndex < 0)
+//	{
+//		_imageIndex += (_imageWidth / _spriteDimensions.x);
+//	}
+//
+//	// DEBUG
+//	//std::cout << _imageTimer << std::endl;
+//}
 
 bool operator<(const Entity &el, const Entity &er)
 {

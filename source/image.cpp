@@ -27,7 +27,6 @@ Image::Image(std::string file, int spriteWidth, int spriteHeight) :
 {
 	if (file != "")
 		LoadFromFile(file, spriteWidth, spriteHeight);
-
 }
 
 Image::~Image()
@@ -107,7 +106,7 @@ void Image::FreeMemory()
 
 void Image::Update()
 {
-	if (_dimensions.x != 0)
+	if (_dimensions.x != 0 && _speed != 0)
 	{
 		Advance();
 	}
@@ -152,6 +151,7 @@ void Image::Advance()
 	_lastTime = SDL_GetTicks();
 
 	// If imageSpeed is positive, we progress forwards through animation
+	//std::cout << "_timer: " << _timer << "\t\t_speed: " << _speed << std::endl;
 	if (_speed > 0)
 	{
 		if (_timer > _speed)

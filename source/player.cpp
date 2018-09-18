@@ -7,9 +7,8 @@
 
 Player::Player()
 {
-    LoadFromFile("images/Player.png");
-    SetImageOrigin(this->imageWidth() / 2, this->imageHeight() / 2);
-
+    LoadImage("images/Player.png");
+    image()->SetOrigin(image()->width() / 2, image()->height() / 2);
 }
 
 void Player::HandleEvents(SDL_Event* event)

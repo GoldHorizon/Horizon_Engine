@@ -7,15 +7,16 @@
 
 Ball::Ball()
 {
+	const int WIDTH = 32;
 	// Load sprite sheet, setting individual sprite (frame) size to 32x32
-	LoadFromFile("images/shrinking_circle.png", 32, 32);
+	LoadImage("images/shrinking_circle.png", WIDTH, WIDTH);
 
 	// Set image origin to be center of sprite (NOT loaded image)
-	SetImageOrigin(spriteDimensions().x / 2, spriteDimensions().y / 2);
+	image()->SetOrigin(WIDTH / 2, WIDTH / 2);
 
 	// Set image speed in ms 
 	//SetImageIndex(0);
-	SetImageSpeed(100);
+	image()->SetSpeed(100);
 }
 
 void Ball::HandleEvents(SDL_Event* event)

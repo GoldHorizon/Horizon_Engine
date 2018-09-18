@@ -83,14 +83,14 @@ void Text::UpdateImage()
 	if (_align != ALIGN_LEFT)
 	{
 		if (_align == ALIGN_CENTER)
-			SetImageOrigin(tempSurface->w/2, 0);
+			image()->SetOrigin(tempSurface->w/2, 0);
 		else if (_align == ALIGN_RIGHT)
-			SetImageOrigin(tempSurface->w, 0);
+			image()->SetOrigin(tempSurface->w, 0);
 	}
 
 	if (tempSurface != nullptr)
 	{
-		LoadFromSurface(tempSurface);
+		LoadImage(tempSurface);
 		SDL_FreeSurface(tempSurface);
 	}
 	else

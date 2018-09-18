@@ -2,7 +2,7 @@
 
 Wall::Wall()
 {
-	LoadFromFile("images/Wall.png");
+	LoadImage("images/Wall.png");
 }
 
 //void Wall::HandleEvents(SDL_Event*)
