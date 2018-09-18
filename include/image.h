@@ -30,11 +30,39 @@ public:
 	// FreeMemory() 	- Frees the texture memory used
 	void FreeMemory();
 
+	// Update()			- Updates the image
+	void Update();
+
 	// AdvanceImage()	- Adjust image index using image speed
 	void AdvanceImage();
 
+	/*
+	 * Get Methods
+	 */
+	SDL_Texture* image() const;
+	float alpha() const;		// Returns alpha of image
+	double angle() const;		// Returns the angle
+	SDL_Point origin() const;	// Returns the origin
+	int width() const;			// Returns the width of the image
+	int height() const;			// Returns the height of the image
+	int speed() const;			// Returns image speed
+	int index() const;			// Returns image index
+
+	// Returns sprite dimensions for sprite sheets
+	SDL_Point spriteDimensions() const;
+
+	/*
+	 * Set Methods
+	 */
+	void SetAlpha(float alpha);		// Sets the image alpha
+	void SetAngle(double angle);	// Sets the angle
+	void SetOrigin(int x, int y);	// Sets the origin
+	void SetOrigin(SDL_Point pos);	// Sets the origin
+	void SetSpeed(int speed);		// Sets image speed in ms
+	void SetIndex(int index);		// Sets image index
+
 private:
-	SDL_Texture* 	_texture;	// SDL texture data stored in the image
+	SDL_Texture* 	_texture;		// SDL texture data stored in the image
 	std::string	 	_filePath;		// File path to the image
 
 	SDL_Renderer*	_renderer;		// Target renderer to draw to
@@ -48,7 +76,8 @@ private:
 	SDL_Point	_dimensions;
 
 	int _speed;
+	int _index;
+
 	int _timer;
 	int _lastTime;
-	int _index;
 };
