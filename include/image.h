@@ -33,8 +33,8 @@ public:
 	// Update()			- Updates the image
 	void Update();
 
-	// AdvanceImage()	- Adjust image index using image speed
-	void AdvanceImage();
+	// Draw()			- Draws the image at the specified coordinates
+	void Draw(int x, int y);
 
 	/*
 	 * Get Methods
@@ -62,6 +62,15 @@ public:
 	void SetIndex(int index);		// Sets image index
 
 private:
+	/*
+	 * Private Methods
+	 */
+	// Advance()	- Adjust image index using image speed
+	void Advance();
+
+	/*
+	 * Attributes
+	 */
 	SDL_Texture* 	_texture;		// SDL texture data stored in the image
 	std::string	 	_filePath;		// File path to the image
 

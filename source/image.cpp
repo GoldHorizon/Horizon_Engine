@@ -109,11 +109,43 @@ void Image::Update()
 {
 	if (_dimensions.x != 0)
 	{
-		AdvanceImage();
+		Advance();
 	}
 }
 
-void Image::AdvanceImage()
+void Image::Draw(int x, int y)
+{
+	x -= _origin.x;
+	y -= _origin.y;
+
+	SDL_Rect* sourceImage = nullptr;
+	SDL_Rect* displayImage = nullptr;
+	// Create a rectangle for select image index
+	if (_dimensions.x != 0 && _dimensions.y != 0)
+	{
+		sourceImage = new SDL_Rect { _dimensions.x * _index, 0, _dimensions.x, _height };
+
+		// DEBUG
+		//std::cout << sourceImage->x << "   " << sourceImage->w << "   " << sourceImage->y << "   " << sourceImage->h << std::endl;
+
+		// Create a rectangle to put on display
+		displayImage = new SDL_Rect { x, y, _dimensions.x, _dimensions.y };
+	}
+	else
+	{
+		// Create a rectangle to put on display
+		displayImage = new SDL_Rect { x, y, _width, _height };
+	}
+
+	SDL_RenderCopyEx(_renderer, _texture, sourceImage, displayImage, _angle, &_origin, SDL_FLIP_NONE);
+
+	// Free memory of image
+	if (sourceImage != nullptr)
+		delete sourceImage;
+	delete displayImage;
+}
+
+void Image::Advance()
 {
 	_timer += SDL_GetTicks() - _lastTime;
 
