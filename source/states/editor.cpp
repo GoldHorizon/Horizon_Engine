@@ -217,12 +217,6 @@ void ClassName::Update()
 
 void ClassName::Render(float interpolation)
 {
-	// We will render objects, but not update them
-    _entities.RenderAll(interpolation);
-
-	// Draw level entities, without updating them
-	_currentLevel.RenderAll(interpolation);
-
 	// Drawing grid
 	if (_drawGrid)
 	{
@@ -234,6 +228,13 @@ void ClassName::Render(float interpolation)
 		}
 	}
 
+	// We will render objects, but not update them
+    _entities.RenderAll(interpolation);
+
+	// Draw level entities, without updating them
+	_currentLevel.RenderAll(interpolation);
+
+	// Draw object type
 	if (_drawType)
 	{
 		std::string type_text = "";
