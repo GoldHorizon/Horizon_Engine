@@ -19,6 +19,18 @@ enum class EditorEntityType {
 	Count
 };
 
+enum class Align {
+	TOP_L,
+	TOP_C,
+	TOP_R,
+	MID_L,
+	MID_C,
+	MID_R,
+	BOT_L,
+	BOT_C,
+	BOT_R
+};
+
 enum KeyEvents {
 	GAME_QUIT,
 	OPEN_MENU,
