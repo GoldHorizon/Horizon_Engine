@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../gameState.h"
+#include "gameState.h"
 #include "level.h"
+#include "camera.h"
 
 #include <vector>
 
@@ -53,6 +54,8 @@ private:
     static ClassName* _thisInstance;
 
 	std::vector<Level*> _levelList;
+	
+	Camera _mainCam;
 };
 
 #ifdef ClassName

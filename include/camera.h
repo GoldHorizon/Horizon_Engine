@@ -13,6 +13,12 @@ class Camera
 		~Camera();
 
 		/*
+		 * Class Methods
+		 */
+		void Move(int x, int y);
+		void Move(Vec2<int> pos);
+
+		/*
 		 * Get Methods
 		 */
 		int x() const;

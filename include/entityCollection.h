@@ -65,7 +65,7 @@ class EntityCollection
 
 		// RenderAll()		- Render every entity in collection
 		//	interpolation:		how much interpolation (prediction) to account for
-		void RenderAll(float interpolation);
+		void RenderAll(float interpolation, int xOffset = 0, int yOffset = 0);
 
 		/*
 		 * Get Methods
