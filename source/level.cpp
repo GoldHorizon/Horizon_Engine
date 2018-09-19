@@ -41,7 +41,7 @@ void Level::SaveToFile()
 
 	sVector* svp = levelFile.GetDataVector();
 
-	for (int i = 0; i < GetCount(); i++)
+	for (int i = GetCount() - 1; i >= 0 ; i--)
 	{
 		svp->push_back(GetByIndex(i)->Serialize());
 	}
