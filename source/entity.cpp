@@ -81,15 +81,15 @@ void Entity::Update()
 	_image.Update();
 }
 
-void Entity::Render(float interpolation)
+void Entity::Render(float interpolation, int xOffset, int yOffset)
 {
 	// Only attempt to render if we have successfully loaded an image and it is visible
 	if (_visible)
 	{
 		// Create a set of ints to use for drawing position (use interpolation to predict movement)
-		int xx = static_cast<int>(_x)
+		int xx = static_cast<int>(_x) + xOffset
 			+ static_cast<int>(cos(_direction * PI / 180) * _speed * (_active * interpolation));
-		int yy = static_cast<int>(_y)
+		int yy = static_cast<int>(_y) + yOffset
 			+ static_cast<int>(sin(_direction * PI / 180) * _speed * (_active * interpolation));
 
 		_image.Draw(xx, yy);

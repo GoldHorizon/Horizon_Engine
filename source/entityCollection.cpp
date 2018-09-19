@@ -178,7 +178,7 @@ void EntityCollection::UpdateAll()
 	}
 }
 
-void EntityCollection::RenderAll(float interpolation)
+void EntityCollection::RenderAll(float interpolation, int xOffset, int yOffset)
 {
 	_collection.sort(EComp);
 	_collection.reverse();
@@ -191,7 +191,7 @@ void EntityCollection::RenderAll(float interpolation)
 		//std::cerr << it->first << std::endl;
 		if ((*it) != nullptr && (*it)->visible())
 		{
-			(*it)->Render(interpolation);
+			(*it)->Render(interpolation, xOffset, yOffset);
 		}
 
 		it++;

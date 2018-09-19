@@ -40,7 +40,7 @@ class Entity
 		virtual void Update();
 
 		// Render()			- Renders the texture to its current position
-		void Render(float interpolation);
+		void Render(float interpolation, int xOffset = 0, int yOffset = 0);
 
 		// Render()			- Renders the texture to its current position
 		//	clipping:	rectangle the image is clipped to before rendered

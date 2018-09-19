@@ -1,8 +1,8 @@
-#include "../../include/states/playing.h"
-#include "../../include/ball.h"
-#include "../../include/player.h"
-#include "../../include/font.h"
-#include "../../include/text.h"
+#include "states/playing.h"
+#include "ball.h"
+#include "player.h"
+#include "font.h"
+#include "text.h"
 #include "file.h"
 #include "engineMethods.h"
 #include "globals.h"
@@ -19,6 +19,7 @@ ClassName::~ClassName()
 void ClassName::Initialize()
 {
 	AddLevel("test_file.txt");
+
 	//AddLevel("another_test.txt");
 
     //Player* mainPlayer = new Player();
@@ -128,6 +129,23 @@ int ClassName::HandleEvents(SDL_Event* event)
 		case SDLK_ESCAPE:
 			if (event->key.repeat == 0)
 				return OPEN_MENU;
+			break;
+
+		case SDLK_h:
+			_mainCam.Move(-10, 0);
+			break;
+
+		case SDLK_j:
+			_mainCam.Move(0, 10);
+			break;
+
+		case SDLK_k:
+			_mainCam.Move(0, -10);
+			break;
+
+		case SDLK_l:
+			_mainCam.Move(10, 0);
+			break;
 		}
 	}
 
@@ -153,13 +171,13 @@ void ClassName::Update()
 
 void ClassName::Render(float interpolation)
 {
-    _entities.RenderAll(interpolation);
+    _entities.RenderAll(interpolation, -_mainCam.x(), -_mainCam.y());
 
 	if (_levelList.size() > 0)
 	{
 		for (int i = 0; i < _levelList.size(); i++)
 		{
-			_levelList[i]->RenderAll(interpolation);
+			_levelList[i]->RenderAll(interpolation, -_mainCam.x(), -_mainCam.y());
 		}
 	}
 }
