@@ -29,6 +29,8 @@ class Camera
 		Vec2<int> position() const;
 		Vec2<int> dimensions() const;
 
+		Align origin() const;
+
 		/*
 		 * Set Methods
 		 */
@@ -41,6 +43,8 @@ class Camera
 		void SetPosition(Vec2<int> pos);
 		void SetDimensions(int w, int h);
 		void SetDimensions(Vec2<int> dim);
+
+		void SetOrigin(Align origin);
 
 	private:
 

@@ -59,6 +59,11 @@ Vec2<int> Camera::dimensions() const
 	return Vec2<int> (_w, _h);
 }
 
+Align Camera::origin() const
+{
+	return _origin;
+}
+
 /*
  * Set Methods
  */
@@ -122,5 +127,10 @@ void Camera::SetDimensions(Vec2<int> dim)
 {
 	_w = dim.x;
 	_h = dim.y;
+}
+
+void Camera::SetOrigin(Align origin)
+{
+	_origin = origin;
 }
 
