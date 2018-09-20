@@ -20,6 +20,9 @@ void ClassName::Initialize()
 {
 	AddLevel("test_file.txt");
 
+	_mainCam.SetOrigin(Align::MID_C);
+	_mainCam.SetPosition(0, 0);
+
 	//AddLevel("another_test.txt");
 
     //Player* mainPlayer = new Player();
