@@ -8,6 +8,10 @@ Camera::Camera()
 	_y = 0;
 	_w = SCREEN_WIDTH;
 	_h = SCREEN_HEIGHT;
+
+	_moveToTarget = false;
+	_targetObj = nullptr;
+	_targetPos = {0, 0};
 }
 
 Camera::~Camera()
@@ -20,14 +24,23 @@ Camera::~Camera()
  */
 void Camera::Move(int x, int y)
 {
-	_x += x;
-	_y += y;
+	if (!_moveToTarget) {
+		_x += x;
+		_y += y;
+	//} else {
+	//	_targetPos.x += x;
+	//	_targetPos.y += y;
+	}
 }
 
 void Camera::Move(Vec2<int> pos)
 {
-	_x += pos.x;
-	_y += pos.y;
+	if (!_moveToTarget) {
+		_x += pos.x;
+		_y += pos.y;
+	//} else {
+	//	_targetPos += pos;
+	}
 }
 
 /*
@@ -103,18 +116,24 @@ void Camera::SetH(int h)
 
 void Camera::SetPosition(int x, int y)
 {
-	SetX(x);
-	SetY(y);
-	//_x = x;
-	//_y = y;
+	if (!_moveToTarget) {
+		SetX(x);
+		SetY(y);
+	//} else {
+	//	_targetPos.x = x;
+	//	_targetPos.y = y;
+	}
 }
 
 void Camera::SetPosition(Vec2<int> pos)
 {
-	SetX(pos.x);
-	SetY(pos.y);
-	//_x = pos.x;
-	//_y = pos.y;
+	if (!_moveToTarget) {
+		SetX(pos.x);
+		SetY(pos.y);
+	//} else {
+	//	_targetPos.x = pos.x;
+	//	_targetPos.y = pos.y;
+	}
 }
 
 void Camera::SetDimensions(int w, int h)
