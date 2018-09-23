@@ -272,10 +272,11 @@ void ClassName::Render(float interpolation)
 
 void ClassName::Open(bool big)
 {
-	if (IsClosed())
+	if (IsClosed()) {
 		_currentLine = "";
 		_currentLineSelected = -1;
 		_cursorPosition = 0;
+	}
 
 	if (big) {
 		_isOpenBig = true;
