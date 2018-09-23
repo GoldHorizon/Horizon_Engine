@@ -241,25 +241,22 @@ void ClassName::Render(float interpolation)
 		switch (_entityType)
 		{
 			case EditorEntityType::PLAYER:
-				//_textType.SetText("Player");				
 				type_text = "Player";
 				break;
 
 			case EditorEntityType::BALL:
-				//_textType.SetText("Ball");				
 				type_text = "Ball";
 				break;
 
 			case EditorEntityType::WALL:
-				//_textType.SetText("Wall");
 				type_text = "Wall";
 				break;
 
 			default:
-				//_textType.SetText("Invalid");
 				type_text = "Invalid";
 		}
-		DrawText(type_text, defaultFont, 8, 8, TextAlignment::ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(type_text, defaultFont, 9, 9, TextAlignment::ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(type_text, defaultFont, 8, 8, TextAlignment::ALIGN_LEFT, {255, 255, 255, 255});
 	}
 }
 

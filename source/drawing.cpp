@@ -59,6 +59,9 @@ void DrawText(std::string str, Font* font, int x, int y, TextAlignment align, SD
 		std::cout << TTF_GetError() << std::endl;
 		return;
 	}
+	
+	if (c.a != 255)
+		SDL_SetTextureAlphaMod(texture, c.a);
 
 	//std::cout << "Surface dimensions: " << surface->w << ", " << surface->h << std::endl;
 	//std::cout << "Texture dimensions: " << texture->w << ", " << texture->h << std::endl;
