@@ -76,17 +76,18 @@ private:
 
 	SDL_Renderer*	_renderer;		// Target renderer to draw to
 
-	float 	_alpha;
-	double	_angle;
-	SDL_Point 	_origin;
-	int _width;
-	int _height;
+	float 	_alpha;					// Image alpha
+	SDL_Color _color;				// Image color modulation?
+	double	_angle;					// Image angle/rotation
+	SDL_Point 	_origin;			// Image origin to draw from
+	int _width;						// Image width
+	int _height;					// Image height
 
-	SDL_Point	_dimensions;
+	SDL_Point	_dimensions;		// Dimensions of an individual sprite (if using sprite sheet)
 
-	int _speed;
-	int _index;
+	int _speed;						// Image animation speed
+	int _index;						// Image animation current index
 
-	int _timer;
-	int _lastTime;
+	int _timer;						// Image timer for animation
+	int _lastTime;					// Image time variable for animation
 };

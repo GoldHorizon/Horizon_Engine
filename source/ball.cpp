@@ -18,6 +18,7 @@ Ball::Ball()
 	//SetImageIndex(0);
 	image()->SetSpeed(100);
 
+	// Temporary Alpha Testing
 	image()->SetAlpha(.5);
 }
 
