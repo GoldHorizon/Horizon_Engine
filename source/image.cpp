@@ -27,6 +27,9 @@ Image::Image(std::string file, int spriteWidth, int spriteHeight) :
 {
 	if (file != "")
 		LoadFromFile(file, spriteWidth, spriteHeight);
+
+	if (_texture != nullptr)
+		SDL_SetTextureAlphaMod(_texture, _alpha * 255);
 }
 
 Image::~Image()
@@ -235,6 +238,8 @@ int Image::index() const
 void Image::SetAlpha(float alpha)
 {
 	_alpha = alpha;
+	if (_texture != nullptr)
+		SDL_SetTextureAlphaMod(_texture, alpha * 255);
 }
 
 void Image::SetAngle(double angle)

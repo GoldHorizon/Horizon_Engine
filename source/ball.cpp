@@ -17,6 +17,8 @@ Ball::Ball()
 	// Set image speed in ms 
 	//SetImageIndex(0);
 	image()->SetSpeed(100);
+
+	image()->SetAlpha(.5);
 }
 
 void Ball::HandleEvents(SDL_Event* event)
