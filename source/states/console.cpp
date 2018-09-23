@@ -23,7 +23,7 @@ void ClassName::Initialize()
 	_isOpenBig = false;
 	_isOpenSmall = false;
 
-	_consoleColor = {0, 50, 50, 255};
+	_consoleColor = {0, 50, 50, 240};
 	_textInputColor = {255, 255, 255, 255};
 	_textOutputColor = {255, 0, 255, 255};
 	_textErrorColor = {255, 30, 40, 255};

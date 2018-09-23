@@ -98,6 +98,9 @@ int Game::Initialize()
 
 	globalRenderer = _mainRenderer;
 
+	// Set blend mode of the renderer, so we can use alpha
+	SDL_SetRenderDrawBlendMode (_mainRenderer, SDL_BLENDMODE_BLEND);
+
 	// Set resolution of renderer to window resolution, output if there's an error
 	// NOTE - This error checking was not done in the tutorial; more for my own practice
 	//		  Will refrain from doing too much error checking, only where appropriate
