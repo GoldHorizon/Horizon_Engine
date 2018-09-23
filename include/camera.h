@@ -49,9 +49,13 @@ class Camera
 	private:
 
 		Align _origin;
+
 		int _x;
 		int _y;
 		int _w;
 		int _h;
-
+		
+		bool _moveToTarget;
+		Entity* _targetObj;
+		Vec2<int> _targetPos;
 };
