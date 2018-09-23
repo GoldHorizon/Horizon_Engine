@@ -15,6 +15,8 @@ Image::Image(std::string file, int spriteWidth, int spriteHeight) :
 	_filePath(file),
 	_renderer(globalRenderer),
 	_alpha(1),
+	_color({255, 255, 255}),
+	_blendMode(BlendMode::BLEND),
 	_angle(0),
 	_origin({0, 0}),
 	_width(0),
@@ -28,8 +30,11 @@ Image::Image(std::string file, int spriteWidth, int spriteHeight) :
 	if (file != "")
 		LoadFromFile(file, spriteWidth, spriteHeight);
 
-	if (_texture != nullptr)
+	if (_texture != nullptr) {
 		SDL_SetTextureAlphaMod(_texture, _alpha * 255);
+		SetColor(_color);
+		SetBlendMode(_blendMode);
+	}		
 }
 
 Image::~Image()
@@ -47,6 +52,7 @@ void Image::LoadFromFile(const std::string file, int spriteWidth, int spriteHeig
 	{
 		// Set our attributes to match image properties
 		_texture = SDL_CreateTextureFromSurface(_renderer, tempSurface);
+		RefreshTexture();
 
 		_width = tempSurface->w;
 		_height = tempSurface->h;
@@ -84,6 +90,8 @@ void Image::LoadFromSurface(SDL_Surface* surface)
 			FreeMemory();
 
 		_texture = SDL_CreateTextureFromSurface(_renderer, surface);
+		RefreshTexture();
+
 		_filePath = "nopath";
 
 		_width = surface->w;
@@ -94,6 +102,15 @@ void Image::LoadFromSurface(SDL_Surface* surface)
 	else
 	{
 		std::cerr << "Error loading null surface." << std::endl;
+	}
+}
+
+void Image::RefreshTexture()
+{
+	if (_texture != nullptr) {
+		SetAlpha(_alpha);
+		SetColor(_color);
+		SetBlendMode(_blendMode);
 	}
 }
 
@@ -205,6 +222,16 @@ float Image::alpha() const
 	return _alpha;
 }
 
+SDL_Color Image::color() const
+{
+	return _color;
+}
+
+BlendMode Image::blendMode() const
+{
+	return _blendMode;
+}
+
 double Image::angle() const
 {
 	return _angle;
@@ -240,6 +267,37 @@ void Image::SetAlpha(float alpha)
 	_alpha = alpha;
 	if (_texture != nullptr)
 		SDL_SetTextureAlphaMod(_texture, alpha * 255);
+}
+
+void Image::SetColor(SDL_Color color)
+{
+	_color = color;
+	if (_texture != nullptr)
+		SDL_SetTextureColorMod(_texture, color.r, color.g, color.b);
+}
+
+void Image::SetBlendMode(BlendMode m)
+{
+	_blendMode = m;
+	if (_texture != nullptr) {
+		switch (m) {
+			case BlendMode::NONE:
+			SDL_SetTextureBlendMode(_texture, SDL_BLENDMODE_NONE);
+			return;
+
+			case BlendMode::BLEND:
+			SDL_SetTextureBlendMode(_texture, SDL_BLENDMODE_BLEND);
+			return;
+
+			case BlendMode::ADD:
+			SDL_SetTextureBlendMode(_texture, SDL_BLENDMODE_ADD);
+			return;
+
+			case BlendMode::MOD:
+			SDL_SetTextureBlendMode(_texture, SDL_BLENDMODE_MOD);
+			return;
+		}	
+	}
 }
 
 void Image::SetAngle(double angle)

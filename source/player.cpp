@@ -9,6 +9,8 @@ Player::Player()
 {
     LoadImage("images/Player.png");
     image()->SetOrigin(image()->width() / 2, image()->height() / 2);
+
+	image()->SetColor({80, 0, 240});
 }
 
 void Player::HandleEvents(SDL_Event* event)

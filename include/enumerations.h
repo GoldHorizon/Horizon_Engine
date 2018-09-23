@@ -19,6 +19,13 @@ enum class EditorEntityType {
 	Count
 };
 
+enum class BlendMode {
+	NONE,
+	BLEND,
+	ADD,
+	MOD
+};
+
 enum KeyEvents {
 	GAME_QUIT,
 	OPEN_MENU,
