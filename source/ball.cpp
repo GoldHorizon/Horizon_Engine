@@ -1,6 +1,7 @@
-#include "../include/ball.h"
-#include "../include/constants.h"
+#include "ball.h"
+#include "constants.h"
 #include "engineMethods.h"
+#include "inputManager.h"
 
 #include <iostream>
 #include <math.h>
@@ -24,66 +25,63 @@ Ball::Ball()
 
 void Ball::HandleEvents(SDL_Event* event)
 {
-	const Uint8 *state = SDL_GetKeyboardState(NULL);
-
-	// WASD adjusts hspeed/vspeed individually
-	if (state[SDL_SCANCODE_W] ^ state[SDL_SCANCODE_S])
-	{
-		if (vspeed() > -4)
-		{
-			SetVSpeed(vspeed() - (0.1 * state[SDL_SCANCODE_W]));
-		}
-		if (vspeed() < 4)
-		{
-			SetVSpeed(vspeed() + (0.1 * state[SDL_SCANCODE_S]));
-		}
-	}
-	if (state[SDL_SCANCODE_A] ^ state[SDL_SCANCODE_D])
-	{
-		if (hspeed() > -4)
-		{
-			SetHSpeed(hspeed() - (0.1 * state[SDL_SCANCODE_A]));
-		}
-		if (hspeed() < 4)
-		{
-			SetHSpeed(hspeed() + (0.1 * state[SDL_SCANCODE_D]));
-		}
-	}
-
-	// Directional Keys "drive" the ball, can turn or speed up/slow down
-	if (state[SDL_SCANCODE_UP])
-		SetSpeed(speed() + 0.1);
-
-	if (state[SDL_SCANCODE_DOWN])
-		SetSpeed(speed() - 0.1);
-
-	if (state[SDL_SCANCODE_LEFT])
-		SetDirection(direction() - 2);
-
-	if (state[SDL_SCANCODE_RIGHT])
-		SetDirection(direction() + 2);
-
-	// Space stops all motion
-	if (state[SDL_SCANCODE_SPACE])
-	{
-		SetSpeed(0);
-		SetDirection(0);
-	}
+	// No events handled here.
 }
 
 void Ball::Update()
 {
 	Entity::Update();
 
-	// DEBUG
-	/*
-	std::cout << "Speeds:" << std::endl
-		<< hspeed() << std::endl
-		<< vspeed() << std::endl
-		<< speed() << std::endl
-		<< direction() << std::endl
-		<< atan(vspeed() / hspeed()) / PI * 180 << std::endl;
-	*/
+	bool upPressed = Input::KeyHeld(SDLK_UP);
+	bool downPressed = Input::KeyHeld(SDLK_DOWN);
+	bool leftPressed = Input::KeyHeld(SDLK_LEFT);
+	bool rightPressed = Input::KeyHeld(SDLK_RIGHT);
+	bool spacePressed = Input::KeyHeld(SDLK_SPACE);
+
+	// Keys adjusts hspeed/vspeed individually
+	//if (upPressed != downPressed)
+	//{
+	//	if (vspeed() > -4)
+	//	{
+	//		SetVSpeed(vspeed() - (0.1 * upPressed));
+	//	}
+	//	if (vspeed() < 4)
+	//	{
+	//		SetVSpeed(vspeed() + (0.1 * downPressed));
+	//	}
+	//}
+	//if (leftPressed != rightPressed)
+	//{
+	//	if (hspeed() > -4)
+	//	{
+	//		SetHSpeed(hspeed() - (0.1 * leftPressed));
+	//	}
+	//	if (hspeed() < 4)
+	//	{
+	//		SetHSpeed(hspeed() + (0.1 * rightPressed));
+	//	}
+	//}
+
+	// Keys "drive" the ball, can turn or speed up/slow down
+	if (upPressed)
+		SetSpeed(speed() + 0.1);
+
+	if (downPressed)
+		SetSpeed(speed() - 0.1);
+
+	if (leftPressed)
+		SetDirection(direction() - 2);
+
+	if (rightPressed)
+		SetDirection(direction() + 2);
+
+
+	// Space stops all motion
+	if (spacePressed)
+	{
+		SetSpeed(0);
+		SetDirection(0);
+	}
 }
 
 std::string Ball::Serialize()
@@ -91,7 +89,7 @@ std::string Ball::Serialize()
 	std::string serialize_string = Entity::Serialize();
 
 	serialize_string += "@Ball ";
-	// @@Future: Add player's member attributes to string
+	// @@Future: Add ball's member attributes to string
 
 	return serialize_string;
 }

@@ -1,29 +1,34 @@
 #include "inputManager.h"
 
-//static void InputManager::GetNextEvent();
-
 using namespace Input;
 
-int GetNextEvent()
-{
-	return SDL_PollEvent(&currentEvent);
-}
+//int Input::GetNextEvent()
+//{
+//	return SDL_PollEvent(&currentEvent);
+//}
+//
+//bool Input::KeyPressed(SDL_Keycode key)
+//{
+//	if (currentEvent.type == SDL_KEYDOWN) {
+//		if (currentEvent.key.keysym.sym == key)
+//			return true;
+//	}
+//	return false;
+//}
+//
+//bool Input::KeyReleased(SDL_Keycode key)
+//{
+//	if (currentEvent.type == SDL_KEYUP) {
+//		if (currentEvent.key.keysym.sym == key)
+//			return true;
+//	}
+//	return false;
+//}
 
-bool KeyPressed(SDL_Keycode key)
+bool Input::KeyHeld(SDL_Keycode key)
 {
-	if (currentEvent.type == SDL_KEYDOWN) {
-		if (currentEvent.key.keysym.sym == key)
-			return true;
-	}
-	return false;
-}
+	SDL_Scancode sc = SDL_GetScancodeFromKey(key);
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
-bool KeyReleased(SDL_Keycode key)
-{
-	if (currentEvent.type == SDL_KEYUP) {
-		if (currentEvent.key.keysym.sym == key)
-			return true;
-	}
-	return false;
+	return (state[sc] == 1);
 }
-
