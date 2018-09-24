@@ -59,7 +59,7 @@ void ClassName::Initialize()
 	auto help_command = [this](sVector args) {
 		std::string list;
 		std::map<std::string, std::function<void(sVector)>>::iterator it = commands.begin();
-		
+
 		list += it->first;
 
 		while (++it != commands.end())
@@ -192,7 +192,7 @@ int ClassName::HandleEvents(SDL_Event* event)
 	}
 	else if (event->type == SDL_TEXTEDITING)
 	{
-		std::cout << "DEBUG testin editing input?" << std::endl;
+		//std::cout << "DEBUG testing editing input?" << std::endl;
 	}
 
 	return -1;

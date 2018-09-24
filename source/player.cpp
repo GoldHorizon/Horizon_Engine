@@ -1,6 +1,9 @@
-#include "../include/player.h"
-#include "../include/constants.h"
+#include "player.h"
+#include "constants.h"
 #include "engineMethods.h"
+#include "globals.h"
+
+#include "states/console.h"
 
 #include <iostream>
 #include <math.h>
@@ -10,7 +13,35 @@ Player::Player()
     LoadImage("images/Player.png");
     image()->SetOrigin(image()->width() / 2, image()->height() / 2);
 
-	image()->SetColor({80, 0, 240});
+	image()->SetColor({255, 0, 0});
+	image()->SetBlendMode(BlendMode::BLEND);
+
+	commands["psetc"] = [this](sVector args) {
+		if (args.size() == 3) {
+			float rgb[3];
+			for (int i = 0; i < 3; i++)
+				rgb[i] = std::atof(args[i].c_str());
+
+			this->image()->SetColor({rgb[0]*255, rgb[1]*255, rgb[2]*255});
+		} else AddError("Need 3 arguments");
+	};
+
+	commands["psetm"] = [this](sVector args) {
+		if (args.size() == 1) {
+			if (args[0] == "none") this->image()->SetBlendMode(BlendMode::NONE);
+			if (args[0] == "blend") this->image()->SetBlendMode(BlendMode::BLEND);
+			if (args[0] == "add") this->image()->SetBlendMode(BlendMode::ADD);
+			if (args[0] == "mod") this->image()->SetBlendMode(BlendMode::MOD);
+
+		} else AddError("Need 1 argument");
+	};
+
+	commands["pseta"] = [this](sVector args) {
+		if (args.size() == 1)
+			image()->SetAlpha(std::atof(args[0].c_str()));
+		else AddError("Need 1 argument");
+	};
+
 }
 
 void Player::HandleEvents(SDL_Event* event)

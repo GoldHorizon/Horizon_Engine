@@ -4,6 +4,8 @@
 #include "ball.h"
 #include "wall.h"
 
+#include "states/console.h"
+
 #include <sstream>
 #include <iostream>
 
@@ -92,6 +94,16 @@ Entity* CreateSerializedObject(std::string str)
 	}
 
 	return nullptr;
+}
+
+void AddOutput(std::string str)
+{
+	StateConsole::Instance()->AddOutput(str);
+}
+
+void AddError(std::string str)
+{
+	StateConsole::Instance()->AddError(str);
 }
 
 bool operator<(const SDL_Point &lhs, const SDL_Point &rhs) 
