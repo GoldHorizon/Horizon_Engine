@@ -6,12 +6,13 @@
 
 namespace Input {
 
-	SDL_Event currentEvent;
+	//SDL_Event currentEvent;
 
-	void GetNextEvent();
+	//int GetNextEvent();
 
-	bool KeyPressed(SDL_Keycode key);
-	bool KeyReleased(SDL_Keycode key);
+	//bool KeyPressed(SDL_Keycode key);
+	//bool KeyReleased(SDL_Keycode key);
+	bool KeyHeld(SDL_Keycode key);
 
 	//class InputManager
 	//{
@@ -26,4 +27,4 @@ namespace Input {
 
 	//	static SDL_Event currentEvent;
 	//};
-}
+};
