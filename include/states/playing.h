@@ -40,9 +40,6 @@ public:
 
 	void Restart();
 
-	void Pause();
-	void Resume();
-
     static ClassName* Instance()
     {
         if (_thisInstance == nullptr)

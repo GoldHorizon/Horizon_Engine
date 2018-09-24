@@ -444,7 +444,11 @@ void Game::Render(float interpolation)
 
         while (it != _stateStack.end())
         {
-            (*it)->Render(interpolation);
+			if ((*it)->IsPaused()) {
+				(*it)->Render(0);
+			} else {
+				(*it)->Render(interpolation);
+			}
             it++;
         }
     }

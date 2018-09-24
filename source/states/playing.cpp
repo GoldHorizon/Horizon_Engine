@@ -235,34 +235,6 @@ void ClassName::Restart()
 	_level->LoadFromFile();
 }
 
-// Overloading pause and resume from game state generic
-void ClassName::Pause()
-{
-	if (!IsPaused())
-	{
-		//for (int l = 0; l < _levelList.size(); l++) {
-		//	for (int i = 0; i < _levelList[l]->GetCount(); i++)
-		//		_levelList[l]->GetByIndex(i)->SetActive(false);				
-		//}
-
-		GameState::Pause();
-	}
-}
-
-void ClassName::Resume()
-{
-	if (IsPaused())
-	{
-		//for (int l = 0; l < _levelList.size(); l++) {
-		//	for (int i = 0; i < _levelList[l]->GetCount(); i++)
-		//		_levelList[l]->GetByIndex(i)->SetActive(true);				
-		//}
-
-
-		GameState::Resume();
-	}
-}
-
 #ifdef ClassName
 #undef ClassName
 #endif
