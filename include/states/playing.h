@@ -40,6 +40,9 @@ public:
 
 	void Restart();
 
+	void Pause();
+	void Resume();
+
     static ClassName* Instance()
     {
         if (_thisInstance == nullptr)
@@ -53,7 +56,8 @@ public:
 private:
     static ClassName* _thisInstance;
 
-	std::vector<Level*> _levelList;
+	//std::vector<Level*> _levelList;
+	Level * _level;
 	
 	Camera _mainCam;
 };

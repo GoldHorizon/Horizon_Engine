@@ -19,7 +19,9 @@ ClassName::~ClassName()
 
 void ClassName::Initialize()
 {
-	AddLevel("test_file.txt");
+	_level = nullptr;
+
+	ChangeLevel("test_file.txt");
 
 	_mainCam.SetOrigin(Align::MID_C);
 	_mainCam.SetPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
@@ -98,26 +100,14 @@ void ClassName::Cleanup()
 		_entities.RemoveByIndex(0);
 	}
 
-	if (_levelList.size() > 0)
-	{
-		for (int i = 0; i < _levelList.size(); i++)
-		{
-			delete _levelList[i];
-		}
-	}
+	delete _level;
 }
 
 int ClassName::HandleEvents(SDL_Event* event)
 {
 	_entities.HandleAllEvents(event);
 
-	if (_levelList.size() > 0)
-	{
-		for (int i = 0; i < _levelList.size(); i++)
-		{
-			_levelList[i]->HandleAllEvents(event);
-		}
-	}
+	_level->HandleAllEvents(event);
 
 //	const Uint8 *state = SDL_GetKeyboardState(NULL);
 //
@@ -162,14 +152,7 @@ void ClassName::Update()
 	{
 		_entities.UpdateAll();
 
-		if (_levelList.size() > 0)
-		{
-			//std::cout << "DEBUG: we have a level" << std::endl;
-			for (int i = 0; i < _levelList.size(); i++)
-			{
-				_levelList[i]->UpdateAll();
-			}
-		}
+		_level->UpdateAll();
 
 		if (Input::KeyHeld(SDLK_h)) _mainCam.Move(-2, 0);
 		if (Input::KeyHeld(SDLK_j)) _mainCam.Move(0, 2);
@@ -182,13 +165,7 @@ void ClassName::Render(float interpolation)
 {
     _entities.RenderAll(interpolation, -_mainCam.x(), -_mainCam.y());
 
-	if (_levelList.size() > 0)
-	{
-		for (int i = 0; i < _levelList.size(); i++)
-		{
-			_levelList[i]->RenderAll(interpolation, -_mainCam.x(), -_mainCam.y());
-		}
-	}
+	_level->RenderAll(interpolation, -_mainCam.x(), -_mainCam.y());
 }
 
 void ClassName::AddLevel(std::string name)
@@ -207,48 +184,82 @@ void ClassName::AddLevel(std::string name)
 
 void ClassName::AddLevel(Level* level)
 {
-	_levelList.push_back(level);
+	//_levelList.push_back(level);
 }
 
 void ClassName::ChangeLevel(std::string name)
 {
-	_levelList.clear();
+	if (_level == nullptr || name != _level->GetFileName()) {
+		delete _level;
 
-	Level* newLevel = new Level(name);
+		Level* newLevel = new Level(name);
 
-	if (!newLevel->LoadFromFile())
-	{
-		std::cout << "Error: Could not add level! Level was not found" << std::endl;
-	}
-	else
-	{
-		AddLevel(newLevel);
+		if (!newLevel->LoadFromFile())
+		{
+			std::cout << "Error: Could not add level! Level was not found" << std::endl;
+		}
+		else
+		{
+			//AddLevel(newLevel);
+			_level = newLevel;
+		}
 	}
 }
 
 Level* ClassName::GetLevel()
 {
-	if (_levelList.size() == 1)
-	{
-		return _levelList[0];
-	}
-	if (_levelList.size() == 0)
-	{
-		std::cout << "Error: No level in level list" << std::endl;
-	}
-	else if (_levelList.size() > 1)
-	{
-		std::cout << "Error: More than 1 level in level list" << std::endl;
-	}
+	return _level;
+	//if (_levelList.size() == 1)
+	//{
+	//	return _levelList[0];
+	//}
+	//if (_levelList.size() == 0)
+	//{
+	//	std::cout << "Error: No level in level list" << std::endl;
+	//}
+	//else if (_levelList.size() > 1)
+	//{
+	//	std::cout << "Error: More than 1 level in level list" << std::endl;
+	//}
 
-	return nullptr;
+	//return nullptr;
 }
 
 void ClassName::Restart()
 {
-	for (int i = 0; i < _levelList.size(); i++)
+	//for (int i = 0; i < _levelList.size(); i++)
+	//{
+	//	_levelList[i]->LoadFromFile();
+	//}
+
+	_level->LoadFromFile();
+}
+
+// Overloading pause and resume from game state generic
+void ClassName::Pause()
+{
+	if (!IsPaused())
 	{
-		_levelList[i]->LoadFromFile();
+		//for (int l = 0; l < _levelList.size(); l++) {
+		//	for (int i = 0; i < _levelList[l]->GetCount(); i++)
+		//		_levelList[l]->GetByIndex(i)->SetActive(false);				
+		//}
+
+		GameState::Pause();
+	}
+}
+
+void ClassName::Resume()
+{
+	if (IsPaused())
+	{
+		//for (int l = 0; l < _levelList.size(); l++) {
+		//	for (int i = 0; i < _levelList[l]->GetCount(); i++)
+		//		_levelList[l]->GetByIndex(i)->SetActive(true);				
+		//}
+
+
+		GameState::Resume();
 	}
 }
 
