@@ -334,7 +334,7 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 				break;
 
 			default:
-				std::cout << "Error: Unimplemented key event detected..." << std::endl;
+				std::cout << "Error: Unimplemented menu event detected..." << std::endl;
 				break;
 			}
 		}
@@ -353,6 +353,10 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 				}
 				else
 				{
+					std::vector<GameState*>::iterator it = _stateStack.end();
+					it--;
+					(*it)->Pause();
+					
 					PushState(StateConsole::Instance());
 					//std::cout << "Console closed, opening ";
 					if (_event.key.keysym.mod & KMOD_LSHIFT)
@@ -394,21 +398,33 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 
 void Game::Update()
 {
-  // STEP 2: Update
-  if (!_stateStack.empty())
-    {
-        std::vector<GameState*>::iterator it = _stateStack.begin();
+	// STEP 2: Update
+	if (!_stateStack.empty())
+		{
+			// This will allow the topmost gamestate to handle any events given to the window
+			// (Preventing lower gamestates from taking input i.e. when a pause menu overlay is up)
+			//std::vector<GameState*>::iterator it = _stateStack.end();
+			//it--;
+			//(*it)->Update();
 
-        while (it != _stateStack.end())
-        {
-            (*it)->Update();
-			it++;
-        }
-    }
+			std::vector<GameState*>::iterator it = _stateStack.begin();
+			while (it != _stateStack.end())
+			{
+				if (!(*it)->IsPaused()) {
+					(*it)->Update();
+				}
+				it++;
+			}
+		}
 
 	// Check console (if we have it open) if it should be closed
-	if (_stateStack.back()->GetType() == GameStateType::CONSOLE && StateConsole::Instance()->IsClosed())
+	if (_stateStack.back()->GetType() == GameStateType::CONSOLE && StateConsole::Instance()->IsClosed()) {
 		CloseConsole();
+
+		std::vector<GameState*>::iterator it = _stateStack.end();
+		it--;
+		(*it)->Resume();
+	}
 
     // deprecated ***
 	//_entities.UpdateAll();
