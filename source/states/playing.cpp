@@ -154,10 +154,10 @@ void ClassName::Update()
 
 		_level->UpdateAll();
 
-		if (Input::KeyHeld(SDLK_h)) globalCam->Move(-2, 0);
-		if (Input::KeyHeld(SDLK_j)) globalCam->Move(0, 2);
-		if (Input::KeyHeld(SDLK_k)) globalCam->Move(0, -2);
-		if (Input::KeyHeld(SDLK_l)) globalCam->Move(2, 0);
+		if (Input::KeyHeld(SDLK_h)) globalCam->Move(-4, 0);
+		if (Input::KeyHeld(SDLK_j)) globalCam->Move(0, 4);
+		if (Input::KeyHeld(SDLK_k)) globalCam->Move(0, -4);
+		if (Input::KeyHeld(SDLK_l)) globalCam->Move(4, 0);
 	}
 }
 

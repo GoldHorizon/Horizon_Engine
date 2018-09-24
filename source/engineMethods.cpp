@@ -3,6 +3,7 @@
 #include "text.h"
 #include "ball.h"
 #include "wall.h"
+#include "globals.h"
 
 #include "states/console.h"
 
@@ -104,6 +105,32 @@ void AddOutput(std::string str)
 void AddError(std::string str)
 {
 	StateConsole::Instance()->AddError(str);
+}
+
+Vec2<int> WorldToScreen(const Vec2<int> &coords)
+{
+	int x = coords.x - globalCam->x();
+	int y = coords.y - globalCam->y();
+
+	return {x, y};
+}
+
+Vec2<int> WorldToScreen(int x, int y)
+{
+	return WorldToScreen({x, y});
+}
+
+Vec2<int> ScreenToWorld(const Vec2<int> &coords)
+{
+	int x = coords.x + globalCam->x();
+	int y = coords.y + globalCam->y();
+
+	return {x, y};
+}
+
+Vec2<int> ScreenToWorld(int x, int y)
+{
+	return ScreenToWorld({x, y});
 }
 
 bool operator<(const SDL_Point &lhs, const SDL_Point &rhs) 

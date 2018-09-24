@@ -4,6 +4,8 @@
 #include "player.h"
 #include "ball.h"
 #include "wall.h"
+#include "inputManager.h"
+#include "engineMethods.h"
 
 #include <iostream>
 
@@ -88,11 +90,9 @@ int ClassName::HandleEvents(SDL_Event* event)
 	{
 		if (event->button.button == SDL_BUTTON_LEFT) {
 			_isCreating = true;
-			if (_isDeleting) _isDeleting = false;	
 		}
 		else if (event->button.button == SDL_BUTTON_RIGHT) {
 			_isDeleting = true;
-			if (_isCreating) _isCreating = false;	
 		}
 	}
 	else if (event->type == SDL_MOUSEBUTTONUP &&
@@ -134,15 +134,21 @@ void ClassName::Update()
 		// Only updates entities local to editor, NOT _currentLevel's entities
 		_entities.UpdateAll();
 
-		// Put editor entity addition/deletion in here?
+		// Temporary camera movement
+		if (Input::KeyHeld(SDLK_h)) globalCam->Move(-4, 0);
+		if (Input::KeyHeld(SDLK_j)) globalCam->Move(0, 4);
+		if (Input::KeyHeld(SDLK_k)) globalCam->Move(0, -4);
+		if (Input::KeyHeld(SDLK_l)) globalCam->Move(4, 0);
 
-		if (_isCreating || _isDeleting) {
+		if (_isCreating != _isDeleting) {
 			int x, y;
 
 			SDL_GetMouseState(&x, &y);
+
+			Vec2<int> temp = ScreenToWorld(x, y);
 			
-			x = x - (x % _gridSize);
-			y = y - (y % _gridSize);
+			x = temp.x - (temp.x % _gridSize);
+			y = temp.y - (temp.y % _gridSize);
 
 			if (_isCreating) {
 
@@ -221,10 +227,25 @@ void ClassName::Render(float interpolation)
 	if (_drawGrid)
 	{
 		for (int j = _gridSize; j < SCREEN_HEIGHT; j += _gridSize) {
-			DrawLine(0, j, SCREEN_WIDTH, j, SDL_Color {180, 180, 180, 255});
+			int temp;
+			if (globalCam->y() >= 0)
+				temp = (globalCam->y() % _gridSize);
+			else
+				temp = (_gridSize - (std::abs(globalCam->y()) % _gridSize));
+
+			int yy = j - temp;
+			DrawLine(0, yy, SCREEN_WIDTH, yy,  SDL_Color {180, 180, 180, 255});
 		}
+
 		for (int i = _gridSize; i < SCREEN_WIDTH; i += _gridSize) {
-			DrawLine(i, 0, i, SCREEN_HEIGHT, SDL_Color {180, 180, 180, 255});
+			int temp;
+			if (globalCam->x() >= 0)
+				temp = (globalCam->x() % _gridSize);
+			else
+				temp = (_gridSize - (std::abs(globalCam->x()) % _gridSize));
+
+			int xx = i - temp;
+			DrawLine(xx, 0, xx, SCREEN_HEIGHT, SDL_Color {180, 180, 180, 255});
 		}
 	}
 
