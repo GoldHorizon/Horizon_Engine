@@ -51,6 +51,9 @@ void Player::HandleEvents(SDL_Event* event)
         int x, y;
         SDL_GetMouseState(&x, &y);
 
+		// Alter coords based on cam position
+		x += globalCam->x();
+		y += globalCam->y();
         SetX(x);
         SetY(y);
     } 
