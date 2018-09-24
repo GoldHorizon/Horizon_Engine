@@ -1,6 +1,7 @@
-#include "../include/globals.h"
+#include "globals.h"
 
 SDL_Renderer* globalRenderer = nullptr;
+Camera* globalCam = nullptr;
 
 Font *defaultFont = nullptr;
 Font *menuTitleFont = nullptr;

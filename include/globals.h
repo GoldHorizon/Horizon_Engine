@@ -6,13 +6,17 @@
 #include "text.h"
 #include "constants.h"
 #include "types.h"
+#include "camera.h"
 
 #include <map>
 #include <functional>
 #include <vector>
 
+// Rendering
 extern SDL_Renderer* globalRenderer;
+extern Camera* globalCam;
 
+// Fonts
 extern Font *defaultFont;
 extern Font *menuTitleFont;
 extern Font *menuOptionFont;

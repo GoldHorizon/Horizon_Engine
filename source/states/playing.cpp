@@ -23,8 +23,8 @@ void ClassName::Initialize()
 
 	ChangeLevel("test_file.txt");
 
-	_mainCam.SetOrigin(Align::MID_C);
-	_mainCam.SetPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+	globalCam->SetOrigin(Align::MID_C);
+	globalCam->SetPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 
 	//AddLevel("another_test.txt");
 
@@ -126,19 +126,19 @@ int ClassName::HandleEvents(SDL_Event* event)
 			break;
 
 		//case SDLK_h:
-		//	_mainCam.Move(-10, 0);
+		//	globalCam->Move(-10, 0);
 		//	break;
 
 		//case SDLK_j:
-		//	_mainCam.Move(0, 10);
+		//	globalCam->Move(0, 10);
 		//	break;
 
 		//case SDLK_k:
-		//	_mainCam.Move(0, -10);
+		//	globalCam->Move(0, -10);
 		//	break;
 
 		//case SDLK_l:
-		//	_mainCam.Move(10, 0);
+		//	globalCam->Move(10, 0);
 		//	break;
 		}
 	}
@@ -154,18 +154,18 @@ void ClassName::Update()
 
 		_level->UpdateAll();
 
-		if (Input::KeyHeld(SDLK_h)) _mainCam.Move(-2, 0);
-		if (Input::KeyHeld(SDLK_j)) _mainCam.Move(0, 2);
-		if (Input::KeyHeld(SDLK_k)) _mainCam.Move(0, -2);
-		if (Input::KeyHeld(SDLK_l)) _mainCam.Move(2, 0);
+		if (Input::KeyHeld(SDLK_h)) globalCam->Move(-2, 0);
+		if (Input::KeyHeld(SDLK_j)) globalCam->Move(0, 2);
+		if (Input::KeyHeld(SDLK_k)) globalCam->Move(0, -2);
+		if (Input::KeyHeld(SDLK_l)) globalCam->Move(2, 0);
 	}
 }
 
 void ClassName::Render(float interpolation)
 {
-    _entities.RenderAll(interpolation, -_mainCam.x(), -_mainCam.y());
+    _entities.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
 
-	_level->RenderAll(interpolation, -_mainCam.x(), -_mainCam.y());
+	_level->RenderAll(interpolation, -globalCam->x(), -globalCam->y());
 }
 
 void ClassName::AddLevel(std::string name)

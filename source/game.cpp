@@ -75,6 +75,9 @@ int Game::Initialize()
 	// After doing that, load global fonts for our use.
 	LoadFonts();
 
+	// Start up our camera before other stuff
+	globalCam = new Camera();
+
 	// STEP 2
 	// Setup our main window with an SDL_Window pointer
 	_mainWindow = SDL_CreateWindow("Main Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);

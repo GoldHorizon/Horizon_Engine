@@ -55,8 +55,6 @@ private:
 
 	//std::vector<Level*> _levelList;
 	Level * _level;
-	
-	Camera _mainCam;
 };
 
 #ifdef ClassName
