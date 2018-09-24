@@ -6,6 +6,7 @@
 #include "file.h"
 #include "engineMethods.h"
 #include "globals.h"
+#include "inputManager.h"
 
 #define ClassName StatePlaying
 
@@ -134,21 +135,21 @@ int ClassName::HandleEvents(SDL_Event* event)
 				return OPEN_MENU;
 			break;
 
-		case SDLK_h:
-			_mainCam.Move(-10, 0);
-			break;
+		//case SDLK_h:
+		//	_mainCam.Move(-10, 0);
+		//	break;
 
-		case SDLK_j:
-			_mainCam.Move(0, 10);
-			break;
+		//case SDLK_j:
+		//	_mainCam.Move(0, 10);
+		//	break;
 
-		case SDLK_k:
-			_mainCam.Move(0, -10);
-			break;
+		//case SDLK_k:
+		//	_mainCam.Move(0, -10);
+		//	break;
 
-		case SDLK_l:
-			_mainCam.Move(10, 0);
-			break;
+		//case SDLK_l:
+		//	_mainCam.Move(10, 0);
+		//	break;
 		}
 	}
 
@@ -169,6 +170,11 @@ void ClassName::Update()
 				_levelList[i]->UpdateAll();
 			}
 		}
+
+		if (Input::KeyHeld(SDLK_h)) _mainCam.Move(-2, 0);
+		if (Input::KeyHeld(SDLK_j)) _mainCam.Move(0, 2);
+		if (Input::KeyHeld(SDLK_k)) _mainCam.Move(0, -2);
+		if (Input::KeyHeld(SDLK_l)) _mainCam.Move(2, 0);
 	}
 }
 
