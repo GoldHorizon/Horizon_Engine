@@ -8,6 +8,9 @@
 sVector* ParseSerializedString(std::string str);
 Entity* CreateSerializedObject(std::string str);
 
+void AddOutput(std::string str);
+void AddError(std::string str);
+
 template <class T>
 void Lerp(T& from, T to, T rate)
 {
