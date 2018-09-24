@@ -21,7 +21,7 @@ void ClassName::Initialize()
 	AddLevel("test_file.txt");
 
 	_mainCam.SetOrigin(Align::MID_C);
-	_mainCam.SetPosition(0, 0);
+	_mainCam.SetPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 
 	//AddLevel("another_test.txt");
 
