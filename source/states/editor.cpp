@@ -229,10 +229,10 @@ void ClassName::Render(float interpolation)
 	}
 
 	// We will render objects, but not update them
-    _entities.RenderAll(interpolation);
+    _entities.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
 
 	// Draw level entities, without updating them
-	_currentLevel.RenderAll(interpolation);
+	_currentLevel.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
 
 	// Draw object type
 	if (_drawType)

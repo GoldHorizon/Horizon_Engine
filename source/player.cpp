@@ -54,6 +54,7 @@ void Player::HandleEvents(SDL_Event* event)
 		// Alter coords based on cam position
 		x += globalCam->x();
 		y += globalCam->y();
+
         SetX(x);
         SetY(y);
     } 
