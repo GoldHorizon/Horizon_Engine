@@ -118,30 +118,63 @@ int ClassName::HandleEvents(SDL_Event* event)
 			{
 				if (event->key.keysym.mod & KMOD_CTRL)
 				{
-					// Delete any space behind the last word
-					while (_currentLine.size() > 0 && _currentLine.back() == ' ')
-						_currentLine.pop_back();
+					if (_cursorPosition == _currentLine.size()) {
+						// Delete any space behind the last word
+						while (_currentLine.size() > 0 && _currentLine.back() == ' ')
+							_currentLine.pop_back();
 
-					// Delete the last word on the line
-					if (_currentLine.size() == 0) break;
-					while (_currentLine.size() > 0 && _currentLine.back() != ' ')
-						_currentLine.pop_back();
+						// Delete the last word on the line
+						//if (_currentLine.size() == 0) break;
+						while (_currentLine.size() > 0 && _currentLine.back() != ' ')
+							_currentLine.pop_back();
 
-					// Delete any spaces before the last word
-					while (_currentLine.size() > 0 && _currentLine.back() == ' ')
-						_currentLine.pop_back();
+						// Delete any spaces before the last word
+						while (_currentLine.size() > 0 && _currentLine.back() == ' ')
+							_currentLine.pop_back();
 
-					_cursorPosition = _currentLine.size();
+						_cursorPosition = _currentLine.size();
+					} else if (_cursorPosition != 0) {
+
+						std::string lh, rh;
+						lh = _currentLine.substr(0, _cursorPosition);
+						rh = _currentLine.substr(_cursorPosition, std::string::npos);
+
+						// Delete any space behind the last word
+						while (lh.size() > 0 && lh.back() == ' ')
+							lh.pop_back();
+
+						// Delete the last word on the line
+						while (lh.size() > 0 && lh.back() != ' ')
+							lh.pop_back();
+
+						// Delete any spaces before the last word
+						while (lh.size() > 0 && lh.back() == ' ')
+							lh.pop_back();
+
+						_currentLine = lh + rh;
+						_cursorPosition = lh.size();
+					}	
 				}
 				else
 				{
-					// Delete last character
-					if (_currentLine.size() > 0)
-						_currentLine.pop_back();
+					if (_cursorPosition == _currentLine.size()) {
+						// Delete last character
+						if (_currentLine.size() > 0)
+							_currentLine.pop_back();
 
-					_cursorPosition--;
+						_cursorPosition--;
 
-					if (_cursorPosition < 0) _cursorPosition = 0;
+						if (_cursorPosition < 0) _cursorPosition = 0;
+					} else if (_cursorPosition != 0) {
+						std::string lh, rh;
+						lh = _currentLine.substr(0, _cursorPosition);
+						rh = _currentLine.substr(_cursorPosition, std::string::npos);
+
+						lh.pop_back();
+
+						_currentLine = lh + rh;
+						_cursorPosition = lh.size();
+					}	
 				}
 			}
 			break;
