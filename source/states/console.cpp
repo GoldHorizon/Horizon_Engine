@@ -172,15 +172,38 @@ int ClassName::HandleEvents(SDL_Event* event)
 
 		case SDLK_LEFT:
 			{
-				if (_cursorPosition > 0)
+				if (_cursorPosition > 0) {
 					_cursorPosition--;
+					if (event->key.keysym.mod & KMOD_LCTRL) {
+						while (_cursorPosition > 0 && _currentLine[_cursorPosition] == ' ')
+							_cursorPosition--;
+						while (_cursorPosition > 0 && _currentLine[_cursorPosition] != ' ')
+							_cursorPosition--;
+
+						if (_cursorPosition != 0) _cursorPosition++;
+						else if (_cursorPosition == 0) 
+							while (_currentLine[_cursorPosition] == ' ')
+								_cursorPosition++;
+					}
+				}
 			}
 			break;
 
 		case SDLK_RIGHT:
 			{
-				if (_cursorPosition < _currentLine.size())
-					_cursorPosition++;
+				if (_cursorPosition < _currentLine.size()) {
+					if (event->key.keysym.mod & KMOD_LCTRL) {
+						if (_currentLine[_cursorPosition] != ' ')
+							while (_cursorPosition < _currentLine.size() && _currentLine[_cursorPosition] != ' ')
+								_cursorPosition++;
+
+						while (_cursorPosition < _currentLine.size() && _currentLine[_cursorPosition] == ' ')
+							_cursorPosition++;
+
+						//if (_cursorPosition != _currentLine.size() && _currentLine[_cursorPosition] == ' ') _cursorPosition++;
+					}
+					else _cursorPosition++;
+				}
 			}
 			break;
 
@@ -224,10 +247,14 @@ int ClassName::HandleEvents(SDL_Event* event)
 			_cursorPosition++;
 		}
 	}
-	else if (event->type == SDL_TEXTEDITING)
+	else if (event->type == SDL_MOUSEWHEEL)
 	{
-		//std::cout << "DEBUG testing editing input?" << std::endl;
+		
 	}
+	//else if (event->type == SDL_TEXTEDITING)
+	//{
+	//	//std::cout << "DEBUG testing editing input?" << std::endl;
+	//}
 
 	return -1;
 }
