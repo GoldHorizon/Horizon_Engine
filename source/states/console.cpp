@@ -193,14 +193,12 @@ int ClassName::HandleEvents(SDL_Event* event)
 			{
 				if (_cursorPosition < _currentLine.size()) {
 					if (event->key.keysym.mod & KMOD_LCTRL) {
-						if (_currentLine[_cursorPosition] != ' ')
-							while (_cursorPosition < _currentLine.size() && _currentLine[_cursorPosition] != ' ')
-								_cursorPosition++;
+						while (_cursorPosition < _currentLine.size() && _currentLine[_cursorPosition] != ' ')
+							_cursorPosition++;
 
 						while (_cursorPosition < _currentLine.size() && _currentLine[_cursorPosition] == ' ')
 							_cursorPosition++;
 
-						//if (_cursorPosition != _currentLine.size() && _currentLine[_cursorPosition] == ' ') _cursorPosition++;
 					}
 					else _cursorPosition++;
 				}
