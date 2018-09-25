@@ -226,7 +226,7 @@ void ClassName::Render(float interpolation)
 	// Drawing grid
 	if (_drawGrid)
 	{
-		for (int j = _gridSize; j < SCREEN_HEIGHT; j += _gridSize) {
+		for (int j = _gridSize; j <= SCREEN_HEIGHT + _gridSize; j += _gridSize) {
 			int temp;
 			if (globalCam->y() >= 0)
 				temp = (globalCam->y() % _gridSize);
@@ -237,7 +237,7 @@ void ClassName::Render(float interpolation)
 			DrawLine(0, yy, SCREEN_WIDTH, yy,  SDL_Color {180, 180, 180, 255});
 		}
 
-		for (int i = _gridSize; i < SCREEN_WIDTH; i += _gridSize) {
+		for (int i = _gridSize; i <= SCREEN_WIDTH + _gridSize; i += _gridSize) {
 			int temp;
 			if (globalCam->x() >= 0)
 				temp = (globalCam->x() % _gridSize);
