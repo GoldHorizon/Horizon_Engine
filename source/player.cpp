@@ -13,8 +13,8 @@ Player::Player()
     LoadImage("images/Player.png");
     image()->SetOrigin(image()->width() / 2, image()->height() / 2);
 
-	image()->SetColor({.5 * 255, .2 * 255, .2 * 255});
-	image()->SetBlendMode(BlendMode::ADD);
+	image()->SetColor({.5 * 255, .5 * 255, .2 * 255});
+	image()->SetBlendMode(BlendMode::BLEND);
 
 	commands["psetc"] = [this](sVector args) {
 		if (args.size() == 3) {
