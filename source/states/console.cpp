@@ -173,18 +173,22 @@ int ClassName::HandleEvents(SDL_Event* event)
 		case SDLK_LEFT:
 			{
 				if (_cursorPosition > 0) {
-					_cursorPosition--;
+					//_cursorPosition--;
 					if (event->key.keysym.mod & KMOD_LCTRL) {
+						if (_currentLine[_cursorPosition] != ' ' && _currentLine[_cursorPosition - 1] == ' ')
+							_cursorPosition--;
 						while (_cursorPosition > 0 && _currentLine[_cursorPosition] == ' ')
 							_cursorPosition--;
 						while (_cursorPosition > 0 && _currentLine[_cursorPosition] != ' ')
 							_cursorPosition--;
 
-						if (_cursorPosition != 0) _cursorPosition++;
-						else if (_cursorPosition == 0) 
-							while (_currentLine[_cursorPosition] == ' ')
-								_cursorPosition++;
-					}
+						if (_currentLine[_cursorPosition] == ' ' && _currentLine[_cursorPosition + 1] != ' ')
+							_cursorPosition++;
+						//if (_cursorPosition != 0) _cursorPosition++;
+						//else if (_cursorPosition == 0) 
+						//	while (_currentLine[_cursorPosition] == ' ')
+						//		_cursorPosition++;
+					} else _cursorPosition--;
 				}
 			}
 			break;
@@ -233,16 +237,19 @@ int ClassName::HandleEvents(SDL_Event* event)
 	{
 		char c = event->text.text[0];
 		if (c != '`' && c != '~') {
-			if (_cursorPosition == _currentLine.size())
-				_currentLine += event->text.text;
-			else if (_cursorPosition == 0)
-				_currentLine = event->text.text + _currentLine;
-			else
-				_currentLine = _currentLine.substr(0, _cursorPosition) 
-								+ event->text.text 
-								+ _currentLine.substr(_cursorPosition, std::string::npos);
+			if (_cursorPosition > 0 || c != ' ') {
 
-			_cursorPosition++;
+				if (_cursorPosition == _currentLine.size())
+					_currentLine += event->text.text;
+				else if (_cursorPosition == 0)
+					_currentLine = event->text.text + _currentLine;
+				else
+					_currentLine = _currentLine.substr(0, _cursorPosition) 
+									+ event->text.text 
+									+ _currentLine.substr(_cursorPosition, std::string::npos);
+
+				_cursorPosition++;
+			}
 		}
 	}
 	else if (event->type == SDL_MOUSEWHEEL)
