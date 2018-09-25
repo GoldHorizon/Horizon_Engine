@@ -2,6 +2,7 @@
 
 #include "globals.h"
 #include "text.h"
+#include "enumerations.h"
 
 #include <iostream>
 
@@ -45,9 +46,15 @@ void DrawLine(int x1, int y1, int x2, int y2, SDL_Color c)
 	SDL_RenderDrawLine(globalRenderer, x1, y1, x2, y2);
 }
 
-void DrawText(std::string str, Font* font, int x, int y, TextAlignment align, SDL_Color c)
+void DrawText(std::string str, TextQuality quality, Font* font, int x, int y, TextAlignment align, SDL_Color c, SDL_Color bg)
 {
-	SDL_Surface* surface = TTF_RenderText_Solid(font->font(), str.c_str(), c);
+	SDL_Surface* surface;
+	switch (quality) {
+		case TextQuality::SOLID: surface 	= TTF_RenderText_Solid(font->font(), str.c_str(), c); break;
+		case TextQuality::BLENDED: surface 	= TTF_RenderText_Blended(font->font(), str.c_str(), c); break;
+		case TextQuality::SHADED: surface 	= TTF_RenderText_Shaded(font->font(), str.c_str(), c, bg); break;
+	}
+
 	if (surface == nullptr) {
 		std::cout << "Error: Drawing text, can't make surface: ";
 		std::cout << TTF_GetError() << std::endl;

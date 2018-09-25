@@ -185,10 +185,10 @@ int Game::Initialize()
 
 void Game::LoadFonts()
 {
-	defaultFont 	= new Font("DefaultFont", 	"assets/Inconsolata-Regular.ttf", 	12);
+	defaultFont 	= new Font("DefaultFont", 	"assets/Inconsolata-Regular.ttf", 	16);
 	menuTitleFont 	= new Font("MenuTitle", 	"assets/Inconsolata-Regular.ttf", 	36);
 	menuOptionFont 	= new Font("MenuOption", 	"assets/Inconsolata-Regular.ttf", 	24);
-	consoleFont 	= new Font("ConsoleFont", 	"assets/Inconsolata-Regular.ttf", 	16);
+	consoleFont 	= new Font("ConsoleFont", 	"assets/Hack-Regular.ttf", 	16);
 
 	fontList[0] = defaultFont;
 	fontList[1] = menuTitleFont;

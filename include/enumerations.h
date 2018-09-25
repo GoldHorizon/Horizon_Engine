@@ -38,6 +38,12 @@ enum class Align {
 	BOT_R
 };
 
+enum class TextQuality {
+	SOLID,
+	BLENDED,
+	SHADED
+};
+
 enum KeyEvents {
 	GAME_QUIT,
 	OPEN_MENU,

@@ -64,7 +64,7 @@ void ClassName::Initialize()
 
 		while (++it != commands.end())
 		{
-			list += ",\t";
+			list += ", ";
 
 			list += it->first;
 		}
@@ -229,6 +229,7 @@ void ClassName::Update()
 void ClassName::Render(float interpolation)
 {
 	if (_openHeight > 0) {
+		// Draw console window
 		DrawRect(0, 0, SCREEN_WIDTH, _openHeight, _consoleColor);
 		DrawLine(0, _openHeight - 40, SCREEN_WIDTH, _openHeight - 40, SDL_Color {255, 255, 255, 255});
 		DrawLine(0, _openHeight - 39, SCREEN_WIDTH, _openHeight - 39, SDL_Color {0, 0, 0, 255});
@@ -237,7 +238,7 @@ void ClassName::Render(float interpolation)
 	for (int i = 0; i < _history.size(); i++)
 	{
 		// First drop shadow, then text
-		DrawText(_history[i].text, consoleFont, 8 + 1, _openHeight - 64 - (16 * i) + 1, ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 64 - (16 * i) + 1, ALIGN_LEFT, {0, 0, 0, 255});
 
 		// Decide text color based on text type
 		SDL_Color *text_c;
@@ -255,16 +256,16 @@ void ClassName::Render(float interpolation)
 				text_c = &_textErrorColor;
 				break;
 		}
-		DrawText(_history[i].text, consoleFont, 8, _openHeight - 64 - (16 * i), ALIGN_LEFT, *text_c);
+		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8, _openHeight - 64 - (16 * i), ALIGN_LEFT, *text_c);
 	}
 
 	// Draw the cursor
-	DrawRect((_cursorPosition * 8) + 9, static_cast<int>(_openHeight - 32), 10, 20, SDL_Color {180, 0, 0, 255});
+	//DrawRect((_cursorPosition * 8) + 9, static_cast<int>(_openHeight - 32), 10, 20, SDL_Color {180, 0, 0, 255});
 
 	// Also draw current line being typed
 	if (_currentLine != "") {
-		DrawText(_currentLine, consoleFont, 8 + 1, _openHeight - 32 + 1, ALIGN_LEFT, {0, 0, 0, 255});
-		DrawText(_currentLine, consoleFont, 8, _openHeight - 32, ALIGN_LEFT, _textInputColor);
+		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 32 + 1, ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8, _openHeight - 32, ALIGN_LEFT, _textInputColor);
 	}
 
     //_entities.RenderAll(interpolation);

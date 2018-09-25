@@ -279,8 +279,8 @@ void ClassName::Render(float interpolation)
 			default:
 				type_text = "Invalid";
 		}
-		DrawText(type_text, defaultFont, 9, 9, TextAlignment::ALIGN_LEFT, {0, 0, 0, 255});
-		DrawText(type_text, defaultFont, 8, 8, TextAlignment::ALIGN_LEFT, {255, 255, 255, 255});
+		//DrawText(type_text, defaultFont, 9, 9, TextAlignment::ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(type_text, TextQuality::SHADED, defaultFont, 8, 8, TextAlignment::ALIGN_LEFT, {255, 255, 255, 255});
 	}
 }
 
