@@ -260,7 +260,7 @@ void ClassName::Render(float interpolation)
 	}
 
 	// Draw the cursor
-	//DrawRect((_cursorPosition * 8) + 9, static_cast<int>(_openHeight - 32), 10, 20, SDL_Color {180, 0, 0, 255});
+	DrawRect((_cursorPosition * 10) + 10, static_cast<int>(_openHeight - 32), 10, 20, SDL_Color {180, 0, 0, 255});
 
 	// Also draw current line being typed
 	if (_currentLine != "") {
