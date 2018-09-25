@@ -146,9 +146,12 @@ void ClassName::Update()
 			SDL_GetMouseState(&x, &y);
 
 			Vec2<int> temp = ScreenToWorld(x, y);
-			
+
 			x = temp.x - (temp.x % _gridSize);
 			y = temp.y - (temp.y % _gridSize);
+
+			if (temp.x < 0) x -= _gridSize;
+			if (temp.y < 0) y -= _gridSize;
 
 			if (_isCreating) {
 
