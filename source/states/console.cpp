@@ -170,6 +170,32 @@ int ClassName::HandleEvents(SDL_Event* event)
 			}
 			break;
 
+		case SDLK_LEFT:
+			{
+				if (_cursorPosition > 0)
+					_cursorPosition--;
+			}
+			break;
+
+		case SDLK_RIGHT:
+			{
+				if (_cursorPosition < _currentLine.size())
+					_cursorPosition++;
+			}
+			break;
+
+		case SDLK_HOME:
+			{
+				_cursorPosition = 0;
+			}
+			break;
+
+		case SDLK_END:
+			{
+				_cursorPosition = _currentLine.size();
+			}
+			break;
+
 		case SDLK_RETURN:
 			{
 				if (_currentLine.size() > 0)
@@ -186,7 +212,15 @@ int ClassName::HandleEvents(SDL_Event* event)
 	{
 		char c = event->text.text[0];
 		if (c != '`' && c != '~') {
-			_currentLine += event->text.text;
+			if (_cursorPosition == _currentLine.size())
+				_currentLine += event->text.text;
+			else if (_cursorPosition == 0)
+				_currentLine = event->text.text + _currentLine;
+			else
+				_currentLine = _currentLine.substr(0, _cursorPosition) 
+								+ event->text.text 
+								+ _currentLine.substr(_cursorPosition, std::string::npos);
+
 			_cursorPosition++;
 		}
 	}
@@ -260,7 +294,7 @@ void ClassName::Render(float interpolation)
 	}
 
 	// Draw the cursor
-	DrawRect((_cursorPosition * 10) + 10, static_cast<int>(_openHeight - 32), 10, 20, SDL_Color {180, 0, 0, 255});
+	DrawRect((_cursorPosition * 10) + 9, static_cast<int>(_openHeight - 32), 10, 20, SDL_Color {180, 0, 0, 255});
 
 	// Also draw current line being typed
 	if (_currentLine != "") {
