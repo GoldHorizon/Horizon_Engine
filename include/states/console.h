@@ -75,6 +75,7 @@ private:
 	SDL_Color _textErrorColor;
 
 	std::vector<c_line> _history;
+	int _historyLine;
 };
 
 struct c_line

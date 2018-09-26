@@ -20,6 +20,9 @@ ClassName::~ClassName()
 
 void ClassName::Initialize()
 {
+	// 
+	// VARIABLES
+	//
 	_isOpenBig = false;
 	_isOpenSmall = false;
 
@@ -37,16 +40,16 @@ void ClassName::Initialize()
 	// This is a fraction of how fast the console opens
 	_openRate = 0.04;
 
-	//ParseCommand("This is a nice test string! abcdefghijklmnopqrstuvwxyz");
-	//ParseCommand("Second test");
-	//ParseCommand("Third, final test");
-
 	_currentLine = "";
 	_savedLine = "";
 	_currentLineSelected = -1;
 
 	_cursorPosition = 0;
+	_historyLine = 0;
 
+	// 
+	// COMMANDS
+	//
 	// Test command!
 	auto test_func = [this](sVector args) {
 		//std::cout << "Argument count: " << args.size() << std::endl;
@@ -279,7 +282,18 @@ int ClassName::HandleEvents(SDL_Event* event)
 	}
 	else if (event->type == SDL_MOUSEWHEEL)
 	{
+		int n = event->wheel.y;
+		//std::cout << "DEBUG mousewheel event" << std::endl;
 		
+		while (n < 0) {
+			if (_historyLine > 0) _historyLine--;
+			n++;
+		} 
+
+		while (n > 0) {
+			if (_historyLine < _history.size() - 1) _historyLine++;
+			n--;
+		}
 	}
 	//else if (event->type == SDL_TEXTEDITING)
 	//{
@@ -326,10 +340,11 @@ void ClassName::Render(float interpolation)
 		DrawLine(0, _openHeight - 39, SCREEN_WIDTH, _openHeight - 39, SDL_Color {0, 0, 0, 255});
 	}
 
-	for (int i = 0; i < _history.size(); i++)
+	// Draw history lines @Fix: don't properly stop rendering lines at the top of the window
+	for (int i = _historyLine; i < _history.size(); i++)
 	{
 		// First drop shadow, then text
-		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 64 - (16 * i) + 1, ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 64 - (16 * i) + 1 + (_historyLine * 16), ALIGN_LEFT, {0, 0, 0, 255});
 
 		// Decide text color based on text type
 		SDL_Color *text_c;
@@ -347,7 +362,7 @@ void ClassName::Render(float interpolation)
 				text_c = &_textErrorColor;
 				break;
 		}
-		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8, _openHeight - 64 - (16 * i), ALIGN_LEFT, *text_c);
+		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8, _openHeight - 64 - (16 * i) + (_historyLine * 16), ALIGN_LEFT, *text_c);
 	}
 
 	// Draw the cursor
