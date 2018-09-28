@@ -121,12 +121,47 @@ int ClassName::HandleEvents(SDL_Event* event)
 			{
 				if (event->key.keysym.mod & KMOD_CTRL)
 				{
+					if (_cursorPosition == 0 && _currentLine.size() > 0)
+					{
+						// Delete any space in front of the last word
+						while (_currentLine.size() > 0 && _currentLine.front() == ' ')
+							_currentLine = _currentLine.substr(1, std::string::npos);
+
+						// Delete the first word on the line
+						while (_currentLine.size() > 0 && _currentLine.front() != ' ')
+							_currentLine = _currentLine.substr(1, std::string::npos);
+
+						// Delete any spaces after the first word
+						while (_currentLine.size() > 0 && _currentLine.front() == ' ')
+							_currentLine = _currentLine.substr(1, std::string::npos);
+					}
+					else if (_cursorPosition != _currentLine.size())
+					{
+						std::string lh, rh;
+						lh = _currentLine.substr(0, _cursorPosition);
+						rh = _currentLine.substr(_cursorPosition, std::string::npos);
+
+						// Delete any space in front of the last word
+						while (rh.size() > 0 && rh.front() == ' ')
+							rh = rh.substr(1, std::string::npos);
+
+						// Delete the first word on the line
+						while (rh.size() > 0 && rh.front() != ' ')
+							rh = rh.substr(1, std::string::npos);
+
+						// Delete any spaces after the first word
+						while (rh.size() > 0 && rh.front() == ' ')
+							rh = rh.substr(1, std::string::npos);
+
+						_currentLine = lh + rh;
+						_cursorPosition = lh.size();
+					}
 				}
 				else
 				{
 					if (_cursorPosition == 0 && _currentLine.size() > 0)
 					{
-						_currentLine = _currentLine.substr(1, _currentLine.size() - 1);
+						_currentLine = _currentLine.substr(1, std::string::npos);
 					}
 					else if (_cursorPosition != _currentLine.size())
 					{
@@ -150,7 +185,6 @@ int ClassName::HandleEvents(SDL_Event* event)
 							_currentLine.pop_back();
 
 						// Delete the last word on the line
-						//if (_currentLine.size() == 0) break;
 						while (_currentLine.size() > 0 && _currentLine.back() != ' ')
 							_currentLine.pop_back();
 
