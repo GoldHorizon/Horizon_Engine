@@ -121,7 +121,7 @@ int Game::Initialize()
 	// COMMANDS
 	//
 	// Some game commands to be implemented
-	commands["changelevel"] = [this](sVector args) {
+	commands["level"] = [this](sVector args) {
 		if (args.size() != 1) {
 			StateConsole::Instance()->AddError("Command requires 1 argument!");
 		}

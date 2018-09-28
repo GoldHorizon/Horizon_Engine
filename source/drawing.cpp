@@ -56,13 +56,13 @@ void DrawText(std::string str, TextQuality quality, Font* font, int x, int y, Te
 	}
 
 	if (surface == nullptr) {
-		std::cout << "Error: Drawing text, can't make surface: ";
+		std::cout << "Error: Drawing text in drawing.cpp, can't make surface: ";
 		std::cout << TTF_GetError() << std::endl;
 		return;
 	}
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(globalRenderer, surface);
 	if (texture == nullptr) {
-		std::cout << "Error: Drawing text, can't make texture: ";
+		std::cout << "Error: Drawing text in drawing.cpp, can't make texture: ";
 		std::cout << TTF_GetError() << std::endl;
 		return;
 	}
