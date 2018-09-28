@@ -117,6 +117,29 @@ int ClassName::HandleEvents(SDL_Event* event)
 			}
 			break;
 
+		case SDLK_DELETE:
+			{
+				if (event->key.keysym.mod & KMOD_CTRL)
+				{
+				}
+				else
+				{
+					if (_cursorPosition == 0 && _currentLine.size() > 0)
+					{
+						_currentLine = _currentLine.substr(1, _currentLine.size() - 1);
+					}
+					else if (_cursorPosition != _currentLine.size())
+					{
+						std::string lh, rh;
+						lh = _currentLine.substr(0, _cursorPosition);
+						rh = _currentLine.substr(_cursorPosition + 1, std::string::npos);
+
+						_currentLine = lh + rh;
+					}
+				}
+			}
+			break;
+
 		case SDLK_BACKSPACE:
 			{
 				if (event->key.keysym.mod & KMOD_CTRL)
@@ -264,7 +287,7 @@ int ClassName::HandleEvents(SDL_Event* event)
 			break;
 		}
 	}
-	else if (event->type == SDL_TEXTINPUT)
+	else if (event->type == SDL_TEXTINPUT) // Normal typing
 	{
 		char c = event->text.text[0];
 		if (c != '`' && c != '~') {
@@ -280,7 +303,7 @@ int ClassName::HandleEvents(SDL_Event* event)
 			_cursorPosition++;
 		}
 	}
-	else if (event->type == SDL_MOUSEWHEEL)
+	else if (event->type == SDL_MOUSEWHEEL) // Scroll through history
 	{
 		int n = event->wheel.y;
 		//std::cout << "DEBUG mousewheel event" << std::endl;
