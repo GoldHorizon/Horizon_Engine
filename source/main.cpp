@@ -3,9 +3,34 @@
 #include "game.h"
 #include "constants.h"
 
+// TEST //
+// TEST //
+// TEST //
+
+#include "mineBoard.h"
+
+// TEST //
+// TEST //
+// TEST //
+
 // Program start
 int main(int argc, char** argv)
 {
+	// TEST //
+	// TEST //
+	// TEST //
+	//
+	
+	MineBoard test;	
+
+	test.InitTestBoard();
+	test.PrintTestBoard();
+
+	//
+	// TEST //
+	// TEST //
+	// TEST //
+	
 	// Entry point for debug
 	//std::cout << "Entry point" << std::endl;
 

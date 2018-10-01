@@ -24,6 +24,7 @@ objects 	:= 	main.o \
 				wall.o \
 				camera.o \
 				inputManager.o \
+				mineBoard.o \
 				playing.o \
 				uninitialized.o \
 				pauseMenu.o \
@@ -109,11 +110,14 @@ drawing.o			: source/drawing.cpp include/drawing.h include/globals.h include/tex
 wall.o				: source/wall.cpp include/wall.h
 	g++ $(gcc_flags) source/wall.cpp
 
-camera.o				: source/camera.cpp include/camera.h include/globals.h include/types.h include/enumerations.h
+camera.o			: source/camera.cpp include/camera.h include/globals.h include/types.h include/enumerations.h
 	g++ $(gcc_flags) source/camera.cpp
 	
 inputManager.o		: source/inputManager.cpp include/inputManager.h
 	g++ $(gcc_flags) source/inputManager.cpp
+
+mineBoard.o			: source/mineBoard.cpp include/mineBoard.h
+	g++ $(gcc_flags) source/mineBoard.cpp
 
 ###
 ### List of game states to be compiled ###
