@@ -1,4 +1,4 @@
-#include "../include/file.h"
+#include "file.h"
 
 File::File() : 	
 	_reading(false),
@@ -18,6 +18,9 @@ void File::OpenFile(std::string name, bool read, bool write)
 	_writing = write;
 
 	if (_file.is_open()) _file.close();
+
+	_file.open(_fileName.c_str());
+	_file.close();
 
 	if (read)
 	{

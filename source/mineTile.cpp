@@ -6,13 +6,28 @@ MineTile::MineTile()
 	_bomb = false;	
 	_count = 0;	
 
-	LoadImage("minesweeper_tiles.png", 32, 32);
+	LoadImage("images/minesweeper_tiles.png", 32, 32);
 
 	image()->SetIndex(0);
 	image()->SetSpeed(0);
 }
 
 MineTile::~MineTile()
+{
+
+}
+
+void MineTile::HandleEvents(SDL_Event* e)
+{
+
+}
+
+void MineTile::Update()
+{
+
+}
+
+void MineTile::UpdateTile()
 {
 
 }

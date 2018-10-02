@@ -21,10 +21,15 @@ void ClassName::Initialize()
 {
 	_level = nullptr;
 
-	ChangeLevel("test_file.txt");
+	ChangeLevel("mine_file.txt");
 
 	globalCam->SetOrigin(Align::MID_C);
 	globalCam->SetPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+
+	_testBoard = new MineBoard;
+	_testBoard->SetPosition(32, 32);
+	_testBoard->InitTestBoard(3, 3, 8, 8);
+	_testBoard->PrintTestBoard();
 
 	//AddLevel("another_test.txt");
 
@@ -105,6 +110,7 @@ void ClassName::Cleanup()
 
 int ClassName::HandleEvents(SDL_Event* event)
 {
+	_testBoard->HandleEvents(event);
 	_entities.HandleAllEvents(event);
 
 	_level->HandleAllEvents(event);
@@ -163,6 +169,7 @@ void ClassName::Update()
 
 void ClassName::Render(float interpolation)
 {
+	if (_testBoard != nullptr) _testBoard->Render(interpolation, -globalCam->x(), -globalCam->y());
     _entities.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
 
 	_level->RenderAll(interpolation, -globalCam->x(), -globalCam->y());
@@ -190,13 +197,14 @@ void ClassName::AddLevel(Level* level)
 void ClassName::ChangeLevel(std::string name)
 {
 	if (_level == nullptr || name != _level->GetFileName()) {
-		delete _level;
+		if (_level == nullptr) delete _level;
 
 		Level* newLevel = new Level(name);
 
 		if (!newLevel->LoadFromFile())
 		{
 			std::cout << "Error: Could not add level! Level was not found" << std::endl;
+			_level = new Level("mine_level");
 		}
 		else
 		{

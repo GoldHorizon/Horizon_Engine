@@ -15,6 +15,10 @@ class MineBoard : public Entity
 		/*
 		 * Class Methods
 		 */
+		void HandleEvents(SDL_Event* e);
+		void Update();
+		void Render(float interpolation, int xOffset = 0, int yOffset = 0);
+
 		void InitTestBoard(int startx, int starty, int sizex, int sizey);
 		void PrintTestBoard();
 		void ClickTile(int x, int y);

@@ -1,4 +1,6 @@
 #include "mineBoard.h"
+#include "drawing.h"
+#include "engineMethods.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -15,6 +17,50 @@ MineBoard::MineBoard()
 MineBoard::~MineBoard()
 {
 	ClearBoard();
+}
+
+void MineBoard::HandleEvents(SDL_Event* e)
+{
+	if (e->type == SDL_MOUSEBUTTONDOWN) {
+		int mx, my; 
+		SDL_GetMouseState(&mx, &my);
+
+		Vec2<int> coords = ScreenToWorld(mx, my);
+
+		mx = coords.x;
+		my = coords.y;
+
+		mx -= static_cast<int>(Entity::x());
+		my -= static_cast<int>(Entity::y());
+
+		if (mx >= 0 && mx < _boardWidth * 32 && my >= 0 && my < _boardHeight * 32) {
+			mx /= 32;
+			my /= 32;
+
+			std::cout << mx << " " << my << std::endl;
+
+		}
+	}
+}
+
+void MineBoard::Update()
+{
+
+}
+
+void MineBoard::Render(float interpolation, int xOffset, int yOffset)
+{
+	if (_board != nullptr)
+	{
+		for (int j = 0; j < _boardHeight; j++) {
+			for (int i = 0; i < _boardWidth; i++) {
+				//std::cout << "::: " << xOffset << std::endl;
+				GetTile(i, j).Render(interpolation, Entity::x() + xOffset + (i * 32), Entity::y() + yOffset + (j * 32));
+			}
+		}
+
+		DrawText("Test", TextQuality::SHADED, defaultFont, 8, 8, TextAlignment::ALIGN_LEFT, {255, 255, 255});
+	}
 }
 
 void MineBoard::InitTestBoard(int startx, int starty, int sizex, int sizey)
@@ -103,10 +149,11 @@ void MineBoard::ClickTile(int x, int y)
 	GetTile(x, y).SetClicked(true);
 	
 	if (GetTile(x, y).count() == 0) {
+		// Check all surrounding tiles
 		for (int j = y - 1; j <= y + 1; j++) {
 			for (int i = x - 1; i <= x + 1; i++) {
 				if (i >= 0 && i < _boardWidth && j >= 0 && j < _boardHeight
-					&& GetTile(i, j).clicked() == false && GetTile(i, j).count() == 0)
+					&& GetTile(i, j).clicked() == false)
 					ClickTile(i, j);
 			}
 		}

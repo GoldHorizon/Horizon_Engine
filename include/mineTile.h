@@ -14,6 +14,8 @@ class MineTile : public Entity
 		/*
 		 * Class Methods
 		 */
+		void HandleEvents(SDL_Event* e);
+		void Update();
 		void UpdateTile();
 
 		/*

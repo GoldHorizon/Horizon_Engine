@@ -78,7 +78,7 @@ void Image::LoadFromFile(const std::string file, int spriteWidth, int spriteHeig
 	else
 	{
 		//std::cout << "Error loading file: " + fullPath << std::endl;
-		std::cout << IMG_GetError() << std::endl;
+		std::cout << "SDL Error (Image.LoadFromFile): " << IMG_GetError() << std::endl;
 	}
 }
 

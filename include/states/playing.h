@@ -3,6 +3,7 @@
 #include "gameState.h"
 #include "level.h"
 #include "camera.h"
+#include "mineBoard.h"
 
 #include <vector>
 
@@ -55,6 +56,8 @@ private:
 
 	//std::vector<Level*> _levelList;
 	Level * _level;
+
+	MineBoard* _testBoard;
 };
 
 #ifdef ClassName
