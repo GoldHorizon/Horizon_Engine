@@ -5,6 +5,11 @@ MineTile::MineTile()
 	_clicked = false;	
 	_bomb = false;	
 	_count = 0;	
+
+	LoadImage("minesweeper_tiles.png", 32, 32);
+
+	image()->SetIndex(0);
+	image()->SetSpeed(0);
 }
 
 MineTile::~MineTile()
@@ -31,6 +36,14 @@ void MineTile::SetClicked(bool c)
 {
 	_clicked = c;
 	// Update image
+	if (_clicked) {
+		if (_bomb)
+			image()->SetIndex(3);
+		else
+			image()->SetIndex(1);
+	} else {
+		image()->SetIndex(0);
+	}
 }
 
 void MineTile::SetBomb(bool b)

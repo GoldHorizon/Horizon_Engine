@@ -142,10 +142,27 @@ void Image::Draw(int x, int y)
 	// Create a rectangle for select image index
 	if (_dimensions.x != 0 && _dimensions.y != 0)
 	{
-		sourceImage = new SDL_Rect { _dimensions.x * _index, 0, _dimensions.x, _height };
+		int xx, yy, temp;
 
-		// DEBUG
-		//std::cout << sourceImage->x << "   " << sourceImage->w << "   " << sourceImage->y << "   " << sourceImage->h << std::endl;
+		xx = 0;
+		yy = 0;
+		temp = _dimensions.x * _index;
+
+		// Find proper position for image index
+		for (int i = _index; i > 0; i--) {
+			if (xx + _dimensions.x < _width) xx += _dimensions.x;
+			else {
+				xx = 0;
+				yy += _dimensions.y;
+			}
+		}
+
+		if (xx < 0 || yy < 0 || xx + _dimensions.x > _width || yy + _dimensions.y > _height) {
+			std::cout << "Error: Invalid image index draw position (image.cpp) " << xx << " " << yy << std::endl;
+			return;
+		}
+
+		sourceImage = new SDL_Rect { xx, yy, _dimensions.x, _dimensions.y };
 
 		// Create a rectangle to put on display
 		displayImage = new SDL_Rect { x, y, _dimensions.x, _dimensions.y };

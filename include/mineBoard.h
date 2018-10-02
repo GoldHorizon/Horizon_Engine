@@ -32,7 +32,6 @@ class MineBoard : public Entity
 		 */
 
 	private:
-		//char *_testBoard;
 		MineTile *_board;
 		
 		int _boardWidth;
