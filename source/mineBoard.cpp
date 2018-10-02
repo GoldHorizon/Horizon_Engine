@@ -37,8 +37,9 @@ void MineBoard::HandleEvents(SDL_Event* e)
 			mx /= 32;
 			my /= 32;
 
-			std::cout << mx << " " << my << std::endl;
+			//std::cout << mx << " " << my << std::endl;
 
+			ClickTile(mx, my);
 		}
 	}
 }
@@ -148,7 +149,10 @@ void MineBoard::ClickTile(int x, int y)
 {
 	GetTile(x, y).SetClicked(true);
 	
-	if (GetTile(x, y).count() == 0) {
+	if (GetTile(x, y).bomb()) {
+
+	}
+	else if (GetTile(x, y).count() == 0) {
 		// Check all surrounding tiles
 		for (int j = y - 1; j <= y + 1; j++) {
 			for (int i = x - 1; i <= x + 1; i++) {
