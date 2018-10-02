@@ -28,7 +28,7 @@ void ClassName::Initialize()
 
 	_testBoard = new MineBoard;
 	_testBoard->SetPosition(32, 32);
-	_testBoard->InitTestBoard(3, 3, 8, 8);
+	_testBoard->InitTestBoard(3, 3, 16, 16);
 	_testBoard->PrintTestBoard();
 
 	//AddLevel("another_test.txt");
@@ -156,6 +156,7 @@ void ClassName::Update()
 {
 	if (!IsPaused())
 	{
+		//if (_testBoard != nullptr) _testBoard->Update();
 		_entities.UpdateAll();
 
 		_level->UpdateAll();

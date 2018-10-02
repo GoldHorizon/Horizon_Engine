@@ -46,7 +46,15 @@ void MineBoard::HandleEvents(SDL_Event* e)
 
 void MineBoard::Update()
 {
-
+	//if (_board != nullptr)
+	//{
+	//	for (int j = 0; j < _boardHeight; j++) {
+	//		for (int i = 0; i < _boardWidth; i++) {
+	//			//std::cout << "::: " << xOffset << std::endl;
+	//			GetTile(i, j).Update();
+	//		}
+	//	}
+	//}
 }
 
 void MineBoard::Render(float interpolation, int xOffset, int yOffset)
