@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 	
 	MineBoard test;	
 
-	test.InitTestBoard();
+	test.InitTestBoard(3, 3, 10, 10);
 	test.PrintTestBoard();
 
 	//

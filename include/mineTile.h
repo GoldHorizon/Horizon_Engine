@@ -14,6 +14,7 @@ class MineTile : public Entity
 		/*
 		 * Class Methods
 		 */
+		void Clear();
 
 		/*
 		 * Get Methods
@@ -26,6 +27,7 @@ class MineTile : public Entity
 		 * Set Methods
 		 */
 		void SetClicked(bool c);
+		void SetBomb(bool b);
 		void SetCount(int c);
 
 	private:

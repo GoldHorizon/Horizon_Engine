@@ -1,24 +1,23 @@
 #pragma once
 
 #include "mineTile.h"
+#include "entity.h"
 
-const int BOARD_WIDTH = 10;
-const int BOARD_HEIGHT = 10;
-
-class MineBoard
+class MineBoard : public Entity
 {
 	public:
 		/*
 		 * Constructors/Destructors
 		 */
-		//MineBoard();
-		//~MineBoard();
+		MineBoard();
+		~MineBoard();
 
 		/*
 		 * Class Methods
 		 */
-		void InitTestBoard(int startx = -1, int starty = -1);
+		void InitTestBoard(int startx, int starty, int sizex, int sizey);
 		void PrintTestBoard();
+		void ClearBoard();
 
 		/*
 		 * Get Methods
@@ -29,5 +28,9 @@ class MineBoard
 		 */
 
 	private:
-		char _testBoard[BOARD_WIDTH][BOARD_HEIGHT];
+		char *_testBoard;
+		MineTile *_board;
+		
+		int _boardWidth;
+		int _boardHeight;
 };

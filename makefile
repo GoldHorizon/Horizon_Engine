@@ -25,6 +25,7 @@ objects 	:= 	main.o \
 				camera.o \
 				inputManager.o \
 				mineBoard.o \
+				mineTile.o \
 				playing.o \
 				uninitialized.o \
 				pauseMenu.o \
@@ -42,7 +43,7 @@ win32_inc_path := -IC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl32\incl
 win32_lib_path := -LC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl32\lib
 
 win32_gcc_flags = -c -Wall -w -Wl,-subsystem,windows $(win32_inc_path) -IC:\Users\Nick\Documents\Git\SDL_Engine\include -static-libstdc++ -std=c++14
-gcc_flags = -c -Wall -w $(win32_inc_path) -IC:\Users\Nick\Documents\Git\SDL_Engine\include -std=c++14
+gcc_flags = -c -Wall -w $(win32_inc_path) -IC:\Users\Nick\Documents\Git\SDL_Engine\include -std=c++14 -g
 
 ###
 ### Main make program
@@ -116,8 +117,11 @@ camera.o			: source/camera.cpp include/camera.h include/globals.h include/types.
 inputManager.o		: source/inputManager.cpp include/inputManager.h
 	g++ $(gcc_flags) source/inputManager.cpp
 
-mineBoard.o			: source/mineBoard.cpp include/mineBoard.h
+mineBoard.o			: source/mineBoard.cpp include/mineBoard.h include/entity.h
 	g++ $(gcc_flags) source/mineBoard.cpp
+
+mineTile.o			: source/mineTile.cpp include/mineTile.h include/entity.h
+	g++ $(gcc_flags) source/mineTile.cpp
 
 ###
 ### List of game states to be compiled ###
