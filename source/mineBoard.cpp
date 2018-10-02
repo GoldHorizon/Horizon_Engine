@@ -6,7 +6,6 @@
 
 MineBoard::MineBoard()
 {
-	//_testBoard = nullptr;
 	_board = nullptr;
 
 	_boardWidth = 0;
@@ -29,7 +28,6 @@ void MineBoard::InitTestBoard(int startx, int starty, int sizex, int sizey)
 	_boardWidth = sizex;
 	_boardHeight = sizey;
 
-	//_testBoard = new char [_boardWidth * _boardHeight]; // Create tile array
 	_board = new MineTile [_boardWidth * _boardHeight]; // Create tile array
 
 	// Generate bombs
@@ -38,11 +36,9 @@ void MineBoard::InitTestBoard(int startx, int starty, int sizex, int sizey)
 			int num = static_cast<int>(rand() % 5);
 
 			if (num == 0)	{
-				//_testBoard[_boardWidth * j + i] = '*'; // Set tile to have bomb
 				GetTile(i, j).SetBomb(true); // Set tile to have bomb
 			}
 			else {
-				//_testBoard[_boardWidth * j + i] = '.'; // Set tile to be clear
 				GetTile(i, j).SetBomb(false); // Set tile to be clear
 			}
 		}
@@ -55,7 +51,6 @@ void MineBoard::InitTestBoard(int startx, int starty, int sizex, int sizey)
 				if (i >= 0 && i < _boardWidth
 				 && j >= 0 && j < _boardHeight)
 					
-					//_testBoard[_boardWidth * j + i] = '.'; // Set tile to be clear
 					GetTile(i, j).SetBomb(false); // Set tile to be clear
 			}
 		}
@@ -68,7 +63,6 @@ void MineBoard::InitTestBoard(int startx, int starty, int sizex, int sizey)
 	for (int j = 0; j < _boardHeight; j++) {
 		for (int i = 0; i < _boardWidth; i++) {
 			if (GetTile(i, j).bomb() == false) {
-			//if (_testBoard[_boardWidth * j + i] == '.') {
 				int minx, miny, maxx, maxy;
 				if (i == 0) 				minx = i; else minx = i - 1; 
 				if (j == 0) 				miny = j; else miny = j - 1; 
@@ -78,12 +72,10 @@ void MineBoard::InitTestBoard(int startx, int starty, int sizex, int sizey)
 				int count = 0;
 				for (int yy = miny; yy <= maxy; yy++) {
 					for (int xx = minx; xx <= maxx; xx++) {
-						//if (_testBoard[_boardWidth * yy + xx] == '*') count++;
 						if (GetTile(xx, yy).bomb()) count++;
 					}
 				}
 
-				//if (count > 0) _testBoard[_boardWidth * j + i] = static_cast<char>(count + 48);
 				if (count > 0) GetTile(i, j).SetCount(count);
 			}
 		}
@@ -94,7 +86,6 @@ void MineBoard::PrintTestBoard()
 {
 	for (int j = 0; j < _boardHeight; j++) {
 		for (int i = 0; i < _boardWidth; i++) {
-			//std::cout << _testBoard[_boardWidth * j + i];
 			if (GetTile(i, j).bomb())
 				std::cout << "*";
 			else if (GetTile(i, j).count() == 0)
@@ -109,7 +100,17 @@ void MineBoard::PrintTestBoard()
 
 void MineBoard::ClickTile(int x, int y)
 {
-	//if (_board[_boardWidth * y + x]	
+	GetTile(x, y).SetClicked(true);
+	
+	if (GetTile(x, y).count() == 0) {
+		for (int j = y - 1; j <= y + 1; j++) {
+			for (int i = x - 1; i <= x + 1; i++) {
+				if (i >= 0 && i < _boardWidth && j >= 0 && j < _boardHeight
+					&& GetTile(i, j).clicked() == false && GetTile(i, j).count() == 0)
+					ClickTile(i, j);
+			}
+		}
+	}
 }
 
 void MineBoard::ClearBoard()
