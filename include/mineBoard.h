@@ -17,18 +17,22 @@ class MineBoard : public Entity
 		 */
 		void InitTestBoard(int startx, int starty, int sizex, int sizey);
 		void PrintTestBoard();
+		void ClickTile(int x, int y);
 		void ClearBoard();
+		MineTile& GetTile(int x, int y);
 
 		/*
 		 * Get Methods
 		 */
+		int width();
+		int height();
 
 		/*
 		 * Set Methods
 		 */
 
 	private:
-		char *_testBoard;
+		//char *_testBoard;
 		MineTile *_board;
 		
 		int _boardWidth;

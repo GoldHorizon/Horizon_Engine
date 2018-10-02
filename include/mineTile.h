@@ -14,7 +14,7 @@ class MineTile : public Entity
 		/*
 		 * Class Methods
 		 */
-		void Clear();
+		void UpdateTile();
 
 		/*
 		 * Get Methods
