@@ -29,7 +29,7 @@ public:
     void Update();
     void Render(float interpolation);
 
-	void StartGame();
+	void StartGame(int startx, int starty);
 	void ResetBoard(int sizex, int sizey);
 
     static StateName* Instance()

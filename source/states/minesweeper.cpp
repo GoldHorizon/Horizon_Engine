@@ -2,6 +2,13 @@
 
 #define StateName StateMinesweeper
 
+StateName* StateName::_thisInstance = nullptr;
+
+StateName::~StateName()
+{
+	Cleanup();
+}
+
 void StateName::Initialize()
 {
 	_mainBoard.SetPosition(32, 32);
@@ -22,6 +29,8 @@ int StateName::HandleEvents(SDL_Event* event)
 	{
 
 	}
+
+	return -1;
 }
 
 void StateName::Update()

@@ -12,6 +12,7 @@
 #include "states/pauseMenu.h"
 #include "states/editor.h"
 #include "states/console.h"
+#include "states/minesweeper.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -121,6 +122,39 @@ int Game::Initialize()
 	// COMMANDS
 	//
 	// Some game commands to be implemented
+	commands["state"] = [this](sVector args) {
+		if (args.size() > 0) 
+		{
+			for (int i = 0; i < args.size(); i++)
+			{
+				//if (args[i][0] == '-' && args[i].size() > 1 && args.size() > i)
+				//{
+				//	switch (args[i][1])
+				//	{
+				//		case 'a':
+				//			switch (args[i + 1])
+				//			{
+
+				//			}
+				//			break;
+				//	}
+				//}
+				//else
+				//{
+
+				if (args[i] == "uninitialized")
+					ChangeState(StateUninitialized::Instance());
+				else if (args[i] == "playing")
+					ChangeState(StatePlaying::Instance());
+				else if (args[i] == "editor")
+					ChangeState(StateEditor::Instance());
+				else if (args[i] == "minesweeper")
+					ChangeState(StateMinesweeper::Instance());
+				//}
+			}
+		}
+	};
+
 	commands["level"] = [this](sVector args) {
 		if (args.size() != 1) {
 			StateConsole::Instance()->AddError("Command requires 1 argument!");
