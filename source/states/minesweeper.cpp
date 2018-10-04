@@ -27,7 +27,13 @@ int StateName::HandleEvents(SDL_Event* event)
 
 	if (event->type == SDL_KEYDOWN)
 	{
-
+		switch (event->key.keysym.sym)
+		{
+			case SDLK_r:
+				_mainBoard.InitTestBoard(3, 3, 16, 16);
+				_mainBoard.PrintTestBoard();
+				break;
+		}
 	}
 
 	return -1;
