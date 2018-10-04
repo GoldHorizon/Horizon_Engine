@@ -72,10 +72,8 @@ void MineBoard::Render(float interpolation, int xOffset, int yOffset)
 	}
 }
 
-void MineBoard::InitTestBoard(int startx, int starty, int sizex, int sizey)
+void MineBoard::CreateBoard(int sizex, int sizey)
 {
-	std::srand(time(NULL));
-
 	// Clear the board if it already exists
 	ClearBoard();
 
@@ -84,6 +82,11 @@ void MineBoard::InitTestBoard(int startx, int starty, int sizex, int sizey)
 	_boardHeight = sizey;
 
 	_board = new MineTile [_boardWidth * _boardHeight]; // Create tile array
+}
+
+void MineBoard::GenerateBombs(int startx, int starty)
+{
+	std::srand(time(NULL));
 
 	// Generate bombs
 	for (int j = 0; j < _boardHeight; j++) {
@@ -113,7 +116,10 @@ void MineBoard::InitTestBoard(int startx, int starty, int sizex, int sizey)
 	else {
 		std::cout << "Error: Invalid starting position of minesweeper board!" << std::endl;
 	}
+}
 
+void MineBoard::SetTileCounters()
+{
 	// Set adjacent bomb count of each tiles
 	for (int j = 0; j < _boardHeight; j++) {
 		for (int i = 0; i < _boardWidth; i++) {
@@ -135,22 +141,6 @@ void MineBoard::InitTestBoard(int startx, int starty, int sizex, int sizey)
 			}
 		}
 	}
-}
-
-void MineBoard::PrintTestBoard()
-{
-	for (int j = 0; j < _boardHeight; j++) {
-		for (int i = 0; i < _boardWidth; i++) {
-			if (GetTile(i, j).bomb())
-				std::cout << "*";
-			else if (GetTile(i, j).count() == 0)
-				std::cout << ".";
-			else
-				std::cout << GetTile(i, j).count();
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
 }
 
 void MineBoard::ClickTile(int x, int y)
@@ -180,6 +170,29 @@ void MineBoard::ClearBoard()
 MineTile& MineBoard::GetTile(int x, int y)
 {
 	return _board[_boardWidth * y + x];
+}
+
+void MineBoard::InitTestBoard(int startx, int starty, int sizex, int sizey)
+{
+	CreateBoard(sizex, sizey);
+	GenerateBombs(startx, starty);
+	SetTileCounters();
+}
+
+void MineBoard::PrintTestBoard()
+{
+	for (int j = 0; j < _boardHeight; j++) {
+		for (int i = 0; i < _boardWidth; i++) {
+			if (GetTile(i, j).bomb())
+				std::cout << "*";
+			else if (GetTile(i, j).count() == 0)
+				std::cout << ".";
+			else
+				std::cout << GetTile(i, j).count();
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
 }
 
 int MineBoard::width()

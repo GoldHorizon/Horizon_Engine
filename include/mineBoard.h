@@ -19,11 +19,16 @@ class MineBoard : public Entity
 		void Update();
 		void Render(float interpolation, int xOffset = 0, int yOffset = 0);
 
-		void InitTestBoard(int startx, int starty, int sizex, int sizey);
-		void PrintTestBoard();
+		void CreateBoard(int sizex, int sizey);
+		void GenerateBombs(int startx, int starty);
+		void SetTileCounters();
+
 		void ClickTile(int x, int y);
 		void ClearBoard();
 		MineTile& GetTile(int x, int y);
+
+		void InitTestBoard(int startx, int starty, int sizex, int sizey);
+		void PrintTestBoard();
 
 		/*
 		 * Get Methods

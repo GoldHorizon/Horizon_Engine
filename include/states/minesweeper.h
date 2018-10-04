@@ -3,7 +3,7 @@
 #include "gameState.h"
 #include "mineBoard.h"
 
-#define ClassName StateMinesweeper
+#define StateName StateMinesweeper
 
 class StateMinesweeper :
 	public GameState
@@ -12,12 +12,12 @@ class StateMinesweeper :
 	 * Constructors/Destructors
 	 */
 protected:
-	ClassName() {
+	StateName() {
 		SetType(GameStateType::MINESWEEPER);
 		Resume();
 	}
 public:
-	~ClassName();
+	~StateName();
 
 	/*
 	 * Class Methods
@@ -32,22 +32,22 @@ public:
 	void StartGame();
 	void ResetBoard(int sizex, int sizey);
 
-    static ClassName* Instance()
+    static StateName* Instance()
     {
         if (_thisInstance == nullptr)
         {
-            _thisInstance = new ClassName;
+            _thisInstance = new StateName;
         	_thisInstance->Initialize();
         }
         return _thisInstance;
     }
 
 private:
-    static ClassName* _thisInstance;
+    static StateName* _thisInstance;
 
 	MineBoard _mainBoard;
 };
 
-#ifdef ClassName
-#undef ClassName
+#ifdef StateName
+#undef StateName
 #endif

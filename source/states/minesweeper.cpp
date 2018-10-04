@@ -1,46 +1,51 @@
 #include "states/minesweeper.h"
 
-#define ClassName StateMinesweeper
+#define StateName StateMinesweeper
 
-void ClassName::Initialize()
+void StateName::Initialize()
 {
 	_mainBoard.SetPosition(32, 32);
 	_mainBoard.InitTestBoard(3, 3, 16, 16);
 	_mainBoard.PrintTestBoard();
 }
 
-void ClassName::Cleanup()
+void StateName::Cleanup()
 {
 
 }
 
-int ClassName::HandleEvents(SDL_Event* event)
+int StateName::HandleEvents(SDL_Event* event)
 {
 	_mainBoard.HandleEvents(event);
+
+	if (event->type == SDL_KEYDOWN)
+	{
+
+	}
 }
 
-void ClassName::Update()
+void StateName::Update()
 {
 
 }
 
-void ClassName::Render(float interpolation)
+void StateName::Render(float interpolation)
 {
 	//_mainBoard.Render(interpolation, -globalCam->x(), -globalCam->y());
 	_mainBoard.Render(interpolation);
 }
 
-void ClassName::StartGame()
+void StateName::StartGame(int startx, int starty)
 {
 
 }
 
-void ClassName::ResetBoard(int sizex, int sizey)
+void StateName::ResetBoard(int sizex, int sizey)
 {
 
 }
 
-#ifdef ClassName
-#undef ClassName
+#ifdef StateName
+#undef StateName
 #endif
 
