@@ -21,15 +21,10 @@ void ClassName::Initialize()
 {
 	_level = nullptr;
 
-	ChangeLevel("mine_file.txt");
+	ChangeLevel("test_file.txt");
 
 	globalCam->SetOrigin(Align::MID_C);
 	globalCam->SetPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-
-	_testBoard = new MineBoard;
-	_testBoard->SetPosition(32, 32);
-	_testBoard->InitTestBoard(3, 3, 16, 16);
-	_testBoard->PrintTestBoard();
 
 	//AddLevel("another_test.txt");
 
@@ -110,7 +105,6 @@ void ClassName::Cleanup()
 
 int ClassName::HandleEvents(SDL_Event* event)
 {
-	_testBoard->HandleEvents(event);
 	_entities.HandleAllEvents(event);
 
 	_level->HandleAllEvents(event);
@@ -156,7 +150,6 @@ void ClassName::Update()
 {
 	if (!IsPaused())
 	{
-		//if (_testBoard != nullptr) _testBoard->Update();
 		_entities.UpdateAll();
 
 		_level->UpdateAll();
@@ -170,7 +163,6 @@ void ClassName::Update()
 
 void ClassName::Render(float interpolation)
 {
-	if (_testBoard != nullptr) _testBoard->Render(interpolation, -globalCam->x(), -globalCam->y());
     _entities.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
 
 	_level->RenderAll(interpolation, -globalCam->x(), -globalCam->y());

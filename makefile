@@ -30,7 +30,8 @@ objects 	:= 	main.o \
 				uninitialized.o \
 				pauseMenu.o \
 				editor.o \
-				console.o
+				console.o \
+				minesweeper.o
 
 win32_flags :=	-lmingw32 \
 				-lSDL2main \
@@ -140,6 +141,9 @@ editor.o		: source/states/editor.cpp include/states/editor.h include/gameState.h
 
 console.o		: source/states/console.cpp include/states/console.h include/gameState.h include/drawing.h include/globals.h include/engineMethods.h include/enumerations.h
 	g++ $(gcc_flags) source/states/console.cpp
+
+minesweeper.o	: source/states/minesweeper.cpp include/states/minesweeper.h include/mineBoard.h	
+	g++ $(gcc_flags) source/states/minesweeper.cpp
 
 ###
 ### Cleans object and executable files (Debug stuff)

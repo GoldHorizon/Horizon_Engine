@@ -1,26 +1,24 @@
 #pragma once
 
 #include "gameState.h"
-#include "level.h"
-#include "camera.h"
+#include "mineBoard.h"
 
-#include <vector>
+#define ClassName StateMinesweeper
 
-#define ClassName StatePlaying
-
-class StatePlaying:
-    public GameState
+class StateMinesweeper :
+	public GameState
 {
 	/*
 	 * Constructors/Destructors
 	 */
 protected:
-    ClassName() {
-		SetType(GameStateType::PLAYING_GAME); 
-		Resume(); 
+	ClassName() {
+		SetType(GameStateType::MINESWEEPER);
+		Resume();
 	}
 public:
-    ~StatePlaying();
+	~ClassName();
+
 	/*
 	 * Class Methods
 	 */
@@ -31,14 +29,8 @@ public:
     void Update();
     void Render(float interpolation);
 
-	void AddLevel(std::string name);
-	void AddLevel(Level* level);
-
-	void ChangeLevel(std::string name);
-	
-	Level* GetLevel();
-
-	void Restart();
+	void StartGame();
+	void ResetBoard(int sizex, int sizey);
 
     static ClassName* Instance()
     {
@@ -53,8 +45,7 @@ public:
 private:
     static ClassName* _thisInstance;
 
-	//std::vector<Level*> _levelList;
-	Level * _level;
+	MineBoard _mainBoard;
 };
 
 #ifdef ClassName
