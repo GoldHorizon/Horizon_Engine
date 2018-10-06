@@ -93,9 +93,10 @@ void MineBoard::GenerateBombs(int startx, int starty)
 			for (int i = startx - 1; i <= startx + 1; i++) {
 				if (i >= 0 && i < _boardWidth
 				 && j >= 0 && j < _boardHeight
-				 && GetTile(i, j).bomb())
+				 && GetTile(i, j).bomb()) {
 					GetTile(i, j).SetBomb(false); // Set tile to be clear
 					_bombCount--;
+				}
 			}
 		}
 	}
