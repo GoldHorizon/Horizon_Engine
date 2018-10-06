@@ -73,6 +73,11 @@ void MineTile::SetClicked(bool c)
 	}
 }
 
+void MineTile::RevealTile()
+{
+	image()->SetIndex(9);
+}
+
 void MineTile::SetBomb(bool b)
 {
 	_bomb = b;

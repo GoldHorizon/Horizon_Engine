@@ -16,7 +16,9 @@ class MineTile : public Entity
 		 */
 		void HandleEvents(SDL_Event* e);
 		void Update();
+
 		void UpdateTile();
+		void RevealTile();
 
 		/*
 		 * Get Methods

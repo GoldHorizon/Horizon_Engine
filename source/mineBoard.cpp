@@ -103,6 +103,8 @@ void MineBoard::GenerateBombs(int startx, int starty)
 	else {
 		std::cout << "Error: Invalid starting position of minesweeper board!" << std::endl;
 	}
+
+	_generated = true;
 }
 
 void MineBoard::SetTileCounters()
@@ -133,7 +135,9 @@ void MineBoard::SetTileCounters()
 void MineBoard::ClickTile(int x, int y)
 {
 	if (GetTile(x, y).bomb() && !GetTile(x, y).clicked()) {
-		_bombCount--;
+		//_bombCount--;
+		_ended = true;
+		RevealBoard();
 	}
 
 	GetTile(x, y).SetClicked(true);
@@ -155,11 +159,26 @@ void MineBoard::ClearBoard()
 	if (_board != nullptr) delete [] _board;
 	_bombCount = 0;
 	_tilesLeft = 0;
+
+	_generated = false;
+	_ended = false;
 }
 
 MineTile& MineBoard::GetTile(int x, int y)
 {
 	return _board[_boardWidth * y + x];
+}
+
+void MineBoard::RevealBoard()
+{
+	for (int j = 0; j < _boardHeight; j++) {
+		for (int i = 0; i < _boardWidth; i++) {
+			if (!GetTile(i, j).clicked() && GetTile(i, j).bomb()) {
+				GetTile(i, j).RevealTile();
+			}
+		}
+	}
+	_ended = true;
 }
 
 void MineBoard::InitTestBoard(int startx, int starty, int sizex, int sizey)
@@ -207,7 +226,7 @@ bool MineBoard::ended()
 
 void MineBoard::SetGenerated(bool g)
 {
-	_generated =g;
+	_generated = g;
 }
 
 void MineBoard::SetEnded(bool e)
