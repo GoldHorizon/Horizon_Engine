@@ -1,5 +1,7 @@
 #include "states/minesweeper.h"
+#include "states/console.h"
 #include "engineMethods.h"
+#include "globals.h"
 
 #define StateName StateMinesweeper
 
@@ -15,6 +17,63 @@ void StateName::Initialize()
 	_mainBoard.SetPosition(32, 32);
 	//_mainBoard.InitTestBoard(3, 3, 16, 16);
 	//_mainBoard.PrintTestBoard();
+	
+
+	//
+	// COMMANDS
+	//
+	commands["mines"] = [this](sVector args) {
+		bool showFlags = false;
+		bool showBombs = false;
+		bool showClicked = false;
+
+		if (args.size() > 0) {
+			if (args[0] == "all") {
+				showFlags = true;
+				showBombs = true;
+				showClicked = true;
+			} else if (args[0] == "flags") {
+				showFlags = true;
+			} else if (args[0] == "bombs") {
+				showBombs = true;
+			} else if (args[0] == "clicked") {
+				showClicked = true;
+			} else StateConsole::Instance()->AddError("No valid argument! Use all, flags, bombs, or clicked");
+		}
+
+		if (showFlags) {
+			StateConsole::Instance()->AddOutput("---- List of flag tiles ----");	
+
+			for (int j = 0; j < _mainBoard.height(); j++) {
+				for (int i = 0; i < _mainBoard.width(); i++) {
+					if (_mainBoard.GetTile(i, j).flagged())
+						StateConsole::Instance()->AddOutput("  " + std::to_string(i) + ", " + std::to_string(j));
+				}
+			}
+		}
+
+		if (showBombs) {
+			StateConsole::Instance()->AddOutput("---- List of bomb tiles ----");	
+
+			for (int j = 0; j < _mainBoard.height(); j++) {
+				for (int i = 0; i < _mainBoard.width(); i++) {
+					if (_mainBoard.GetTile(i, j).bomb())
+						StateConsole::Instance()->AddOutput("  " + std::to_string(i) + ", " + std::to_string(j));
+				}
+			}
+		}
+
+		if (showClicked) {
+			StateConsole::Instance()->AddOutput("---- List of clicked tiles ----");	
+
+			for (int j = 0; j < _mainBoard.height(); j++) {
+				for (int i = 0; i < _mainBoard.width(); i++) {
+					if (_mainBoard.GetTile(i, j).clicked())
+						StateConsole::Instance()->AddOutput("  " + std::to_string(i) + ", " + std::to_string(j));
+				}
+			}
+		}
+	};
 }
 
 void StateName::Cleanup()

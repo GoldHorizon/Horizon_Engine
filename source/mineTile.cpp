@@ -5,6 +5,8 @@ MineTile::MineTile()
 {
 	_clicked = false;	
 	_bomb = false;	
+	_flagged = false; 
+
 	_count = 0;	
 
 	LoadImage("images/minesweeper_tiles.png", 32, 32);

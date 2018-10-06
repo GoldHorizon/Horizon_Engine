@@ -174,6 +174,7 @@ void MineBoard::FlagTile(int x, int y)
 void MineBoard::ClearBoard()
 {
 	if (_board != nullptr) delete [] _board;
+
 	_bombCount = 0;
 	_tilesLeft = 0;
 
