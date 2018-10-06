@@ -42,6 +42,9 @@ int StateName::HandleEvents(SDL_Event* event)
 	{
 		if (event->button.button == SDL_BUTTON_LEFT)
 		{
+			// If the game has ended (due to win or loss) don't worry about clicking anything
+			if (_mainBoard.ended() == true) return -1;
+
 			int mx, my; 
 			SDL_GetMouseState(&mx, &my);
 

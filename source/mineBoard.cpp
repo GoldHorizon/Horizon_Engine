@@ -12,6 +12,9 @@ MineBoard::MineBoard()
 	_boardWidth = 0;
 	_boardHeight = 0;
 
+	_bombCount = 0;
+	_tilesLeft = 0;
+
 	_generated = false;
 	_ended = false;
 }
@@ -49,7 +52,7 @@ void MineBoard::Render(float interpolation, int xOffset, int yOffset)
 			}
 		}
 
-		DrawText("Test", TextQuality::SHADED, defaultFont, 8, 8, TextAlignment::ALIGN_LEFT, {255, 255, 255});
+		DrawText(std::to_string(_bombCount), TextQuality::SHADED, defaultFont, 8, 8, TextAlignment::ALIGN_LEFT, {255, 255, 255});
 	}
 }
 
@@ -76,6 +79,7 @@ void MineBoard::GenerateBombs(int startx, int starty)
 
 			if (num == 0)	{
 				GetTile(i, j).SetBomb(true); // Set tile to have bomb
+				_bombCount++;
 			}
 			else {
 				GetTile(i, j).SetBomb(false); // Set tile to be clear
@@ -88,9 +92,10 @@ void MineBoard::GenerateBombs(int startx, int starty)
 		for (int j = starty - 1; j <= starty + 1; j++) {
 			for (int i = startx - 1; i <= startx + 1; i++) {
 				if (i >= 0 && i < _boardWidth
-				 && j >= 0 && j < _boardHeight)
-					
+				 && j >= 0 && j < _boardHeight
+				 && GetTile(i, j).bomb())
 					GetTile(i, j).SetBomb(false); // Set tile to be clear
+					_bombCount--;
 			}
 		}
 	}
@@ -126,12 +131,13 @@ void MineBoard::SetTileCounters()
 
 void MineBoard::ClickTile(int x, int y)
 {
-	GetTile(x, y).SetClicked(true);
-	
-	if (GetTile(x, y).bomb()) {
-
+	if (GetTile(x, y).bomb() && !GetTile(x, y).clicked()) {
+		_bombCount--;
 	}
-	else if (GetTile(x, y).count() == 0) {
+
+	GetTile(x, y).SetClicked(true);
+
+	if (!GetTile(x, y).bomb() && GetTile(x, y).count() == 0) {
 		// Check all surrounding tiles
 		for (int j = y - 1; j <= y + 1; j++) {
 			for (int i = x - 1; i <= x + 1; i++) {
@@ -146,6 +152,8 @@ void MineBoard::ClickTile(int x, int y)
 void MineBoard::ClearBoard()
 {
 	if (_board != nullptr) delete [] _board;
+	_bombCount = 0;
+	_tilesLeft = 0;
 }
 
 MineTile& MineBoard::GetTile(int x, int y)

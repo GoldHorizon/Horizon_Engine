@@ -50,6 +50,9 @@ class MineBoard : public Entity
 		int _boardWidth;
 		int _boardHeight;
 
+		int _bombCount;
+		int _tilesLeft;
+
 		bool _generated;
 		bool _ended;
 };
