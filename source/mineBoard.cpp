@@ -66,6 +66,7 @@ void MineBoard::CreateBoard(int sizex, int sizey)
 	_boardHeight = sizey;
 
 	_board = new MineTile [_boardWidth * _boardHeight]; // Create tile array
+	_tilesLeft = _boardWidth * _boardHeight;
 }
 
 void MineBoard::GenerateBombs(int startx, int starty)
@@ -134,14 +135,19 @@ void MineBoard::SetTileCounters()
 
 void MineBoard::ClickTile(int x, int y)
 {
-	if (GetTile(x, y).bomb() && !GetTile(x, y).clicked()) {
+	if (GetTile(x, y).flagged() || GetTile(x, y).clicked()) return;
+
+	// If tile is bomb, we lose and end game
+	if (GetTile(x, y).bomb()) {
 		//_bombCount--;
 		_ended = true;
 		RevealBoard();
 	}
 
 	GetTile(x, y).SetClicked(true);
+	_tilesLeft--;
 
+	// If tile is empty, reveal surrounding squares too
 	if (!GetTile(x, y).bomb() && GetTile(x, y).count() == 0) {
 		// Check all surrounding tiles
 		for (int j = y - 1; j <= y + 1; j++) {
@@ -152,6 +158,17 @@ void MineBoard::ClickTile(int x, int y)
 			}
 		}
 	}
+
+	// If we reveal all tiles that aren't bombs, we win!
+	if (_tilesLeft == _bombCount) {
+		_ended = true;
+	}
+}
+
+void MineBoard::FlagTile(int x, int y)
+{
+	if (_generated && !_ended)
+		GetTile(x, y).SetFlagged(!GetTile(x, y).flagged());
 }
 
 void MineBoard::ClearBoard()

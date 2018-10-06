@@ -28,14 +28,19 @@ void MineTile::Update()
 
 }
 
-//void MineTile::UpdateTile()
-//{
-//
-//}
+void MineTile::RevealTile()
+{
+	image()->SetIndex(9);
+}
 
 bool MineTile::clicked()
 {
 	return _clicked;
+}
+
+bool MineTile::flagged()
+{
+	return _flagged;
 }
 
 bool MineTile::bomb()
@@ -50,6 +55,8 @@ int  MineTile::count()
 
 void MineTile::SetClicked(bool c)
 {
+	if (_flagged) return;
+
 	_clicked = c;
 	// Update image
 	if (_clicked) {
@@ -73,9 +80,16 @@ void MineTile::SetClicked(bool c)
 	}
 }
 
-void MineTile::RevealTile()
+void MineTile::SetFlagged(bool f)
 {
-	image()->SetIndex(9);
+	if (!_clicked) {
+		_flagged = f;
+		if (_flagged) {
+			image()->SetIndex(2);
+		} else {
+			image()->SetIndex(0);
+		}
+	}
 }
 
 void MineTile::SetBomb(bool b)

@@ -40,35 +40,40 @@ int StateName::HandleEvents(SDL_Event* event)
 	}
 	else if (event->type == SDL_MOUSEBUTTONDOWN) 
 	{
+		// If the game has ended (due to win or loss) don't worry about clicking anything
+		if (_mainBoard.ended() == true) return -1;
+
+		int mx, my; 
+		SDL_GetMouseState(&mx, &my);
+
+		Vec2<int> coords = ScreenToWorld(mx, my);
+
+		mx = coords.x;
+		my = coords.y;
+
+		mx -= static_cast<int>(_mainBoard.x());
+		my -= static_cast<int>(_mainBoard.y());
+
+		if (mx >= 0 && mx < _mainBoard.width() * 32 && my >= 0 && my < _mainBoard.height() * 32) {
+			mx /= 32;
+			my /= 32;
+		}
+		else return -1;
+
 		if (event->button.button == SDL_BUTTON_LEFT)
 		{
-			// If the game has ended (due to win or loss) don't worry about clicking anything
-			if (_mainBoard.ended() == true) return -1;
+			if (!_mainBoard.generated()) {
+				_mainBoard.GenerateBombs(mx, my);
+				_mainBoard.SetTileCounters();
+				_mainBoard.SetGenerated(true);
+			}
 
-			int mx, my; 
-			SDL_GetMouseState(&mx, &my);
-
-			Vec2<int> coords = ScreenToWorld(mx, my);
-
-			mx = coords.x;
-			my = coords.y;
-
-			mx -= static_cast<int>(_mainBoard.x());
-			my -= static_cast<int>(_mainBoard.y());
-
-			if (mx >= 0 && mx < _mainBoard.width() * 32 && my >= 0 && my < _mainBoard.height() * 32) {
-				mx /= 32;
-				my /= 32;
-
-				//std::cout << mx << " " << my << std::endl;
-
-				if (!_mainBoard.generated()) {
-					_mainBoard.GenerateBombs(mx, my);
-					_mainBoard.SetTileCounters();
-					_mainBoard.SetGenerated(true);
-				}
-
-				_mainBoard.ClickTile(mx, my);
+			_mainBoard.ClickTile(mx, my);
+		}
+		else if (event->button.button == SDL_BUTTON_RIGHT)
+		{
+			if (_mainBoard.generated()) {
+				_mainBoard.FlagTile(mx, my);
 			}
 		}
 	}

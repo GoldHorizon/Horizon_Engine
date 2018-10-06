@@ -17,13 +17,13 @@ class MineTile : public Entity
 		void HandleEvents(SDL_Event* e);
 		void Update();
 
-		void UpdateTile();
 		void RevealTile();
 
 		/*
 		 * Get Methods
 		 */
 		bool clicked();
+		bool flagged();
 		bool bomb();
 		int  count();
 
@@ -31,11 +31,13 @@ class MineTile : public Entity
 		 * Set Methods
 		 */
 		void SetClicked(bool c);
+		void SetFlagged(bool f);
 		void SetBomb(bool b);
 		void SetCount(int c);
 
 	private:
 		bool _clicked;
+		bool _flagged;
 		bool _bomb;
 		int  _count;
 };

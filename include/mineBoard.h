@@ -24,6 +24,7 @@ class MineBoard : public Entity
 		void SetTileCounters();
 
 		void ClickTile(int x, int y);
+		void FlagTile(int x, int y);
 		void ClearBoard();
 		MineTile& GetTile(int x, int y);
 		void RevealBoard();
