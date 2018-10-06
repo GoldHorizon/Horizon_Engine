@@ -1,6 +1,5 @@
 #include "mineBoard.h"
 #include "drawing.h"
-#include "engineMethods.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -12,6 +11,9 @@ MineBoard::MineBoard()
 
 	_boardWidth = 0;
 	_boardHeight = 0;
+
+	_generated = false;
+	_ended = false;
 }
 
 MineBoard::~MineBoard()
@@ -21,27 +23,6 @@ MineBoard::~MineBoard()
 
 void MineBoard::HandleEvents(SDL_Event* e)
 {
-	if (e->type == SDL_MOUSEBUTTONDOWN) {
-		int mx, my; 
-		SDL_GetMouseState(&mx, &my);
-
-		Vec2<int> coords = ScreenToWorld(mx, my);
-
-		mx = coords.x;
-		my = coords.y;
-
-		mx -= static_cast<int>(Entity::x());
-		my -= static_cast<int>(Entity::y());
-
-		if (mx >= 0 && mx < _boardWidth * 32 && my >= 0 && my < _boardHeight * 32) {
-			mx /= 32;
-			my /= 32;
-
-			//std::cout << mx << " " << my << std::endl;
-
-			ClickTile(mx, my);
-		}
-	}
 }
 
 void MineBoard::Update()
@@ -203,5 +184,25 @@ int MineBoard::width()
 int MineBoard::height()
 {
 	return _boardHeight;
+}
+
+bool MineBoard::generated()
+{
+	return _generated;
+}
+
+bool MineBoard::ended()
+{
+	return _ended;
+}
+
+void MineBoard::SetGenerated(bool g)
+{
+	_generated =g;
+}
+
+void MineBoard::SetEnded(bool e)
+{
+	_ended = e;
 }
 

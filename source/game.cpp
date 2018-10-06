@@ -142,14 +142,22 @@ int Game::Initialize()
 				//else
 				//{
 
-				if (args[i] == "uninitialized")
+				if (args[i] == "uninitialized") {
 					ChangeState(StateUninitialized::Instance());
-				else if (args[i] == "playing")
+					StateUninitialized::Instance()->Resume();
+				}
+				else if (args[i] == "playing") {
 					ChangeState(StatePlaying::Instance());
-				else if (args[i] == "editor")
+					StatePlaying::Instance()->Resume();
+				}
+				else if (args[i] == "editor") {
 					ChangeState(StateEditor::Instance());
-				else if (args[i] == "minesweeper")
+					StateEditor::Instance()->Resume();
+				}
+				else if (args[i] == "minesweeper") {
 					ChangeState(StateMinesweeper::Instance());
+					StateMinesweeper::Instance()->Resume();
+				}
 				//}
 			}
 		}
@@ -391,6 +399,7 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 				else
 				{
 					std::vector<GameState*>::iterator it = _stateStack.end();
+					//if (_stateStack.size() > 1)
 					it--;
 					(*it)->Pause();
 					

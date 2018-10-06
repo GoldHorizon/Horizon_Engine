@@ -35,14 +35,21 @@ class MineBoard : public Entity
 		 */
 		int width();
 		int height();
+		bool generated();
+		bool ended();
 
 		/*
 		 * Set Methods
 		 */
+		void SetGenerated(bool g);
+		void SetEnded(bool e);
 
 	private:
 		MineTile *_board;
 		
 		int _boardWidth;
 		int _boardHeight;
+
+		bool _generated;
+		bool _ended;
 };
