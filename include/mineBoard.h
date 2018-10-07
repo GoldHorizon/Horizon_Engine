@@ -54,6 +54,7 @@ class MineBoard : public Entity
 
 		int _bombCount;
 		int _tilesLeft;
+		int _flagCount;
 
 		bool _generated;
 		bool _ended;

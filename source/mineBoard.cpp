@@ -1,6 +1,7 @@
 #include "mineBoard.h"
 #include "drawing.h"
 
+#include <math.h>
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
@@ -14,6 +15,7 @@ MineBoard::MineBoard()
 
 	_bombCount = 0;
 	_tilesLeft = 0;
+	_flagCount = 0;
 
 	_generated = false;
 	_ended = false;
@@ -52,7 +54,7 @@ void MineBoard::Render(float interpolation, int xOffset, int yOffset)
 			}
 		}
 
-		DrawText(std::to_string(_bombCount), TextQuality::SHADED, defaultFont, 8, 8, TextAlignment::ALIGN_LEFT, {255, 255, 255});
+		DrawText(std::to_string(std::max(_bombCount - _flagCount, 0)), TextQuality::SHADED, defaultFont, 8, 8, TextAlignment::ALIGN_LEFT, {255, 255, 255});
 	}
 }
 
@@ -167,8 +169,17 @@ void MineBoard::ClickTile(int x, int y)
 
 void MineBoard::FlagTile(int x, int y)
 {
-	if (_generated && !_ended)
+	if (_generated && !_ended) {
 		GetTile(x, y).SetFlagged(!GetTile(x, y).flagged());
+
+		if (GetTile(x, y).clicked()) return;
+
+		if (GetTile(x, y).flagged()) {
+			_flagCount++;
+		} else {
+			_flagCount--;
+		}
+	}
 }
 
 void MineBoard::ClearBoard()
@@ -177,6 +188,7 @@ void MineBoard::ClearBoard()
 
 	_bombCount = 0;
 	_tilesLeft = 0;
+	_flagCount = 0;
 
 	_generated = false;
 	_ended = false;

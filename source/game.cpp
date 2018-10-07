@@ -127,21 +127,6 @@ int Game::Initialize()
 		{
 			for (int i = 0; i < args.size(); i++)
 			{
-				//if (args[i][0] == '-' && args[i].size() > 1 && args.size() > i)
-				//{
-				//	switch (args[i][1])
-				//	{
-				//		case 'a':
-				//			switch (args[i + 1])
-				//			{
-
-				//			}
-				//			break;
-				//	}
-				//}
-				//else
-				//{
-
 				if (args[i] == "uninitialized") {
 					ChangeState(StateUninitialized::Instance());
 					StateUninitialized::Instance()->Resume();
@@ -158,6 +143,9 @@ int Game::Initialize()
 					ChangeState(StateMinesweeper::Instance());
 					StateMinesweeper::Instance()->Resume();
 				}
+				else break;
+
+				PushState(StateConsole::Instance());
 				//}
 			}
 		}
