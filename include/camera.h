@@ -16,7 +16,7 @@ class Camera
 		 * Class Methods
 		 */
 		void Move(int x, int y);
-		void Move(Vec2<int> pos);
+		void Move(vec2<int> pos);
 
 		/*
 		 * Get Methods
@@ -26,8 +26,8 @@ class Camera
 		int w() const;
 		int h() const;
 
-		Vec2<int> position() const;
-		Vec2<int> dimensions() const;
+		vec2<int> position() const;
+		vec2<int> dimensions() const;
 
 		Align origin() const;
 
@@ -40,9 +40,9 @@ class Camera
 		void SetH(int h);
 
 		void SetPosition(int x, int y);
-		void SetPosition(Vec2<int> pos);
+		void SetPosition(vec2<int> pos);
 		void SetDimensions(int w, int h);
-		void SetDimensions(Vec2<int> dim);
+		void SetDimensions(vec2<int> dim);
 
 		void SetOrigin(Align origin);
 
@@ -57,5 +57,5 @@ class Camera
 		
 		bool _moveToTarget;
 		Entity* _targetObj;
-		Vec2<int> _targetPos;
+		vec2<int> _targetPos;
 };

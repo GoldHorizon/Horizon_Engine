@@ -107,7 +107,7 @@ void AddError(std::string str)
 	StateConsole::Instance()->AddError(str);
 }
 
-Vec2<int> WorldToScreen(const Vec2<int> &coords)
+vec2<int> WorldToScreen(const vec2<int> &coords)
 {
 	int x = coords.x - globalCam->x();
 	int y = coords.y - globalCam->y();
@@ -115,12 +115,12 @@ Vec2<int> WorldToScreen(const Vec2<int> &coords)
 	return {x, y};
 }
 
-Vec2<int> WorldToScreen(int x, int y)
+vec2<int> WorldToScreen(int x, int y)
 {
 	return WorldToScreen({x, y});
 }
 
-Vec2<int> ScreenToWorld(const Vec2<int> &coords)
+vec2<int> ScreenToWorld(const vec2<int> &coords)
 {
 	int x = coords.x + globalCam->x();
 	int y = coords.y + globalCam->y();
@@ -128,7 +128,7 @@ Vec2<int> ScreenToWorld(const Vec2<int> &coords)
 	return {x, y};
 }
 
-Vec2<int> ScreenToWorld(int x, int y)
+vec2<int> ScreenToWorld(int x, int y)
 {
 	return ScreenToWorld({x, y});
 }

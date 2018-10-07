@@ -33,7 +33,7 @@ void Camera::Move(int x, int y)
 	}
 }
 
-void Camera::Move(Vec2<int> pos)
+void Camera::Move(vec2<int> pos)
 {
 	if (!_moveToTarget) {
 		_x += pos.x;
@@ -62,14 +62,14 @@ int Camera::h() const
 {
 	return _h;
 }
-Vec2<int> Camera::position() const
+vec2<int> Camera::position() const
 {
-	return Vec2<int> (_x, _y);
+	return vec2<int> (_x, _y);
 }
 
-Vec2<int> Camera::dimensions() const
+vec2<int> Camera::dimensions() const
 {
-	return Vec2<int> (_w, _h);
+	return vec2<int> (_w, _h);
 }
 
 Align Camera::origin() const
@@ -125,7 +125,7 @@ void Camera::SetPosition(int x, int y)
 	}
 }
 
-void Camera::SetPosition(Vec2<int> pos)
+void Camera::SetPosition(vec2<int> pos)
 {
 	if (!_moveToTarget) {
 		SetX(pos.x);
@@ -142,7 +142,7 @@ void Camera::SetDimensions(int w, int h)
 	_h = h;
 }
 
-void Camera::SetDimensions(Vec2<int> dim)
+void Camera::SetDimensions(vec2<int> dim)
 {
 	_w = dim.x;
 	_h = dim.y;
