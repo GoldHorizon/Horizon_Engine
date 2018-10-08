@@ -34,6 +34,7 @@ void Panel::HandleEvents(SDL_Event* event)
 				//std::cout << "mx: " << mx << ", my: " << my << std::endl;
 				if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight && !_grabbed) {
 					_grabbed = true;
+					_offset = {event->button.x - x(), event->button.y - y()};
 					//std::cout << "Grabbed!" << std::endl;
 				}
 			}
@@ -50,7 +51,14 @@ void Panel::HandleEvents(SDL_Event* event)
 
 		case SDL_MOUSEMOTION:
 			if (_grabbed) {
-				SetPosition(x() + event->motion.xrel, y() + event->motion.yrel);
+				//SetPosition(x() + event->motion.xrel, y() + event->motion.yrel);
+
+				SetPosition(event->motion.x - _offset.x, event->motion.y - _offset.y);
+
+				if (x() < 0) SetX(0);
+				if (x() + _dim.x >= SCREEN_WIDTH) SetX(SCREEN_WIDTH - _dim.x);
+				if (y() < 0) SetY(0);
+				if (y() + _dim.y >= SCREEN_HEIGHT) SetY(SCREEN_HEIGHT - _dim.y);
 			}
 	}
 }

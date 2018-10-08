@@ -49,4 +49,5 @@ class Panel : public Entity
 
 		bool _focused;
 		bool _grabbed;
+		vec2<int> _offset;
 };
