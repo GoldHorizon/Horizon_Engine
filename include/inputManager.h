@@ -1,5 +1,7 @@
 #pragma once
 
+#include "event.h"
+
 #include <SDL.h>
 #include <string>
 #include <iostream>
@@ -14,17 +16,8 @@ namespace Input {
 	//bool KeyReleased(SDL_Keycode key);
 	bool KeyHeld(SDL_Keycode key);
 
-	//class InputManager
-	//{
-	//public:
-	//	static void GetNextEvent();
+	Event* NextEvent();
 
-	//	static bool KeyIsPressed(SDL_Keycode key);
-	//	static bool KeyIsReleased(SDL_Keycode key);
-
-	//private:
-	//	InputManager();
-
-	//	static SDL_Event currentEvent;
-	//};
+	SDL_Event SDLEvent;
+	Event lastEvent;
 };

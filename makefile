@@ -25,6 +25,7 @@ objects 	:= 	main.o \
 				camera.o \
 				inputManager.o \
 				panel.o \
+				event.o \
 				playing.o \
 				uninitialized.o \
 				pauseMenu.o \
@@ -118,6 +119,9 @@ inputManager.o		: source/inputManager.cpp include/inputManager.h
 
 panel.o				: source/panel.cpp include/panel.h include/entity.h
 	g++ $(gcc_flags) source/panel.cpp
+
+event.o				: source/event.cpp include/event.h
+	g++ $(gcc_flags) source/event.cpp
 
 ###
 ### List of game states to be compiled ###
