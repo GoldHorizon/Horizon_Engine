@@ -49,5 +49,8 @@ class Panel : public Entity
 
 		bool _focused;
 		bool _grabbed;
+		bool _locked;
+		bool _screenBound;
+		bool _followCamera;
 		vec2<int> _offset;
 };

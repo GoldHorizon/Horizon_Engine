@@ -1,5 +1,7 @@
 #include "panel.h"
 #include "drawing.h"
+#include "globals.h"
+#include "engineMethods.h"
 
 #include <iostream>
 
@@ -14,6 +16,9 @@ Panel::Panel()
 
 	_focused = false;
 	_grabbed = false;
+	_locked = false;
+	_screenBound = false;
+	_followCamera = true;
 }
 
 Panel::~Panel()
@@ -26,16 +31,46 @@ void Panel::HandleEvents(SDL_Event* event)
 	switch (event->type)
 	{
 		case SDL_MOUSEBUTTONDOWN:
-			if (event->button.button == SDL_BUTTON_LEFT) {
+			if (event->button.button == SDL_BUTTON_LEFT && !_locked) {
 				int mx, my;
 				mx = event->button.x;
 				my = event->button.y;
 
-				//std::cout << "mx: " << mx << ", my: " << my << std::endl;
-				if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight && !_grabbed) {
-					_grabbed = true;
-					_offset = {event->button.x - x(), event->button.y - y()};
-					//std::cout << "Grabbed!" << std::endl;
+				if (_followCamera) {
+					if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight && !_grabbed) {
+						_grabbed = true;
+						_offset = {event->button.x - x(), event->button.y - y()};
+						//std::cout << "Grabbed!" << std::endl;
+					}
+				} else {
+					if (mx >= x() - globalCam->x() && mx < x() - globalCam->x() + _dim.x && my >= y() - globalCam->y() && my < y() - globalCam->y() + _barHeight && !_grabbed) {
+						_grabbed = true;
+						_offset = {event->button.x - x(), event->button.y - y()};
+						//std::cout << "Grabbed!" << std::endl;
+					}
+				}
+			}
+			else if (event->button.button == SDL_BUTTON_RIGHT) {
+				int mx, my;
+				mx = event->button.x;
+				my = event->button.y;
+
+				if (_followCamera) {
+					if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight) {
+						_followCamera = false;	
+
+						vec2<int> newPos;
+						newPos = ScreenToWorld(x(), y());
+						SetPosition(newPos.x, newPos.y);
+					}
+				} else {
+					if (mx >= x() - globalCam->x() && mx < x() - globalCam->x() + _dim.x && my >= y() - globalCam->y() && my < y() - globalCam->y() + _barHeight) {
+						_followCamera = true;	
+
+						vec2<int> newPos;
+						newPos = WorldToScreen(x(), y());
+						SetPosition(newPos.x, newPos.y);
+					}
 				}
 			}
 			break;
@@ -55,10 +90,12 @@ void Panel::HandleEvents(SDL_Event* event)
 
 				SetPosition(event->motion.x - _offset.x, event->motion.y - _offset.y);
 
-				if (x() < 0) SetX(0);
-				if (x() + _dim.x >= SCREEN_WIDTH) SetX(SCREEN_WIDTH - _dim.x);
-				if (y() < 0) SetY(0);
-				if (y() + _dim.y >= SCREEN_HEIGHT) SetY(SCREEN_HEIGHT - _dim.y);
+				if (_screenBound) {
+					if (x() < 0) SetX(0);
+					else if (x() + _dim.x >= SCREEN_WIDTH) SetX(SCREEN_WIDTH - _dim.x);
+					if (y() < 0) SetY(0);
+					else if (y() + _dim.y >= SCREEN_HEIGHT) SetY(SCREEN_HEIGHT - _dim.y);
+				}
 			}
 	}
 }
@@ -75,13 +112,20 @@ void Panel::Render(float interpolation, int xOffset, int yOffset)
 
 void Panel::RenderCustom(float interpolation, int xOffset, int yOffset)
 {
-	// Draw window
-	DrawRect(this->x(), this->y(), _dim.x, _dim.y, _bgColor);
-	DrawRect(this->x(), this->y(), _dim.x, _barHeight, _barColor);
+	int drawX = this->x();
+	int drawY = this->y();
+
+	if (!_followCamera) {
+		drawX += xOffset;
+		drawY += yOffset;
+	}
+
+	DrawRect(drawX, drawY, _dim.x, _dim.y, _bgColor);
+	DrawRect(drawX, drawY, _dim.x, _barHeight, _barColor);
 	
 	// Draw title text
-	DrawSmoothText(_title, consoleFont, (x() + _dim.x / 2) + 1, (y() + (_barHeight - 20) / 2) + 1, TextAlignment::ALIGN_CENTER, {0, 0, 0, 1});
-	DrawSmoothText(_title, consoleFont, x() + _dim.x / 2, y() + (_barHeight - 20) / 2, TextAlignment::ALIGN_CENTER, {1, 1, 1, 1});
+	DrawSmoothText(_title, consoleFont, (drawX + _dim.x / 2) + 1, (drawY + (_barHeight - 20) / 2) + 1, TextAlignment::ALIGN_CENTER, {0, 0, 0, 1});
+	DrawSmoothText(_title, consoleFont, drawX + _dim.x / 2, drawY + (_barHeight - 20) / 2, TextAlignment::ALIGN_CENTER, {1, 1, 1, 1});
 }
 
 std::string Panel::title()
