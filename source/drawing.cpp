@@ -56,9 +56,15 @@ void DrawText(std::string str, TextQuality quality, Font* font, int x, int y, Te
 {
 	SDL_Surface* surface;
 	switch (quality) {
-		case TextQuality::SOLID: surface 	= TTF_RenderText_Solid(font->font(), str.c_str(), c); break;
-		case TextQuality::BLENDED: surface 	= TTF_RenderText_Blended(font->font(), str.c_str(), c); break;
-		case TextQuality::SHADED: surface 	= TTF_RenderText_Shaded(font->font(), str.c_str(), c, bg); break;
+		case TextQuality::SOLID: 
+			surface = TTF_RenderText_Solid(font->font(), str.c_str(), c); 
+			break;
+		case TextQuality::BLENDED: 
+			surface = TTF_RenderText_Blended(font->font(), str.c_str(), c); 
+			break;
+		case TextQuality::SHADED: 
+			surface = TTF_RenderText_Shaded(font->font(), str.c_str(), c, bg); 
+			break;
 	}
 
 	if (surface == nullptr) {
@@ -78,12 +84,40 @@ void DrawText(std::string str, TextQuality quality, Font* font, int x, int y, Te
 
 	//std::cout << "Surface dimensions: " << surface->w << ", " << surface->h << std::endl;
 	//std::cout << "Texture dimensions: " << texture->w << ", " << texture->h << std::endl;
+	
+	int offset;
+	switch (align) {
+		case TextAlignment::ALIGN_LEFT:
+			offset = 0;
+			break;
+		case TextAlignment::ALIGN_CENTER:
+			offset = surface->w / 2;
+			break;
+		case TextAlignment::ALIGN_RIGHT:
+			offset = surface->w;
+			break;
+	}
 
-	SDL_Rect dest = {x, y, surface->w, surface->h};
+	SDL_Rect dest = {x - offset, y, surface->w, surface->h};
 	
 	SDL_SetRenderDrawColor(globalRenderer, c.r, c.g, c.b, c.a);
 	SDL_RenderCopy(globalRenderer, texture, nullptr, &dest);
 
 	SDL_FreeSurface(surface);
 	SDL_DestroyTexture(texture);
+}
+
+void DrawFastText(std::string str, Font* font, int x, int y, TextAlignment align, vec4<float> c, vec4<float> bg)
+{
+	DrawText(str, TextQuality::SOLID, font, x, y, align, {c.x * 255, c.y * 255, c.z * 255, c.w * 255}, {bg.x, bg.y, bg.z, bg.w});
+}
+
+void DrawSmoothText(std::string str, Font* font, int x, int y, TextAlignment align, vec4<float> c, vec4<float> bg)
+{
+	DrawText(str, TextQuality::BLENDED, font, x, y, align, {c.x * 255, c.y * 255, c.z * 255, c.w * 255}, {bg.x, bg.y, bg.z, bg.w});
+}
+
+void DrawShadedText(std::string str, Font* font, int x, int y, TextAlignment align, vec4<float> c, vec4<float> bg)
+{
+	DrawText(str, TextQuality::SHADED, font, x, y, align, {c.x * 255, c.y * 255, c.z * 255, c.w * 255}, {bg.x, bg.y, bg.z, bg.w});
 }

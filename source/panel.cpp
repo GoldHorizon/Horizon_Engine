@@ -5,7 +5,7 @@
 
 Panel::Panel()
 {
-	_title = "";
+	_title = "Title";
 	_dim = {128, 512};
 	_barHeight = 24;
 
@@ -25,7 +25,7 @@ void Panel::HandleEvents(SDL_Event* event)
 
 void Panel::Update()
 {
-	//DrawPanel();
+
 }
 
 void Panel::Render(float interpolation, int xOffset, int yOffset)
@@ -35,9 +35,13 @@ void Panel::Render(float interpolation, int xOffset, int yOffset)
 
 void Panel::RenderCustom(float interpolation, int xOffset, int yOffset)
 {
+	// Draw window
 	DrawRect(this->x(), this->y(), _dim.x, _dim.y, _bgColor);
 	DrawRect(this->x(), this->y(), _dim.x, _barHeight, _barColor);
-	//DrawRect(this->x() - 16, this->y() + _dim.y - 16, 32, 32, _barColor);
+	
+	// Draw title text
+	DrawSmoothText(_title, consoleFont, (x() + _dim.x / 2) + 1, (y() + (_barHeight - 20) / 2) + 1, TextAlignment::ALIGN_CENTER, {0, 0, 0, 1});
+	DrawSmoothText(_title, consoleFont, x() + _dim.x / 2, y() + (_barHeight - 20) / 2, TextAlignment::ALIGN_CENTER, {1, 1, 1, 1});
 }
 
 std::string Panel::title()

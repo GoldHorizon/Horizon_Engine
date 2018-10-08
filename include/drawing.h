@@ -14,4 +14,8 @@ void DrawRect(int x, int y, int w, int h, vec4<float> c);
 void DrawLine(SDL_Point p1, SDL_Point p2, SDL_Color c);
 void DrawLine(int x1, int y1, int x2, int y2, SDL_Color c);
 
-void DrawText(std::string str, TextQuality quality, Font* font, int x, int y, TextAlignment align, SDL_Color c, SDL_Color bg = {0, 0, 0});
+void DrawText(std::string str, TextQuality quality, Font* font, int x, int y, TextAlignment align, SDL_Color c, SDL_Color bg = {0, 0, 0, 255});
+
+void DrawFastText(std::string str, Font* font, int x, int y, TextAlignment align, vec4<float> c, vec4<float> bg = {0, 0, 0, 0});
+void DrawSmoothText(std::string str, Font* font, int x, int y, TextAlignment align, vec4<float> c, vec4<float> bg = {0, 0, 0, 0});
+void DrawShadedText(std::string str, Font* font, int x, int y, TextAlignment align, vec4<float> c, vec4<float> bg = {0, 0, 0, 255});
