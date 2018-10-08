@@ -32,3 +32,15 @@ bool Input::KeyHeld(SDL_Keycode key)
 
 	return (state[sc] == 1);
 }
+
+Event* Input::NextEvent()
+{
+	if (SDL_PollEvent(&SDLEvent))
+	{
+		lastEvent.Reset();
+		lastEvent.SetEvent(&SDLEvent);
+
+		return &lastEvent;
+	}
+	else return nullptr;
+}
