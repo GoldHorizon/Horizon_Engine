@@ -34,6 +34,12 @@ void DrawRect(int x, int y, int w, int h, SDL_Color c) {
 	SDL_RenderFillRect(globalRenderer, &rect);
 }
 
+void DrawRect(int x, int y, int w, int h, vec4<float> c) {
+	SDL_SetRenderDrawColor(globalRenderer, c.x * 255, c.y * 255, c.z * 255, c.w * 255);
+	SDL_Rect rect = {x, y, w, h};
+	SDL_RenderFillRect(globalRenderer, &rect);
+}
+
 void DrawLine(SDL_Point p1, SDL_Point p2, SDL_Color c)
 {
 	SDL_SetRenderDrawColor(globalRenderer, c.r, c.g, c.b, c.a);

@@ -93,6 +93,8 @@ void Entity::Render(float interpolation, int xOffset, int yOffset)
 			+ static_cast<int>(sin(_direction * PI / 180) * _speed * (_active * interpolation));
 
 		_image.Draw(xx, yy);
+
+		RenderCustom(interpolation, xOffset, yOffset);
 	}
 }
 

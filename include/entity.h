@@ -42,6 +42,9 @@ class Entity
 		// Render()			- Renders the texture to its current position
 		void Render(float interpolation, int xOffset = 0, int yOffset = 0);
 
+		// RenderCustom()	- Extra custom rendering for entities if they desire more drawing
+		virtual void RenderCustom(float interpolation, int xOffset = 0, int yOffset = 0) {}
+
 		// Render()			- Renders the texture to its current position
 		//	clipping:	rectangle the image is clipped to before rendered
 		//void Render(SDL_Rect* clipping);

@@ -7,6 +7,7 @@
 #include "engineMethods.h"
 #include "globals.h"
 #include "inputManager.h"
+#include "panel.h"
 
 #define ClassName StatePlaying
 
@@ -27,6 +28,11 @@ void ClassName::Initialize()
 	globalCam->SetPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 
 	//AddLevel("another_test.txt");
+	
+	Panel* testPanel = new Panel();
+	testPanel->SetPosition(64, 64);
+	testPanel->SetDepth(200);
+	_entities.AddEntity(testPanel);
 
     //Player* mainPlayer = new Player();
     //mainPlayer->SetName("MainPlayer");
@@ -163,9 +169,9 @@ void ClassName::Update()
 
 void ClassName::Render(float interpolation)
 {
-    _entities.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
-
 	_level->RenderAll(interpolation, -globalCam->x(), -globalCam->y());
+
+    _entities.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
 }
 
 void ClassName::AddLevel(std::string name)

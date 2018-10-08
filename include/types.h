@@ -86,14 +86,14 @@ struct vec3 : public vec2<T> {
 	 * Operators
 	 */
 	void operator+= (const vec3<T> &R) {
-		this.x += R.x;
-		this.y += R.y;
-		this.z += R.z;
+		this->x += R.x;
+		this->y += R.y;
+		this->z += R.z;
 	}
 	void operator-= (const vec3<T> &R) {
-		this.x -= R.x;
-		this.y -= R.y;
-		this.z -= R.z;
+		this->x -= R.x;
+		this->y -= R.y;
+		this->z -= R.z;
 	}
 	vec3<T> operator+ (const vec3<T> &R) const {
 		vec3<T> result;
@@ -110,12 +110,12 @@ struct vec3 : public vec2<T> {
 		return result;
 	}
 	void operator= (const vec3<T> &R) {
-		this.x = R.x;
-		this.y = R.y;
-		this.z = R.z;
+		this->x = R.x;
+		this->y = R.y;
+		this->z = R.z;
 	}
 	bool operator== (const vec3<T> &R) {
-		return ((this.x == R.x) && (this.y == R.y) && (this.z == R.z));
+		return ((this->x == R.x) && (this->y == R.y) && (this->z == R.z));
 	}
 	friend std::ostream &operator<< (std::ostream &output, const vec3<T> &R) {
 		output << "(" << R.x << ", " << R.y << ", " << R.z << ")";
@@ -131,22 +131,22 @@ struct vec4 : public vec3<T> {
 	 * Methods
 	 */
 	vec4() : vec4(0, 0, 0, 0) {};
-	vec4(T a, T b, T c, T d) : vec2<T>::vec3(a, b, c), w(d) {};
+	vec4(T a, T b, T c, T d) : vec3<T>::vec3(a, b, c), w(d) {};
 
 	/*
 	 * Operators
 	 */
 	void operator+= (const vec4<T> &R) {
-		this.x += R.x;
-		this.y += R.y;
-		this.z += R.z;
-		this.w += R.w;
+		this->x += R.x;
+		this->y += R.y;
+		this->z += R.z;
+		this->w += R.w;
 	}
 	void operator-= (const vec4<T> &R) {
-		this.x -= R.x;
-		this.y -= R.y;
-		this.z -= R.z;
-		this.w -= R.w;
+		this->x -= R.x;
+		this->y -= R.y;
+		this->z -= R.z;
+		this->w -= R.w;
 	}
 	vec4<T> operator+ (const vec4<T> &R) const {
 		vec4<T> result;
@@ -165,13 +165,13 @@ struct vec4 : public vec3<T> {
 		return result;
 	}
 	void operator= (const vec4<T> &R) {
-		this.x = R.x;
-		this.y = R.y;
-		this.z = R.z;
-		this.w = R.w;
+		this->x = R.x;
+		this->y = R.y;
+		this->z = R.z;
+		this->w = R.w;
 	}
 	bool operator== (const vec4<T> &R) {
-		return ((this.x == R.x) && (this.y == R.y) && (this.z == R.z) && (this.w == R.w));
+		return ((this->x == R.x) && (this->y == R.y) && (this->z == R.z) && (this->w == R.w));
 	}
 	friend std::ostream &operator<< (std::ostream &output, const vec4<T> &R) {
 		output << "(" << R.x << ", " << R.y << ", " << R.z << ", " << R.w << ")";
