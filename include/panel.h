@@ -28,6 +28,8 @@ class Panel : public Entity
 		vec2<int> dim();
 		vec4<float> bgColor();
 		vec4<float> barColor();
+		bool focused();
+		bool grabbed();
 
 		/*
 		 * Set Methods
@@ -44,4 +46,7 @@ class Panel : public Entity
 
 		vec4<float> _bgColor;
 		vec4<float> _barColor;
+
+		bool _focused;
+		bool _grabbed;
 };

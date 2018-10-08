@@ -11,6 +11,9 @@ Panel::Panel()
 
 	_bgColor = {0, .2, .2, .9};
 	_barColor = {0, .6, .6, .9};
+
+	_focused = false;
+	_grabbed = false;
 }
 
 Panel::~Panel()
@@ -20,7 +23,36 @@ Panel::~Panel()
 
 void Panel::HandleEvents(SDL_Event* event)
 {
-	
+	switch (event->type)
+	{
+		case SDL_MOUSEBUTTONDOWN:
+			if (event->button.button == SDL_BUTTON_LEFT) {
+				int mx, my;
+				mx = event->button.x;
+				my = event->button.y;
+
+				//std::cout << "mx: " << mx << ", my: " << my << std::endl;
+				if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight && !_grabbed) {
+					_grabbed = true;
+					//std::cout << "Grabbed!" << std::endl;
+				}
+			}
+			break;
+
+		case SDL_MOUSEBUTTONUP:
+			if (event->button.button == SDL_BUTTON_LEFT) {
+				if (_grabbed) {
+					_grabbed = false;
+					//std::cout << "Let go!" << std::endl;
+				}
+			}
+			break;
+
+		case SDL_MOUSEMOTION:
+			if (_grabbed) {
+				SetPosition(x() + event->motion.xrel, y() + event->motion.yrel);
+			}
+	}
 }
 
 void Panel::Update()
@@ -62,6 +94,16 @@ vec4<float> Panel::bgColor()
 vec4<float> Panel::barColor()
 {
 	return _barColor;
+}
+
+bool Panel::focused()
+{
+	return _focused;
+}
+
+bool Panel::grabbed()
+{
+	return _grabbed;
 }
 
 void Panel::SetTitle(std::string title)
