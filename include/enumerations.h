@@ -44,6 +44,11 @@ enum class TextQuality {
 	SHADED
 };
 
+enum class PanelType {
+	FOCUS,
+	STATIC
+};
+
 enum KeyEvents {
 	GAME_QUIT,
 	OPEN_MENU,

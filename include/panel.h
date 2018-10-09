@@ -1,6 +1,7 @@
 #include "entity.h"
 #include "types.h"
 #include "event.h"
+#include "enumerations.h"
 
 #include <string>
 
@@ -51,11 +52,16 @@ class Panel : public Entity
 		void SetScreenBound(bool screenBound);
 		void SetFollowCamera(bool followCamera);
 
+		/*
+		 * Public Attributes
+		 */
+		PanelType _type;		
+
 	private:
 		std::string _title;
+
 		vec2<int> _dim;
 		int _barHeight;
-
 		vec4<float> _bgColor;
 		vec4<float> _barColor;
 

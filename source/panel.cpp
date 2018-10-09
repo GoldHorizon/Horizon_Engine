@@ -7,6 +7,7 @@
 
 Panel::Panel()
 {
+	_type = PanelType::STATIC;
 	_title = "Title";
 	_dim = {196, 512};
 	_barHeight = 24;
@@ -14,7 +15,7 @@ Panel::Panel()
 	_bgColor = {0, .2, .2, .9};
 	_barColor = {0, .6, .6, .9};
 
-	_focus = 0;
+	_focus = 1;
 	_grabbed = false;
 	_locked = false;
 	_screenBound = true;
@@ -30,10 +31,6 @@ Panel::~Panel()
 
 void Panel::HandleEvents(Event& event)
 {
-	if (event.blocked()) {
-		return;
-	}
-
 	switch (event.ev.type)
 	{
 		case SDL_MOUSEBUTTONDOWN:
@@ -49,30 +46,36 @@ void Panel::HandleEvents(Event& event)
 					Unfocus();
 				}
 
-				// If we press left mb and the panel is not locked in place...
-				if (event.ev.button.button == SDL_BUTTON_LEFT && !_locked) {
-					if (InTitleBar({mx, my})) {
-						// Grab the panel and set the offset for where the mouse is
-						_grabbed = true;
-						_offset = {event.ev.button.x - x(), event.ev.button.y - y()};
-						//std::cout << "Grabbed!" << std::endl;
+				if (_type == PanelType::FOCUS)
+				{
+					// If we press left mb and the panel is not locked in place...
+					if (event.ev.button.button == SDL_BUTTON_LEFT && !_locked) {
+						if (InTitleBar({mx, my})) {
+							// Grab the panel and set the offset for where the mouse is
+							_grabbed = true;
+							_offset = {event.ev.button.x - x(), event.ev.button.y - y()};
+							//std::cout << "Grabbed!" << std::endl;
+						}
 					}
-				}
-				// If we press right mb, toggle if the panel is locked
-				else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
-					if (InTitleBar({mx, my}) && !_grabbed) {
-						SetFollowCamera(!_followCamera);
+					// If we press right mb, toggle if the panel is locked
+					else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
+						if (InTitleBar({mx, my}) && !_grabbed) {
+							SetFollowCamera(!_followCamera);
+						}
 					}
 				}
 			}
 			break;
 
 		case SDL_MOUSEBUTTONUP:
-			// Let go if we release the mouse button
-			if (event.ev.button.button == SDL_BUTTON_LEFT) {
-				if (_grabbed) {
-					_grabbed = false;
-					//std::cout << "Let go!" << std::endl;
+			if (_type == PanelType::FOCUS)
+			{
+				// Let go if we release the mouse button
+				if (event.ev.button.button == SDL_BUTTON_LEFT) {
+					if (_grabbed) {
+						_grabbed = false;
+						//std::cout << "Let go!" << std::endl;
+					}
 				}
 			}
 			break;
@@ -113,7 +116,11 @@ void Panel::RenderCustom(float interpolation, int xOffset, int yOffset)
 		drawY += yOffset;
 	}
 
-	if (_focus == 0) {
+	float titleAlpha;
+
+	if (_focus == 0 || _type == PanelType::STATIC) {
+		titleAlpha = 1;
+
 		DrawRect(drawX, drawY, _dim.x, _dim.y, _bgColor);
 		DrawRect(drawX, drawY, _dim.x, _barHeight, _barColor);
 	} else {
@@ -122,14 +129,15 @@ void Panel::RenderCustom(float interpolation, int xOffset, int yOffset)
 
 		bgTemp.w = .2;
 		barTemp.w = .2;
+		titleAlpha = .2;
 
 		DrawRect(drawX, drawY, _dim.x, _dim.y, bgTemp);
 		DrawRect(drawX, drawY, _dim.x, _barHeight, barTemp);
 	}
 	
 	// Draw title text
-	DrawSmoothText(_title, consoleFont, (drawX + _dim.x / 2) + 1, (drawY + (_barHeight - 20) / 2) + 1, TextAlignment::ALIGN_CENTER, {0, 0, 0, 1});
-	DrawSmoothText(_title, consoleFont, drawX + _dim.x / 2, drawY + (_barHeight - 20) / 2, TextAlignment::ALIGN_CENTER, {1, 1, 1, 1});
+	DrawSmoothText(_title, consoleFont, (drawX + _dim.x / 2) + 1, (drawY + (_barHeight - 20) / 2) + 1, TextAlignment::ALIGN_CENTER, {0, 0, 0, titleAlpha});
+	DrawSmoothText(_title, consoleFont, drawX + _dim.x / 2, drawY + (_barHeight - 20) / 2, TextAlignment::ALIGN_CENTER, {1, 1, 1, titleAlpha});
 }
 
 bool Panel::InWindow(vec2<int> pos)
@@ -170,16 +178,23 @@ bool Panel::InTitleBar(vec2<int> pos)
 
 void Panel::Focus()
 {
-	if (_focus > 0) {
-		_focus = 0;
-		SetDepth(1000);
+	if (_type == PanelType::FOCUS)
+	{
+		if (_focus > 0) {
+			_focus = 0;
+			SetDepth(1000);
+		}
 	}
 }
 
 void Panel::Unfocus()
 {
-	_focus++;
-	SetDepth(depth() + 1);
+	if (_type == PanelType::FOCUS)
+	{
+		_focus++;
+		SetDepth(depth() + 1);
+	}
+	//else if (_type == PanelType::STATIC)
 }
 
 std::string Panel::title()
