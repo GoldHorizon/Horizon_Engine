@@ -31,56 +31,20 @@ void Panel::HandleEvents(Event& event)
 	switch (event.ev.type)
 	{
 		case SDL_MOUSEBUTTONDOWN:
-			// If we press left mb and the panel is not locked in place...
-			if (event.ev.button.button == SDL_BUTTON_LEFT && !_locked) {
+			if (event.ev.button.button == SDL_BUTTON_LEFT) {
 				int mx, my;
 				mx = event.ev.button.x;
 				my = event.ev.button.y;
 
-				if (_followCamera) {
-					if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight && !_grabbed) {
-						// Grab the panel and set the offset for where the mouse is
-						_grabbed = true;
-						_offset = {event.ev.button.x - x(), event.ev.button.y - y()};
-						//std::cout << "Grabbed!" << std::endl;
-					}
-				} else {
-					if (mx >= x() - globalCam->x() && mx < x() - globalCam->x() + _dim.x && my >= y() - globalCam->y() && my < y() - globalCam->y() + _barHeight && !_grabbed) {
-						// Grab the panel and set the offset for where the mouse is
-						_grabbed = true;
-						_offset = {event.ev.button.x - x(), event.ev.button.y - y()};
-						//std::cout << "Grabbed!" << std::endl;
-					}
-				}
-			}
-			// If we press right mb, toggle if the panel is locked
-			else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
-				int mx, my;
-				mx = event.ev.button.x;
-				my = event.ev.button.y;
-
-				if (_followCamera) {
-					if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight) {
-						_locked = !_locked;	
-
-						//vec2<int> newPos;
-						//newPos = ScreenToWorld(x(), y());
-						//SetPosition(newPos.x, newPos.y);
-					}
-				} else {
-					if (mx >= x() - globalCam->x() && mx < x() - globalCam->x() + _dim.x && my >= y() - globalCam->y() && my < y() - globalCam->y() + _barHeight) {
-						_locked = !_locked;	
-
-						//vec2<int> newPos;
-						//newPos = WorldToScreen(x(), y());
-						//SetPosition(newPos.x, newPos.y);
-					}
+				//std::cout << "mx: " << mx << ", my: " << my << std::endl;
+				if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight && !_grabbed) {
+					_grabbed = true;
+					//std::cout << "Grabbed!" << std::endl;
 				}
 			}
 			break;
 
 		case SDL_MOUSEBUTTONUP:
-			// Let go if we release the mouse button
 			if (event.ev.button.button == SDL_BUTTON_LEFT) {
 				if (_grabbed) {
 					_grabbed = false;
@@ -91,16 +55,7 @@ void Panel::HandleEvents(Event& event)
 
 		case SDL_MOUSEMOTION:
 			if (_grabbed) {
-				//SetPosition(x() + event.ev.motion.xrel, y() + event.ev.motion.yrel);
-
-				SetPosition(x() + event.ev.motion.x, y() + event.ev.motion.y);
-
-				if (_screenBound && _followCamera) {
-					if (x() < 0) SetX(0);
-					else if (x() + _dim.x >= SCREEN_WIDTH) SetX(SCREEN_WIDTH - _dim.x);
-					if (y() < 0) SetY(0);
-					else if (y() + _dim.y >= SCREEN_HEIGHT) SetY(SCREEN_HEIGHT - _dim.y);
-				}
+				SetPosition(x() + event.ev.motion.xrel, y() + event.ev.motion.yrel);
 			}
 	}
 }
