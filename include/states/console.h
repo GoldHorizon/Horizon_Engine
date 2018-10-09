@@ -2,6 +2,7 @@
 
 #include "gameState.h"
 #include "text.h"
+#include "event.h"
 
 #define ClassName StateConsole
 
@@ -28,7 +29,7 @@ public:
     void Initialize();
     void Cleanup();
 
-    int HandleEvents(SDL_Event*);
+    int HandleEvents(Event&);
     void Update();
     void Render(float interpolation);
 

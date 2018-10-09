@@ -1,6 +1,7 @@
 #pragma once
 
 #include "image.h"
+#include "event.h"
 
 #include "SDL.h"
 
@@ -34,7 +35,7 @@ class Entity
 		void FreeMemory();
 
 		// HandleEvents()   - Handles things such as user input
-		virtual void HandleEvents(SDL_Event*);
+		virtual void HandleEvents(Event&);
 
 		// Update()			- Updates anything to do with the entity
 		virtual void Update();

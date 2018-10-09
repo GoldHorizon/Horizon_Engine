@@ -78,15 +78,15 @@ void ClassName::Cleanup()
 //		if (_menuList[i] != nullptr) delete _menuList[i];
 }
 
-int ClassName::HandleEvents(SDL_Event* event)
+int ClassName::HandleEvents(Event& event)
 {
-	if (event->type == SDL_KEYDOWN)
+	if (event.ev.type == SDL_KEYDOWN)
 	{
-		//std::cout << std::to_string(event->key.timestamp) << "   " << std::to_string(event->key.repeat) << std::endl;
-		switch (event->key.keysym.sym)
+		//std::cout << std::to_string(event.ev.key.timestamp) << "   " << std::to_string(event.ev.key.repeat) << std::endl;
+		switch (event.ev.key.keysym.sym)
 		{
 		case SDLK_ESCAPE:
-			if (event->key.repeat == 0)
+			if (event.ev.key.repeat == 0)
 				return CLOSE_MENU;
 			break;
 

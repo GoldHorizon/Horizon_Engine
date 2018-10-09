@@ -44,9 +44,9 @@ Player::Player()
 
 }
 
-void Player::HandleEvents(SDL_Event* event)
+void Player::HandleEvents(Event& event)
 {
-    if (event->type == SDL_MOUSEBUTTONDOWN)
+    if (event.ev.type == SDL_MOUSEBUTTONDOWN)
     {
         int x, y;
         SDL_GetMouseState(&x, &y);
@@ -105,41 +105,6 @@ void Player::HandleEvents(SDL_Event* event)
 	}
 	else
 		SetSpeed(0);
-
-// 		If our event is a keyboard button press ???
-//	if (event->type == SDL_KEYDOWN)
-//	{
-//		switch (event->key.keysym.scancode)
-//		{
-//			case SDL_SCANCODE_W:
-//				SetDirection(270);
-//				SetSpeed(4);
-//				break;
-//
-//			case SDL_SCANCODE_S:
-//				SetDirection(90);
-//				SetSpeed(4);
-//				break;
-//
-//			case SDL_SCANCODE_A:
-//				SetDirection(180);
-//				SetSpeed(4);
-//				break;
-//
-//			case SDL_SCANCODE_D:
-//				SetDirection(0);
-//				SetSpeed(4);
-//				break;
-//
-//			default:
-//				SetSpeed(0);
-//				break;
-//		}
-//	}
-//	else
-//	{
-//		SetSpeed(0);
-//	}
 }
 
 void Player::Update()

@@ -1,5 +1,5 @@
-#include "../include/entityCollection.h"
-#include "../include/globals.h"
+#include "entityCollection.h"
+#include "globals.h"
 
 #include <iostream>
 
@@ -146,7 +146,7 @@ void EntityCollection::ClearEntities()
 	}
 }
 
-void EntityCollection::HandleAllEvents(SDL_Event* event)
+void EntityCollection::HandleAllEvents(Event& event)
 {
 	eList::const_iterator it = _collection.begin();
 

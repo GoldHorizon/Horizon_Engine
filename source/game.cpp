@@ -4,6 +4,7 @@
 #include "ball.h"
 #include "enumerations.h"
 #include "types.h"
+#include "inputManager.h"
 
 #include "states/playing.h"
 #include "states/uninitialized.h"
@@ -249,7 +250,7 @@ bool Game::GetInput()
 	int event_response = -1;
 
 	// Poll the system for an event of some kind
-	while (SDL_PollEvent(&_event))
+	while (Input::NextEvent(_event))
 	{
 		// STEP 1: Process Input
 
@@ -257,7 +258,7 @@ bool Game::GetInput()
 		// (Preventing lower gamestates from taking input i.e. when a pause menu overlay is up)
 		std::vector<GameState*>::iterator it = _stateStack.end();
 		it--;
-		event_response = (*it)->HandleEvents(&_event);
+		event_response = (*it)->HandleEvents(_event);
 
 		if (event_response != -1)
 		{
@@ -343,9 +344,9 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 		}
 
 		// If our event is a keyboard button press
-		if (_event.type == SDL_KEYDOWN)
+		if (_event.ev.type == SDL_KEYDOWN)
 		{
-			switch (_event.key.keysym.sym)
+			switch (_event.ev.key.keysym.sym)
 			{
 			case SDLK_BACKQUOTE:
 				//std::cout << "Pressed backquote! ";
@@ -362,7 +363,7 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 					
 					PushState(StateConsole::Instance());
 					//std::cout << "Console closed, opening ";
-					if (_event.key.keysym.mod & KMOD_LSHIFT)
+					if (_event.ev.key.keysym.mod & KMOD_LSHIFT)
 					{
 						//std::cout << "big..." << std::endl;
 						StateConsole::Instance()->Open(true);
@@ -378,9 +379,9 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 				break;
 			}
 		}
-		else if (_event.type == SDL_WINDOWEVENT && _event.window.windowID == SDL_GetWindowID(_mainWindow))
+		else if (_event.ev.type == SDL_WINDOWEVENT && _event.ev.window.windowID == SDL_GetWindowID(_mainWindow))
 		{
-			switch ((int)(_event.window.event))
+			switch ((int)(_event.ev.window.event))
 			{
 			case SDL_WINDOWEVENT_CLOSE:
 			  // If window is closed, take this as the user quitting
@@ -389,7 +390,7 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 			  QuitGame();
 			  break;
 			default:
-				//std::cout << (int)(_event.window.event);
+				//std::cout << (int)(_event.ev.window.event);
 				break;
 			}
 		}

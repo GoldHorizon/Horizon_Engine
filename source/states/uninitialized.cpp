@@ -1,4 +1,4 @@
-#include "../../include/states/uninitialized.h"
+#include "states/uninitialized.h"
 
 #define ClassName StateUninitialized
 
@@ -19,7 +19,7 @@ void ClassName::Cleanup()
 
 }
 
-int ClassName::HandleEvents(SDL_Event*)
+int ClassName::HandleEvents(Event& event)
 {
 
 }

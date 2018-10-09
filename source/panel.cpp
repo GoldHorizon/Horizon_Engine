@@ -21,15 +21,15 @@ Panel::~Panel()
 
 }
 
-void Panel::HandleEvents(SDL_Event* event)
+void Panel::HandleEvents(Event& event)
 {
-	switch (event->type)
+	switch (event.ev.type)
 	{
 		case SDL_MOUSEBUTTONDOWN:
-			if (event->button.button == SDL_BUTTON_LEFT) {
+			if (event.ev.button.button == SDL_BUTTON_LEFT) {
 				int mx, my;
-				mx = event->button.x;
-				my = event->button.y;
+				mx = event.ev.button.x;
+				my = event.ev.button.y;
 
 				//std::cout << "mx: " << mx << ", my: " << my << std::endl;
 				if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight && !_grabbed) {
@@ -40,7 +40,7 @@ void Panel::HandleEvents(SDL_Event* event)
 			break;
 
 		case SDL_MOUSEBUTTONUP:
-			if (event->button.button == SDL_BUTTON_LEFT) {
+			if (event.ev.button.button == SDL_BUTTON_LEFT) {
 				if (_grabbed) {
 					_grabbed = false;
 					//std::cout << "Let go!" << std::endl;
@@ -50,7 +50,7 @@ void Panel::HandleEvents(SDL_Event* event)
 
 		case SDL_MOUSEMOTION:
 			if (_grabbed) {
-				SetPosition(x() + event->motion.xrel, y() + event->motion.yrel);
+				SetPosition(x() + event.ev.motion.xrel, y() + event.ev.motion.yrel);
 			}
 	}
 }

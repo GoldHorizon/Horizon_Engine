@@ -23,7 +23,7 @@ Ball::Ball()
 	image()->SetAlpha(.5);
 }
 
-void Ball::HandleEvents(SDL_Event* event)
+void Ball::HandleEvents(Event& event)
 {
 	// No events handled here.
 }

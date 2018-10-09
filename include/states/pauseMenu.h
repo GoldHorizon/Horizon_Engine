@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../gameState.h"
+#include "gameState.h"
 #include "text.h"
+#include "event.h"
 
 #define ClassName StatePauseMenu
 
@@ -26,7 +27,7 @@ public:
     void Initialize();
     void Cleanup();
 
-    int HandleEvents(SDL_Event*);
+    int HandleEvents(Event&);
     void Update();
 	void UpdateMenu();
     void Render(float interpolation);
