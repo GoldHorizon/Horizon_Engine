@@ -2,29 +2,6 @@
 
 using namespace Input;
 
-//int Input::GetNextEvent()
-//{
-//	return SDL_PollEvent(&currentEvent);
-//}
-//
-//bool Input::KeyPressed(SDL_Keycode key)
-//{
-//	if (currentEvent.type == SDL_KEYDOWN) {
-//		if (currentEvent.key.keysym.sym == key)
-//			return true;
-//	}
-//	return false;
-//}
-//
-//bool Input::KeyReleased(SDL_Keycode key)
-//{
-//	if (currentEvent.type == SDL_KEYUP) {
-//		if (currentEvent.key.keysym.sym == key)
-//			return true;
-//	}
-//	return false;
-//}
-
 bool Input::KeyHeld(SDL_Keycode key)
 {
 	SDL_Scancode sc = SDL_GetScancodeFromKey(key);
@@ -33,14 +10,13 @@ bool Input::KeyHeld(SDL_Keycode key)
 	return (state[sc] == 1);
 }
 
-Event* Input::NextEvent()
+bool Input::NextEvent(Event& event)
 {
-	if (SDL_PollEvent(&SDLEvent))
+	if (SDL_PollEvent(&event.ev))
 	{
-		lastEvent.Reset();
-		lastEvent.SetEvent(&SDLEvent);
+		event.Reset();
 
-		return &lastEvent;
+		return true;
 	}
-	else return nullptr;
+	return false;
 }
