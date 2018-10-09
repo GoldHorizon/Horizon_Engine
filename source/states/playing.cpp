@@ -116,8 +116,6 @@ void ClassName::Cleanup()
 
 int ClassName::HandleEvents(Event& event)
 {
-	if (event.blocked()) return -1;
-
 	_entities.HandleAllEvents(event);
 
 	_level->HandleAllEvents(event);
@@ -139,6 +137,10 @@ int ClassName::HandleEvents(Event& event)
 			break;
 		}
 	}
+	//else if (event.ev.type == SDL_MOUSEBUTTONDOWN)
+	//{
+	//	std::cout << "DEBUG: Mouse press in playing state" << std::endl;
+	//}
 
 	return -1;
 }

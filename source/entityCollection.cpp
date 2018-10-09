@@ -154,6 +154,9 @@ void EntityCollection::HandleAllEvents(Event& event)
 
 	do
 	{
+		// If the event has been blocked, stop checking entities with it.
+		if (event.blocked()) return;
+
 		if ((*it) != nullptr)
 		{
 			(*it)->HandleEvents(event);
