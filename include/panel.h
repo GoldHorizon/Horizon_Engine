@@ -22,6 +22,11 @@ class Panel : public Entity
 
 		void RenderCustom(float interpolation, int xOffset = 0, int yOffset = 0);
 
+		bool InWindow(vec2<int> pos);
+		bool InTitleBar(vec2<int> pos);
+
+		void Focus();
+		void Unfocus();
 		/*
 		 * Get Methods
 		 */
@@ -29,7 +34,7 @@ class Panel : public Entity
 		vec2<int> dim();
 		vec4<float> bgColor();
 		vec4<float> barColor();
-		bool focused();
+		bool focus();
 		bool grabbed();
 		bool locked();
 		bool screenBound();
@@ -54,7 +59,7 @@ class Panel : public Entity
 		vec4<float> _bgColor;
 		vec4<float> _barColor;
 
-		bool _focused;
+		int _focus;
 		bool _grabbed;
 		bool _locked;
 		bool _screenBound;

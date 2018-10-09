@@ -31,8 +31,13 @@ void ClassName::Initialize()
 	
 	Panel* testPanel = new Panel();
 	testPanel->SetPosition(64, 64);
-	testPanel->SetDepth(200);
+	testPanel->SetTitle("Test Panel");
 	_entities.AddEntity(testPanel);
+
+	Panel* testPanel2 = new Panel();
+	testPanel2->SetPosition(400, 64);
+	testPanel2->SetTitle("Panel 2");
+	_entities.AddEntity(testPanel2);
 
     //Player* mainPlayer = new Player();
     //mainPlayer->SetName("MainPlayer");
@@ -111,6 +116,8 @@ void ClassName::Cleanup()
 
 int ClassName::HandleEvents(Event& event)
 {
+	if (event.blocked()) return -1;
+
 	_entities.HandleAllEvents(event);
 
 	_level->HandleAllEvents(event);
@@ -130,22 +137,6 @@ int ClassName::HandleEvents(Event& event)
 			if (event.ev.key.repeat == 0)
 				return OPEN_MENU;
 			break;
-
-		//case SDLK_h:
-		//	globalCam->Move(-10, 0);
-		//	break;
-
-		//case SDLK_j:
-		//	globalCam->Move(0, 10);
-		//	break;
-
-		//case SDLK_k:
-		//	globalCam->Move(0, -10);
-		//	break;
-
-		//case SDLK_l:
-		//	globalCam->Move(10, 0);
-		//	break;
 		}
 	}
 

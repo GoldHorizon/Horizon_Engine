@@ -148,24 +148,29 @@ void EntityCollection::ClearEntities()
 
 void EntityCollection::HandleAllEvents(Event& event)
 {
-	eList::const_iterator it = _collection.begin();
+	eList::const_iterator it = _collection.end();
 
-	while (it != _collection.end())
+	it--;
+
+	do
 	{
 		if ((*it) != nullptr)
 		{
 			(*it)->HandleEvents(event);
 		}
 
-		it++;
+		it--;
 	}
+	while (it != _collection.end());
 }
 
 void EntityCollection::UpdateAll()
 {
-	eList::const_iterator it = _collection.begin();
+	eList::const_iterator it = _collection.end();
 
-	while (it != _collection.end())
+	it--;
+
+	do
 	{
 		// Uncomment to debug Update() on different entities
 		//std::cerr << it->first << std::endl;
@@ -174,8 +179,9 @@ void EntityCollection::UpdateAll()
 			(*it)->Update();
 		}
 
-		it++;
+		it--;
 	}
+	while (it != _collection.begin());
 }
 
 void EntityCollection::RenderAll(float interpolation, int xOffset, int yOffset)

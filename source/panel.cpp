@@ -8,17 +8,19 @@
 Panel::Panel()
 {
 	_title = "Title";
-	_dim = {128, 512};
+	_dim = {196, 512};
 	_barHeight = 24;
 
 	_bgColor = {0, .2, .2, .9};
 	_barColor = {0, .6, .6, .9};
 
-	_focused = false;
+	_focus = 0;
 	_grabbed = false;
 	_locked = false;
 	_screenBound = true;
 	_followCamera = true;
+
+	SetDepth(1000);
 }
 
 Panel::~Panel()
@@ -28,44 +30,37 @@ Panel::~Panel()
 
 void Panel::HandleEvents(Event& event)
 {
+	if (event.blocked()) {
+		return;
+	}
+
 	switch (event.ev.type)
 	{
 		case SDL_MOUSEBUTTONDOWN:
-			// If we press left mb and the panel is not locked in place...
-			if (event.ev.button.button == SDL_BUTTON_LEFT && !_locked) {
+			{
 				int mx, my;
 				mx = event.ev.button.x;
 				my = event.ev.button.y;
 
-				if (_followCamera) {
-					if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight && !_grabbed) {
-						// Grab the panel and set the offset for where the mouse is
-						_grabbed = true;
-						_offset = {event.ev.button.x - x(), event.ev.button.y - y()};
-						//std::cout << "Grabbed!" << std::endl;
-					}
+				if (InWindow({mx, my})) {
+					event.Block();					
+					Focus();
 				} else {
-					if (mx >= x() - globalCam->x() && mx < x() - globalCam->x() + _dim.x && my >= y() - globalCam->y() && my < y() - globalCam->y() + _barHeight && !_grabbed) {
+					Unfocus();
+				}
+
+				// If we press left mb and the panel is not locked in place...
+				if (event.ev.button.button == SDL_BUTTON_LEFT && !_locked) {
+					if (InTitleBar({mx, my})) {
 						// Grab the panel and set the offset for where the mouse is
 						_grabbed = true;
 						_offset = {event.ev.button.x - x(), event.ev.button.y - y()};
 						//std::cout << "Grabbed!" << std::endl;
 					}
 				}
-			}
-			// If we press right mb, toggle if the panel is locked
-			else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
-				int mx, my;
-				mx = event.ev.button.x;
-				my = event.ev.button.y;
-
-				//std::cout << "mx: " << mx << ", my: " << my << std::endl;
-				if (_followCamera) {
-					if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight && !_grabbed) {
-						SetFollowCamera(!_followCamera);
-					}
-				} else {
-					if (mx >= x() - globalCam->x() && mx < x() - globalCam->x() + _dim.x && my >= y() - globalCam->y() && my < y() - globalCam->y() + _barHeight && !_grabbed) {
+				// If we press right mb, toggle if the panel is locked
+				else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
+					if (InTitleBar({mx, my}) && !_grabbed) {
 						SetFollowCamera(!_followCamera);
 					}
 				}
@@ -118,12 +113,73 @@ void Panel::RenderCustom(float interpolation, int xOffset, int yOffset)
 		drawY += yOffset;
 	}
 
-	DrawRect(drawX, drawY, _dim.x, _dim.y, _bgColor);
-	DrawRect(drawX, drawY, _dim.x, _barHeight, _barColor);
+	if (_focus == 0) {
+		DrawRect(drawX, drawY, _dim.x, _dim.y, _bgColor);
+		DrawRect(drawX, drawY, _dim.x, _barHeight, _barColor);
+	} else {
+		vec4<float> bgTemp = _bgColor;
+		vec4<float> barTemp = _barColor;
+
+		bgTemp.w = .2;
+		barTemp.w = .2;
+
+		DrawRect(drawX, drawY, _dim.x, _dim.y, bgTemp);
+		DrawRect(drawX, drawY, _dim.x, _barHeight, barTemp);
+	}
 	
 	// Draw title text
 	DrawSmoothText(_title, consoleFont, (drawX + _dim.x / 2) + 1, (drawY + (_barHeight - 20) / 2) + 1, TextAlignment::ALIGN_CENTER, {0, 0, 0, 1});
 	DrawSmoothText(_title, consoleFont, drawX + _dim.x / 2, drawY + (_barHeight - 20) / 2, TextAlignment::ALIGN_CENTER, {1, 1, 1, 1});
+}
+
+bool Panel::InWindow(vec2<int> pos)
+{
+	if (_followCamera) {
+		if (pos.x >= x() 
+			&& pos.x < x() + _dim.x 
+			&& pos.y >= y() 
+			&& pos.y < y() + _dim.y)
+			return true;
+	} else {
+		if (pos.x >= x() - globalCam->x() 
+			&& pos.x < x() - globalCam->x() + _dim.x 
+			&& pos.y >= y() - globalCam->y() 
+			&& pos.y < y() - globalCam->y() + _dim.y) 
+			return true;
+	}
+	return false;
+}
+
+bool Panel::InTitleBar(vec2<int> pos)
+{
+	if (_followCamera) {
+		if (pos.x >= x() 
+			&& pos.x < x() + _dim.x 
+			&& pos.y >= y() 
+			&& pos.y < y() + _barHeight)
+			return true;
+	} else {
+		if (pos.x >= x() - globalCam->x() 
+			&& pos.x < x() - globalCam->x() + _dim.x 
+			&& pos.y >= y() - globalCam->y() 
+			&& pos.y < y() - globalCam->y() + _barHeight) 
+			return true;
+	}
+	return false;
+}
+
+void Panel::Focus()
+{
+	if (_focus > 0) {
+		_focus = 0;
+		SetDepth(1000);
+	}
+}
+
+void Panel::Unfocus()
+{
+	_focus++;
+	SetDepth(depth() + 1);
 }
 
 std::string Panel::title()
@@ -146,9 +202,9 @@ vec4<float> Panel::barColor()
 	return _barColor;
 }
 
-bool Panel::focused()
+bool Panel::focus()
 {
-	return _focused;
+	return _focus;
 }
 
 bool Panel::grabbed()
