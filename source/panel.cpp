@@ -62,11 +62,11 @@ void Panel::HandleEvents(Event& event)
 				//std::cout << "mx: " << mx << ", my: " << my << std::endl;
 				if (_followCamera) {
 					if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight && !_grabbed) {
-						_locked = !_locked;
+						SetFollowCamera(!_followCamera);
 					}
 				} else {
 					if (mx >= x() - globalCam->x() && mx < x() - globalCam->x() + _dim.x && my >= y() - globalCam->y() && my < y() - globalCam->y() + _barHeight && !_grabbed) {
-						_locked = !_locked;
+						SetFollowCamera(!_followCamera);
 					}
 				}
 			}
@@ -203,5 +203,24 @@ void Panel::SetScreenBound(bool screenBound)
 
 void Panel::SetFollowCamera(bool followCamera)
 {
-	_followCamera = followCamera;
+	if (_followCamera && !followCamera) {
+		_followCamera = false;
+
+		vec2<int> newPos;
+		newPos = ScreenToWorld(x(), y());
+		SetPosition(newPos.x, newPos.y);
+	} else if (!_followCamera && followCamera) {
+		_followCamera = true;
+
+		vec2<int> newPos;
+		newPos = WorldToScreen(x(), y());
+		SetPosition(newPos.x, newPos.y);
+
+		if (_screenBound) {
+			if (x() < 0) SetX(0);
+			else if (x() + _dim.x >= SCREEN_WIDTH) SetX(SCREEN_WIDTH - _dim.x);
+			if (y() < 0) SetY(0);
+			else if (y() + _dim.y >= SCREEN_HEIGHT) SetY(SCREEN_HEIGHT - _dim.y);
+		}
+	}
 }
