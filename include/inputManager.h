@@ -16,8 +16,5 @@ namespace Input {
 	//bool KeyReleased(SDL_Keycode key);
 	bool KeyHeld(SDL_Keycode key);
 
-	Event* NextEvent();
-
-	SDL_Event SDLEvent;
-	Event lastEvent;
+	bool NextEvent(Event&);
 };

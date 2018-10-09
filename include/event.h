@@ -3,18 +3,32 @@
 class Event
 {
 	public:
+		/*
+		 * Constructors/Destructors
+		 */
 		Event();
 		~Event();
 
+		/*
+		 * Class Methods
+		 */
 		void Reset();
+		void Block();
 
-		SDL_Event* event();
+		/*
+		 * Get Methods
+		 */
 		bool blocked();
 
-		void SetEvent(SDL_Event* event);
-		void SetBlocked(bool blocked = true);
+		/*
+		 * Set Methods
+		 */
+
+		/*
+		 * Public Attributes
+		 */
+		SDL_Event ev;
 
 	private:
-		SDL_Event* _event;
 		bool _blocked;
 };
