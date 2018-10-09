@@ -1,5 +1,6 @@
 #include "entity.h"
 #include "types.h"
+#include "event.h"
 
 #include <string>
 
@@ -15,7 +16,7 @@ class Panel : public Entity
 		/*
 		 * Class Methods
 		 */
-		void HandleEvents(SDL_Event*);
+		void HandleEvents(Event&);
 		void Update();
 		void Render(float interpolation, int xOffset = 0, int yOffset = 0);
 

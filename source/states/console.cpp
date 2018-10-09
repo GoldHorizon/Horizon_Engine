@@ -85,11 +85,11 @@ void ClassName::Cleanup()
 
 }
 
-int ClassName::HandleEvents(SDL_Event* event)
+int ClassName::HandleEvents(Event& event)
 {
-	if (event->type == SDL_KEYDOWN)
+	if (event.ev.type == SDL_KEYDOWN)
 	{
-		switch (event->key.keysym.sym)
+		switch (event.ev.key.keysym.sym)
 		{
 		case SDLK_ESCAPE:
 			Close();
@@ -98,7 +98,7 @@ int ClassName::HandleEvents(SDL_Event* event)
 		case SDLK_BACKQUOTE:
 			{
 				//std::cout << "CONSOLE DETECTED BACKQUOTE" << std::endl;
-				bool lshift = event->key.keysym.mod & KMOD_LSHIFT;
+				bool lshift = event.ev.key.keysym.mod & KMOD_LSHIFT;
 
 				if (_isOpenBig)
 				{
@@ -112,14 +112,14 @@ int ClassName::HandleEvents(SDL_Event* event)
 				}
 				else
 				{
-					Open(event->key.keysym.mod & KMOD_LSHIFT);
+					Open(event.ev.key.keysym.mod & KMOD_LSHIFT);
 				}
 			}
 			break;
 
 		case SDLK_DELETE:
 			{
-				if (event->key.keysym.mod & KMOD_CTRL)
+				if (event.ev.key.keysym.mod & KMOD_CTRL)
 				{
 					if (_cursorPosition == 0 && _currentLine.size() > 0)
 					{
@@ -177,7 +177,7 @@ int ClassName::HandleEvents(SDL_Event* event)
 
 		case SDLK_BACKSPACE:
 			{
-				if (event->key.keysym.mod & KMOD_CTRL)
+				if (event.ev.key.keysym.mod & KMOD_CTRL)
 				{
 					if (_cursorPosition == _currentLine.size()) {
 						// Delete any space behind the last word
@@ -266,7 +266,7 @@ int ClassName::HandleEvents(SDL_Event* event)
 		case SDLK_LEFT:
 			{
 				if (_cursorPosition > 0) {
-					if (event->key.keysym.mod & KMOD_LCTRL) {
+					if (event.ev.key.keysym.mod & KMOD_LCTRL) {
 						if (_currentLine[_cursorPosition] != ' ' && _currentLine[_cursorPosition - 1] == ' ')
 							_cursorPosition--;
 
@@ -285,7 +285,7 @@ int ClassName::HandleEvents(SDL_Event* event)
 		case SDLK_RIGHT:
 			{
 				if (_cursorPosition < _currentLine.size()) {
-					if (event->key.keysym.mod & KMOD_LCTRL) {
+					if (event.ev.key.keysym.mod & KMOD_LCTRL) {
 						while (_cursorPosition < _currentLine.size() && _currentLine[_cursorPosition] != ' ')
 							_cursorPosition++;
 
@@ -321,25 +321,25 @@ int ClassName::HandleEvents(SDL_Event* event)
 			break;
 		}
 	}
-	else if (event->type == SDL_TEXTINPUT) // Normal typing
+	else if (event.ev.type == SDL_TEXTINPUT) // Normal typing
 	{
-		char c = event->text.text[0];
+		char c = event.ev.text.text[0];
 		if (c != '`' && c != '~') {
 			if (_cursorPosition == _currentLine.size())
-				_currentLine += event->text.text;
+				_currentLine += event.ev.text.text;
 			else if (_cursorPosition == 0)
-				_currentLine = event->text.text + _currentLine;
+				_currentLine = event.ev.text.text + _currentLine;
 			else
 				_currentLine = _currentLine.substr(0, _cursorPosition) 
-								+ event->text.text 
+								+ event.ev.text.text 
 								+ _currentLine.substr(_cursorPosition, std::string::npos);
 
 			_cursorPosition++;
 		}
 	}
-	else if (event->type == SDL_MOUSEWHEEL) // Scroll through history
+	else if (event.ev.type == SDL_MOUSEWHEEL) // Scroll through history
 	{
-		int n = event->wheel.y;
+		int n = event.ev.wheel.y;
 		//std::cout << "DEBUG mousewheel event" << std::endl;
 		
 		while (n < 0) {
@@ -352,7 +352,7 @@ int ClassName::HandleEvents(SDL_Event* event)
 			n--;
 		}
 	}
-	//else if (event->type == SDL_TEXTEDITING)
+	//else if (event.ev.type == SDL_TEXTEDITING)
 	//{
 	//	//std::cout << "DEBUG testing editing input?" << std::endl;
 	//}

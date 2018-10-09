@@ -66,7 +66,7 @@ void Entity::FreeMemory()
 	_image.FreeMemory();
 }
 
-void Entity::HandleEvents(SDL_Event*)
+void Entity::HandleEvents(Event& event)
 {
 
 }

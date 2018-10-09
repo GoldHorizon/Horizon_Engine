@@ -41,20 +41,20 @@ void ClassName::Cleanup()
 
 }
 
-int ClassName::HandleEvents(SDL_Event* event)
+int ClassName::HandleEvents(Event& event)
 {
 	// We don't want to update the objects we are editing
 
-	if (event->type == SDL_KEYDOWN)
+	if (event.ev.type == SDL_KEYDOWN)
 	{
-		switch (event->key.keysym.sym)
+		switch (event.ev.key.keysym.sym)
 		{
 		case SDLK_ESCAPE:
-			if (event->key.repeat == 0)
+			if (event.ev.key.repeat == 0)
 				return OPEN_MENU;
 			break;
 		case SDLK_SLASH:
-			if (event->key.repeat == 0)
+			if (event.ev.key.repeat == 0)
 				_drawGrid = !_drawGrid;
 			break;
 
@@ -85,37 +85,37 @@ int ClassName::HandleEvents(SDL_Event* event)
 		}
 	}
 
-	else if (event->type == SDL_MOUSEBUTTONDOWN && 
-			event->button.clicks == 1)
+	else if (event.ev.type == SDL_MOUSEBUTTONDOWN && 
+			event.ev.button.clicks == 1)
 	{
-		if (event->button.button == SDL_BUTTON_LEFT) {
+		if (event.ev.button.button == SDL_BUTTON_LEFT) {
 			_isCreating = true;
 		}
-		else if (event->button.button == SDL_BUTTON_RIGHT) {
+		else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
 			_isDeleting = true;
 		}
 	}
-	else if (event->type == SDL_MOUSEBUTTONUP &&
-			event->button.clicks == 1) 
+	else if (event.ev.type == SDL_MOUSEBUTTONUP &&
+			event.ev.button.clicks == 1) 
 	{
-		if (event->button.button == SDL_BUTTON_LEFT) {
+		if (event.ev.button.button == SDL_BUTTON_LEFT) {
 			_isCreating = false;
 		}
-		else if (event->button.button == SDL_BUTTON_RIGHT) {
+		else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
 			_isDeleting = false;
 		}
 	}
 
-	else if (event->type == SDL_MOUSEWHEEL)
+	else if (event.ev.type == SDL_MOUSEWHEEL)
 	{
-		if (event->wheel.y < 0)
+		if (event.ev.wheel.y < 0)
 		{
 			_entityType = static_cast<EditorEntityType>((static_cast<int>(_entityType)) + 1);	
 
 			if (static_cast<int>(_entityType) >= static_cast<int>(EditorEntityType::Count))
 				_entityType = static_cast<EditorEntityType>(0);
 		}
-		else if (event->wheel.y > 0)
+		else if (event.ev.wheel.y > 0)
 		{
 			_entityType = static_cast<EditorEntityType>((static_cast<int>(_entityType)) - 1);	
 

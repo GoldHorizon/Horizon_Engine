@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../gameState.h"
+#include "gameState.h"
+#include "event.h"
 
 #define ClassName StateTitleScreen
 
@@ -23,7 +24,7 @@ public:
     void Pause();
     void Resume();
 
-    int HandleEvents(SDL_Event*);
+    int HandleEvents(Event&);
     void Update();
     void Render(float interpolation);
 

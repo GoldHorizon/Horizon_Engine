@@ -3,6 +3,7 @@
 #include "gameState.h"
 #include "level.h"
 #include "camera.h"
+#include "event.h"
 
 #include <vector>
 
@@ -27,7 +28,7 @@ public:
     void Initialize();
     void Cleanup();
 
-    int HandleEvents(SDL_Event*);
+    int HandleEvents(Event&);
     void Update();
     void Render(float interpolation);
 

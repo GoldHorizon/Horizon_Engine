@@ -2,6 +2,7 @@
 
 #include "entity.h"
 #include "types.h"
+#include "event.h"
 
 template <typename T> bool PComp(const T * const &a, const T * const &b)
 {
@@ -58,7 +59,7 @@ class EntityCollection
 		void ClearEntities();
 
 		// HandleAllEvents()- Handles events (such as input) for all entities in collection
-		void HandleAllEvents(SDL_Event*);
+		void HandleAllEvents(Event&);
 
 		// UpdateAll()		- Update every entity in collection
 		void UpdateAll();

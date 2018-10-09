@@ -109,7 +109,7 @@ void ClassName::Cleanup()
 	delete _level;
 }
 
-int ClassName::HandleEvents(SDL_Event* event)
+int ClassName::HandleEvents(Event& event)
 {
 	_entities.HandleAllEvents(event);
 
@@ -122,12 +122,12 @@ int ClassName::HandleEvents(SDL_Event* event)
 //		return OPEN_MENU;
 //	}
 
-	if (event->type == SDL_KEYDOWN)
+	if (event.ev.type == SDL_KEYDOWN)
 	{
-		switch (event->key.keysym.sym)
+		switch (event.ev.key.keysym.sym)
 		{
 		case SDLK_ESCAPE:
-			if (event->key.repeat == 0)
+			if (event.ev.key.repeat == 0)
 				return OPEN_MENU;
 			break;
 

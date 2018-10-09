@@ -2,6 +2,7 @@
 
 #include "game.h"
 #include "enumerations.h"
+#include "event.h"
 
 // Inspired by Game Dev Geek
 // http://gamedevgeek.com/tutorials/managing-game-states-in-c/ 
@@ -23,7 +24,7 @@ public:
     virtual void Initialize() = 0;
     virtual void Cleanup() = 0;
 
-    virtual int HandleEvents(SDL_Event*) = 0;
+    virtual int HandleEvents(Event&) = 0;
     virtual void Update() = 0;
     virtual void Render(float interpolation) = 0;
 

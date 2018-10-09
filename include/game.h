@@ -4,6 +4,7 @@
 
 #include "entityCollection.h"
 #include "enumerations.h"
+#include "event.h"
 
 #include "SDL.h"
 
@@ -62,7 +63,7 @@ private:
   // _mainRenderer	- main renderer, renders to _mainWindow
   SDL_Renderer* _mainRenderer;
   // _event			- global event gathered by game
-  SDL_Event _event;
+  Event _event;
 
   // _stateStack      - stack of all states in game
   std::vector<GameState*> _stateStack;
