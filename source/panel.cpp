@@ -60,9 +60,14 @@ void Panel::HandleEvents(Event& event)
 				my = event.ev.button.y;
 
 				//std::cout << "mx: " << mx << ", my: " << my << std::endl;
-				if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight && !_grabbed) {
-					_grabbed = true;
-					//std::cout << "Grabbed!" << std::endl;
+				if (_followCamera) {
+					if (mx >= x() && mx < x() + _dim.x && my >= y() && my < y() + _barHeight && !_grabbed) {
+						_locked = !_locked;
+					}
+				} else {
+					if (mx >= x() - globalCam->x() && mx < x() - globalCam->x() + _dim.x && my >= y() - globalCam->y() && my < y() - globalCam->y() + _barHeight && !_grabbed) {
+						_locked = !_locked;
+					}
 				}
 			}
 			break;
