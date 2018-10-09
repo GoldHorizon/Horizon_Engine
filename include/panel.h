@@ -19,7 +19,6 @@ class Panel : public Entity
 		 */
 		void HandleEvents(Event&);
 		void Update();
-		void Render(float interpolation, int xOffset = 0, int yOffset = 0);
 
 		void RenderCustom(float interpolation, int xOffset = 0, int yOffset = 0);
 

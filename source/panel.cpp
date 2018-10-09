@@ -39,6 +39,7 @@ void Panel::HandleEvents(Event& event)
 				mx = event.ev.button.x;
 				my = event.ev.button.y;
 
+				// Focus window if we are clicking inside of it somewhere
 				if (InWindow({mx, my})) {
 					event.Block();					
 					Focus();
@@ -82,7 +83,6 @@ void Panel::HandleEvents(Event& event)
 
 		case SDL_MOUSEMOTION:
 			if (_grabbed) {
-				//SetPosition(x() + event.ev.motion.xrel, y() + event.ev.motion.yrel);
 
 				SetPosition(event.ev.motion.x - _offset.x, event.ev.motion.y - _offset.y);
 
@@ -97,11 +97,6 @@ void Panel::HandleEvents(Event& event)
 }
 
 void Panel::Update()
-{
-
-}
-
-void Panel::Render(float interpolation, int xOffset, int yOffset)
 {
 
 }
