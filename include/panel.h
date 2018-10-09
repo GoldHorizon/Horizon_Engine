@@ -30,6 +30,9 @@ class Panel : public Entity
 		vec4<float> barColor();
 		bool focused();
 		bool grabbed();
+		bool locked();
+		bool screenBound();
+		bool followCamera();
 
 		/*
 		 * Set Methods
@@ -38,6 +41,9 @@ class Panel : public Entity
 		void SetPos(vec2<int> dim);
 		void SetBgColor(vec4<float> color);
 		void SetBarColor(vec4<float> color);
+		void SetLocked(bool locked);
+		void SetScreenBound(bool screenBound);
+		void SetFollowCamera(bool followCamera);
 
 	private:
 		std::string _title;
