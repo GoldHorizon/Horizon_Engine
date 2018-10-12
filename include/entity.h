@@ -15,7 +15,6 @@ class Entity
 		 * Constructors/Destructors
 		 */
 		Entity();
-		explicit Entity(SDL_Renderer* renderer);
 		virtual ~Entity();
 
 		/*
@@ -45,20 +44,6 @@ class Entity
 
 		// RenderCustom()	- Extra custom rendering for entities if they desire more drawing
 		virtual void RenderCustom(float interpolation, int xOffset = 0, int yOffset = 0) {}
-
-		// Render()			- Renders the texture to its current position
-		//	clipping:	rectangle the image is clipped to before rendered
-		//void Render(SDL_Rect* clipping);
-
-		// Render() 		- Renders the texture to a position
-		//	flip:		how to flip the image before it is rendered
-		//	clipping:	rectangle the image is clipped to before rendered
-		//void Render(SDL_RendererFlip flip, SDL_Rect* clipping = nullptr);
-
-		// Render() 		- Renders the texture to a position
-		//	x:			x position of rendering
-		//	y:			y position of rendering
-		//void Render(float x, float y, float interpolation);
 
 		// Move()			- Moves the image by an offset of x and y coordinates
 		//	x:			amount to move in the x direction
@@ -127,8 +112,6 @@ class Entity
 
 		// _image				- Image stored in the drawable
 		Image _image;
-		//SDL_Texture* _image;
-		//std::string  _imagePath;
 		//// _renderer			- Renderer we draw to for this drawable
 		//SDL_Renderer* _renderer;
 

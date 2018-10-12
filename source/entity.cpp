@@ -9,14 +9,7 @@
 
 #include "SDL_image.h"
 
-Entity::Entity() : Entity(globalRenderer)
-{
-}
-
-Entity::Entity(SDL_Renderer* renderer):
-	//_image(nullptr),
-	//_imagePath("nopath"),
-	//_renderer(renderer),
+Entity::Entity() :
 	_name("noname"),
 	_ID(0),
 	_active(true),
@@ -28,22 +21,7 @@ Entity::Entity(SDL_Renderer* renderer):
 	_speed(0),
 	_hspeed(0),
 	_vspeed(0)
-	//_imageAlpha(1),
-	//_imageAngle(0),
-	//_imageWidth(0),
-	//_imageHeight(0),
-	//_spriteDimensions({ 0, 0 }),
-	//_imageSpeed(0),
-	//_imageTimer(0),
-	//_lastImageTime(0),
-	//_imageIndex(0)
 {
-	//_imageOrigin = {0, 0};
-
-	//if (renderer == nullptr)
-	//{
-	//	std::cerr << "Error: Cannot instantiate object - globalRenderer not set!" << std::endl;
-	//}
 }
 
 Entity::~Entity()
@@ -98,91 +76,6 @@ void Entity::Render(float interpolation, int xOffset, int yOffset)
 	}
 }
 
-//void Entity::Render(SDL_Rect* clipping)
-//{
-//	if (_image != nullptr)
-//	{
-//		// Create a set of ints to use for drawing position
-//		int xx = static_cast<int>(_x) - _imageOrigin.x;
-//		int yy = static_cast<int>(_y) - _imageOrigin.y;
-//
-//		// Create a rectangle to put on display
-//		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
-//
-//		// If we are clipping the sprite, adjust it
-//		if (clipping != nullptr)
-//		{
-//			displayImage.w = clipping->w;
-//			displayImage.h = clipping->h;
-//		}
-//
-//		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, _imageAngle, &_imageOrigin, SDL_FLIP_NONE);
-//	}
-////	else
-////	{
-////		//std::cout << "Error: _image not found..." << std::endl;
-////	}
-//}
-
-//void Entity::Render(SDL_RendererFlip flip, SDL_Rect* clipping)
-//{
-//	if (_image != nullptr)
-//	{
-//		// Create a set of ints to use for drawing position
-//		int xx = static_cast<int>(_x) - _imageOrigin.x;
-//		int yy = static_cast<int>(_y) - _imageOrigin.y;
-//
-//		// Create a rectangle to put on display
-//		SDL_Rect displayImage = {xx, yy, _imageWidth, _imageHeight};
-//
-//		// If we are clipping the sprite, adjust it
-//		if (clipping != nullptr)
-//		{
-//			displayImage.w = clipping->w;
-//			displayImage.h = clipping->h;
-//		}
-//
-//		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, _imageAngle, &_imageOrigin, flip);
-////		SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
-////		SDL_RenderDrawRect(_renderer, &displayImage);
-//	}
-////	else
-////	{
-////		//std::cout << "Error: _image not found..." << std::endl;
-////	}
-//}
-
-//void Drawable::Render(float x, float y, double angle, SDL_Point* origin, SDL_RendererFlip flip, SDL_Rect* clipping)
-//{
-//	// Set our member variables to the new drawing position
-//	_x = x;
-//	_y = y;
-//
-//	if (_image != nullptr)
-//	{
-//		// Create a set of ints to use for drawing position
-//		int xx = static_cast<int>(x);
-//		int yy = static_cast<int>(y);
-//
-//		// Create a rectangle to put on display
-//		SDL_Rect displayImage = {xx, yy, _width, _height};
-//		//std::cout << clipping->x << " " << clipping->y << " " << clipping->w << " " << clipping->h << " " << std::endl;
-//
-//		// If we are clipping the sprite, adjust it
-//		if (clipping != nullptr)
-//		{
-//			displayImage.w = clipping->w;
-//			displayImage.h = clipping->h;
-//		}
-//
-//		SDL_RenderCopyEx(_renderer, _image, clipping, &displayImage, angle, origin, flip);
-//	}
-////	else
-////	{
-////		//std::cout << "Error: _image not found..." << std::endl;
-////	}
-//}
-
 void Entity::Move(float x, float y)
 {
 	_x += x;
@@ -209,18 +102,6 @@ std::string Entity::Serialize()
 		+ std::to_string(_speed) + " "
 		+ std::to_string(_hspeed) + " "
 		+ std::to_string(_vspeed) + " ";
-		//+ std::to_string(_imageAlpha) + " "
-		//+ std::to_string(_imageAngle) + " "
-		//+ std::to_string(_imageWidth) + " "
-		//+ std::to_string(_imageHeight) + " "
-		//+ std::to_string(_imageSpeed) + " "
-		//+ std::to_string(_imageTimer) + " "
-		//+ std::to_string(_lastImageTime) + " "
-		//+ std::to_string(_imageIndex) + " "
-		//+ std::to_string(_imageOrigin.x) + " "
-		//+ std::to_string(_imageOrigin.y) + " "
-		//+ std::to_string(_spriteDimensions.x) + " "
-		//+ std::to_string(_spriteDimensions.y) + " ";
 
 	return serialize_string;
 }
