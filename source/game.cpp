@@ -13,6 +13,7 @@
 #include "states/pauseMenu.h"
 #include "states/editor.h"
 #include "states/console.h"
+#include "states/minesweeper.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -122,6 +123,35 @@ int Game::Initialize()
 	// COMMANDS
 	//
 	// Some game commands to be implemented
+	commands["state"] = [this](sVector args) {
+		if (args.size() > 0) 
+		{
+			for (int i = 0; i < args.size(); i++)
+			{
+				if (args[i] == "uninitialized") {
+					ChangeState(StateUninitialized::Instance());
+					StateUninitialized::Instance()->Resume();
+				}
+				else if (args[i] == "playing") {
+					ChangeState(StatePlaying::Instance());
+					StatePlaying::Instance()->Resume();
+				}
+				else if (args[i] == "editor") {
+					ChangeState(StateEditor::Instance());
+					StateEditor::Instance()->Resume();
+				}
+				else if (args[i] == "minesweeper") {
+					ChangeState(StateMinesweeper::Instance());
+					StateMinesweeper::Instance()->Resume();
+				}
+				else break;
+
+				PushState(StateConsole::Instance());
+				//}
+			}
+		}
+	};
+
 	commands["level"] = [this](sVector args) {
 		if (args.size() != 1) {
 			StateConsole::Instance()->AddError("Command requires 1 argument!");
@@ -358,6 +388,7 @@ if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
 				else
 				{
 					std::vector<GameState*>::iterator it = _stateStack.end();
+					//if (_stateStack.size() > 1)
 					it--;
 					(*it)->Pause();
 					

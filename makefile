@@ -26,11 +26,14 @@ objects 	:= 	main.o \
 				inputManager.o \
 				panel.o \
 				event.o \
+				mineBoard.o \
+				mineTile.o \
 				playing.o \
 				uninitialized.o \
 				pauseMenu.o \
 				editor.o \
-				console.o
+				console.o \
+				minesweeper.o
 
 win32_flags :=	-lmingw32 \
 				-lSDL2main \
@@ -43,7 +46,7 @@ win32_inc_path := -IC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl32\incl
 win32_lib_path := -LC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl32\lib
 
 win32_gcc_flags = -c -Wall -w -Wl,-subsystem,windows $(win32_inc_path) -IC:\Users\Nick\Documents\Git\SDL_Engine\include -static-libstdc++ -std=c++14
-gcc_flags = -c -Wall -w $(win32_inc_path) -IC:\Users\Nick\Documents\Git\SDL_Engine\include -std=c++14
+gcc_flags = -c -Wall -w $(win32_inc_path) -IC:\Users\Nick\Documents\Git\SDL_Engine\include -std=c++14 -g
 
 ###
 ### Main make program
@@ -111,7 +114,7 @@ drawing.o			: source/drawing.cpp include/drawing.h include/globals.h include/tex
 wall.o				: source/wall.cpp include/wall.h
 	g++ $(gcc_flags) source/wall.cpp
 
-camera.o				: source/camera.cpp include/camera.h include/globals.h include/types.h include/enumerations.h
+camera.o			: source/camera.cpp include/camera.h include/globals.h include/types.h include/enumerations.h
 	g++ $(gcc_flags) source/camera.cpp
 	
 inputManager.o		: source/inputManager.cpp include/inputManager.h
@@ -122,6 +125,12 @@ panel.o				: source/panel.cpp include/panel.h include/entity.h
 
 event.o				: source/event.cpp include/event.h
 	g++ $(gcc_flags) source/event.cpp
+
+mineBoard.o			: source/mineBoard.cpp include/mineBoard.h include/entity.h
+	g++ $(gcc_flags) source/mineBoard.cpp
+
+mineTile.o			: source/mineTile.cpp include/mineTile.h include/entity.h
+	g++ $(gcc_flags) source/mineTile.cpp
 
 ###
 ### List of game states to be compiled ###
@@ -140,6 +149,9 @@ editor.o		: source/states/editor.cpp include/states/editor.h include/gameState.h
 
 console.o		: source/states/console.cpp include/states/console.h include/gameState.h include/drawing.h include/globals.h include/engineMethods.h include/enumerations.h
 	g++ $(gcc_flags) source/states/console.cpp
+
+minesweeper.o	: source/states/minesweeper.cpp include/states/minesweeper.h include/mineBoard.h	
+	g++ $(gcc_flags) source/states/minesweeper.cpp
 
 ###
 ### Cleans object and executable files (Debug stuff)

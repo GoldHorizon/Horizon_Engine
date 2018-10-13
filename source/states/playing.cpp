@@ -189,13 +189,14 @@ void ClassName::AddLevel(Level* level)
 void ClassName::ChangeLevel(std::string name)
 {
 	if (_level == nullptr || name != _level->GetFileName()) {
-		delete _level;
+		if (_level == nullptr) delete _level;
 
 		Level* newLevel = new Level(name);
 
 		if (!newLevel->LoadFromFile())
 		{
 			std::cout << "Error: Could not add level! Level was not found" << std::endl;
+			_level = new Level("mine_level");
 		}
 		else
 		{

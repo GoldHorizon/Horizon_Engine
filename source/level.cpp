@@ -11,8 +11,7 @@ Level::Level() : Level("")
 
 Level::Level(std::string levelName)
 {
-	if (levelName != "")
-		SetFileName(levelName);
+	SetFileName(levelName);
 }
 
 Level::~Level()

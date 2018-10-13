@@ -9,7 +9,8 @@ enum class GameStateType
 	PLAYING_GAME,
 	PAUSE_MENU,
 	LEVEL_EDITOR,
-	CONSOLE
+	CONSOLE,
+	MINESWEEPER
 };
 
 enum class EditorEntityType {

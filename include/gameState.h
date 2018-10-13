@@ -1,8 +1,10 @@
 #pragma once
 
-#include "game.h"
 #include "enumerations.h"
 #include "event.h"
+#include "entityCollection.h"
+
+#include "SDL.h"
 
 // Inspired by Game Dev Geek
 // http://gamedevgeek.com/tutorials/managing-game-states-in-c/ 
@@ -27,8 +29,6 @@ public:
     virtual int HandleEvents(Event&) = 0;
     virtual void Update() = 0;
     virtual void Render(float interpolation) = 0;
-
-    void ChangeState(Game* gameReference, GameState* nextState);
 
     // NOTE: Goes in all inherited states
     // static GameState* Instance()
