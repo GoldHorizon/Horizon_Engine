@@ -55,8 +55,8 @@ void Player::HandleEvents(Event& event)
 		x += globalCam->x();
 		y += globalCam->y();
 
-        SetX(x);
-        SetY(y);
+        this->x = (x);
+        this->y = (y);
     } 
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);

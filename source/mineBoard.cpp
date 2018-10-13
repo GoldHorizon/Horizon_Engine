@@ -50,7 +50,7 @@ void MineBoard::Render(float interpolation, int xOffset, int yOffset)
 		for (int j = 0; j < _boardHeight; j++) {
 			for (int i = 0; i < _boardWidth; i++) {
 				//std::cout << "::: " << xOffset << std::endl;
-				GetTile(i, j).Render(interpolation, Entity::x() + xOffset + (i * 32), Entity::y() + yOffset + (j * 32));
+				GetTile(i, j).Render(interpolation, this->x + xOffset + (i * 32), this->y + yOffset + (j * 32));
 			}
 		}
 

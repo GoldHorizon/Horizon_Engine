@@ -257,7 +257,7 @@ void ClassName::RemoveMenuOption(int pos)
 		Text* temp = _menuList[pos];
 
 		//std::cout << "Trying to delete " << temp->text() << std::endl;
-		_entities.RemoveByID(temp->ID());
+		_entities.RemoveByID(temp->ID);
 		if (_menuList[pos] != nullptr)
 		{
 			_menuList[pos] = nullptr;

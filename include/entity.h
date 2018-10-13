@@ -63,12 +63,12 @@ class Entity
 		//SDL_Renderer* renderer() const;
 
 		std::string name() const;	// Returns name of entity
-		int ID() const;					// Returns entity ID
-		bool active() const;
-		bool visible() const;
-		float x() const;				// Returns the x position
-		float y() const;				// Returns the y position
-		float depth() const;            // Returns image depth
+		//int ID() const;					// Returns entity ID
+		//bool active() const;
+		//bool visible() const;
+		//float x() const;				// Returns the x position
+		//float y() const;				// Returns the y position
+		//float depth() const;            // Returns image depth
 		float direction() const;		// Returns movement direction
 		float speed() const;			// Returns movement speed
 		float hspeed() const;           // Returns horizontal speed
@@ -88,12 +88,12 @@ class Entity
 		 * Set Methods
 		 */
 		void SetName(std::string name);		// Sets entity name
-		void SetID(int ID);					// Sets entity ID
-		void SetActive(bool active);		// Sets if entity is active
-		void SetVisible(bool visible);		// Sets if entity is visible
-		void SetX(float x);					// Sets the new x position
-		void SetY(float y);					// Sets the new y position
-		void SetDepth(float depth);         // Sets the image depth
+		//void SetID(int ID);					// Sets entity ID
+		//void SetActive(bool active);		// Sets if entity is active
+		//void SetVisible(bool visible);		// Sets if entity is visible
+		//void SetX(float x);					// Sets the new x position
+		//void SetY(float y);					// Sets the new y position
+		//void SetDepth(float depth);         // Sets the image depth
 		void SetDirection(float direction);	// Sets the movement direction
 		void SetSpeed(float speed);			// Sets the movement speed
 		void SetHSpeed(float hspeed);		// Sets the movement hspeed
@@ -108,20 +108,19 @@ class Entity
 		void SetPosition(float x, float y);	// Shortcut to set position
 		void SetPosition(SDL_Point pos);	// Shortcut to set position
 
+		int ID;					// ID of the entity
+		bool active;			// If entity is active or not
+		bool visible;			// If entity's image is visible
+		float x;				// Current x position of image
+		float y;				// Current y position of image
+		float depth;			// Depth of image (greater value = further back)
+
 	private:
 
 		// _image				- Image stored in the drawable
 		Image _image;
-		//// _renderer			- Renderer we draw to for this drawable
-		//SDL_Renderer* _renderer;
 
-		std::string _name;
-		int _ID;				// ID of the entity
-		bool _active;			// If entity is active or not
-		bool _visible;			// If entity's image is visible
-		float _x;				// Current x position of image
-		float _y;				// Current y position of image
-		float _depth;           // Depth of image (greater value = further back)
+		std::string _name;		// Name of entity
 		float _direction;		// Direction the entity is moving
 		float _speed;			// Speed the entity is moving at
 		float _hspeed;          // Horizontal speed of entity

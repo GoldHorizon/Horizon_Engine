@@ -110,8 +110,8 @@ int StateName::HandleEvents(Event& event)
 		mx = coords.x;
 		my = coords.y;
 
-		mx -= static_cast<int>(_mainBoard.x());
-		my -= static_cast<int>(_mainBoard.y());
+		mx -= static_cast<int>(_mainBoard.x);
+		my -= static_cast<int>(_mainBoard.y);
 
 		if (mx >= 0 && mx < _mainBoard.width() * 32 && my >= 0 && my < _mainBoard.height() * 32) {
 			mx /= 32;

@@ -21,7 +21,7 @@ Panel::Panel()
 	_screenBound = true;
 	_followCamera = true;
 
-	SetDepth(1000);
+	depth = (1000);
 }
 
 Panel::~Panel()
@@ -54,7 +54,7 @@ void Panel::HandleEvents(Event& event)
 						if (InTitleBar({mx, my})) {
 							// Grab the panel and set the offset for where the mouse is
 							_grabbed = true;
-							_offset = {event.ev.button.x - x(), event.ev.button.y - y()};
+							_offset = {event.ev.button.x - this->x, event.ev.button.y - this->y};
 							//std::cout << "Grabbed!" << std::endl;
 						}
 					}
@@ -87,10 +87,10 @@ void Panel::HandleEvents(Event& event)
 				SetPosition(event.ev.motion.x - _offset.x, event.ev.motion.y - _offset.y);
 
 				if (_screenBound && _followCamera) {
-					if (x() < 0) SetX(0);
-					else if (x() + _dim.x >= SCREEN_WIDTH) SetX(SCREEN_WIDTH - _dim.x);
-					if (y() < 0) SetY(0);
-					else if (y() + _dim.y >= SCREEN_HEIGHT) SetY(SCREEN_HEIGHT - _dim.y);
+					if (this->x < 0) this->x = (0);
+					else if (this->x + _dim.x >= SCREEN_WIDTH) this->x = (SCREEN_WIDTH - _dim.x);
+					if (this->y < 0) this->y = (0);
+					else if (this->y + _dim.y >= SCREEN_HEIGHT) this->y = (SCREEN_HEIGHT - _dim.y);
 				}
 			}
 	}
@@ -103,8 +103,8 @@ void Panel::Update()
 
 void Panel::RenderCustom(float interpolation, int xOffset, int yOffset)
 {
-	int drawX = this->x();
-	int drawY = this->y();
+	int drawX = this->x;
+	int drawY = this->y;
 
 	if (!_followCamera) {
 		drawX += xOffset;
@@ -138,16 +138,16 @@ void Panel::RenderCustom(float interpolation, int xOffset, int yOffset)
 bool Panel::InWindow(vec2<int> pos)
 {
 	if (_followCamera) {
-		if (pos.x >= x() 
-			&& pos.x < x() + _dim.x 
-			&& pos.y >= y() 
-			&& pos.y < y() + _dim.y)
+		if (pos.x >= this->x 
+			&& pos.x < this->x + _dim.x 
+			&& pos.y >= this->y 
+			&& pos.y < this->y + _dim.y)
 			return true;
 	} else {
-		if (pos.x >= x() - globalCam->x() 
-			&& pos.x < x() - globalCam->x() + _dim.x 
-			&& pos.y >= y() - globalCam->y() 
-			&& pos.y < y() - globalCam->y() + _dim.y) 
+		if (pos.x >= this->x - globalCam->x() 
+			&& pos.x < this->x - globalCam->x() + _dim.x 
+			&& pos.y >= this->y - globalCam->y() 
+			&& pos.y < this->y - globalCam->y() + _dim.y) 
 			return true;
 	}
 	return false;
@@ -156,16 +156,16 @@ bool Panel::InWindow(vec2<int> pos)
 bool Panel::InTitleBar(vec2<int> pos)
 {
 	if (_followCamera) {
-		if (pos.x >= x() 
-			&& pos.x < x() + _dim.x 
-			&& pos.y >= y() 
-			&& pos.y < y() + _barHeight)
+		if (pos.x >= this->x 
+			&& pos.x < this->x + _dim.x 
+			&& pos.y >= this->y 
+			&& pos.y < this->y + _barHeight)
 			return true;
 	} else {
-		if (pos.x >= x() - globalCam->x() 
-			&& pos.x < x() - globalCam->x() + _dim.x 
-			&& pos.y >= y() - globalCam->y() 
-			&& pos.y < y() - globalCam->y() + _barHeight) 
+		if (pos.x >= this->x - globalCam->x()
+			&& pos.x < this->x - globalCam->x() + _dim.x 
+			&& pos.y >= this->y - globalCam->y() 
+			&& pos.y < this->y - globalCam->y() + _barHeight) 
 			return true;
 	}
 	return false;
@@ -177,7 +177,7 @@ void Panel::Focus()
 	{
 		if (_focus > 0) {
 			_focus = 0;
-			SetDepth(1000);
+			this->depth = (1000);
 		}
 	}
 }
@@ -187,7 +187,7 @@ void Panel::Unfocus()
 	if (_type == PanelType::FOCUS)
 	{
 		_focus++;
-		SetDepth(depth() + 1);
+		this->depth = (this->depth + 1);
 	}
 	//else if (_type == PanelType::STATIC)
 }
@@ -273,20 +273,20 @@ void Panel::SetFollowCamera(bool followCamera)
 		_followCamera = false;
 
 		vec2<int> newPos;
-		newPos = ScreenToWorld(x(), y());
+		newPos = ScreenToWorld(this->x, this->y);
 		SetPosition(newPos.x, newPos.y);
 	} else if (!_followCamera && followCamera) {
 		_followCamera = true;
 
 		vec2<int> newPos;
-		newPos = WorldToScreen(x(), y());
+		newPos = WorldToScreen(this->x, this->y);
 		SetPosition(newPos.x, newPos.y);
 
 		if (_screenBound) {
-			if (x() < 0) SetX(0);
-			else if (x() + _dim.x >= SCREEN_WIDTH) SetX(SCREEN_WIDTH - _dim.x);
-			if (y() < 0) SetY(0);
-			else if (y() + _dim.y >= SCREEN_HEIGHT) SetY(SCREEN_HEIGHT - _dim.y);
+			if (this->x < 0) this->x = (0);
+			else if (this->x + _dim.x >= SCREEN_WIDTH) this->x = (SCREEN_WIDTH - _dim.x);
+			if (this->y < 0) this->y = (0);
+			else if (this->y + _dim.y >= SCREEN_HEIGHT) this->y = (SCREEN_HEIGHT - _dim.y);
 		}
 	}
 }
