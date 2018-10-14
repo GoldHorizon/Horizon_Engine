@@ -11,8 +11,8 @@ MineTile::MineTile()
 
 	LoadImage("images/minesweeper_tiles.png", 32, 32);
 
-	image()->SetIndex(0);
-	image()->SetSpeed(0);
+	image()->index = (0);
+	image()->speed = (0);
 }
 
 MineTile::~MineTile()
@@ -32,7 +32,7 @@ void MineTile::Update()
 
 void MineTile::RevealTile()
 {
-	image()->SetIndex(9);
+	image()->index = (9);
 }
 
 bool MineTile::clicked()
@@ -63,22 +63,22 @@ void MineTile::SetClicked(bool c)
 	// Update image
 	if (_clicked) {
 		if (_bomb) {
-			image()->SetIndex(7);
+			image()->index = (7);
 		} else if (_count > 0) {
 			switch (_count) {
-				case 1: image()->SetIndex(3); break;
-				case 2: image()->SetIndex(4); break;
-				case 3: image()->SetIndex(5); break;
-				case 4: image()->SetIndex(6); break;
-				case 5: image()->SetIndex(10); break;
-				case 6: image()->SetIndex(11); break;
-				case 7: image()->SetIndex(12); break;
-				case 8: image()->SetIndex(13); break;
+				case 1: image()->index = (3); break;
+				case 2: image()->index = (4); break;
+				case 3: image()->index = (5); break;
+				case 4: image()->index = (6); break;
+				case 5: image()->index = (10); break;
+				case 6: image()->index = (11); break;
+				case 7: image()->index = (12); break;
+				case 8: image()->index = (13); break;
 				default: std::cout << "Error: Invalid count on mine tile" << std::endl;
 			}
-		} else image()->SetIndex(1);
+		} else image()->index = (1);
 	} else {
-		image()->SetIndex(0);
+		image()->index = (0);
 	}
 }
 
@@ -87,9 +87,9 @@ void MineTile::SetFlagged(bool f)
 	if (!_clicked) {
 		_flagged = f;
 		if (_flagged) {
-			image()->SetIndex(2);
+			image()->index = (2);
 		} else {
-			image()->SetIndex(0);
+			image()->index = (0);
 		}
 	}
 }

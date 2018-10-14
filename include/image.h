@@ -48,12 +48,8 @@ public:
 	float alpha() const;			// Returns alpha of image
 	SDL_Color color() const;		// Returns color modulation, if any
 	BlendMode blendMode() const;	// Returns blending mode of texture
-	double angle() const;			// Returns the angle
-	SDL_Point origin() const;		// Returns the origin
 	int width() const;				// Returns the width of the image
 	int height() const;				// Returns the height of the image
-	int speed() const;				// Returns image speed
-	int index() const;				// Returns image index
 
 	// Returns sprite dimensions for sprite sheets
 	SDL_Point spriteDimensions() const;
@@ -64,12 +60,12 @@ public:
 	void SetAlpha(float alpha);		// Sets the image alpha
 	void SetColor(SDL_Color color);	// Sets color modulation
 	void SetBlendMode(BlendMode m); // Sets blend mode
-	void SetAngle(double angle);	// Sets the angle
-	void SetOrigin(int x, int y);	// Sets the origin
-	void SetOrigin(SDL_Point pos);	// Sets the origin
-	void SetSpeed(int speed);		// Sets image speed in ms
-	void SetIndex(int index);		// Sets image index
 
+	double angle;					// Image angle/rotation
+	SDL_Point origin;				// Image origin to draw from
+	int speed;						// Image animation speed
+	int index;						// Image animation current index
+		
 private:
 	/*
 	 * Private Methods
@@ -78,7 +74,7 @@ private:
 	void Advance();
 
 	/*
-	 * Attributes
+	 * Private Attributes
 	 */
 	SDL_Texture* 	_texture;		// SDL texture data stored in the image
 	std::string	 	_filePath;		// File path to the image
@@ -89,15 +85,10 @@ private:
 	SDL_Color _color;				// Image color modulation?
 	BlendMode _blendMode;
 
-	double	_angle;					// Image angle/rotation
-	SDL_Point 	_origin;			// Image origin to draw from
 	int _width;						// Image width
 	int _height;					// Image height
 
 	SDL_Point	_dimensions;		// Dimensions of an individual sprite (if using sprite sheet)
-
-	int _speed;						// Image animation speed
-	int _index;						// Image animation current index
 
 	int _timer;						// Image timer for animation
 	int _lastTime;					// Image time variable for animation

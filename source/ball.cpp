@@ -13,11 +13,10 @@ Ball::Ball()
 	LoadImage("images/shrinking_circle.png", WIDTH, WIDTH);
 
 	// Set image origin to be center of sprite (NOT loaded image)
-	image()->SetOrigin(WIDTH / 2, WIDTH / 2);
+	image()->origin = {WIDTH / 2, WIDTH / 2};
 
 	// Set image speed in ms 
-	//SetImageIndex(0);
-	image()->SetSpeed(100);
+	image()->speed = (100);
 
 	// Temporary Alpha Testing
 	image()->SetAlpha(.5);

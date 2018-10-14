@@ -83,9 +83,9 @@ void Text::UpdateImage()
 	if (_align != ALIGN_LEFT)
 	{
 		if (_align == ALIGN_CENTER)
-			image()->SetOrigin(tempSurface->w/2, 0);
+			image()->origin = {tempSurface->w/2, 0};
 		else if (_align == ALIGN_RIGHT)
-			image()->SetOrigin(tempSurface->w, 0);
+			image()->origin = {tempSurface->w, 0};
 	}
 
 	if (tempSurface != nullptr)
