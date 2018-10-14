@@ -24,7 +24,7 @@ void ClassName::Initialize()
 
 	ChangeLevel("test_file.txt");
 
-	globalCam->SetOrigin(Align::MID_C);
+	globalCam->origin = (Align::MID_C);
 	globalCam->SetPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 
 	//AddLevel("another_test.txt");
