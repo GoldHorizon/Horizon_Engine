@@ -28,20 +28,19 @@ class Font
          *  Get Methods
          */
         int size() const;
-        std::string name() const;
 		TTF_Font* font() const;
 
         /*
          *  Set Methods
          */
         void SetSize(int size);
-        void SetName(std::string name);
 
 		std::string Serialize();
 		void Unserialize(std::string str);
 
+        std::string name;
+
     private:
-        std::string _name;
 		std::string _file;
 		int _size;
         TTF_Font* _sdl_font;

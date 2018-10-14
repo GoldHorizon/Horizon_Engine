@@ -16,7 +16,7 @@ Font::Font(std::string name, std::string file, int size)
 {
 	_sdl_font = nullptr;
 
-	SetName(name);
+	this->name = (name);
 
 	if (file != "") LoadFont(file, size);
 }
@@ -86,11 +86,6 @@ int Font::size() const
 	return _size;
 }
 
-std::string Font::name() const
-{
-	return _name;
-}
-
 TTF_Font* Font::font() const
 {
 	return _sdl_font;
@@ -106,16 +101,11 @@ void Font::SetSize(int size)
 	}
 }
 
-void Font::SetName(std::string name)
-{
-	_name = name;
-}
-
 std::string Font::Serialize()
 {
 	std::string serialize_string = "Font ";
 
-	serialize_string += "\"" + _name + "\"" + " "
+	serialize_string += "\"" + name + "\"" + " "
 		+ "\"" + _file + "\"" + " "
 		+ std::to_string(_size);
 
@@ -133,7 +123,7 @@ void Font::Unserialize(std::string str)
 
 	if ((*list)[index++] == "Font")
 	{
-		_name		= (*list)[index++];
+		name		= (*list)[index++];
 		_file		= (*list)[index++];
 		_size		= std::stoi((*list)[index++]);
 
@@ -142,26 +132,5 @@ void Font::Unserialize(std::string str)
 			
 	delete list;
 
-	//std::stringstream stream(str);
-	//std::string temp;
-
-	//stream >> temp;
-	//while (stream)
-	//{
-	//	//std::cout << temp << std::endl;
-	//	if (temp == "Font") 
-	//	{
-	//		stream >> _name;
-	//		stream >> _file;
-	//		stream >> _size;
-
-	//		LoadFont(_file, _size);
-
-	//		break;
-	//	}
-
-	//	stream >> temp;
-	//}
 }
-
 

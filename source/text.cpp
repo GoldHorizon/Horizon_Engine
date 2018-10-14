@@ -139,7 +139,7 @@ std::string Text::Serialize()
 		+ std::to_string(static_cast<int>(align));
 
 	//serialize_string += " " + _font->Serialize();
-	serialize_string += " \"" + _font->name() + "\"";
+	serialize_string += " \"" + _font->name + "\"";
 
 	return serialize_string;
 }
@@ -176,7 +176,7 @@ void Text::Unserialize(std::string str)
 
 		for (int i = 0; i < FONT_COUNT; i++)
 		{
-			if (f == fontList[i]->name()) {
+			if (f == fontList[i]->name) {
 				_font = fontList[i];
 				//std::cout << "Found font with name " + f << std::endl;
 				break;
