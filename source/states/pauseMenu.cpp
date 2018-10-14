@@ -165,12 +165,12 @@ void ClassName::UpdateMenu()
 
 		if (_menuOptionSelected == i)
 		{
-			_menuList[i]->SetColor(SDL_Color({0, 255, 255, 255}));
+			_menuList[i]->color = (SDL_Color({0, 255, 255, 255}));
 			_menuList[i]->UpdateImage();
 		}
 		else
 		{
-			_menuList[i]->SetColor(SDL_Color({255, 255, 255, 255}));
+			_menuList[i]->color = (SDL_Color({255, 255, 255, 255}));
 			_menuList[i]->UpdateImage();
 		}
 	}

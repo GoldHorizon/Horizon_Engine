@@ -32,41 +32,38 @@ class Text: public Entity
 		void UpdateImage();
 
 		/*
+		 * Set Methods
+		 */
+        void SetFont(Font* font);       	// Sets the font being used
+		void SetText(std::string text);		// Sets the text being displayed
+
+		/*
 		 * Get Methods
 		 */
         Font* font() const;         // Returns the font used
 		std::string text() const;       // Returns the text displayed
-		SDL_Color color() const;		// Returns the color of the text
-		int maxWidth() const;
-		bool wrap() const;
-		TextAlignment align() const;
 
 		/*
-		 * Set Methods
+		 * Serialization
 		 */
-        void SetFont(Font* font);       // Sets the font being used
-		void SetText(std::string text);		// Sets the text being displayed
-		void SetColor(SDL_Color color);		// Sets the text color
-		void SetMaxWidth(int maxWidth);
-		void SetWrap(bool wrap);
-		void SetAlign(TextAlignment align);
-
 		std::string Serialize();
 		void Unserialize(std::string str);
 
+		/*
+		 * Public Attributes
+		 */
+		SDL_Color color;		// Color of the text
+		int maxWidth;			// Max width of the text before it stops/wraps
+		bool wrap;				// If the text wraps
+		TextAlignment align;	// Alignment of the text
+
 	private:
 
-        // _font                - Font associated with the text
-        Font* _font;
-
-		// _text				- Image stored in the drawable
-		std::string _text;
-
-		SDL_Color _color;		// Color of the text
-		int _maxWidth;			// Max width of the text before it stops/wraps
-		bool _wrap;
-		TextAlignment _align;
-
+		/*
+		 * Private Attributes
+		 */
+        Font* _font; 			// Font associated with the text
+		std::string _text;		// Image stored in the drawable
 
 		/*
 		 * Operator Overloads

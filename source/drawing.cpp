@@ -10,8 +10,8 @@ Text* CreateText(std::string name, Font* font, SDL_Point pos, SDL_Color color, T
 {
 	Text* text = new Text(name, font);
 	text->SetPosition(pos);
-	text->SetColor(color);
-	text->SetAlign(align);
+	text->color = (color);
+	text->align = (align);
 	text->UpdateImage();
 
 	return text;

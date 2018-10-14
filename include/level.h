@@ -9,11 +9,17 @@
 class Level : public EntityCollection
 {
 public:
+	/*
+	 * Constructors/Destructors
+	 */
 	Level();
 	Level(std::string levelName);
 
 	~Level();
 
+	/*
+	 * Class Methods
+	 */
 	void SetFileName(std::string levelName);
 	std::string GetFileName();
 	void SaveToFile();
@@ -31,6 +37,9 @@ public:
 	bool CheckPoint(int x, int y);
 
 private:
+	/*
+	 * Private Attributes
+	 */
 	std::string _name;
 
 	peMap _pointList;

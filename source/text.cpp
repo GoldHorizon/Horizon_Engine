@@ -7,18 +7,18 @@
 
 #include "SDL_ttf.h"
 
-Text::Text(): Text("", nullptr)
+Text::Text() : Text("", nullptr)
 {
 	
 }
 
 Text::Text(std::string text, Font* font) :
+	color(DEFAULT_COLOR),
+	maxWidth(0),
+	wrap(false),
+	align(ALIGN_LEFT),
 	_font(font),
-	_text(text),
-	_color(DEFAULT_COLOR),
-	_maxWidth(0),
-	_wrap(false),
-	_align(ALIGN_LEFT)
+	_text(text)
 {
 	if (_font != nullptr)
 		SetText(text);
@@ -75,16 +75,16 @@ void Text::UpdateImage()
 
 	SDL_Surface* tempSurface;
 
-	if (_wrap)
-		tempSurface = TTF_RenderText_Blended_Wrapped(_font->font(), _text.c_str(), _color, _maxWidth);
+	if (wrap)
+		tempSurface = TTF_RenderText_Blended_Wrapped(_font->font(), _text.c_str(), color, maxWidth);
 	else
-		tempSurface = TTF_RenderText_Solid(_font->font(), _text.c_str(), _color);
+		tempSurface = TTF_RenderText_Solid(_font->font(), _text.c_str(), color);
 
-	if (_align != ALIGN_LEFT)
+	if (align != ALIGN_LEFT)
 	{
-		if (_align == ALIGN_CENTER)
+		if (align == ALIGN_CENTER)
 			image()->origin = {tempSurface->w/2, 0};
-		else if (_align == ALIGN_RIGHT)
+		else if (align == ALIGN_RIGHT)
 			image()->origin = {tempSurface->w, 0};
 	}
 
@@ -109,29 +109,11 @@ std::string Text::text() const
     return _text;
 }
 
-SDL_Color Text::color() const
-{
-	return _color;
-}
-
-int Text::maxWidth() const
-{
-	return _maxWidth;
-}
-
-bool Text::wrap() const
-{
-	return _wrap;
-}
-
-TextAlignment Text::align() const
-{
-	return _align;
-}
-
 void Text::SetFont(Font* font)
 {
     _font = font;
+
+	UpdateImage();
 }
 
 void Text::SetText(std::string text)
@@ -141,26 +123,6 @@ void Text::SetText(std::string text)
 	UpdateImage();
 }
 
-void Text::SetColor(SDL_Color color)	// Sets the color of the text
-{
-	_color = color;
-}
-
-void Text::SetMaxWidth(int maxWidth)
-{
-	_maxWidth = maxWidth;
-}
-
-void Text::SetWrap(bool wrap)
-{
-	_wrap = wrap;
-}
-
-void Text::SetAlign(TextAlignment align)
-{
-	_align = align;
-}
-
 std::string Text::Serialize()
 {
 	std::string serialize_string = Entity::Serialize();
@@ -168,13 +130,13 @@ std::string Text::Serialize()
 	serialize_string += "@Text ";
 
 	serialize_string += "\"" + _text + "\"" + " "
-		+ std::to_string(_color.r) + " "
-		+ std::to_string(_color.g) + " "
-		+ std::to_string(_color.b) + " "
-		+ std::to_string(_color.a) + " "
-		+ std::to_string(_maxWidth) + " "
-		+ std::to_string(_wrap) + " "
-		+ std::to_string(static_cast<int>(_align));
+		+ std::to_string(color.r) + " "
+		+ std::to_string(color.g) + " "
+		+ std::to_string(color.b) + " "
+		+ std::to_string(color.a) + " "
+		+ std::to_string(maxWidth) + " "
+		+ std::to_string(wrap) + " "
+		+ std::to_string(static_cast<int>(align));
 
 	//serialize_string += " " + _font->Serialize();
 	serialize_string += " \"" + _font->name() + "\"";
@@ -195,16 +157,15 @@ void Text::Unserialize(std::string str)
 
 	if ((*list)[index++] == "@Text")
 	{
-		_text			= (*list)[index++];
-		_color.r		= stoi((*list)[index++]);
-		_color.g		= stoi((*list)[index++]);
-		_color.b		= stoi((*list)[index++]);
-		_color.a		= stoi((*list)[index++]);
-		_maxWidth		= stoi((*list)[index++]);
-		_wrap			= (*list)[index++] == "1" ? true : false;
-		int a;
-		a				= stoi((*list)[index++]);
-		_align = static_cast<TextAlignment>(a);
+		_text		= (*list)[index++];
+		color.r		= stoi((*list)[index++]);
+		color.g		= stoi((*list)[index++]);
+		color.b		= stoi((*list)[index++]);
+		color.a		= stoi((*list)[index++]);
+		maxWidth	= stoi((*list)[index++]);
+		wrap		= (*list)[index++] == "1" ? true : false;
+		int a		= stoi((*list)[index++]);
+		align = static_cast<TextAlignment>(a);
 
 		std::string f	= (*list)[index++];
 
@@ -230,36 +191,6 @@ void Text::Unserialize(std::string str)
 	}
 			
 	delete list;
-
-	//std::stringstream stream(str);
-	//std::string temp;
-
-	//stream >> temp;
-	//while (stream)
-	//{
-	//	//std::cout << temp << std::endl;
-	//	if (temp == "Text") 
-	//	{
-	//		stream >> _text;
-	//		stream >> _color.r;
-	//		stream >> _color.g;
-	//		stream >> _color.b;
-	//		stream >> _color.a;
-	//		stream >> _maxWidth;
-	//		stream >> _wrap;
-	//		int a;
-	//		stream >> a;
-	//		_align = static_cast<TextAlignment>(a);
-
-	//		UpdateImage();
-
-	//		_font->Unserialize(str);
-
-	//		break;
-	//	}
-
-	//	stream >> temp;
-	//}
 }
 
 bool operator<(const Text &el, const Text &er)
