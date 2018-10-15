@@ -31,12 +31,12 @@ void ClassName::Initialize()
 	
 	Panel* testPanel = new Panel();
 	testPanel->SetPosition(64, 64);
-	testPanel->SetTitle("Test Panel");
+	testPanel->title = ("Test Panel");
 	_entities.AddEntity(testPanel);
 
 	Panel* testPanel2 = new Panel();
 	testPanel2->SetPosition(400, 64);
-	testPanel2->SetTitle("Panel 2");
+	testPanel2->title = ("Panel 2");
 	_entities.AddEntity(testPanel2);
 
     //Player* mainPlayer = new Player();
