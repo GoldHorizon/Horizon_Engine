@@ -69,7 +69,7 @@ bool Level::LoadFromFile()
 	levelFile.ReadFileAll();
 	//levelFile.PrintData();
 
-	for (int i = 0; i < svp->size(); i++)
+	for (size_t i = 0; i < svp->size(); i++)
 	{
 		Entity* obj = nullptr;
 		obj = CreateSerializedObject((*svp)[i]);
@@ -93,7 +93,7 @@ void Level::AddEntity(Entity* obj)
 	//
 	EntityCollection::AddEntity(obj);
 
-	const SDL_Point p = {obj->x, obj->y};
+	const SDL_Point p = {(int)obj->x, (int)obj->y};
 
 	_pointList.insert(pePair(p, obj));
 }
@@ -116,7 +116,7 @@ void Level::RemoveEntity(int index)
 	{
 		peMap::iterator it;
 
-		SDL_Point point = {ep->x, ep->y};
+		SDL_Point point = {(int)ep->x, (int)ep->y};
 		it = _pointList.find(point);
 
 		if (it != _pointList.end())
@@ -150,7 +150,7 @@ void Level::RemoveEntity(int x, int y)
 	{
 		peMap::iterator it;
 
-		SDL_Point point = {ep->x, ep->y};
+		SDL_Point point = {(int)ep->x, (int)ep->y};
 		it = _pointList.find(point);
 
 		if (it != _pointList.end())
@@ -162,7 +162,7 @@ void Level::RemoveEntity(int x, int y)
 
 void Level::RemoveLastEntity()
 {
-	int count;
+	int count = GetCount();
 
 	RemoveByIndex(count - 1);
 }

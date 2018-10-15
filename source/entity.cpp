@@ -110,7 +110,7 @@ void Entity::Unserialize(std::string str)
 {
 	sVector* list = ParseSerializedString(str);
 
-	int index = 0;
+	size_t index = 0;
 
 	while ((*list)[index] != "@Entity" && index < list->size())
 		index++;
@@ -119,7 +119,7 @@ void Entity::Unserialize(std::string str)
 	{
 		//_imagePath 			= (*list)[index++];
 		_name 				= (*list)[index++];
-		active 			= (*list)[index++] == "1" ? true : false;	
+		active 				= (*list)[index++] == "1" ? true : false;	
 		visible 			= (*list)[index++] == "1" ? true : false;	
 		x					= std::stof((*list)[index++]);	
 		y					= std::stof((*list)[index++]);

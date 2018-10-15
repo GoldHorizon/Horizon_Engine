@@ -241,7 +241,7 @@ int ClassName::HandleEvents(Event& event)
 
 		case SDLK_UP:
 			{
-				int i = _currentLineSelected + 1;
+				size_t i = _currentLineSelected + 1;
 				while (i < _history.size()
 						&& _history[i].type != c_line_type::INPUT) {
 					i++;
@@ -311,12 +311,13 @@ int ClassName::HandleEvents(Event& event)
 
 		case SDLK_RETURN:
 			{
-				if (_currentLine.size() > 0)
+				if (_currentLine.size() > 0) {
 					ParseCommand(_currentLine);
 					_currentLine = "";
 				
-				_currentLineSelected = -1;
-				_cursorPosition = 0;
+					_currentLineSelected = -1;
+					_cursorPosition = 0;
+				}
 			}
 			break;
 		}
@@ -398,7 +399,7 @@ void ClassName::Render(float interpolation)
 	}
 
 	// Draw history lines @Fix: don't properly stop rendering lines at the top of the window
-	for (int i = _historyLine; i < _history.size(); i++)
+	for (size_t i = _historyLine; i < _history.size(); i++)
 	{
 		// First drop shadow, then text
 		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 64 - (16 * i) + 1 + (_historyLine * 16), ALIGN_LEFT, {0, 0, 0, 255});
@@ -491,7 +492,7 @@ void ClassName::SelectLine(int line)
 		_savedLine = _currentLine;	
 	}
 
-	if (line >= 0 && line < _history.size()) {
+	if (line >= 0 && line < (int)(_history.size())) {
 		if (_history[line].type == c_line_type::INPUT) {
 			_currentLineSelected = line;
 			_currentLine = _history[line].text;

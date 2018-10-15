@@ -53,7 +53,7 @@ void Panel::HandleEvents(Event& event)
 						if (InTitleBar({mx, my})) {
 							// Grab the panel and set the offset for where the mouse is
 							_grabbed = true;
-							_offset = {event.ev.button.x - this->x, event.ev.button.y - this->y};
+							_offset = {(int)(event.ev.button.x - this->x), (int)(event.ev.button.y - this->y)};
 							//std::cout << "Grabbed!" << std::endl;
 						}
 					}

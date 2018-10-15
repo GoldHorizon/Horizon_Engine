@@ -52,6 +52,7 @@ void DrawLine(int x1, int y1, int x2, int y2, SDL_Color c)
 	SDL_RenderDrawLine(globalRenderer, x1, y1, x2, y2);
 }
 
+// NEEDS TO BE REMOVED, OR FIND CACHE SOLUTION
 void DrawText(std::string str, TextQuality quality, Font* font, int x, int y, TextAlignment align, SDL_Color c, SDL_Color bg)
 {
 	SDL_Surface* surface;
@@ -109,15 +110,15 @@ void DrawText(std::string str, TextQuality quality, Font* font, int x, int y, Te
 
 void DrawFastText(std::string str, Font* font, int x, int y, TextAlignment align, vec4<float> c, vec4<float> bg)
 {
-	DrawText(str, TextQuality::SOLID, font, x, y, align, {c.x * 255, c.y * 255, c.z * 255, c.w * 255}, {bg.x, bg.y, bg.z, bg.w});
+	DrawText(str, TextQuality::SOLID, font, x, y, align, {(unsigned char)(c.x * 255), (unsigned char)(c.y * 255), (unsigned char)(c.z * 255), (unsigned char)(c.w * 255)}, {(unsigned char)(bg.x), (unsigned char)(bg.y), (unsigned char)(bg.z), (unsigned char)(bg.w)});
 }
 
 void DrawSmoothText(std::string str, Font* font, int x, int y, TextAlignment align, vec4<float> c, vec4<float> bg)
 {
-	DrawText(str, TextQuality::BLENDED, font, x, y, align, {c.x * 255, c.y * 255, c.z * 255, c.w * 255}, {bg.x, bg.y, bg.z, bg.w});
+	DrawText(str, TextQuality::BLENDED, font, x, y, align, {(unsigned char)(c.x * 255), (unsigned char)(c.y * 255), (unsigned char)(c.z * 255), (unsigned char)(c.w * 255)}, {(unsigned char)(bg.x), (unsigned char)(bg.y), (unsigned char)(bg.z), (unsigned char)(bg.w)});
 }
 
 void DrawShadedText(std::string str, Font* font, int x, int y, TextAlignment align, vec4<float> c, vec4<float> bg)
 {
-	DrawText(str, TextQuality::SHADED, font, x, y, align, {c.x * 255, c.y * 255, c.z * 255, c.w * 255}, {bg.x, bg.y, bg.z, bg.w});
+	DrawText(str, TextQuality::SHADED, font, x, y, align, {(unsigned char)(c.x * 255), (unsigned char)(c.y * 255), (unsigned char)(c.z * 255), (unsigned char)(c.w * 255)}, {(unsigned char)(bg.x), (unsigned char)(bg.y), (unsigned char)(bg.z), (unsigned char)(bg.w)});
 }

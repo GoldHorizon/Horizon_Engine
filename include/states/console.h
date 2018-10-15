@@ -64,7 +64,7 @@ private:
 	float _openHeightBig;
 	float _openHeightSmall;
 
-	int _cursorPosition;
+	unsigned int _cursorPosition;
 
 	std::string _currentLine;
 	std::string _savedLine;
@@ -76,7 +76,7 @@ private:
 	SDL_Color _textErrorColor;
 
 	std::vector<c_line> _history;
-	int _historyLine;
+	unsigned int _historyLine;
 };
 
 struct c_line

@@ -126,7 +126,7 @@ int Game::Initialize()
 	commands["state"] = [this](sVector args) {
 		if (args.size() > 0) 
 		{
-			for (int i = 0; i < args.size(); i++)
+			for (size_t i = 0; i < args.size(); i++)
 			{
 				if (args[i] == "uninitialized") {
 					ChangeState(StateUninitialized::Instance());

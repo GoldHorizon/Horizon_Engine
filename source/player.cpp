@@ -13,7 +13,7 @@ Player::Player()
     LoadImage("images/Player.png");
     image()->origin = {image()->width() / 2, image()->height() / 2};
 
-	image()->SetColor({.5 * 255, .5 * 255, .2 * 255});
+	//image()->SetColor({.5 * 255, .5 * 255, .2 * 255});
 	image()->SetBlendMode(BlendMode::BLEND);
 
 	commands["psetc"] = [this](sVector args) {
@@ -22,7 +22,7 @@ Player::Player()
 			for (int i = 0; i < 3; i++)
 				rgb[i] = std::atof(args[i].c_str());
 
-			this->image()->SetColor({rgb[0]*255, rgb[1]*255, rgb[2]*255});
+			this->image()->SetColor({(unsigned char)(rgb[0]*255), (unsigned char)(rgb[1]*255), (unsigned char)(rgb[2]*255)});
 		} else AddError("Need 3 arguments");
 	};
 

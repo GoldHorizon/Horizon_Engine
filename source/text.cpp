@@ -150,7 +150,7 @@ void Text::Unserialize(std::string str)
 
 	sVector* list = ParseSerializedString(str);
 
-	int index = 0;
+	size_t index = 0;
 
 	while ((*list)[index] != "@Text" && index < list->size())
 		index++;

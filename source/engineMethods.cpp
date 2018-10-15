@@ -60,7 +60,7 @@ sVector* ParseSerializedString(std::string str)
 
 Entity* CreateSerializedObject(std::string str)
 {
-	if (str.find("@Entity") == -1)
+	if (str.find("@Entity") == std::string::npos)
 	{
 		std::cout << "Error: Trying to create serialized object that is not an entity!" << std::endl;
 		return nullptr;
@@ -68,22 +68,22 @@ Entity* CreateSerializedObject(std::string str)
 
 	Entity* obj = nullptr;
 
-	if (str.find("@Player") != -1)
+	if (str.find("@Player") != std::string::npos)
 	{
 		obj = new Player;
 	}
 
-	if (str.find("@Text") != -1)
+	if (str.find("@Text") != std::string::npos)
 	{
 		obj = new Text;
 	}
 
-	if (str.find("@Ball") != -1)
+	if (str.find("@Ball") != std::string::npos)
 	{
 		obj = new Ball;
 	}
 
-	if (str.find("@Wall") != -1)
+	if (str.find("@Wall") != std::string::npos)
 	{
 		obj = new Wall;
 	}

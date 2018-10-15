@@ -142,11 +142,13 @@ void Image::Draw(int x, int y)
 	// Create a rectangle for select image index
 	if (_dimensions.x != 0 && _dimensions.y != 0)
 	{
-		int xx, yy, temp;
+		int xx;
+		int yy;
+		//int temp;
 
 		xx = 0;
 		yy = 0;
-		temp = _dimensions.x * index;
+		//temp = _dimensions.x * this->index;
 
 		// Find proper position for image index
 		for (int i = index; i > 0; i--) {
