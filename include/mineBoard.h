@@ -43,8 +43,6 @@ class MineBoard : public Entity
 		/*
 		 * Set Methods
 		 */
-		void SetGenerated(bool g);
-		void SetEnded(bool e);
 
 	private:
 		MineTile *_board;

@@ -254,13 +254,3 @@ bool MineBoard::ended()
 	return _ended;
 }
 
-void MineBoard::SetGenerated(bool g)
-{
-	_generated = g;
-}
-
-void MineBoard::SetEnded(bool e)
-{
-	_ended = e;
-}
-

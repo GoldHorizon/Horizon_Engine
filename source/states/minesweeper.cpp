@@ -92,8 +92,6 @@ int StateName::HandleEvents(Event& event)
 			case SDLK_r:
 				//_mainBoard.InitTestBoard(3, 3, 16, 16);
 				_mainBoard.CreateBoard(16, 16);
-				_mainBoard.SetGenerated(false);
-				_mainBoard.SetEnded(false);
 				break;
 		}
 	}
@@ -124,7 +122,6 @@ int StateName::HandleEvents(Event& event)
 			if (!_mainBoard.generated()) {
 				_mainBoard.GenerateBombs(mx, my);
 				_mainBoard.SetTileCounters();
-				_mainBoard.SetGenerated(true);
 			}
 
 			_mainBoard.ClickTile(mx, my);
@@ -158,9 +155,6 @@ void StateName::StartGame(int startx, int starty)
 
 void StateName::ResetBoard(int sizex, int sizey)
 {
-	_mainBoard.SetGenerated(false);
-	_mainBoard.SetEnded(false);
-
 	_mainBoard.ClearBoard();
 	_mainBoard.CreateBoard(sizex, sizey);
 }
