@@ -1,7 +1,6 @@
 #include "game.h"
 #include "globals.h"
 #include "constants.h"
-#include "ball.h"
 #include "enumerations.h"
 #include "types.h"
 #include "inputManager.h"
@@ -43,6 +42,8 @@ Game::Game():
 
 Game::~Game()
 {
+	_varFile.CloseFile();
+
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -210,6 +211,9 @@ int Game::Initialize()
 	//
 	// END OF COMMANDS
 	//
+	
+	// Test file stuff
+	_varFile.OpenFile("variables.txt", true, false);
 
 	return 0;
 }
@@ -461,8 +465,9 @@ void Game::Update()
 		(*it)->Resume();
 	}
 
-    // deprecated ***
-	//_entities.UpdateAll();
+	if (_varFile.IsOutdated()) {
+		std::cout << "File has changed!" << std::endl;
+	}
 }
 
 void Game::Render(float interpolation)

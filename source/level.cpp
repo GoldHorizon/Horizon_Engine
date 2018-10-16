@@ -1,8 +1,9 @@
-#include "../include/level.h"
+#include "level.h"
 #include "file.h"
 #include "types.h"
 #include "engineMethods.h"
 
+#include <sys/stat.h>
 #include <iostream>
 
 Level::Level() : Level("")
@@ -49,6 +50,13 @@ void Level::SaveToFile()
 	levelFile.CloseFile();
 }
 
+void Level::SaveLevel()
+{
+	//std::filesystem::path filePath = "levels/" + _name + "/";
+
+	//std::cout << filePath.path << std::endl;
+}
+
 bool Level::LoadFromFile()
 {
 	bool success = false;
@@ -85,6 +93,12 @@ bool Level::LoadFromFile()
 	success = true;
 
 	return success;
+}
+
+bool Level::LoadLevel()
+{
+
+	return false;
 }
 
 void Level::AddEntity(Entity* obj)

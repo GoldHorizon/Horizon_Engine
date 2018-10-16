@@ -4,7 +4,7 @@
 
 #include <fstream>
 #include <iostream>
-#include <filesystem>
+#include <sys/stat.h>
 
 class File
 {
@@ -27,6 +27,9 @@ public:
 	void WriteFileLine(std::string data);
 
 	bool IsOpen();
+	int UpdateFileInfo();
+	time_t GetModifyTime();
+	bool IsOutdated();
 
 	void SetFilePos(std::ios_base::seekdir pos, int offset = 0);
 
@@ -45,5 +48,8 @@ private:
 	bool _writing;
 
 	sVector _data;
+
+	struct stat _fileInfo;
+	time_t _lastModifyTime;
 
 };
