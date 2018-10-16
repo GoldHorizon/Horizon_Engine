@@ -1,7 +1,10 @@
 #pragma once
 
-#include "game.h"
 #include "enumerations.h"
+#include "event.h"
+#include "entityCollection.h"
+
+#include "SDL.h"
 
 // Inspired by Game Dev Geek
 // http://gamedevgeek.com/tutorials/managing-game-states-in-c/ 
@@ -23,14 +26,9 @@ public:
     virtual void Initialize() = 0;
     virtual void Cleanup() = 0;
 
-    virtual void Pause() = 0;
-    virtual void Resume() = 0;
-
-    virtual void HandleEvents(SDL_Event*) = 0;
+    virtual int HandleEvents(Event&) = 0;
     virtual void Update() = 0;
     virtual void Render(float interpolation) = 0;
-
-    void ChangeState(Game* gameReference, GameState* nextState);
 
     // NOTE: Goes in all inherited states
     // static GameState* Instance()
@@ -48,15 +46,24 @@ public:
     // Entities()			- Returns entity collection
     EntityCollection& Entities();
 
+    void Pause();
+    void Resume();
+    bool IsPaused();
+
+protected:
+	/*
+	 * Protected Methods
+	 */
+    void SetType(GameStateType type);
+    EntityCollection _entities;
+
 private:
     // NOTE: Goes in all inherited states
     //static GameState* _thisInstance;
 
     GameStateType _type;
+    bool _paused;
 
-protected:
-    void SetType(GameStateType type);
-    EntityCollection _entities;
 };
 
 // NOTE: Goes in all inherited states

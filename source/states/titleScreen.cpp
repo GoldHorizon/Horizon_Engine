@@ -1,5 +1,5 @@
-#include "../../include/states/titleScreen.h"
-#include "../../include/globals.h"
+#include "states/titleScreen.h"
+#include "globals.h"
 
 #define ClassName StateTitleScreen
 
@@ -30,7 +30,7 @@ void ClassName::Resume()
 
 }
 
-void ClassName::HandleEvents(SDL_Event*)
+int ClassName::HandleEvents(Event&)
 {
 
 }

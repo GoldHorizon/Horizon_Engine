@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../gameState.h"
+#include "gameState.h"
+#include "event.h"
 
 #define ClassName StateUninitialized
 
@@ -11,7 +12,7 @@ class StateUninitialized:
 	 * Constructors/Destructors
 	 */
 protected:
-    ClassName() {SetType(GameStateType::UNINITIALIZED);}
+    ClassName() {SetType(GameStateType::UNINITIALIZED); Resume();}
 public:
     ~StateUninitialized();
 	/*
@@ -20,10 +21,7 @@ public:
     void Initialize();
     void Cleanup();
 
-    void Pause();
-    void Resume();
-
-    void HandleEvents(SDL_Event*);
+    int HandleEvents(Event&);
     void Update();
     void Render(float interpolation);
 

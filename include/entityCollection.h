@@ -1,73 +1,85 @@
 #pragma once
 
-#include <string>
-#include <map>
-
 #include "entity.h"
+#include "types.h"
+#include "event.h"
 
-typedef std::map<std::string, Entity*> eMap;
+template <typename T> bool PComp(const T * const &a, const T * const &b)
+{
+	return *a < *b;
+}
+
+bool EComp(const Entity * const &a, const Entity * const &b);
 
 class EntityCollection
 {
-public:
-	/*
-	 * Constructors/Destructors
-	 */
-	EntityCollection();
-	~EntityCollection();
+	public:
+		/*
+		 * Constructors/Destructors
+		 */
+		EntityCollection();
+		~EntityCollection();
 
-	/*
-	 * Class Methods
-	 */
-	// GetCount()		- Return number of entities in collection
-	int GetCount() const;
+		/*
+		 * Class Methods
+		 */
+		// GetCount()		- Return number of entities in collection
+		int GetCount() const;
 
-	// GetByName()		- Return the entity with specified name
-	//	name:		string with name of entity
-	Entity* const GetByName(std::string name) const;
+		// GetByName()		- Return the entity with specified name
+		//	name:		string with name of entity
+		Entity* GetByName(std::string name) const;
 
-	// GetByID()		- Return the entity with specified ID
-	//	ID:			int with entity's ID
-	Entity* const GetByID(int ID) const;
+		// GetByID()		- Return the entity with specified ID
+		//	ID:			int with entity's ID
+		Entity* GetByID(int ID) const;
 
-	// GetByIndex()		- Return the entity at specified index
-	//	index:		index entity is at
-	Entity* const GetByIndex(unsigned int index) const;
+		// GetByIndex()		- Return the entity at specified index
+		//	index:		index entity is at
+		Entity* GetByIndex(unsigned int index) const;
 
-	// AddEntity()		- Add an entity into the collection
-	//	name:		name of the entity being added
-	//	entity:		pointer to the entity to add
-	void AddEntity(std::string name, Entity* entity);
+		// AddEntity()		- Add an entity into the collection
+		//	name:		name of the entity being added
+		//	entity:		pointer to the entity to add
+		void AddEntity(Entity* entity);
 
-	// RemoveByName()	- Remove an entity with the specified name
-	//	name:		name of entity to remove
-	void RemoveByName(std::string name);
+		// RemoveByName()	- Remove an entity with the specified name
+		//	name:		name of entity to remove
+		void RemoveByName(std::string name);
 
-	// RemoveByID()		- Remove an entity with the specified ID
-	//	ID:			ID of entity to remove
-	void RemoveByID(int ID);
+		// RemoveByID()		- Remove an entity with the specified ID
+		//	ID:			ID of entity to remove
+		void RemoveByID(int ID);
 
-	// RemoveByIndex()	- Remove an entity at given index
-	//	index:		index at which to remove entity
-	void RemoveByIndex(unsigned int index);
+		// RemoveByIndex()	- Remove an entity at given index
+		//	index:		index at which to remove entity
+		void RemoveByIndex(unsigned int index);
 
-	// HandleAllEvents()- Handles events (such as input) for all entities in collection
-	void HandleAllEvents(SDL_Event*);
+		// ClearEntities() 	- Remove all entities from the collection
+		void ClearEntities();
 
-	// UpdateAll()		- Update every entity in collection
-	void UpdateAll();
+		// HandleAllEvents()- Handles events (such as input) for all entities in collection
+		void HandleAllEvents(Event&);
 
-	// RenderAll()		- Render every entity in collection
-	//	interpolation:		how much interpolation (prediction) to account for
-	void RenderAll(float interpolation);
-	/*
-	 * Get Methods
-	 */
+		// UpdateAll()		- Update every entity in collection
+		void UpdateAll();
 
-	/*
-	 * Set Methods
-	 */
-private:
-	// _collection			// Collection of entities
-	eMap _collection;
+		// RenderAll()		- Render every entity in collection
+		//	interpolation:		how much interpolation (prediction) to account for
+		void RenderAll(float interpolation, int xOffset = 0, int yOffset = 0);
+
+		/*
+		 * Get Methods
+		 */
+		Entity* operator[](int ID);
+
+		/*
+		 * Set Methods
+		 */
+	protected:
+		// _collection			// Collection of entities
+		eList _collection;
+
+	private:
+		int nextID;
 };

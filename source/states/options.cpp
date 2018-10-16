@@ -1,4 +1,4 @@
-#include "../../include/states/options.h"
+#include "states/options.h"
 
 #define ClassName StateOptions
 
@@ -29,7 +29,7 @@ void ClassName::Resume()
 
 }
 
-void ClassName::HandleEvents(SDL_Event*)
+int ClassName::HandleEvents(Event&)
 {
 
 }

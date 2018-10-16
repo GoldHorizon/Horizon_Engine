@@ -1,30 +1,69 @@
-#include "../include/player.h"
-#include "../include/constants.h"
+#include "player.h"
+#include "constants.h"
+#include "engineMethods.h"
+#include "globals.h"
+
+#include "states/console.h"
 
 #include <iostream>
 #include <math.h>
 
 Player::Player()
 {
-    LoadFromFile("images/Player.png");
-    SetImageOrigin(this->imageWidth() / 2, this->imageHeight() / 2);
+    LoadImage("images/Player.png");
+    image()->origin = {image()->width() / 2, image()->height() / 2};
+
+	//image()->SetColor({.5 * 255, .5 * 255, .2 * 255});
+	image()->SetBlendMode(BlendMode::BLEND);
+
+	commands["psetc"] = [this](sVector args) {
+		if (args.size() == 3) {
+			float rgb[3];
+			for (int i = 0; i < 3; i++)
+				rgb[i] = std::atof(args[i].c_str());
+
+			this->image()->SetColor({(unsigned char)(rgb[0]*255), (unsigned char)(rgb[1]*255), (unsigned char)(rgb[2]*255)});
+		} else AddError("Need 3 arguments");
+	};
+
+	commands["psetm"] = [this](sVector args) {
+		if (args.size() == 1) {
+			if (args[0] == "none") this->image()->SetBlendMode(BlendMode::NONE);
+			if (args[0] == "blend") this->image()->SetBlendMode(BlendMode::BLEND);
+			if (args[0] == "add") this->image()->SetBlendMode(BlendMode::ADD);
+			if (args[0] == "mod") this->image()->SetBlendMode(BlendMode::MOD);
+
+		} else AddError("Need 1 argument");
+	};
+
+	commands["pseta"] = [this](sVector args) {
+		if (args.size() == 1)
+			image()->SetAlpha(std::atof(args[0].c_str()));
+		else AddError("Need 1 argument");
+	};
 
 }
 
-void Player::HandleEvents(SDL_Event* event)
+void Player::HandleEvents(Event& event)
 {
-    if (event->type == SDL_MOUSEBUTTONDOWN)
+    if (event.ev.type == SDL_MOUSEBUTTONDOWN)
     {
         int x, y;
         SDL_GetMouseState(&x, &y);
 
-        SetX(x);
-        SetY(y);
+		// Alter coords based on cam position
+		x += globalCam->x();
+		y += globalCam->y();
+
+        this->x = (x);
+        this->y = (y);
     } 
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	int calcDirection = 0;
 
+	// We use SDL_GetKeyboardState for continuous button presses, not key down events
+	// Need to check that actually...
 	if ((state[SDL_SCANCODE_W] ^ state[SDL_SCANCODE_S]) || (state[SDL_SCANCODE_A] ^ state[SDL_SCANCODE_D]))
 	{
 		SetSpeed(4);
@@ -66,41 +105,6 @@ void Player::HandleEvents(SDL_Event* event)
 	}
 	else
 		SetSpeed(0);
-
-// 		If our event is a keyboard button press ???
-//	if (event->type == SDL_KEYDOWN)
-//	{
-//		switch (event->key.keysym.scancode)
-//		{
-//			case SDL_SCANCODE_W:
-//				SetDirection(270);
-//				SetSpeed(4);
-//				break;
-//
-//			case SDL_SCANCODE_S:
-//				SetDirection(90);
-//				SetSpeed(4);
-//				break;
-//
-//			case SDL_SCANCODE_A:
-//				SetDirection(180);
-//				SetSpeed(4);
-//				break;
-//
-//			case SDL_SCANCODE_D:
-//				SetDirection(0);
-//				SetSpeed(4);
-//				break;
-//
-//			default:
-//				SetSpeed(0);
-//				break;
-//		}
-//	}
-//	else
-//	{
-//		SetSpeed(0);
-//	}
 }
 
 void Player::Update()
@@ -111,4 +115,32 @@ void Player::Update()
 Entity* Player::NewInstance()
 {
     return new Player();
+}
+
+std::string Player::Serialize()
+{
+	std::string serialize_string = Entity::Serialize();
+
+	serialize_string += "@Player ";
+	// @@Future: Add player's member attributes to string
+
+	return serialize_string;
+}
+
+void Player::Unserialize(std::string str)
+{
+	Entity::Unserialize(str);
+
+	//std::stringstream stream(str);
+	//std::string temp;
+	//
+	////std::cout << "Back in player" << std::endl;
+
+	//stream >> temp;
+	//while (stream)
+	//{
+	//	//std::cout << temp << std::endl;
+	//	stream >> temp;
+	//	if (temp == "Player") break;
+	//}
 }

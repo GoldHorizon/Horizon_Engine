@@ -1,9 +1,11 @@
 #pragma once
 
-//#include "header.h"
 #include "SDL.h"
 #include "entity.h"
+#include "event.h"
+
 #include <string>
+#include <sstream>
 
 class Player: public Entity
 {
@@ -17,7 +19,7 @@ public:
 	 * Class Methods
 	 */
     // HandleEvents()   - Updates player based on user input
-    void HandleEvents(SDL_Event*);
+    void HandleEvents(Event&);
 
 	// Update()			- Updates anything to do with the entity
 	void Update();
@@ -28,7 +30,9 @@ public:
 	// Render()			- Renders the texture to its current position
 	//void Render(float interpolation);
 
-
-private:
-
+	/*
+	 * Serialization Methods
+	 */
+	std::string Serialize();
+	void Unserialize(std::string);
 };

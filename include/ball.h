@@ -1,6 +1,9 @@
 #pragma once
 
 #include "entity.h"
+#include "event.h"
+
+#include <string>
 
 class Ball:
 		public Entity
@@ -8,6 +11,9 @@ class Ball:
 public:
 	Ball();
 
-    void HandleEvents(SDL_Event*);
+    void HandleEvents(Event&);
 	void Update();
+
+	std::string Serialize();
+	void Unserialize(std::string str);
 };

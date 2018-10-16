@@ -1,8 +1,11 @@
 # Linux Executable Files
 *.sh
 
-# Vim swap files
+# Vim files
 *.swp
+*.swo
+*~
+compile_commands.json
 
 # Debug Folders
 Debug/*
@@ -10,12 +13,13 @@ Debug/*
 cmake-build-debug/*
 Win32/*
 x64/*
+sdl/*
 
 # VS Stuff
 .vs/*
-*.vcxproj
-*.vcxproj.*
-*.sln
+#*.vcxproj
+#*.vcxproj.*
+#*.sln
 
 # CMake Stuff
 CMakeCache.txt
@@ -52,3 +56,10 @@ cmake_install.cmake
 *.exe
 *.out
 *.app
+
+# Misc
+#*.txt
+test_*.txt
+another_test.txt
+another_test2.txt
+

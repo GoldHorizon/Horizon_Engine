@@ -1,6 +1,11 @@
 #pragma once
 
-#include "../gameState.h"
+#include "gameState.h"
+#include "level.h"
+#include "camera.h"
+#include "event.h"
+
+#include <vector>
 
 #define ClassName StatePlaying
 
@@ -11,7 +16,10 @@ class StatePlaying:
 	 * Constructors/Destructors
 	 */
 protected:
-    ClassName() {SetType(GameStateType::PLAYING_GAME);}
+    ClassName() {
+		SetType(GameStateType::PLAYING_GAME); 
+		Resume(); 
+	}
 public:
     ~StatePlaying();
 	/*
@@ -20,25 +28,34 @@ public:
     void Initialize();
     void Cleanup();
 
-    void Pause();
-    void Resume();
-
-    void HandleEvents(SDL_Event*);
+    int HandleEvents(Event&);
     void Update();
     void Render(float interpolation);
+
+	void AddLevel(std::string name);
+	void AddLevel(Level* level);
+
+	void ChangeLevel(std::string name);
+	
+	Level* GetLevel();
+
+	void Restart();
 
     static ClassName* Instance()
     {
         if (_thisInstance == nullptr)
         {
             _thisInstance = new ClassName;
+        	_thisInstance->Initialize();
         }
-        _thisInstance->Initialize();
         return _thisInstance;
     }
 
 private:
     static ClassName* _thisInstance;
+
+	//std::vector<Level*> _levelList;
+	Level * _level;
 };
 
 #ifdef ClassName

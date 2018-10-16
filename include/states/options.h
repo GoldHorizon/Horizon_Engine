@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../gameState.h"
+#include "event.h"
+#include "gameState.h"
 
 #define ClassName StateOptions
 
@@ -23,7 +24,7 @@ public:
     void Pause();
     void Resume();
 
-    void HandleEvents(SDL_Event*);
+    int HandleEvents(Event&);
     void Update();
     void Render(float interpolation);
 
