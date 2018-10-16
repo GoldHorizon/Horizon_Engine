@@ -10,13 +10,13 @@
 #include "SDL_image.h"
 
 Entity::Entity() :
+	ID(0),
+	active(true),
+	visible(true),
+	x(0),
+	y(0),
+	depth(0),
 	_name("noname"),
-	_ID(0),
-	_active(true),
-	_visible(true),
-	_x(0),
-	_y(0),
-	_depth(0),
 	_direction(0),
 	_speed(0),
 	_hspeed(0),
@@ -62,13 +62,13 @@ void Entity::Update()
 void Entity::Render(float interpolation, int xOffset, int yOffset)
 {
 	// Only attempt to render if we have successfully loaded an image and it is visible
-	if (_visible)
+	if (this->visible)
 	{
 		// Create a set of ints to use for drawing position (use interpolation to predict movement)
-		int xx = static_cast<int>(_x) + xOffset
-			+ static_cast<int>(cos(_direction * PI / 180) * _speed * (_active * interpolation));
-		int yy = static_cast<int>(_y) + yOffset
-			+ static_cast<int>(sin(_direction * PI / 180) * _speed * (_active * interpolation));
+		int xx = static_cast<int>(this->x) + xOffset
+			+ static_cast<int>(cos(_direction * PI / 180) * _speed * (this->active * interpolation));
+		int yy = static_cast<int>(this->y) + yOffset
+			+ static_cast<int>(sin(_direction * PI / 180) * _speed * (this->active * interpolation));
 
 		_image.Draw(xx, yy);
 
@@ -78,8 +78,8 @@ void Entity::Render(float interpolation, int xOffset, int yOffset)
 
 void Entity::Move(float x, float y)
 {
-	_x += x;
-	_y += y;
+	this->x += x;
+	this->y += y;
 }
 
 Entity* Entity::NewInstance()
@@ -93,11 +93,11 @@ std::string Entity::Serialize()
 
 	serialize_string = "@Entity ";
 	serialize_string += "\"" + _name + "\"" + " "
-		+ std::to_string(_active) + " "
-		+ std::to_string(_visible) + " "
-		+ std::to_string(_x) + " "
-		+ std::to_string(_y) + " "
-		+ std::to_string(_depth) + " "
+		+ std::to_string(active) + " "
+		+ std::to_string(visible) + " "
+		+ std::to_string(x) + " "
+		+ std::to_string(y) + " "
+		+ std::to_string(depth) + " "
 		+ std::to_string(_direction) + " "
 		+ std::to_string(_speed) + " "
 		+ std::to_string(_hspeed) + " "
@@ -110,7 +110,7 @@ void Entity::Unserialize(std::string str)
 {
 	sVector* list = ParseSerializedString(str);
 
-	int index = 0;
+	size_t index = 0;
 
 	while ((*list)[index] != "@Entity" && index < list->size())
 		index++;
@@ -119,27 +119,15 @@ void Entity::Unserialize(std::string str)
 	{
 		//_imagePath 			= (*list)[index++];
 		_name 				= (*list)[index++];
-		_active 			= (*list)[index++] == "1" ? true : false;	
-		_visible 			= (*list)[index++] == "1" ? true : false;	
-		_x					= std::stof((*list)[index++]);	
-		_y					= std::stof((*list)[index++]);
-		_depth 				= std::stof((*list)[index++]);
+		active 				= (*list)[index++] == "1" ? true : false;	
+		visible 			= (*list)[index++] == "1" ? true : false;	
+		x					= std::stof((*list)[index++]);	
+		y					= std::stof((*list)[index++]);
+		depth 				= std::stof((*list)[index++]);
 		_direction 			= std::stof((*list)[index++]);
 		_speed 				= std::stof((*list)[index++]);
 		_hspeed 			= std::stof((*list)[index++]);
 		_vspeed 			= std::stof((*list)[index++]);
-		//_imageAlpha 		= std::stof((*list)[index++]);
-		//_imageAngle 		= std::stod((*list)[index++]);
-		//_imageWidth 		= std::stoi((*list)[index++]);
-		//_imageHeight 		= std::stoi((*list)[index++]);
-		//_imageSpeed 		= std::stoi((*list)[index++]);
-		//_imageTimer 		= std::stoi((*list)[index++]);
-		//_lastImageTime 		= std::stoi((*list)[index++]);
-		//_imageIndex 		= std::stoi((*list)[index++]);
-		//_imageOrigin.x 		= std::stoi((*list)[index++]);
-		//_imageOrigin.y 		= std::stoi((*list)[index++]);
-		//_spriteDimensions.x = std::stoi((*list)[index++]);
-		//_spriteDimensions.y = std::stoi((*list)[index++]);
 	}
 
 	delete list;
@@ -162,30 +150,6 @@ Image* Entity::image()
 std::string Entity::name() const
 {
 	return _name;
-}
-int Entity::ID() const
-{
-	return _ID;
-}
-bool Entity::active() const
-{
-	return _active;
-}
-bool Entity::visible() const
-{
-	return _visible;
-}
-float Entity::x() const
-{
-	return _x;
-}
-float Entity::y() const
-{
-	return _y;
-}
-float Entity::depth() const
-{
-	return _depth;
 }
 float Entity::direction() const
 {
@@ -247,32 +211,8 @@ void Entity::SetName(std::string name)
 	}
 	else
 	{
-		_name = "noname";
+		_name = "NoName";
 	}
-}
-void Entity::SetID(int ID)
-{
-	_ID = ID;
-}
-void Entity::SetActive(bool active)
-{
-	_active = active;
-}
-void Entity::SetVisible(bool visible)
-{
-	_visible = visible;
-}
-void Entity::SetX(float x)
-{
-	_x = x;
-}
-void Entity::SetY(float y)
-{
-	_y = y;
-}
-void Entity::SetDepth(float depth)
-{
-	_depth = depth;
 }
 void Entity::SetDirection(float direction)
 {
@@ -356,13 +296,13 @@ void Entity::SetVSpeed(float vspeed)
 
 void Entity::SetPosition(float x, float y)
 {
-	_x = x;
-	_y = y;
+	this->x = x;
+	this->y = y;
 }
 void Entity::SetPosition(SDL_Point pos)
 {
-	_x = pos.x;
-	_y = pos.y;
+	this->x = pos.x;
+	this->y = pos.y;
 }
 
 void Entity::CalculateSpeedDir()
@@ -404,74 +344,27 @@ void Entity::CalculateSpeedDir()
 	_speed = sqrt(pow(_hspeed, 2) + pow(_vspeed, 2));
 }
 
-//void Entity::AdvanceImage()
-//{
-//	_imageTimer += SDL_GetTicks() - _lastImageTime;
-//
-//	_lastImageTime = SDL_GetTicks();
-//
-//	// If imageSpeed is positive, we progress forwards through animation
-//	if (_imageSpeed > 0)
-//	{
-//		if (_imageTimer > _imageSpeed)
-//		{
-//			//_imageTimer -= _imageSpeed;
-//			_imageTimer %= _imageSpeed;
-//			_imageIndex++;
-//		}
-//	}
-//	// If imageSpeed is negative, we step backwards through animation
-//	else if (_imageSpeed < 0)
-//	{
-//		if (_imageTimer > abs(_imageSpeed))
-//		{
-//			//_imageTimer -= abs(_imageSpeed);
-//			_imageTimer %= abs(_imageSpeed);
-//			_imageIndex--;
-//		}
-//	}
-//	// If imageSpeed is 0 reset timer and do nothing
-//	else
-//	{
-//		_imageTimer = 0;
-//	}
-//
-//	// If we overflow on imageIndex, go back to beginning
-//	while (_imageIndex >= (_imageWidth / _spriteDimensions.x))
-//	{
-//		_imageIndex -= (_imageWidth / _spriteDimensions.x);
-//	}
-//	// If we underflow imageIndex, go to end
-//	while (_imageIndex < 0)
-//	{
-//		_imageIndex += (_imageWidth / _spriteDimensions.x);
-//	}
-//
-//	// DEBUG
-//	//std::cout << _imageTimer << std::endl;
-//}
-
 bool operator<(const Entity &el, const Entity &er)
 {
-	return el._depth < er._depth;
+	return el.depth < er.depth;
 }
 bool operator>(const Entity &el, const Entity &er)
 {
-	return el._depth > er._depth;
+	return el.depth > er.depth;
 }
 bool operator<=(const Entity &el, const Entity &er)
 {
-	return el._depth <= er._depth;
+	return el.depth <= er.depth;
 }
 bool operator>=(const Entity &el, const Entity &er)
 {
-	return el._depth >= er._depth;
+	return el.depth >= er.depth;
 }
 bool operator==(const Entity &el, const Entity &er)
 {
-	return el._depth == er._depth;
+	return el.depth == er.depth;
 }
 bool operator!=(const Entity &el, const Entity &er)
 {
-	return el._depth != er._depth;
+	return el.depth != er.depth;
 }

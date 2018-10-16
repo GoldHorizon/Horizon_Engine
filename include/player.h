@@ -29,11 +29,10 @@ public:
 
 	// Render()			- Renders the texture to its current position
 	//void Render(float interpolation);
-	
+
+	/*
+	 * Serialization Methods
+	 */
 	std::string Serialize();
-
 	void Unserialize(std::string);
-
-private:
-
 };

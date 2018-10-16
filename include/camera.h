@@ -23,37 +23,35 @@ class Camera
 		 */
 		int x() const;
 		int y() const;
-		int w() const;
-		int h() const;
 
 		vec2<int> position() const;
 		vec2<int> dimensions() const;
-
-		Align origin() const;
 
 		/*
 		 * Set Methods
 		 */
 		void SetX(int x);
 		void SetY(int y);
-		void SetW(int w);
-		void SetH(int h);
 
 		void SetPosition(int x, int y);
 		void SetPosition(vec2<int> pos);
 		void SetDimensions(int w, int h);
 		void SetDimensions(vec2<int> dim);
 
-		void SetOrigin(Align origin);
+		/*
+		 * Public Attributes
+		 */
+		Align origin;
+		int w;
+		int h;
 
 	private:
 
-		Align _origin;
-
+		/*
+		 * Private Attributes
+		 */
 		int _x;
 		int _y;
-		int _w;
-		int _h;
 		
 		bool _moveToTarget;
 		Entity* _targetObj;

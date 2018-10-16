@@ -126,7 +126,7 @@ int Game::Initialize()
 	commands["state"] = [this](sVector args) {
 		if (args.size() > 0) 
 		{
-			for (int i = 0; i < args.size(); i++)
+			for (size_t i = 0; i < args.size(); i++)
 			{
 				if (args[i] == "uninitialized") {
 					ChangeState(StateUninitialized::Instance());
@@ -199,10 +199,10 @@ int Game::Initialize()
 				{
 					Entity* temp = ptr->GetLevel()->GetByIndex(i);
 
-					StateConsole::Instance()->AddOutput("  " + std::to_string(static_cast<int>(temp->x())) 
-							+ " " + std::to_string(static_cast<int>(temp->y()))
-							+ " " + std::to_string(temp->ID())
-							+ " " + std::to_string(static_cast<int>(temp->depth())));
+					StateConsole::Instance()->AddOutput("  " + std::to_string(static_cast<int>(temp->x)) 
+							+ " " + std::to_string(static_cast<int>(temp->y))
+							+ " " + std::to_string(temp->ID)
+							+ " " + std::to_string(static_cast<int>(temp->depth)));
 				}
 			}
 		}

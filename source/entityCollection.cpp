@@ -7,7 +7,7 @@ bool EComp(const Entity * const &a, const Entity * const &b)
 {
 	if (*a == *b)
 	{
-		return (*a).ID() < (*b).ID();
+		return (*a).ID < (*b).ID;
 	}
 	else
 		return *a < *b;
@@ -52,7 +52,7 @@ Entity* EntityCollection::GetByID(int ID) const
 
 	while (it != _collection.end())
 	{
-		if ((*it)->ID() == ID)
+		if ((*it)->ID == ID)
 		{
 			return (*it);
 		}
@@ -78,7 +78,7 @@ Entity* EntityCollection::GetByIndex(unsigned int index) const
 
 void EntityCollection::AddEntity(Entity* entity)
 {
-	entity->SetID(nextID++);
+	entity->ID = (nextID++);
 	
 	_collection.push_back(entity);
 }
@@ -104,7 +104,7 @@ void EntityCollection::RemoveByID(int ID)
 {
 	eList::const_iterator it = _collection.begin();
 
-	while (it != _collection.end() && (*it)->ID() != ID)
+	while (it != _collection.end() && (*it)->ID != ID)
 	{
 		it++;
 	}
@@ -177,7 +177,7 @@ void EntityCollection::UpdateAll()
 	{
 		// Uncomment to debug Update() on different entities
 		//std::cerr << it->first << std::endl;
-		if ((*it) != nullptr && (*it)->active())
+		if ((*it) != nullptr && (*it)->active)
 		{
 			(*it)->Update();
 		}
@@ -198,7 +198,7 @@ void EntityCollection::RenderAll(float interpolation, int xOffset, int yOffset)
 	{
 		// Uncomment to debug Render() on different entities
 		//std::cerr << it->first << std::endl;
-		if ((*it) != nullptr && (*it)->visible())
+		if ((*it) != nullptr && (*it)->visible)
 		{
 			(*it)->Render(interpolation, xOffset, yOffset);
 		}

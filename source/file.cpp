@@ -72,7 +72,7 @@ void File::WriteFileData()
 {
 	if (_file.is_open())
 	{
-		for (int i = 0; i < _data.size(); i++)
+		for (size_t i = 0; i < _data.size(); i++)
 			_file << _data[i] << std::endl;
 	}
 	else std::cout << "File not open!" << std::endl;
@@ -106,7 +106,7 @@ void File::SetFilePos(std::ios_base::seekdir pos, int offset)
 void File::PrintData()
 {
 	std::cout << ">>>>>>>>>> Printing data contents for file " << _fileName << std::endl;
-	for (int i = 0; i < _data.size(); i++)
+	for (size_t i = 0; i < _data.size(); i++)
 		std::cout << _data[i] << std::endl;
 	std::cout << "<<<<<<<<<< End print of data contents." << std::endl;
 }

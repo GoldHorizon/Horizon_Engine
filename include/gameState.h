@@ -50,6 +50,13 @@ public:
     void Resume();
     bool IsPaused();
 
+protected:
+	/*
+	 * Protected Methods
+	 */
+    void SetType(GameStateType type);
+    EntityCollection _entities;
+
 private:
     // NOTE: Goes in all inherited states
     //static GameState* _thisInstance;
@@ -57,9 +64,6 @@ private:
     GameStateType _type;
     bool _paused;
 
-protected:
-    void SetType(GameStateType type);
-    EntityCollection _entities;
 };
 
 // NOTE: Goes in all inherited states

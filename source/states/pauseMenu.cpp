@@ -165,12 +165,12 @@ void ClassName::UpdateMenu()
 
 		if (_menuOptionSelected == i)
 		{
-			_menuList[i]->SetColor(SDL_Color({0, 255, 255, 255}));
+			_menuList[i]->color = (SDL_Color({0, 255, 255, 255}));
 			_menuList[i]->UpdateImage();
 		}
 		else
 		{
-			_menuList[i]->SetColor(SDL_Color({255, 255, 255, 255}));
+			_menuList[i]->color = (SDL_Color({255, 255, 255, 255}));
 			_menuList[i]->UpdateImage();
 		}
 	}
@@ -257,7 +257,7 @@ void ClassName::RemoveMenuOption(int pos)
 		Text* temp = _menuList[pos];
 
 		//std::cout << "Trying to delete " << temp->text() << std::endl;
-		_entities.RemoveByID(temp->ID());
+		_entities.RemoveByID(temp->ID);
 		if (_menuList[pos] != nullptr)
 		{
 			_menuList[pos] = nullptr;

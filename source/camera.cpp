@@ -3,11 +3,11 @@
 
 Camera::Camera()
 {
-	_origin = Align::TOP_L;
+	origin = Align::TOP_L;
+	w = SCREEN_WIDTH;
+	h = SCREEN_HEIGHT;
 	_x = 0;
 	_y = 0;
-	_w = SCREEN_WIDTH;
-	_h = SCREEN_HEIGHT;
 
 	_moveToTarget = false;
 	_targetObj = nullptr;
@@ -54,14 +54,6 @@ int Camera::y() const
 {
 	return _y;
 }
-int Camera::w() const
-{
-	return _w;
-}
-int Camera::h() const
-{
-	return _h;
-}
 vec2<int> Camera::position() const
 {
 	return vec2<int> (_x, _y);
@@ -69,12 +61,7 @@ vec2<int> Camera::position() const
 
 vec2<int> Camera::dimensions() const
 {
-	return vec2<int> (_w, _h);
-}
-
-Align Camera::origin() const
-{
-	return _origin;
+	return vec2<int> (w, h);
 }
 
 /*
@@ -82,36 +69,26 @@ Align Camera::origin() const
  */
 void Camera::SetX(int x)
 {
-	if (_origin == Align::TOP_L || _origin == Align::MID_L || _origin == Align::BOT_L)
+	if (origin == Align::TOP_L || origin == Align::MID_L || origin == Align::BOT_L)
 		_x = x;
 
-	if (_origin == Align::TOP_C || _origin == Align::MID_C || _origin == Align::BOT_C)
-		_x = x - (_w / 2);
+	if (origin == Align::TOP_C || origin == Align::MID_C || origin == Align::BOT_C)
+		_x = x - (w / 2);
 
-	if (_origin == Align::TOP_R || _origin == Align::MID_R || _origin == Align::BOT_R)
-		_x = x - _w;
+	if (origin == Align::TOP_R || origin == Align::MID_R || origin == Align::BOT_R)
+		_x = x - w;
 }
 
 void Camera::SetY(int y)
 {
-	if (_origin == Align::TOP_L || _origin == Align::TOP_C || _origin == Align::TOP_R)
+	if (origin == Align::TOP_L || origin == Align::TOP_C || origin == Align::TOP_R)
 		_y = y;
 
-	if (_origin == Align::MID_L || _origin == Align::MID_C || _origin == Align::MID_R)
-		_y = y - (_h / 2);
+	if (origin == Align::MID_L || origin == Align::MID_C || origin == Align::MID_R)
+		_y = y - (h / 2);
 
-	if (_origin == Align::BOT_L || _origin == Align::BOT_C || _origin == Align::BOT_R)
-		_y = y - _h;
-}
-
-void Camera::SetW(int w)
-{
-	_w = w;
-}
-
-void Camera::SetH(int h)
-{
-	_h = h;
+	if (origin == Align::BOT_L || origin == Align::BOT_C || origin == Align::BOT_R)
+		_y = y - h;
 }
 
 void Camera::SetPosition(int x, int y)
@@ -138,18 +115,13 @@ void Camera::SetPosition(vec2<int> pos)
 
 void Camera::SetDimensions(int w, int h)
 {
-	_w = w;
-	_h = h;
+	this->w = w;
+	this->h = h;
 }
 
 void Camera::SetDimensions(vec2<int> dim)
 {
-	_w = dim.x;
-	_h = dim.y;
-}
-
-void Camera::SetOrigin(Align origin)
-{
-	_origin = origin;
+	this->w = dim.x;
+	this->h = dim.y;
 }
 

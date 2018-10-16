@@ -11,21 +11,21 @@ Image::Image() : Image("")
 }
 
 Image::Image(std::string file, int spriteWidth, int spriteHeight) :
+	angle(0),
+	origin({0, 0}),
+	speed(0),
+	index(0),
 	_texture(nullptr),
 	_filePath(file),
 	_renderer(globalRenderer),
 	_alpha(1),
 	_color({255, 255, 255}),
 	_blendMode(BlendMode::BLEND),
-	_angle(0),
-	_origin({0, 0}),
 	_width(0),
 	_height(0),
 	_dimensions({0, 0}),
-	_speed(0),
 	_timer(0),
-	_lastTime(0),
-	_index(0)
+	_lastTime(0)
 {
 	if (file != "")
 		LoadFromFile(file, spriteWidth, spriteHeight);
@@ -126,7 +126,7 @@ void Image::FreeMemory()
 
 void Image::Update()
 {
-	if (_dimensions.x != 0 && _speed != 0)
+	if (_dimensions.x != 0 && speed != 0)
 	{
 		Advance();
 	}
@@ -134,22 +134,24 @@ void Image::Update()
 
 void Image::Draw(int x, int y)
 {
-	x -= _origin.x;
-	y -= _origin.y;
+	x -= origin.x;
+	y -= origin.y;
 
 	SDL_Rect* sourceImage = nullptr;
 	SDL_Rect* displayImage = nullptr;
 	// Create a rectangle for select image index
 	if (_dimensions.x != 0 && _dimensions.y != 0)
 	{
-		int xx, yy, temp;
+		int xx;
+		int yy;
+		//int temp;
 
 		xx = 0;
 		yy = 0;
-		temp = _dimensions.x * _index;
+		//temp = _dimensions.x * this->index;
 
 		// Find proper position for image index
-		for (int i = _index; i > 0; i--) {
+		for (int i = index; i > 0; i--) {
 			if (xx + _dimensions.x < _width) xx += _dimensions.x;
 			else {
 				xx = 0;
@@ -173,7 +175,7 @@ void Image::Draw(int x, int y)
 		displayImage = new SDL_Rect { x, y, _width, _height };
 	}
 
-	SDL_RenderCopyEx(_renderer, _texture, sourceImage, displayImage, _angle, &_origin, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(_renderer, _texture, sourceImage, displayImage, angle, &origin, SDL_FLIP_NONE);
 
 	// Free memory of image
 	if (sourceImage != nullptr)
@@ -188,24 +190,24 @@ void Image::Advance()
 	_lastTime = SDL_GetTicks();
 
 	// If imageSpeed is positive, we progress forwards through animation
-	//std::cout << "_timer: " << _timer << "\t\t_speed: " << _speed << std::endl;
-	if (_speed > 0)
+	//std::cout << "_timer: " << _timer << "\t\tspeed: " << speed << std::endl;
+	if (speed > 0)
 	{
-		if (_timer > _speed)
+		if (_timer > speed)
 		{
-			//_timer -= _speed;
-			_timer %= _speed;
-			_index++;
+			//_timer -= speed;
+			_timer %= speed;
+			index++;
 		}
 	}
 	// If imageSpeed is negative, we step backwards through animation
-	else if (_speed < 0)
+	else if (speed < 0)
 	{
-		if (_timer > abs(_speed))
+		if (_timer > abs(speed))
 		{
-			//_timer -= abs(_speed);
-			_timer %= abs(_speed);
-			_index--;
+			//_timer -= abs(speed);
+			_timer %= abs(speed);
+			index--;
 		}
 	}
 	// If imageSpeed is 0 reset timer and do nothing
@@ -215,14 +217,14 @@ void Image::Advance()
 	}
 
 	// If we overflow on imageIndex, go back to beginning
-	while (_index >= (_width / _dimensions.x))
+	while (index >= (_width / _dimensions.x))
 	{
-		_index -= (_width / _dimensions.x);
+		index -= (_width / _dimensions.x);
 	}
 	// If we underflow imageIndex, go to end
-	while (_index < 0)
+	while (index < 0)
 	{
-		_index += (_width / _dimensions.x);
+		index += (_width / _dimensions.x);
 	}
 
 	// DEBUG
@@ -249,16 +251,6 @@ BlendMode Image::blendMode() const
 	return _blendMode;
 }
 
-double Image::angle() const
-{
-	return _angle;
-}
-
-SDL_Point Image::origin() const
-{
-	return _origin;
-}
-
 int Image::width() const
 {
 	return _width;
@@ -267,16 +259,6 @@ int Image::width() const
 int Image::height() const
 {
 	return _height;
-}
-
-int Image::speed() const
-{
-	return _speed;
-}
-
-int Image::index() const
-{
-	return _index;
 }
 
 void Image::SetAlpha(float alpha)
@@ -316,29 +298,3 @@ void Image::SetBlendMode(BlendMode m)
 		}	
 	}
 }
-
-void Image::SetAngle(double angle)
-{
-	_angle = angle;
-}
-
-void Image::SetOrigin(int x, int y)
-{
-	_origin = {x, y};
-}
-
-void Image::SetOrigin(SDL_Point pos)
-{
-	_origin = pos;
-}
-
-void Image::SetSpeed(int speed)
-{
-	_speed = speed;
-}
-
-void Image::SetIndex(int index)
-{
-	_index = index;
-}
-

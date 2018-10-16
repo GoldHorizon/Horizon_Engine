@@ -8,10 +8,15 @@
 class File
 {
 public:
+	/*
+	 * Constructors/Destructors
+	 */
 	File();
-
 	~File();
 	
+	/*
+	 * Class Methods
+	 */
 	void OpenFile(std::string name, bool read = true, bool write = true);
 	void CloseFile();
 
@@ -29,6 +34,9 @@ public:
 
 private:
 
+	/*
+	 * Private Attributes
+	 */
 	std::fstream _file;
 	std::string _fileName;
 

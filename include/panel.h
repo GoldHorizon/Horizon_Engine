@@ -30,43 +30,38 @@ class Panel : public Entity
 		/*
 		 * Get Methods
 		 */
-		std::string title();
-		vec2<int> dim();
-		vec4<float> bgColor();
-		vec4<float> barColor();
+		vec2<int> size();
 		bool focus();
 		bool grabbed();
-		bool locked();
 		bool screenBound();
 		bool followCamera();
 
 		/*
 		 * Set Methods
 		 */
-		void SetTitle(std::string title);
-		void SetPos(vec2<int> dim);
-		void SetBgColor(vec4<float> color);
-		void SetBarColor(vec4<float> color);
-		void SetLocked(bool locked);
+		void SetSize(vec2<int> size);
 		void SetScreenBound(bool screenBound);
 		void SetFollowCamera(bool followCamera);
 
 		/*
 		 * Public Attributes
 		 */
-		PanelType _type;		
+		std::string title;
+		PanelType type;		
+		vec4<float> bgColor;
+		vec4<float> barColor;
+		bool locked;
 
 	private:
-		std::string _title;
 
-		vec2<int> _dim;
+		/*
+		 * Private Attributes
+		 */
+		vec2<int> _size;
+
 		int _barHeight;
-		vec4<float> _bgColor;
-		vec4<float> _barColor;
-
 		int _focus;
 		bool _grabbed;
-		bool _locked;
 		bool _screenBound;
 		bool _followCamera;
 		vec2<int> _offset;

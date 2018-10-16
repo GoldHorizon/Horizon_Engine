@@ -21,7 +21,7 @@ void ClassName::Cleanup()
 
 int ClassName::HandleEvents(Event& event)
 {
-
+	return -1;
 }
 
 void ClassName::Update()
