@@ -45,8 +45,8 @@ win32_flags :=	-lmingw32 \
 win32_inc_path := -IC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl32\include\SDL2
 win32_lib_path := -LC:\Users\Nick\Documents\Workspace\Libraries\MinGW\sdl32\lib
 
-win32_gcc_flags = -c -Wall -Wl,-subsystem,windows $(win32_inc_path) -IC:\Users\Nick\Documents\Git\SDL_Engine\include -static-libstdc++ -std=c++14
-gcc_flags = -c -Wall -Werror $(win32_inc_path) -IC:\Users\Nick\Documents\Git\SDL_Engine\include -std=c++14 -g
+win32_gcc_flags = -c -Wall -Wl,-subsystem,windows $(win32_inc_path) -IC:\Users\Nick\Documents\Git\Horizon_Engine\include -static-libstdc++ -std=c++17
+gcc_flags = -c -Wall -Werror $(win32_inc_path) -IC:\Users\Nick\Documents\Git\Horizon_Engine\include -std=c++17 -g
 
 ###
 ### Main make program
@@ -57,7 +57,7 @@ $(executable):
 				-mkdir -p build
 				-cd build && mv *.o ../
 				make $(objects)
-				$(compiler) $(objects) $(win32_inc_path) $(win32_lib_path) $(win32_flags) -o $(executable)
+				$(compiler) $(objects) $(win32_inc_path) $(win32_lib_path) $(win32_flags) -g -o $(executable)
 				-mv *.o build/
 
 ###

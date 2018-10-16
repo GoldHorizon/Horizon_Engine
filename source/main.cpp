@@ -3,6 +3,22 @@
 #include "game.h"
 #include "constants.h"
 
+#ifdef _WIN32
+	#ifdef _WIN64
+		#define BUILD_WIN64
+
+	#else
+		#define BUILD_WIN32
+
+	#endif
+#elif __linux__
+	#define BUILD_LINUX
+
+#else
+	#define BUILD_UNKNOWN
+
+#endif
+
 // Program start
 int main(int argc, char** argv)
 {
