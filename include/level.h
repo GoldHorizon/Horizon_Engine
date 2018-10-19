@@ -4,7 +4,10 @@
 #include "entity.h"
 #include "entityCollection.h"
 
+#include <string>
 #include <map>
+
+const std::string LEVEL_FOLDER = "levels"; // Base folder for levels 
 
 class Level : public EntityCollection
 {

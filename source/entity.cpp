@@ -64,10 +64,12 @@ void Entity::Render(float interpolation, int xOffset, int yOffset)
 	// Only attempt to render if we have successfully loaded an image and it is visible
 	if (this->visible)
 	{
+		// @Todo: Make it stop drawing if entity is off the screen (maybe still use render custom though?)
 		// Create a set of ints to use for drawing position (use interpolation to predict movement)
-		int xx = static_cast<int>(this->x) + xOffset
+		// @Todo: Need to give camera a speed so it can draw the entity properly.
+		int xx = static_cast<int>(this->x) + (xOffset)
 			+ static_cast<int>(cos(_direction * PI / 180) * _speed * (this->active * interpolation));
-		int yy = static_cast<int>(this->y) + yOffset
+		int yy = static_cast<int>(this->y) + (yOffset)
 			+ static_cast<int>(sin(_direction * PI / 180) * _speed * (this->active * interpolation));
 
 		_image.Draw(xx, yy);
@@ -131,7 +133,16 @@ void Entity::Unserialize(std::string str)
 	}
 
 	delete list;
+}
 
+std::string Entity::SerializeFile()
+{
+	return Serialize();
+}
+
+void Entity::DeserializeFile(std::string str)
+{
+	Unserialize(str);
 }
 
 /*

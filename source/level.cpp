@@ -3,8 +3,12 @@
 #include "types.h"
 #include "engineMethods.h"
 
-#include <sys/stat.h>
+#include <sys/stat.h>	// For stat structure of files to get access time
 #include <iostream>
+
+#ifdef _WIN32
+#include <windows.h>	// For creating directory in windows
+#endif
 
 Level::Level() : Level("")
 {
@@ -48,13 +52,62 @@ void Level::SaveToFile()
 
 	levelFile.WriteFileData();
 	levelFile.CloseFile();
+
+	// DEBUG
+	SaveLevel();
 }
 
 void Level::SaveLevel()
 {
-	//std::filesystem::path filePath = "levels/" + _name + "/";
+	// Save level procedure:
+	// 	1)	Create level folder (if nonexistent)
+	// 	2)  Save level details in level file (level width? gamemode? camera? maybe for future use) 
+	// 	3)  Save individual entity files (instead of all in one, for easier readability)
 
-	//std::cout << filePath.path << std::endl;
+	// Create folder
+	std::string thisLevelsFolder = "";
+	std::string saveName = _name;
+
+	// Make sure our folder name doesn't have a file extension (for legacy names?)
+	unsigned int dot = _name.find('.');
+
+	if (dot != std::string::npos) {
+		saveName = _name.substr(0, dot);
+	}
+
+#ifdef _WIN32
+	thisLevelsFolder = LEVEL_FOLDER + "\\" + saveName + "\\";
+
+	// Level should not have any spaces in it
+	if (thisLevelsFolder.find(' ') != std::string::npos) {
+		std::cout << "Error: Can't save level with spaces in name" << std::endl;
+		return;
+	}
+
+	// Windows API function
+	CreateDirectory(thisLevelsFolder.c_str(), NULL);
+#endif
+
+	if (thisLevelsFolder == "") {	// Couldn't create folder, so exiting...
+		std::cout << "Error: Couldn't create level folder! (OS not supported?)" << std::endl;
+		return;
+	}
+
+	// Save level file (skip for now?)
+
+	// Save entity files
+	File entityFile;
+
+	for (int i = 0; i < GetCount(); i++)
+	{
+		auto ent = GetByIndex(i);
+
+		entityFile.OpenFile(thisLevelsFolder + std::to_string(ent->ID), false, true);
+		
+		entityFile.WriteFileLine(ent->Serialize());
+
+		entityFile.CloseFile();
+	}
 }
 
 bool Level::LoadFromFile()

@@ -465,8 +465,9 @@ void Game::Update()
 		(*it)->Resume();
 	}
 
+	// Check if variables file is outdated, so we can hotload new variables
 	if (_varFile.IsOutdated()) {
-		std::cout << "File has changed!" << std::endl;
+		std::cout << "File has changed! Begin hotloading..." << std::endl;
 	}
 }
 
