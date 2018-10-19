@@ -4,7 +4,9 @@
 #include "engineMethods.h"
 
 #include <sys/stat.h>	// For stat structure of files to get access time
+#include <dirent.h>		// For searching directory for files
 #include <iostream>
+#include <cassert>		// Finally start using assert?
 
 #ifdef _WIN32
 #include <windows.h>	// For creating directory in windows
@@ -88,10 +90,12 @@ void Level::SaveLevel()
 	CreateDirectory(thisLevelsFolder.c_str(), NULL);
 #endif
 
-	if (thisLevelsFolder == "") {	// Couldn't create folder, so exiting...
-		std::cout << "Error: Couldn't create level folder! (OS not supported?)" << std::endl;
-		return;
-	}
+	assert (thisLevelsFolder != "" && "Couldn't create level folder (OS not supported?)");
+
+	//if (thisLevelsFolder == "") {	// Couldn't create folder, so exiting...
+	//	std::cout << "Error: Couldn't create level folder! (OS not supported?)" << std::endl;
+	//	return;
+	//}
 
 	// Save level file (skip for now?)
 
@@ -102,9 +106,11 @@ void Level::SaveLevel()
 	{
 		auto ent = GetByIndex(i);
 
-		entityFile.OpenFile(thisLevelsFolder + std::to_string(ent->ID), false, true);
+		// Saves entity files as ID number
+		entityFile.OpenFile(thisLevelsFolder + std::to_string(ent->ID) + ".entity", false, true);
 		
-		entityFile.WriteFileLine(ent->Serialize());
+		// Write serialization string to file (eventually better formatted)
+		entityFile.WriteFileLine(ent->SerializeFile());
 
 		entityFile.CloseFile();
 	}
@@ -133,25 +139,81 @@ bool Level::LoadFromFile()
 	for (size_t i = 0; i < svp->size(); i++)
 	{
 		Entity* obj = nullptr;
+
 		obj = CreateSerializedObject((*svp)[i]);
-		if (obj == nullptr)
-			std::cout << "Error: Could not create serialized object from string " << i << " (returned -1 to playing.cpp)" << std::endl;
-		else
-		{
-			AddEntity(obj);
-		}
+
+		//if (obj == nullptr)
+		//	std::cout << "Error: Could not create serialized object from string " << i << " (returned -1 to playing.cpp)" << std::endl;
+		//else
+		//{
+		//	AddEntity(obj);
+		//}
+
+		assert (obj != nullptr && "Could not create serialized object from string");
+		
+		AddEntity(obj);
 	}
 
 	levelFile.CloseFile();
 	success = true;
+
+	LoadLevel();
 
 	return success;
 }
 
 bool Level::LoadLevel()
 {
+	bool success = false;
 
-	return false;
+	// Create folder
+	std::string thisLevelsFolder = "";
+	std::string loadName = _name;
+
+	// Make sure our folder name doesn't have a file extension (for legacy names?)
+	unsigned int dot = _name.find('.');
+
+	if (dot != std::string::npos) {
+		loadName = _name.substr(0, dot);
+	}
+
+	thisLevelsFolder = LEVEL_FOLDER + "/" + loadName + "/";
+
+	// Begin looping through level directory
+	DIR *directory;
+	struct dirent *entry;
+	
+	directory = opendir(thisLevelsFolder.c_str());
+
+	if (directory != NULL) {
+		std::string filePath;
+		std::string fileName;
+		
+		entry = readdir(directory);
+		while (entry != NULL) {
+			// Found entry in folder, deserialize the object
+			fileName = std::string(entry->d_name);
+
+			// If entry is referring to the '.' or '..' directories, ignore
+			if (fileName == "." || fileName == "..") {
+				//std::cout << "Not checking " << fileName << std::endl;
+			} else {
+				filePath = (thisLevelsFolder + fileName);
+					
+				// Deserialize objects here
+				//std::cout << filePath << std::endl;
+			}
+			
+
+			entry = readdir(directory);
+		}
+
+		closedir(directory);
+	} else {
+		std::cout << "Error: Couldn't find level folder named " << thisLevelsFolder << " to load!" << std::endl;
+	}
+
+	return success;
 }
 
 void Level::AddEntity(Entity* obj)
