@@ -39,25 +39,25 @@ std::string Level::GetFileName()
 	return _name;
 }
 
-void Level::SaveToFile()
-{
-	File levelFile;
-	
-	levelFile.OpenFile(_name, false, true);
-
-	sVector* svp = levelFile.GetDataVector();
-
-	for (int i = GetCount() - 1; i >= 0 ; i--)
-	{
-		svp->push_back(GetByIndex(i)->Serialize());
-	}
-
-	levelFile.WriteFileData();
-	levelFile.CloseFile();
-
-	// DEBUG
-	//SaveLevel();
-}
+//void Level::SaveToFile()
+//{
+//	File levelFile;
+//	
+//	levelFile.OpenFile(_name, false, true);
+//
+//	sVector* svp = levelFile.GetDataVector();
+//
+//	for (int i = GetCount() - 1; i >= 0 ; i--)
+//	{
+//		svp->push_back(GetByIndex(i)->Serialize());
+//	}
+//
+//	levelFile.WriteFileData();
+//	levelFile.CloseFile();
+//
+//	// DEBUG
+//	//SaveLevel();
+//}
 
 void Level::SaveLevel()
 {
@@ -116,51 +116,51 @@ void Level::SaveLevel()
 	}
 }
 
-bool Level::LoadFromFile()
-{
-	bool success = false;
-
-	File levelFile;
-
-	levelFile.OpenFile(_name);
-
-	if (!levelFile.IsOpen())
-	{
-		std::cout << "Error: Trying to load level file from non-existent level" << std::endl;
-		return false;
-	}
-	
-	ClearEntities();
-
-	sVector* svp = levelFile.GetDataVector();
-	levelFile.ReadFileAll();
-	//levelFile.PrintData();
-
-	for (size_t i = 0; i < svp->size(); i++)
-	{
-		Entity* obj = nullptr;
-
-		obj = CreateSerializedObject((*svp)[i]);
-
-		//if (obj == nullptr)
-		//	std::cout << "Error: Could not create serialized object from string " << i << " (returned -1 to playing.cpp)" << std::endl;
-		//else
-		//{
-		//	AddEntity(obj);
-		//}
-
-		assert (obj != nullptr && "Could not create serialized object from string");
-		
-		AddEntity(obj);
-	}
-
-	levelFile.CloseFile();
-	success = true;
-
-	//LoadLevel();
-
-	return success;
-}
+//bool Level::LoadFromFile()
+//{
+//	bool success = false;
+//
+//	File levelFile;
+//
+//	levelFile.OpenFile(_name);
+//
+//	if (!levelFile.IsOpen())
+//	{
+//		std::cout << "Error: Trying to load level file from non-existent level" << std::endl;
+//		return false;
+//	}
+//	
+//	ClearEntities();
+//
+//	sVector* svp = levelFile.GetDataVector();
+//	levelFile.ReadFileAll();
+//	//levelFile.PrintData();
+//
+//	for (size_t i = 0; i < svp->size(); i++)
+//	{
+//		Entity* obj = nullptr;
+//
+//		obj = CreateSerializedObject((*svp)[i]);
+//
+//		//if (obj == nullptr)
+//		//	std::cout << "Error: Could not create serialized object from string " << i << " (returned -1 to playing.cpp)" << std::endl;
+//		//else
+//		//{
+//		//	AddEntity(obj);
+//		//}
+//
+//		assert (obj != nullptr && "Could not create serialized object from string");
+//		
+//		AddEntity(obj);
+//	}
+//
+//	levelFile.CloseFile();
+//	success = true;
+//
+//	//LoadLevel();
+//
+//	return success;
+//}
 
 bool Level::LoadLevel()
 {

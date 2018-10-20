@@ -26,10 +26,10 @@ public:
 	void SetFileName(std::string levelName);
 	std::string GetFileName();
 
-	void SaveToFile();
+	//void SaveToFile();
 	void SaveLevel();	// NEW Save level
 
-	bool LoadFromFile();
+	//bool LoadFromFile();
 	bool LoadLevel();	// NEW Load level
 
 	void AddEntity(Entity* obj);

@@ -305,7 +305,8 @@ bool ClassName::LoadLevel()
 		}
 		else
 		{
-			std::cout << "Error: Failed to load level " << _levelName << std::endl;
+			//std::cout << "Error: Failed to load level " << _levelName << std::endl;
+			std::cout << "Creating new level '" << _levelName << "'" << std::endl;
 		}
 		
 		return result;
@@ -324,12 +325,17 @@ void ClassName::SetLevel(std::string name)
 
 		_currentLevel.SetFileName(name);
 		_levelName = name;
+
+		LoadLevel();
+
 		//std::cout << "\tAbout to open level " << _levelName << std::endl;
-		if (!LoadLevel())
-		{
-			_levelName = oldLevel;
-		}
-	}
+		//if (!LoadLevel())
+		//{
+		//	_levelName = oldLevel;
+		//}
+	} else std::cout << "DEBUG trying to edit blank level" << std::endl;
+
+	std::cout << "DEBUG Level name: " << _levelName << std::endl;
 }
 
 void ClassName::SetLevel(Level* level)
