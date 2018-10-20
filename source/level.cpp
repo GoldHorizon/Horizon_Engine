@@ -157,7 +157,7 @@ bool Level::LoadFromFile()
 	levelFile.CloseFile();
 	success = true;
 
-	LoadLevel();
+	//LoadLevel();
 
 	return success;
 }
@@ -201,12 +201,26 @@ bool Level::LoadLevel()
 				filePath = (thisLevelsFolder + fileName);
 					
 				// Deserialize objects here
-				//std::cout << filePath << std::endl;
+				File entityFile;
+				entityFile.OpenFile(filePath);
+
+				Entity* obj = nullptr;
+				
+				// @Todo: Need to rework how entity string is read, for when formatting changes
+				entityFile.ReadFileAll();
+				sVector* svp = entityFile.GetDataVector();
+				obj = CreateSerializedObject((*svp)[0]);
+
+				assert (obj != nullptr && "Could not create serialized object from string");
+				
+				AddEntity(obj);
+				entityFile.CloseFile();
 			}
-			
 
 			entry = readdir(directory);
 		}
+
+		success = true;
 
 		closedir(directory);
 	} else {

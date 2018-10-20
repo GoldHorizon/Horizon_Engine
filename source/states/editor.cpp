@@ -297,7 +297,7 @@ bool ClassName::LoadLevel()
 	if (_levelName != "") {
 		bool result = false;
 
-		result = _currentLevel.LoadFromFile();
+		result = _currentLevel.LoadLevel();
 
 		if (result)
 		{
