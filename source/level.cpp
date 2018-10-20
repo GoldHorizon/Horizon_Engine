@@ -63,6 +63,7 @@ void Level::SaveLevel()
 {
 	// Save level procedure:
 	// 	1)	Create level folder (if nonexistent)
+	// 	1.5)	NEED TO DELETE ALL EXISTING ENTITY FILES (to account for deleted entities in editor)
 	// 	2)  Save level details in level file (level width? gamemode? camera? maybe for future use) 
 	// 	3)  Save individual entity files (instead of all in one, for easier readability)
 
@@ -71,7 +72,7 @@ void Level::SaveLevel()
 	std::string saveName = _name;
 
 	// Make sure our folder name doesn't have a file extension (for legacy names?)
-	unsigned int dot = _name.find('.');
+	auto dot = _name.find('.');
 
 	if (dot != std::string::npos) {
 		saveName = _name.substr(0, dot);
@@ -86,17 +87,30 @@ void Level::SaveLevel()
 		return;
 	}
 
-	// Windows API function
+	// Windows API functions
 	CreateDirectory(thisLevelsFolder.c_str(), NULL);
+
 #endif
 
 	assert (thisLevelsFolder != "" && "Couldn't create level folder (OS not supported?)");
-
+	
 	//if (thisLevelsFolder == "") {	// Couldn't create folder, so exiting...
 	//	std::cout << "Error: Couldn't create level folder! (OS not supported?)" << std::endl;
 	//	return;
 	//}
 
+	// Delete old entity files?
+	DIR *directory;
+	struct dirent *entry;
+	
+	directory = opendir(thisLevelsFolder.c_str());
+
+	while ((entry = readdir(directory)) != NULL)
+	{
+		remove(std::string(thisLevelsFolder + entry->d_name).c_str());
+	}
+	closedir(directory);
+	
 	// Save level file (skip for now?)
 
 	// Save entity files
@@ -186,6 +200,9 @@ bool Level::LoadLevel()
 	directory = opendir(thisLevelsFolder.c_str());
 
 	if (directory != NULL) {
+
+		ClearEntities();
+
 		std::string filePath;
 		std::string fileName;
 		
@@ -197,7 +214,12 @@ bool Level::LoadLevel()
 			// If entry is referring to the '.' or '..' directories, ignore
 			if (fileName == "." || fileName == "..") {
 				//std::cout << "Not checking " << fileName << std::endl;
-			} else {
+				
+			} else if (fileName.find(".entity") != std::string::npos) {
+				// If we find an entity file, deserialize it. Else ignore.
+				//
+				int fileID = std::stoi(fileName.substr(0, fileName.find(".entity")));
+
 				filePath = (thisLevelsFolder + fileName);
 					
 				// Deserialize objects here
@@ -212,6 +234,8 @@ bool Level::LoadLevel()
 				obj = CreateSerializedObject((*svp)[0]);
 
 				assert (obj != nullptr && "Could not create serialized object from string");
+
+				obj->ID = fileID;
 				
 				AddEntity(obj);
 				entityFile.CloseFile();

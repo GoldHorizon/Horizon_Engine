@@ -15,7 +15,7 @@ bool EComp(const Entity * const &a, const Entity * const &b)
 
 EntityCollection::EntityCollection()
 {
-	nextID = 0;
+	nextID = 1;
 }
 
 EntityCollection::~EntityCollection()
@@ -78,7 +78,8 @@ Entity* EntityCollection::GetByIndex(unsigned int index) const
 
 void EntityCollection::AddEntity(Entity* entity)
 {
-	entity->ID = (nextID++);
+	if (entity->ID == 0)
+		entity->ID = (nextID++);
 	
 	_collection.push_back(entity);
 }
