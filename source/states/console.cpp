@@ -8,6 +8,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <cassert>
 
 #define ClassName StateConsole
 
@@ -217,7 +218,7 @@ int ClassName::HandleEvents(Event& event)
 				}
 				else
 				{
-					if (_cursorPosition == _currentLine.size()) {
+					if (_cursorPosition == _currentLine.size() && _currentLine.size() > 0) {
 						// Delete last character
 						if (_currentLine.size() > 0)
 							_currentLine.pop_back();
@@ -235,6 +236,8 @@ int ClassName::HandleEvents(Event& event)
 						_currentLine = lh + rh;
 						_cursorPosition = lh.size();
 					}	
+
+					assert (_cursorPosition >= 0 && "Console cursor position less than 0");
 				}
 			}
 			break;
