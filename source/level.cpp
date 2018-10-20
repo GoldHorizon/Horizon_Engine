@@ -56,7 +56,7 @@ void Level::SaveToFile()
 	levelFile.CloseFile();
 
 	// DEBUG
-	SaveLevel();
+	//SaveLevel();
 }
 
 void Level::SaveLevel()

@@ -96,7 +96,7 @@ void ClassName::AddLevel(std::string name)
 {
 	Level* newLevel = new Level(name);
 
-	if (!newLevel->LoadFromFile())
+	if (!newLevel->LoadLevel())
 	{
 		std::cout << "Error: Could not add level! Level was not found" << std::endl;
 	}
@@ -118,7 +118,7 @@ void ClassName::ChangeLevel(std::string name)
 
 		Level* newLevel = new Level(name);
 
-		if (!newLevel->LoadFromFile())
+		if (!newLevel->LoadLevel())
 		{
 			std::cout << "Error: Could not add level! Level was not found" << std::endl;
 			_level = new Level("mine_level");
@@ -154,10 +154,10 @@ void ClassName::Restart()
 {
 	//for (int i = 0; i < _levelList.size(); i++)
 	//{
-	//	_levelList[i]->LoadFromFile();
+	//	_levelList[i]->LoadLevel();
 	//}
 
-	_level->LoadFromFile();
+	_level->LoadLevel();
 }
 
 #ifdef ClassName

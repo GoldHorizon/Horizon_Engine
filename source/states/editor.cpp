@@ -287,7 +287,7 @@ void ClassName::Render(float interpolation)
 void ClassName::SaveLevel()
 {
 	if (_levelName != "")
-		_currentLevel.SaveToFile();
+		_currentLevel.SaveLevel();
 
 	// @todo: Save entities that were added to the _currentLevel's collection through the editor onto file.
 }
