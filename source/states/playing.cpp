@@ -20,88 +20,24 @@ ClassName::~ClassName()
 
 void ClassName::Initialize()
 {
-	_level = nullptr;
+	ChangeLevel("test_file");
 
-	ChangeLevel("test_file.txt");
-
+	// Set global camera to be at 0, 0 in top left corner
 	globalCam->origin = (Align::MID_C);
 	globalCam->SetPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 
 	//AddLevel("another_test.txt");
 	
-	Panel* testPanel = new Panel();
-	testPanel->SetPosition(64, 64);
-	testPanel->title = ("Test Panel");
-	_entities.AddEntity(testPanel);
+	// Panel test code
+	//Panel* testPanel = new Panel();
+	//testPanel->SetPosition(64, 64);
+	//testPanel->title = ("Test Panel");
+	//_entities.AddEntity(testPanel);
 
-	Panel* testPanel2 = new Panel();
-	testPanel2->SetPosition(400, 64);
-	testPanel2->title = ("Panel 2");
-	_entities.AddEntity(testPanel2);
-
-    //Player* mainPlayer = new Player();
-    //mainPlayer->SetName("MainPlayer");
-	//mainPlayer->SetDepth(-20);
-    //_entities.AddEntity(mainPlayer);
-
-    //Ball* testBall = new Ball();
-    //testBall->SetPosition(128, 128);
-    //testBall->SetDepth(-10);
-    //testBall->SetName("TestBall");
-    //_entities.AddEntity(testBall);
-
-	//// Test loading fonts/texts
-	//Text* testTextLabel = new Text("This is just a test label!!!", defaultFont);
-	//testTextLabel->SetPosition({ 600, 300 });
-	//testTextLabel->SetMaxWidth(128);
-	//testTextLabel->SetWrap(true);
-	//testTextLabel->SetDepth(-40);
-	//_entities.AddEntity(testTextLabel);
-	// End test loading fonts/texts
-
-
-	//File testFile;
-	//sVector* svp = testFile.GetDataVector();
-
-	//testFile.OpenFile("test_file.txt", false, true);
-
-	//svp->push_back(mainPlayer->Serialize());
-
-	//testFile.WriteFileData();
-
-	//testFile.CloseFile();
-
-	//sVector* testV;
-	//testV = ParseSerializedString(testTextLabel->Serialize());
-
-	//for (int i = 0; i < testV->size(); i++)
-	//{
-	//	std::cout << (*testV)[i] << std::endl;
-	//}
-	//delete testV;
-
-	//svp->clear();
-
-	//testFile.OpenFile("test_file.txt");
-
-	//testFile.ReadFileAll();
-	//testFile.PrintData();
-
-	// Base unserialization loop
-	//for (int i = 0; i < svp->size(); i++)
-	//{
-	//	Entity* test = nullptr;
-	//	test = CreateSerializedObject((*svp)[i]);
-	//	if (test == nullptr)
-	//		std::cout << "Error: Could not create serialized object from string " << i << " (returned -1 to playing.cpp)" << std::endl;
-	//	else
-	//		_entities.AddEntity(test);
-	//}
-
-	//testBall		->Unserialize((*svp)[1]);
-
-	//testFile.CloseFile();
-	//// End testing file Input/Output
+	//Panel* testPanel2 = new Panel();
+	//testPanel2->SetPosition(400, 64);
+	//testPanel2->title = ("Panel 2");
+	//_entities.AddEntity(testPanel2);
 }
 
 void ClassName::Cleanup()
@@ -120,13 +56,6 @@ int ClassName::HandleEvents(Event& event)
 
 	_level->HandleAllEvents(event);
 
-//	const Uint8 *state = SDL_GetKeyboardState(NULL);
-//
-//	if (state[SDL_SCANCODE_ESCAPE])
-//	{
-//		return OPEN_MENU;
-//	}
-
 	if (event.ev.type == SDL_KEYDOWN)
 	{
 		switch (event.ev.key.keysym.sym)
@@ -137,10 +66,6 @@ int ClassName::HandleEvents(Event& event)
 			break;
 		}
 	}
-	//else if (event.ev.type == SDL_MOUSEBUTTONDOWN)
-	//{
-	//	std::cout << "DEBUG: Mouse press in playing state" << std::endl;
-	//}
 
 	return -1;
 }
@@ -171,7 +96,7 @@ void ClassName::AddLevel(std::string name)
 {
 	Level* newLevel = new Level(name);
 
-	if (!newLevel->LoadFromFile())
+	if (!newLevel->LoadLevel())
 	{
 		std::cout << "Error: Could not add level! Level was not found" << std::endl;
 	}
@@ -193,7 +118,7 @@ void ClassName::ChangeLevel(std::string name)
 
 		Level* newLevel = new Level(name);
 
-		if (!newLevel->LoadFromFile())
+		if (!newLevel->LoadLevel())
 		{
 			std::cout << "Error: Could not add level! Level was not found" << std::endl;
 			_level = new Level("mine_level");
@@ -229,10 +154,10 @@ void ClassName::Restart()
 {
 	//for (int i = 0; i < _levelList.size(); i++)
 	//{
-	//	_levelList[i]->LoadFromFile();
+	//	_levelList[i]->LoadLevel();
 	//}
 
-	_level->LoadFromFile();
+	_level->LoadLevel();
 }
 
 #ifdef ClassName

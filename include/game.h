@@ -5,6 +5,7 @@
 #include "entityCollection.h"
 #include "enumerations.h"
 #include "event.h"
+#include "file.h"
 
 #include "SDL.h"
 
@@ -73,4 +74,7 @@ private:
 
   // _playing		- whether the game is still being played (running)
   bool _playing;
+
+  // _varFile		- file containing game variables
+  File _varFile;
 };

@@ -4,7 +4,10 @@
 #include "entity.h"
 #include "entityCollection.h"
 
+#include <string>
 #include <map>
+
+const std::string LEVEL_FOLDER = "levels"; // Base folder for levels 
 
 class Level : public EntityCollection
 {
@@ -22,8 +25,12 @@ public:
 	 */
 	void SetFileName(std::string levelName);
 	std::string GetFileName();
-	void SaveToFile();
-	bool LoadFromFile();
+
+	//void SaveToFile();
+	void SaveLevel();	// NEW Save level
+
+	//bool LoadFromFile();
+	bool LoadLevel();	// NEW Load level
 
 	void AddEntity(Entity* obj);
 	void AddEntity(Entity* obj, int x, int y);

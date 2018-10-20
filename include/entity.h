@@ -59,6 +59,9 @@ class Entity
 		virtual std::string Serialize();
 		virtual void Unserialize(std::string);
 
+		virtual std::string SerializeFile(); 			// NEW Serialization
+		virtual void DeserializeFile(std::string str); 	// NEW deserialization
+
 		/*
 		 * Get Methods
 		 */
