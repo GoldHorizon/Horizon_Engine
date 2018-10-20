@@ -320,6 +320,8 @@ int ClassName::HandleEvents(Event& event)
 				
 					_currentLineSelected = -1;
 					_cursorPosition = 0;
+
+					_historyLine = 0;
 				}
 			}
 			break;
@@ -401,11 +403,19 @@ void ClassName::Render(float interpolation)
 		DrawLine(0, _openHeight - 39, SCREEN_WIDTH, _openHeight - 39, SDL_Color {0, 0, 0, 255});
 	}
 
-	// Draw history lines @Fix: don't properly stop rendering lines at the top of the window
+	// Draw history lines 
 	for (size_t i = _historyLine; i < _history.size(); i++)
 	{
+		int drawHeight = (_openHeight - 64 - (16 * i) + (_historyLine * 16));
+
+		// If trying to draw above the screen, we can stop drawing to save render time
+		if (drawHeight < -16) {
+			//std::cout << "DEBUG drawing above screen, i = " << i << std::endl;
+			break;
+		}
+
 		// First drop shadow, then text
-		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 64 - (16 * i) + 1 + (_historyLine * 16), ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8 + 1, drawHeight + 1, ALIGN_LEFT, {0, 0, 0, 255});
 
 		// Decide text color based on text type
 		SDL_Color *text_c;
@@ -423,7 +433,7 @@ void ClassName::Render(float interpolation)
 				text_c = &_textErrorColor;
 				break;
 		}
-		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8, _openHeight - 64 - (16 * i) + (_historyLine * 16), ALIGN_LEFT, *text_c);
+		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8, drawHeight, ALIGN_LEFT, *text_c);
 	}
 
 	// Draw the cursor
