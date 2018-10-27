@@ -31,7 +31,7 @@ void ClassName::Resume()
 
 int ClassName::HandleEvents(Event&)
 {
-
+	return -1;
 }
 
 void ClassName::Update()

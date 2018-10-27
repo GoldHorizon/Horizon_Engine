@@ -6,6 +6,7 @@
 #include "wall.h"
 #include "inputManager.h"
 #include "engineMethods.h"
+#include "panel.h"
 
 #include <iostream>
 
@@ -34,6 +35,8 @@ void ClassName::Initialize()
 	//_textType.SetFont(defaultFont);
 	//_textType.SetPosition(8, 8);
 	//Entities().AddEntity(&_textType);
+	
+	CreateUI();
 }
 
 void ClassName::Cleanup()
@@ -44,6 +47,7 @@ void ClassName::Cleanup()
 int ClassName::HandleEvents(Event& event)
 {
 	// We don't want to update the objects we are editing
+	_entities.HandleAllEvents(event);
 
 	if (event.ev.type == SDL_KEYDOWN)
 	{
@@ -201,20 +205,13 @@ void ClassName::Update()
 				obj->SetPosition(x, y);
 
 				// Breaks if we add to our own entity list, then try to load
-				//_entities.AddEntity(ball);
 				if (_levelName != "")
 				{
 					_currentLevel.AddEntity(obj);
 				}
-
-				// Debug
-				//std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
-				//std::cout << "Count: " << _currentLevel.GetCount() << std::endl;
 			}
 
 			if (_isDeleting) {
-
-				//std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
 				if (_currentLevel.CheckPoint(x, y) == true) {
 					// Delete the existing entity at this location
 					_currentLevel.RemoveEntity(x, y);
@@ -305,8 +302,9 @@ bool ClassName::LoadLevel()
 		}
 		else
 		{
-			//std::cout << "Error: Failed to load level " << _levelName << std::endl;
+			std::cout << "Failed to load level " << _levelName << std::endl;
 			std::cout << "Creating new level '" << _levelName << "'" << std::endl;
+
 		}
 		
 		return result;
@@ -333,9 +331,10 @@ void ClassName::SetLevel(std::string name)
 		//{
 		//	_levelName = oldLevel;
 		//}
+
 	} else std::cout << "DEBUG trying to edit blank level" << std::endl;
 
-	std::cout << "DEBUG Level name: " << _levelName << std::endl;
+	//std::cout << "DEBUG Level name: " << _levelName << std::endl;
 }
 
 void ClassName::SetLevel(Level* level)
@@ -343,14 +342,23 @@ void ClassName::SetLevel(Level* level)
 	std::cout << "Setting editor level to " << level->GetFileName() << "..." << std::endl;
 }
 
-std::string ClassName::GetLevel()
+Level* ClassName::GetLevel()
 {
-	return _levelName;
+	return &_currentLevel;
 }
 
 void ClassName::ResetLevel()
 {
 	_currentLevel.ClearEntities();
+}
+
+void ClassName::CreateUI()
+{
+	Panel* modeSelector = new Panel();
+	modeSelector->SetPosition(64, 64);
+	modeSelector->title = ("Mode");
+	modeSelector->type = PanelType::FOCUS;
+	_entities.AddEntity(modeSelector);
 }
 
 #ifdef ClassName

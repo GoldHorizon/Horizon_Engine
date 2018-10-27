@@ -26,11 +26,9 @@ public:
 	void SetFileName(std::string levelName);
 	std::string GetFileName();
 
-	//void SaveToFile();
-	void SaveLevel();	// NEW Save level
-
-	//bool LoadFromFile();
-	bool LoadLevel();	// NEW Load level
+	void SaveLevel();
+	bool LoadLevel();
+	void LoadEntity(std::string filePath, std::string fileName);
 
 	void AddEntity(Entity* obj);
 	void AddEntity(Entity* obj, int x, int y);
@@ -50,8 +48,4 @@ private:
 	std::string _name;
 
 	peMap _pointList;
-
-	// @todo: maybe for level position later on, for multiple levels?
-	int _lx;
-	int _ly;
 };

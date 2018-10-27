@@ -20,7 +20,9 @@ ClassName::~ClassName()
 
 void ClassName::Initialize()
 {
-	ChangeLevel("test_file");
+	_level = nullptr;
+
+	//ChangeLevel("test_file");
 
 	// Set global camera to be at 0, 0 in top left corner
 	globalCam->origin = (Align::MID_C);
@@ -54,7 +56,8 @@ int ClassName::HandleEvents(Event& event)
 {
 	_entities.HandleAllEvents(event);
 
-	_level->HandleAllEvents(event);
+	if (_level != nullptr)
+		_level->HandleAllEvents(event);
 
 	if (event.ev.type == SDL_KEYDOWN)
 	{
@@ -76,7 +79,8 @@ void ClassName::Update()
 	{
 		_entities.UpdateAll();
 
-		_level->UpdateAll();
+		if (_level != nullptr)
+			_level->UpdateAll();
 
 		if (Input::KeyHeld(SDLK_h)) globalCam->Move(-4, 0);
 		if (Input::KeyHeld(SDLK_j)) globalCam->Move(0, 4);
@@ -87,7 +91,8 @@ void ClassName::Update()
 
 void ClassName::Render(float interpolation)
 {
-	_level->RenderAll(interpolation, -globalCam->x(), -globalCam->y());
+	if (_level != nullptr)
+		_level->RenderAll(interpolation, -globalCam->x(), -globalCam->y());
 
     _entities.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
 }
@@ -114,14 +119,14 @@ void ClassName::AddLevel(Level* level)
 void ClassName::ChangeLevel(std::string name)
 {
 	if (_level == nullptr || name != _level->GetFileName()) {
-		if (_level == nullptr) delete _level;
+		if (_level != nullptr) delete _level;
 
 		Level* newLevel = new Level(name);
 
 		if (!newLevel->LoadLevel())
 		{
 			std::cout << "Error: Could not add level! Level was not found" << std::endl;
-			_level = new Level("mine_level");
+			//_level = new Level("mine_level");
 		}
 		else
 		{
@@ -134,30 +139,12 @@ void ClassName::ChangeLevel(std::string name)
 Level* ClassName::GetLevel()
 {
 	return _level;
-	//if (_levelList.size() == 1)
-	//{
-	//	return _levelList[0];
-	//}
-	//if (_levelList.size() == 0)
-	//{
-	//	std::cout << "Error: No level in level list" << std::endl;
-	//}
-	//else if (_levelList.size() > 1)
-	//{
-	//	std::cout << "Error: More than 1 level in level list" << std::endl;
-	//}
-
-	//return nullptr;
 }
 
 void ClassName::Restart()
 {
-	//for (int i = 0; i < _levelList.size(); i++)
-	//{
-	//	_levelList[i]->LoadLevel();
-	//}
-
-	_level->LoadLevel();
+	if (_level != nullptr)
+		_level->LoadLevel();
 }
 
 #ifdef ClassName

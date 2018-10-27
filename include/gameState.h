@@ -55,6 +55,10 @@ protected:
 	 * Protected Methods
 	 */
     void SetType(GameStateType type);
+
+	/*
+	 * Protected Attributes
+	 */
     EntityCollection _entities;
 
 private:

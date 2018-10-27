@@ -20,10 +20,7 @@ EntityCollection::EntityCollection()
 
 EntityCollection::~EntityCollection()
 {
-	while (_collection.size() > 0)
-	{
-		_collection.erase(_collection.begin());	
-	}
+	ClearEntities();
 }
 
 int EntityCollection::GetCount() const
@@ -149,43 +146,32 @@ void EntityCollection::ClearEntities()
 
 void EntityCollection::HandleAllEvents(Event& event)
 {
-	eList::const_iterator it = _collection.end();
+	eList::const_reverse_iterator it = _collection.rbegin();
 
-	it--;
-
-	do
+	while (it != _collection.rend())
 	{
-		// If the event has been blocked, stop checking entities with it.
-		if (event.blocked()) return;
-
-		if ((*it) != nullptr)
+		if ((*it) != nullptr && (*it)->visible)
 		{
 			(*it)->HandleEvents(event);
 		}
 
-		it--;
+		it++;
 	}
-	while (it != _collection.end());
 }
 
 void EntityCollection::UpdateAll()
 {
-	eList::const_iterator it = _collection.end();
+	eList::const_reverse_iterator it = _collection.rbegin();
 
-	it--;
-
-	do
+	while (it != _collection.rend())
 	{
-		// Uncomment to debug Update() on different entities
-		//std::cerr << it->first << std::endl;
-		if ((*it) != nullptr && (*it)->active)
+		if ((*it) != nullptr && (*it)->visible)
 		{
 			(*it)->Update();
 		}
 
-		it--;
+		it++;
 	}
-	while (it != _collection.begin());
 }
 
 void EntityCollection::RenderAll(float interpolation, int xOffset, int yOffset)
