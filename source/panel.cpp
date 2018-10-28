@@ -57,7 +57,7 @@ void Panel::HandleEvents(Event& event)
 							//std::cout << "Grabbed!" << std::endl;
 						}
 					}
-					// If we press right mb, toggle if the panel is locked
+					// If we press right mb, toggle if the panel is following the camera
 					else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
 						if (InTitleBar({mx, my}) && !_grabbed) {
 							SetFollowCamera(!_followCamera);
@@ -139,16 +139,18 @@ void Panel::RenderCustom(float interpolation, int xOffset, int yOffset)
 bool Panel::InWindow(vec2<int> pos)
 {
 	if (_followCamera) {
-		if (pos.x >= this->x 
-			&& pos.x < this->x + _size.x 
-			&& pos.y >= this->y 
-			&& pos.y < this->y + _size.y)
+		//if (pos.x >= this->x 
+		//	&& pos.x < this->x + _size.x 
+		//	&& pos.y >= this->y 
+		//	&& pos.y < this->y + _size.y)
+		if (ContainsPoint(vec2{ int(x), int(y) }, size(), pos))
 			return true;
 	} else {
-		if (pos.x >= this->x - globalCam->x() 
-			&& pos.x < this->x - globalCam->x() + _size.x 
-			&& pos.y >= this->y - globalCam->y() 
-			&& pos.y < this->y - globalCam->y() + _size.y) 
+		//if (pos.x >= this->x - globalCam->x() 
+		//	&& pos.x < this->x - globalCam->x() + _size.x 
+		//	&& pos.y >= this->y - globalCam->y() 
+		//	&& pos.y < this->y - globalCam->y() + _size.y) 
+		if (ContainsPoint(vec2{ int(x), int(y) } - vec2{globalCam->x(), globalCam->y()}, size(), pos))
 			return true;
 	}
 	return false;

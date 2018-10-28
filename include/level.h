@@ -39,6 +39,8 @@ public:
 	void RemoveEntity(int x, int y);
 	void RemoveLastEntity();
 
+	void RemoveEntities(int x, int y);
+
 	bool CheckPoint(int x, int y);
 
 private:

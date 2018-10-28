@@ -133,6 +133,24 @@ vec2<int> ScreenToWorld(int x, int y)
 	return ScreenToWorld({x, y});
 }
 
+bool ContainsPoint(const vec4<int> & rect, const vec2<int> & point)
+{
+	bool inside = false;
+
+	inside = (point.x >= rect.x && point.x < rect.x + rect.z) && (point.y >= rect.y && point.y < rect.y + rect.w);
+
+	return inside;
+}
+
+bool ContainsPoint(const vec2<int> & rect_pos, const vec2<int> & rect_dim, const vec2<int> & point)
+{
+	bool inside = false;
+
+	inside = (point.x >= rect_pos.x && point.x < rect_pos.x + rect_dim.x) && (point.y >= rect_pos.y && point.y < rect_pos.y + rect_dim.y);
+
+	return inside;
+}
+
 bool operator<(const SDL_Point &lhs, const SDL_Point &rhs) 
 {
     return (lhs.x < rhs.x) || ((lhs.x == rhs.x) && (lhs.y < rhs.y));

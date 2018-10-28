@@ -59,9 +59,10 @@ private:
 
 	//Text _textType; // @Todo: may have to replace this
 
-	// If user is creating/deleting any entities
+	// Entity mode
 	bool _isCreating;
 	bool _isDeleting;
+	bool _isSelecting;
 
 	void CreateUI();
 

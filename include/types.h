@@ -178,4 +178,3 @@ struct vec4 : public vec3<T> {
 		return output;
 	}
 };
-
