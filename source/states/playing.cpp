@@ -22,24 +22,12 @@ void ClassName::Initialize()
 {
 	_level = nullptr;
 
+	// @todo Set this to be based on a startup variables file eventually
 	//ChangeLevel("test_file");
 
 	// Set global camera to be at 0, 0 in top left corner
 	globalCam->origin = (Align::MID_C);
 	globalCam->SetPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-
-	//AddLevel("another_test.txt");
-	
-	// Panel test code
-	//Panel* testPanel = new Panel();
-	//testPanel->SetPosition(64, 64);
-	//testPanel->title = ("Test Panel");
-	//_entities.AddEntity(testPanel);
-
-	//Panel* testPanel2 = new Panel();
-	//testPanel2->SetPosition(400, 64);
-	//testPanel2->title = ("Panel 2");
-	//_entities.AddEntity(testPanel2);
 }
 
 void ClassName::Cleanup()
@@ -119,8 +107,6 @@ void ClassName::AddLevel(Level* level)
 void ClassName::ChangeLevel(std::string name)
 {
 	if (_level == nullptr || name != _level->GetFileName()) {
-		if (_level != nullptr) delete _level;
-
 		Level* newLevel = new Level(name);
 
 		if (!newLevel->LoadLevel())
@@ -130,6 +116,9 @@ void ClassName::ChangeLevel(std::string name)
 		}
 		else
 		{
+			if (_level != nullptr) 
+				delete _level;
+
 			//AddLevel(newLevel);
 			_level = newLevel;
 		}

@@ -205,7 +205,8 @@ void Level::AddEntity(Entity* obj, int x, int y)
 
 void Level::RemoveEntity(Entity* obj)
 {
-	// @Todo: if needed
+	delete obj;
+	_collection.remove(obj);
 }
 
 void Level::RemoveEntity(int index)
@@ -253,6 +254,7 @@ void Level::RemoveEntity(int x, int y)
 		it = _pointList.find(point);
 
 		if (it != _pointList.end())
+			ep = it->second;
 			_pointList.erase(it);
 
 		RemoveByIndex(index);
@@ -266,6 +268,38 @@ void Level::RemoveLastEntity()
 	RemoveByIndex(count - 1);
 }
 
+void Level::RemoveEntities(int x, int y)
+{
+	for (auto ep : _collection) {
+		// If the entity has an image loaded...
+		if (ep->image()->width() > 0) {
+			vec2<int> e_pos;
+			vec2<int> e_dim;
+
+			// Get image position based on it's offset
+			if (ep->image()->origin.x != 0 || ep->image()->origin.y != 0) {
+				e_pos = { static_cast<int>(ep->x - ep->image()->origin.x), static_cast<int>(ep->y - ep->image()->origin.y) };
+			} else {
+				e_pos = { static_cast<int>(ep->x), static_cast<int>(ep->y) };
+
+			}
+
+			// Check if it's a sprite sheet or not...
+			if (ep->image()->spriteDimensions().x > 0) {
+				// Is a sprite sheet
+				e_dim = { static_cast<int>(ep->image()->spriteDimensions().x), static_cast<int>(ep->image()->spriteDimensions().y) };
+			} else {
+				// Not a sprite sheet
+				e_dim = { static_cast<int>(ep->image()->width()), static_cast<int>(ep->image()->height()) };
+			}
+			
+			if (ContainsPoint(e_pos, e_dim, vec2<int>{x, y})) {
+				RemoveEntity(ep);
+				return;
+			}
+		}
+	}
+}
 
 bool Level::CheckPoint(int x, int y)
 {
