@@ -199,3 +199,8 @@ Entity* EntityCollection::operator[](int ID)
 	return GetByIndex(ID);
 }
 
+eList& EntityCollection::collection()
+{
+	return _collection;
+}
+

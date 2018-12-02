@@ -9,6 +9,7 @@
 #include "panel.h"
 
 #include <iostream>
+#include <cassert>
 
 #define ClassName StateEditor
 
@@ -167,7 +168,7 @@ void ClassName::Update()
 
 				if (_currentLevel.CheckPoint(mx, my) == true) {
 					// Delete the existing entity at this location (soon to be unnecessary)
-					_currentLevel.RemoveEntity(mx, my);
+					//_currentLevel.RemoveEntity(mx, my);
 				}
 
 				//////////////////////
@@ -191,14 +192,6 @@ void ClassName::Update()
 						obj = new Wall();
 						break;
 
-					// probably won't want to add text...yet?
-					//case EditorEntityType::TEXT:
-					//	obj = new Text();
-					//	std::string text;
-					//	std::getline(std::cin, text);
-					//	static_cast<Text*>(obj)->SetText(text);
-					//	break;
-
 					default:
 						std::cout << "Error: Trying to add entity to level of invalid type (not in enum class)" << std::endl;
 				}
@@ -212,10 +205,26 @@ void ClassName::Update()
 				{
 					_currentLevel.AddEntity(obj);
 				}
+
+				// Temporary, just to practice creation
+				_isCreating = false; // @todo fix this stuff
 			}
 
 			else if (_isDeleting) {
-				_currentLevel.RemoveEntities(mx, my);
+				// @Todo Figure out deletion algorithm?!
+
+				//auto iter = _levelEntities.begin();
+
+				//while (iter != _levelEntities.end()) {
+				//	Entity* ep = (*iter).entPtr;
+				//	if (ep->ImageContainsPoint(vec2<int>{mx, my})) {
+				//		std::cout << "MARKED FOR DELETION" << std::endl;
+				//	}
+
+				//	iter++;
+				//}
+
+				//_currentLevel.RemoveEntities(mx, my);
 			}
 
 			else if (_isSelecting) {
@@ -254,7 +263,18 @@ void ClassName::Render(float interpolation)
 	}
 
 	// Draw level entities, without updating them
-	_currentLevel.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
+	//_currentLevel.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
+
+	// Temp render code, testing
+	auto iter = _levelEntities.begin();
+
+	while (iter != _levelEntities.end()) {
+		if ((*iter).entPtr != nullptr) {
+			(*iter).entPtr->Render(interpolation, -globalCam->x(), -globalCam->y());
+		}
+
+		iter++;
+	}
 
 	// Render editor objects (like panels)
 	_entities.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
@@ -300,13 +320,37 @@ bool ClassName::LoadLevel()
 
 		if (result)
 		{
-			//std::cout << "Loaded level " << _levelName << std::endl;
+			//while (_levelEntities.size > 0) {
+			//	_levelEntities.pop_back();
+			//}
+
+			//auto iter = _currentLevel.collection().begin();
+
+			//while (iter != _currentLevel.collection().end()) {
+			//	assert((*iter) != nullptr);
+
+			//	_levelEntities.push_back(EditorEnt(*iter));
+			//	iter++;
+			//}
 		}
 		else
 		{
-			std::cout << "Failed to load level " << _levelName << std::endl;
-			std::cout << "Creating new level '" << _levelName << "'" << std::endl;
+			std::cout << "Couldn't load level... Creating new level '" << _levelName << "'" << std::endl;
+			//AddOutput("Couldn't load  level, creating new one...");
 
+		}
+
+		while (_levelEntities.size() > 0) {
+			_levelEntities.pop_back();
+		}
+
+		auto iter = _currentLevel.collection().begin();
+
+		while (iter != _currentLevel.collection().end()) {
+			assert((*iter) != nullptr);
+
+			_levelEntities.push_back(EditorEnt(*iter));
+			iter++;
 		}
 		
 		return result;

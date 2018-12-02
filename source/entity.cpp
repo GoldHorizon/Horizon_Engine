@@ -1,4 +1,5 @@
 #include "entity.h"
+//#include "types.h"
 #include "globals.h"
 #include "constants.h"
 #include "engineMethods.h"
@@ -87,6 +88,14 @@ void Entity::Move(float x, float y)
 Entity* Entity::NewInstance()
 {
 	return nullptr;
+}
+
+bool Entity::ImageContainsPoint(vec2<int> &pt)
+{
+	return (image() != nullptr && 
+			ContainsPoint(vec2<int> {static_cast<int>(x - image()->origin.x), static_cast<int>(y - image()->origin.y)}, 
+						  vec2<int> {(image()->width()), (image()->height())}, 
+						  pt));
 }
 
 std::string Entity::Serialize()

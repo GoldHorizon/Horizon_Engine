@@ -57,7 +57,7 @@ private:
 	EditorEntityType _entityType;
 	bool _drawType;
 
-	//Text _textType; // @Todo: may have to replace this
+	//Text _textType; // @Todo: may have to reuse this
 
 	// Entity mode
 	bool _isCreating;
@@ -66,6 +66,17 @@ private:
 
 	void CreateUI();
 
+	// Editor entity struct
+	struct EditorEnt {
+		Entity* entPtr;
+
+		bool _selected = false;
+		bool _grabbed = false;
+
+		EditorEnt(Entity* ep) : entPtr(ep) {};
+	};
+
+	std::vector<EditorEnt> _levelEntities;
 };
 
 #ifdef ClassName

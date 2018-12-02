@@ -139,17 +139,9 @@ void Panel::RenderCustom(float interpolation, int xOffset, int yOffset)
 bool Panel::InWindow(vec2<int> pos)
 {
 	if (_followCamera) {
-		//if (pos.x >= this->x 
-		//	&& pos.x < this->x + _size.x 
-		//	&& pos.y >= this->y 
-		//	&& pos.y < this->y + _size.y)
 		if (ContainsPoint(vec2{ int(x), int(y) }, size(), pos))
 			return true;
 	} else {
-		//if (pos.x >= this->x - globalCam->x() 
-		//	&& pos.x < this->x - globalCam->x() + _size.x 
-		//	&& pos.y >= this->y - globalCam->y() 
-		//	&& pos.y < this->y - globalCam->y() + _size.y) 
 		if (ContainsPoint(vec2{ int(x), int(y) } - vec2{globalCam->x(), globalCam->y()}, size(), pos))
 			return true;
 	}
@@ -159,16 +151,18 @@ bool Panel::InWindow(vec2<int> pos)
 bool Panel::InTitleBar(vec2<int> pos)
 {
 	if (_followCamera) {
-		if (pos.x >= this->x 
-			&& pos.x < this->x + _size.x 
-			&& pos.y >= this->y 
-			&& pos.y < this->y + _barHeight)
+		//if (pos.x >= this->x 
+		//	&& pos.x < this->x + _size.x 
+		//	&& pos.y >= this->y 
+		//	&& pos.y < this->y + _barHeight)
+		if (ContainsPoint(vec2{ int(x), int(y) }, vec2{ size().x, _barHeight }, pos))
 			return true;
 	} else {
-		if (pos.x >= this->x - globalCam->x()
-			&& pos.x < this->x - globalCam->x() + _size.x 
-			&& pos.y >= this->y - globalCam->y() 
-			&& pos.y < this->y - globalCam->y() + _barHeight) 
+		//if (pos.x >= this->x - globalCam->x()
+		//	&& pos.x < this->x - globalCam->x() + _size.x 
+		//	&& pos.y >= this->y - globalCam->y() 
+		//	&& pos.y < this->y - globalCam->y() + _barHeight) 
+		if (ContainsPoint(vec2{ int(x), int(y) } - vec2{ globalCam->x(), globalCam->y() }, vec2{ size().x, _barHeight }, pos))
 			return true;
 	}
 	return false;

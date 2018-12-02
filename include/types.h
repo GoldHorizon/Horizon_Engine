@@ -7,8 +7,10 @@
 #include <iostream>
 #include <math.h>
 
-#include "entity.h"
+//#include "entity.h"
+#include "SDL.h"
 
+class Entity;
 
 typedef std::list<Entity*> eList;
 typedef std::vector<std::string> sVector;

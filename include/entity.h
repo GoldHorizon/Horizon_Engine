@@ -2,6 +2,7 @@
 
 #include "image.h"
 #include "event.h"
+#include "types.h"
 
 #include "SDL.h"
 
@@ -53,6 +54,9 @@ class Entity
 		// NewInstance()    - Returns a new entity of a certain type
 		virtual Entity* NewInstance();
 
+		// ContainsPoint(vec2<int>)
+		bool ImageContainsPoint(vec2<int> &pt);
+
 		/*
 		 * Serialization
 		 */
@@ -99,7 +103,7 @@ class Entity
 	private:
 
 		/*
-		 * Public Attributes
+		 * Private Attributes
 		 */
 		Image _image;			// Image stored in the entity
 
