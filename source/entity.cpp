@@ -92,6 +92,8 @@ Entity* Entity::NewInstance()
 
 bool Entity::ImageContainsPoint(vec2<int> &pt)
 {
+	if (image() == nullptr) return false;
+
 	return (image() != nullptr && 
 			ContainsPoint(vec2<int> {static_cast<int>(x - image()->origin.x), static_cast<int>(y - image()->origin.y)}, 
 						  vec2<int> {(image()->width()), (image()->height())}, 

@@ -166,11 +166,6 @@ void ClassName::Update()
 				if (temp.x < 0) mx -= _gridSize;
 				if (temp.y < 0) my -= _gridSize;
 
-				if (_currentLevel.CheckPoint(mx, my) == true) {
-					// Delete the existing entity at this location (soon to be unnecessary)
-					//_currentLevel.RemoveEntity(mx, my);
-				}
-
 				//////////////////////
 				//
 				// Entity Selection
@@ -211,18 +206,20 @@ void ClassName::Update()
 			}
 
 			else if (_isDeleting) {
-				// @Todo Figure out deletion algorithm?!
+				// @Cleanup Seems to be working, but may need to be checked on or refactored
+				auto iter = _levelEntities.begin();
 
-				//auto iter = _levelEntities.begin();
-
-				//while (iter != _levelEntities.end()) {
-				//	Entity* ep = (*iter).entPtr;
-				//	if (ep->ImageContainsPoint(vec2<int>{mx, my})) {
-				//		std::cout << "MARKED FOR DELETION" << std::endl;
-				//	}
-
-				//	iter++;
-				//}
+				while (iter != _levelEntities.end()) {
+					Entity* ep = (*iter).entPtr;
+					if (ep->ImageContainsPoint(vec2<int>{mx, my})) {
+						//std::cout << "MARKED FOR DELETION" << std::endl;
+						//delete (*iter).entPtr; // @Cleanup Shouldn't this be outside of RemoveEntity??
+						_currentLevel.RemoveEntity((*iter).entPtr);
+						iter = _levelEntities.erase(iter);
+					}
+					else
+						iter++;
+				}
 
 				//_currentLevel.RemoveEntities(mx, my);
 			}
@@ -395,6 +392,8 @@ Level* ClassName::GetLevel()
 
 void ClassName::ResetLevel()
 {
+	for (auto it = _levelEntities.begin(); it != _levelEntities.end(); it = _levelEntities.erase(it));
+
 	_currentLevel.ClearEntities();
 }
 

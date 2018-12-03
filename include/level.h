@@ -41,13 +41,9 @@ public:
 
 	void RemoveEntities(int x, int y);
 
-	bool CheckPoint(int x, int y);
-
 private:
 	/*
 	 * Private Attributes
 	 */
 	std::string _name;
-
-	peMap _pointList;
 };

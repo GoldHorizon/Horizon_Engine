@@ -45,7 +45,7 @@ void Level::SaveLevel()
 	// 	2)  Save level details in level file (level width? gamemode? camera? maybe for future use) 
 	// 	3)  Save individual entity files (instead of all in one, for easier readability)
 
-	assert (_name != "" && "Tried saving level without filename!");
+	assert(_name != "" && "Tried saving level without filename!");
 
 	if (_name == "") return;
 
@@ -71,6 +71,33 @@ void Level::SaveLevel()
 
 	// Windows API functions
 	CreateDirectory(thisLevelsFolder.c_str(), NULL);
+
+	// Empty out the directory
+	HANDLE fileHandle;
+	WIN32_FIND_DATA fileData;
+
+	fileHandle = FindFirstFile(std::string(thisLevelsFolder + "*").c_str(), &fileData);
+
+	if (fileHandle == INVALID_HANDLE_VALUE) {
+		std::cout << "Error: Could not get a file handle using the specified directory" << thisLevelsFolder << std::endl;
+		FindClose(fileHandle);
+		return;
+	}
+	
+	do 
+	{
+		if (fileData.cFileName[0] == '.' || fileData.cFileName[0] == '-') continue;
+
+		std::cout << fileData.cFileName << std::endl;
+
+		std::string tempPath = thisLevelsFolder;
+
+		DeleteFile(tempPath.append(fileData.cFileName).c_str());
+
+	} while (FindNextFile(fileHandle, &fileData));
+
+	assert(FindClose(fileHandle) && "Could not close the file handle when loading level");
+
 #else
 	assert(false && "Level saving not implemented on current OS!");
 #endif
@@ -136,7 +163,7 @@ bool Level::LoadLevel()
 	std::cout << "DIRECTORY CONTENTS:" << std::endl;
 	do 
 	{
-		if (fileData.cFileName[0] == '.') continue;
+		if (fileData.cFileName[0] == '.' || fileData.cFileName[0] == '-') continue;
 		std::cout << fileData.cFileName << std::endl;
 
 		LoadEntity(thisLevelsFolder + fileData.cFileName, fileData.cFileName);
@@ -193,8 +220,6 @@ void Level::AddEntity(Entity* obj)
 	EntityCollection::AddEntity(obj);
 
 	const SDL_Point p = {(int)obj->x, (int)obj->y};
-
-	_pointList.insert(pePair(p, obj));
 }
 
 void Level::AddEntity(Entity* obj, int x, int y)
@@ -215,12 +240,6 @@ void Level::RemoveEntity(int index)
 	if (ep != nullptr)
 	{
 		peMap::iterator it;
-
-		SDL_Point point = {(int)ep->x, (int)ep->y};
-		it = _pointList.find(point);
-
-		if (it != _pointList.end())
-			_pointList.erase(it);
 
 		RemoveByIndex(index);
 	}
@@ -251,11 +270,6 @@ void Level::RemoveEntity(int x, int y)
 		peMap::iterator it;
 
 		SDL_Point point = {(int)ep->x, (int)ep->y};
-		it = _pointList.find(point);
-
-		if (it != _pointList.end())
-			ep = it->second;
-			_pointList.erase(it);
 
 		RemoveByIndex(index);
 	}
@@ -298,11 +312,4 @@ void Level::RemoveEntities(int x, int y)
 			}
 		}
 	}
-}
-
-bool Level::CheckPoint(int x, int y)
-{
-	peMap::iterator it = _pointList.find(SDL_Point {x, y});
-
-	return (it != _pointList.end());
 }

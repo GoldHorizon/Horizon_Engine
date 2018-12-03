@@ -70,6 +70,8 @@ private:
 	struct EditorEnt {
 		Entity* entPtr;
 
+		bool _locked = false;
+		bool _hidden = false;
 		bool _selected = false;
 		bool _grabbed = false;
 
