@@ -66,3 +66,4 @@ test_*.txt
 another_test.txt
 another_test2.txt
 
+/CppProperties.json
