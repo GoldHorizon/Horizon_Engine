@@ -58,7 +58,7 @@ cmake_install.cmake
 *.app
 
 # Level files
-*.entity
+#*.entity
 
 # Misc
 #*.txt
