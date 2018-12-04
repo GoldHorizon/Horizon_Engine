@@ -13,7 +13,7 @@ Debug/*
 cmake-build-debug/*
 Win32/*
 x64/*
-sdl/*
+#sdl/*
 
 # VS Stuff
 .vs/*
