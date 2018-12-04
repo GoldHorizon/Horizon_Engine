@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{620A06C9-007F-42CD-B29D-4C743A3E563E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level1</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\Users\Nick\Documents\Git\Horizon_Engine\include\states;C:\Users\Nick\Documents\Git\Horizon_Engine\include;C:\Users\Nick\Documents\Workspace\Libraries\SDL2\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>C:\Users\Nick\Documents\Git\Horizon_Engine\sdl\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Nick\Documents\Git\Horizon_Engine\include\states;C:\Users\Nick\Documents\Git\Horizon_Engine\include;C:\Users\Nick\Documents\Workspace\Libraries\SDL2\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Users\Nick\Documents\Git\Horizon_Engine\sdl\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="source\ball.cpp" />
+    <ClCompile Include="source\camera.cpp" />
+    <ClCompile Include="source\drawing.cpp" />
+    <ClCompile Include="source\engineMethods.cpp" />
+    <ClCompile Include="source\entity.cpp" />
+    <ClCompile Include="source\entityCollection.cpp" />
+    <ClCompile Include="source\event.cpp" />
+    <ClCompile Include="source\file.cpp" />
+    <ClCompile Include="source\font.cpp" />
+    <ClCompile Include="source\game.cpp" />
+    <ClCompile Include="source\gameState.cpp" />
+    <ClCompile Include="source\globals.cpp" />
+    <ClCompile Include="source\image.cpp" />
+    <ClCompile Include="source\inputManager.cpp" />
+    <ClCompile Include="source\level.cpp" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\mineBoard.cpp" />
+    <ClCompile Include="source\mineTile.cpp" />
+    <ClCompile Include="source\panel.cpp" />
+    <ClCompile Include="source\player.cpp" />
+    <ClCompile Include="source\states\console.cpp" />
+    <ClCompile Include="source\states\editor.cpp" />
+    <ClCompile Include="source\states\minesweeper.cpp" />
+    <ClCompile Include="source\states\options.cpp" />
+    <ClCompile Include="source\states\pauseMenu.cpp" />
+    <ClCompile Include="source\states\playing.cpp" />
+    <ClCompile Include="source\states\titleScreen.cpp" />
+    <ClCompile Include="source\states\uninitialized.cpp" />
+    <ClCompile Include="source\text.cpp" />
+    <ClCompile Include="source\wall.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\ball.h" />
+    <ClInclude Include="include\camera.h" />
+    <ClInclude Include="include\constants.h" />
+    <ClInclude Include="include\drawing.h" />
+    <ClInclude Include="include\engineMethods.h" />
+    <ClInclude Include="include\entity.h" />
+    <ClInclude Include="include\entityCollection.h" />
+    <ClInclude Include="include\enumerations.h" />
+    <ClInclude Include="include\event.h" />
+    <ClInclude Include="include\file.h" />
+    <ClInclude Include="include\font.h" />
+    <ClInclude Include="include\game.h" />
+    <ClInclude Include="include\gameState.h" />
+    <ClInclude Include="include\globals.h" />
+    <ClInclude Include="include\image.h" />
+    <ClInclude Include="include\inputManager.h" />
+    <ClInclude Include="include\level.h" />
+    <ClInclude Include="include\mineBoard.h" />
+    <ClInclude Include="include\mineTile.h" />
+    <ClInclude Include="include\panel.h" />
+    <ClInclude Include="include\player.h" />
+    <ClInclude Include="include\prototypes.h" />
+    <ClInclude Include="include\states\console.h" />
+    <ClInclude Include="include\states\editor.h" />
+    <ClInclude Include="include\states\minesweeper.h" />
+    <ClInclude Include="include\states\options.h" />
+    <ClInclude Include="include\states\pauseMenu.h" />
+    <ClInclude Include="include\states\playing.h" />
+    <ClInclude Include="include\states\titleScreen.h" />
+    <ClInclude Include="include\states\uninitialized.h" />
+    <ClInclude Include="include\text.h" />
+    <ClInclude Include="include\types.h" />
+    <ClInclude Include="include\variables.h" />
+    <ClInclude Include="include\wall.h" />
+    <ClInclude Include="sdl\include\begin_code.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

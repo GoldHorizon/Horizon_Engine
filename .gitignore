@@ -17,9 +17,9 @@ sdl/*
 
 # VS Stuff
 .vs/*
-*.vcxproj
-*.vcxproj.*
-*.sln
+#*.vcxproj
+#*.vcxproj.*
+#*.sln
 
 # CMake Stuff
 CMakeCache.txt
