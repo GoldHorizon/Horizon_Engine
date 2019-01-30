@@ -81,6 +81,8 @@ void EntityCollection::AddEntity(Entity* entity)
 	_collection.push_back(entity);
 }
 
+// @Cleanup: should we be deleteing the member when removing it?
+// 	Look at ALL remove functions to check this
 void EntityCollection::RemoveByName(std::string name)
 {
 	eList::const_iterator it = _collection.begin();
