@@ -72,6 +72,7 @@ class EntityCollection
 		 * Get Methods
 		 */
 		Entity* operator[](int ID);
+		eList& collection();
 
 		/*
 		 * Set Methods

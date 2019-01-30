@@ -6,8 +6,10 @@
 #include "wall.h"
 #include "inputManager.h"
 #include "engineMethods.h"
+#include "panel.h"
 
 #include <iostream>
+#include <cassert>
 
 #define ClassName StateEditor
 
@@ -29,11 +31,14 @@ void ClassName::Initialize()
 
 	_isCreating = false;
 	_isDeleting = false;
+	_isSelecting = false;
 
 	_drawType = true;
 	//_textType.SetFont(defaultFont);
 	//_textType.SetPosition(8, 8);
 	//Entities().AddEntity(&_textType);
+	
+	CreateUI();
 }
 
 void ClassName::Cleanup()
@@ -44,6 +49,7 @@ void ClassName::Cleanup()
 int ClassName::HandleEvents(Event& event)
 {
 	// We don't want to update the objects we are editing
+	_entities.HandleAllEvents(event);
 
 	if (event.ev.type == SDL_KEYDOWN)
 	{
@@ -85,44 +91,47 @@ int ClassName::HandleEvents(Event& event)
 		}
 	}
 
-	else if (event.ev.type == SDL_MOUSEBUTTONDOWN && 
+	else if (!event.blocked()) {
+		if (event.ev.type == SDL_MOUSEBUTTONDOWN &&
 			event.ev.button.clicks == 1)
-	{
-		if (event.ev.button.button == SDL_BUTTON_LEFT) {
-			_isCreating = true;
-		}
-		else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
-			_isDeleting = true;
-		}
-	}
-	else if (event.ev.type == SDL_MOUSEBUTTONUP &&
-			event.ev.button.clicks == 1) 
-	{
-		if (event.ev.button.button == SDL_BUTTON_LEFT) {
-			_isCreating = false;
-		}
-		else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
-			_isDeleting = false;
-		}
-	}
-
-	else if (event.ev.type == SDL_MOUSEWHEEL)
-	{
-		if (event.ev.wheel.y < 0)
 		{
-			_entityType = static_cast<EditorEntityType>((static_cast<int>(_entityType)) + 1);	
-
-			if (static_cast<int>(_entityType) >= static_cast<int>(EditorEntityType::Count))
-				_entityType = static_cast<EditorEntityType>(0);
+			if (event.ev.button.button == SDL_BUTTON_LEFT) {
+				_isCreating = true;
+			}
+			else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
+				_isDeleting = true;
+			}
 		}
-		else if (event.ev.wheel.y > 0)
+		else if (event.ev.type == SDL_MOUSEBUTTONUP &&
+			event.ev.button.clicks == 1)
 		{
-			_entityType = static_cast<EditorEntityType>((static_cast<int>(_entityType)) - 1);	
+			if (event.ev.button.button == SDL_BUTTON_LEFT) {
+				_isCreating = false;
+			}
+			else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
+				_isDeleting = false;
+			}
+		}
+		else if (event.ev.type == SDL_MOUSEWHEEL)
+		{
+			if (event.ev.wheel.y < 0)
+			{
+				_entityType = static_cast<EditorEntityType>((static_cast<int>(_entityType)) + 1);	
 
-			if (static_cast<int>(_entityType) < 0)
-				_entityType = static_cast<EditorEntityType>(static_cast<int>(EditorEntityType::Count) - 1);
+				if (static_cast<int>(_entityType) >= static_cast<int>(EditorEntityType::Count))
+					_entityType = static_cast<EditorEntityType>(0);
+			}
+			else if (event.ev.wheel.y > 0)
+			{
+				_entityType = static_cast<EditorEntityType>((static_cast<int>(_entityType)) - 1);	
+
+				if (static_cast<int>(_entityType) < 0)
+					_entityType = static_cast<EditorEntityType>(static_cast<int>(EditorEntityType::Count) - 1);
+			}
 		}
 	}
+
+	
 
 	return -1;
 }
@@ -140,29 +149,23 @@ void ClassName::Update()
 		if (Input::KeyHeld(SDLK_k)) globalCam->Move(0, -4);
 		if (Input::KeyHeld(SDLK_l)) globalCam->Move(4, 0);
 
-		if (_isCreating != _isDeleting) {
-			int x, y;
+		if (_isCreating || _isDeleting) {
+			int mx, my;
 
-			SDL_GetMouseState(&x, &y);
+			SDL_GetMouseState(&mx, &my);
 
-			vec2<int> temp = ScreenToWorld(x, y);
-
-			x = temp.x - (temp.x % _gridSize);
-			y = temp.y - (temp.y % _gridSize);
-
-			if (temp.x < 0) x -= _gridSize;
-			if (temp.y < 0) y -= _gridSize;
+			vec2<int> temp = ScreenToWorld(mx, my);
 
 			if (_isCreating) {
 
-				//std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
-				if (_currentLevel.CheckPoint(x, y) == true) {
-					// Delete the existing entity at this location
-					_currentLevel.RemoveEntity(x, y);
-				}
+				// For creating we will put the object on the grid 
+				// (eventually check if we have grid turned on or not)
+				mx = temp.x - (temp.x % _gridSize);
+				my = temp.y - (temp.y % _gridSize);
 
-				// Try to create ball at coords.
-				// @todo: find a way to select the entity we want to create...
+				if (temp.x < 0) mx -= _gridSize;
+				if (temp.y < 0) my -= _gridSize;
+
 				//////////////////////
 				//
 				// Entity Selection
@@ -184,41 +187,45 @@ void ClassName::Update()
 						obj = new Wall();
 						break;
 
-					// Probably won't want to add text...
-					//case EditorEntityType::TEXT:
-					//	obj = new Text();
-					//	std::string text;
-					//	std::getline(std::cin, text);
-					//	static_cast<Text*>(obj)->SetText(text);
-					//	break;
-
 					default:
 						std::cout << "Error: Trying to add entity to level of invalid type (not in enum class)" << std::endl;
 				}
 
 				if (obj == nullptr) return;
 
-				obj->SetPosition(x, y);
+				obj->SetPosition(mx + obj->image()->origin.x, my + obj->image()->origin.y);
 
 				// Breaks if we add to our own entity list, then try to load
-				//_entities.AddEntity(ball);
 				if (_levelName != "")
 				{
 					_currentLevel.AddEntity(obj);
 				}
 
-				// Debug
-				//std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
-				//std::cout << "Count: " << _currentLevel.GetCount() << std::endl;
+				// Temporary, just to practice creation
+				_isCreating = false; // @todo fix this stuff
 			}
 
-			if (_isDeleting) {
+			else if (_isDeleting) {
+				// @Cleanup Seems to be working, but may need to be checked on or refactored
+				auto iter = _levelEntities.begin();
 
-				//std::cout << _currentLevel.CheckPoint(x, y) << std::endl;
-				if (_currentLevel.CheckPoint(x, y) == true) {
-					// Delete the existing entity at this location
-					_currentLevel.RemoveEntity(x, y);
+				while (iter != _levelEntities.end()) {
+					Entity* ep = (*iter).entPtr;
+					if (ep->ImageContainsPoint(vec2<int>{mx, my})) {
+						//std::cout << "MARKED FOR DELETION" << std::endl;
+						//delete (*iter).entPtr; // @Cleanup Shouldn't this be outside of RemoveEntity??
+						_currentLevel.RemoveEntity((*iter).entPtr);
+						iter = _levelEntities.erase(iter);
+					}
+					else
+						iter++;
 				}
+
+				//_currentLevel.RemoveEntities(mx, my);
+			}
+
+			else if (_isSelecting) {
+				// @todo
 			}
 		}
 	}
@@ -252,11 +259,22 @@ void ClassName::Render(float interpolation)
 		}
 	}
 
-	// We will render objects, but not update them
-    _entities.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
-
 	// Draw level entities, without updating them
-	_currentLevel.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
+	//_currentLevel.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
+
+	// Temp render code, testing
+	auto iter = _levelEntities.begin();
+
+	while (iter != _levelEntities.end()) {
+		if ((*iter).entPtr != nullptr) {
+			(*iter).entPtr->Render(interpolation, -globalCam->x(), -globalCam->y());
+		}
+
+		iter++;
+	}
+
+	// Render editor objects (like panels)
+	_entities.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
 
 	// Draw object type
 	if (_drawType)
@@ -288,8 +306,6 @@ void ClassName::SaveLevel()
 {
 	if (_levelName != "")
 		_currentLevel.SaveLevel();
-
-	// @todo: Save entities that were added to the _currentLevel's collection through the editor onto file.
 }
 
 bool ClassName::LoadLevel()
@@ -301,12 +317,37 @@ bool ClassName::LoadLevel()
 
 		if (result)
 		{
-			//std::cout << "Loaded level " << _levelName << std::endl;
+			//while (_levelEntities.size > 0) {
+			//	_levelEntities.pop_back();
+			//}
+
+			//auto iter = _currentLevel.collection().begin();
+
+			//while (iter != _currentLevel.collection().end()) {
+			//	assert((*iter) != nullptr);
+
+			//	_levelEntities.push_back(EditorEnt(*iter));
+			//	iter++;
+			//}
 		}
 		else
 		{
-			//std::cout << "Error: Failed to load level " << _levelName << std::endl;
-			std::cout << "Creating new level '" << _levelName << "'" << std::endl;
+			std::cout << "Couldn't load level... Creating new level '" << _levelName << "'" << std::endl;
+			//AddOutput("Couldn't load  level, creating new one...");
+
+		}
+
+		while (_levelEntities.size() > 0) {
+			_levelEntities.pop_back();
+		}
+
+		auto iter = _currentLevel.collection().begin();
+
+		while (iter != _currentLevel.collection().end()) {
+			assert((*iter) != nullptr);
+
+			_levelEntities.push_back(EditorEnt(*iter));
+			iter++;
 		}
 		
 		return result;
@@ -333,9 +374,10 @@ void ClassName::SetLevel(std::string name)
 		//{
 		//	_levelName = oldLevel;
 		//}
+
 	} else std::cout << "DEBUG trying to edit blank level" << std::endl;
 
-	std::cout << "DEBUG Level name: " << _levelName << std::endl;
+	//std::cout << "DEBUG Level name: " << _levelName << std::endl;
 }
 
 void ClassName::SetLevel(Level* level)
@@ -343,14 +385,25 @@ void ClassName::SetLevel(Level* level)
 	std::cout << "Setting editor level to " << level->GetFileName() << "..." << std::endl;
 }
 
-std::string ClassName::GetLevel()
+Level* ClassName::GetLevel()
 {
-	return _levelName;
+	return &_currentLevel;
 }
 
 void ClassName::ResetLevel()
 {
+	for (auto it = _levelEntities.begin(); it != _levelEntities.end(); it = _levelEntities.erase(it));
+
 	_currentLevel.ClearEntities();
+}
+
+void ClassName::CreateUI()
+{
+	Panel* modeSelector = new Panel();
+	modeSelector->SetPosition(64, 64);
+	modeSelector->title = ("Mode");
+	modeSelector->type = PanelType::FOCUS;
+	_entities.AddEntity(modeSelector);
 }
 
 #ifdef ClassName

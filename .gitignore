@@ -13,7 +13,7 @@ Debug/*
 cmake-build-debug/*
 Win32/*
 x64/*
-sdl/*
+#sdl/*
 
 # VS Stuff
 .vs/*
@@ -40,7 +40,7 @@ cmake_install.cmake
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
+#*.dll
 
 # Fortran module files
 *.mod
@@ -50,7 +50,7 @@ cmake_install.cmake
 *.lai
 *.la
 *.a
-*.lib
+#*.lib
 
 # Executables
 *.exe
@@ -58,7 +58,7 @@ cmake_install.cmake
 *.app
 
 # Level files
-*.entity
+#*.entity
 
 # Misc
 #*.txt
@@ -66,3 +66,4 @@ test_*.txt
 another_test.txt
 another_test2.txt
 
+/CppProperties.json

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "types.h"
-#include "entity.h"
+//#include "entity.h"
 
 #include <string>
 
@@ -15,6 +15,9 @@ vec2<int> WorldToScreen(const vec2<int> &coords);
 vec2<int> WorldToScreen(int x, int y);
 vec2<int> ScreenToWorld(const vec2<int> &coords);
 vec2<int> ScreenToWorld(int x, int y);
+
+bool ContainsPoint(const vec4<int> &rect, const vec2<int> &point);
+bool ContainsPoint(const vec2<int> &rect_pos, const vec2<int> &rect_dim, const vec2<int> &point);
 
 template <class T>
 void Lerp(T& from, T to, T rate)

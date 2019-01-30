@@ -261,6 +261,11 @@ int Image::height() const
 	return _height;
 }
 
+SDL_Point Image::spriteDimensions() const
+{
+	return _dimensions;
+}
+
 void Image::SetAlpha(float alpha)
 {
 	_alpha = alpha;

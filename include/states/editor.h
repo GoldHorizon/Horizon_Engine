@@ -31,7 +31,7 @@ public:
 	bool LoadLevel();
 	void SetLevel(std::string name);
 	void SetLevel(Level* level);
-	std::string GetLevel();
+	Level* GetLevel();
 
 	void ResetLevel();
 
@@ -48,7 +48,6 @@ public:
 private:
     static ClassName* _thisInstance;
 
-	//std::vector<Level*> _levelList;
 	Level _currentLevel;
 
 	std::string _levelName;
@@ -57,12 +56,29 @@ private:
 	int _gridSize;
 	EditorEntityType _entityType;
 	bool _drawType;
-	//Text _textType;
 
-	// If user is creating/deleting any entities
+	//Text _textType; // @Todo: may have to reuse this
+
+	// Entity mode
 	bool _isCreating;
 	bool _isDeleting;
+	bool _isSelecting;
 
+	void CreateUI();
+
+	// Editor entity struct
+	struct EditorEnt {
+		Entity* entPtr;
+
+		bool _locked = false;
+		bool _hidden = false;
+		bool _selected = false;
+		bool _grabbed = false;
+
+		EditorEnt(Entity* ep) : entPtr(ep) {};
+	};
+
+	std::vector<EditorEnt> _levelEntities;
 };
 
 #ifdef ClassName

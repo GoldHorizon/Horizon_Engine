@@ -131,19 +131,19 @@ int Game::Initialize()
 			{
 				if (args[i] == "uninitialized") {
 					ChangeState(StateUninitialized::Instance());
-					StateUninitialized::Instance()->Resume();
+					StateUninitialized::Instance()->Pause();
 				}
 				else if (args[i] == "playing") {
 					ChangeState(StatePlaying::Instance());
-					StatePlaying::Instance()->Resume();
+					StatePlaying::Instance()->Pause();
 				}
 				else if (args[i] == "editor") {
 					ChangeState(StateEditor::Instance());
-					StateEditor::Instance()->Resume();
+					StateEditor::Instance()->Pause();
 				}
 				else if (args[i] == "minesweeper") {
 					ChangeState(StateMinesweeper::Instance());
-					StateMinesweeper::Instance()->Resume();
+					StateMinesweeper::Instance()->Pause();
 				}
 				else break;
 
@@ -154,8 +154,8 @@ int Game::Initialize()
 	};
 
 	commands["level"] = [this](sVector args) {
-		if (args.size() != 1) {
-			StateConsole::Instance()->AddError("Command requires 1 argument!");
+		if (args.size() > 1) {
+			StateConsole::Instance()->AddError("Command requires at most 1 argument!");
 		}
 		else {
 			std::vector<GameState*>::iterator it = _stateStack.end();
@@ -164,17 +164,35 @@ int Game::Initialize()
 			{
 				it--;
 				if ((*it)->GetType() == GameStateType::PLAYING_GAME) {
-					StateConsole::Instance()->AddOutput("Changing played level");
-					StatePlaying::Instance()->ChangeLevel(args[0]);
+					if (args.size() == 1) {
+						StateConsole::Instance()->AddOutput("Changing played level");
+						StatePlaying::Instance()->ChangeLevel(args[0]);
+						return;
+					} else {
+						if (StatePlaying::Instance()->GetLevel() != nullptr)
+							StateConsole::Instance()->AddOutput(StatePlaying::Instance()->GetLevel()->GetFileName());
+						else
+							StateConsole::Instance()->AddOutput("No level selected...");
+					}
+
 					return;
 				} else if ((*it)->GetType() == GameStateType::LEVEL_EDITOR) {
-					StateConsole::Instance()->AddOutput("Changing edited level");
-					StateEditor::Instance()->SetLevel(args[0]);
+					if (args.size() == 1) {
+						StateConsole::Instance()->AddOutput("Changing edited level");
+						StateEditor::Instance()->SetLevel(args[0]);
+						return;
+					} else {
+						if (StateEditor::Instance()->GetLevel()->GetFileName() != "")
+							StateConsole::Instance()->AddOutput(StateEditor::Instance()->GetLevel()->GetFileName());
+						else
+							StateConsole::Instance()->AddOutput("No level selected...");
+					}
+
 					return;
 				}
 			}
 
-			StateConsole::Instance()->AddError("Not in a correct state to change levels!");
+			StateConsole::Instance()->AddError("Not in a correct state to use command!");
 		}
 	};
 
@@ -318,7 +336,7 @@ bool Game::GetInput()
 					//StatePauseMenu::Instance()->RemoveMenuOption(2);
 				}
 
-				if ((*it)->GetType() == GameStateType::LEVEL_EDITOR) {
+				else if ((*it)->GetType() == GameStateType::LEVEL_EDITOR) {
 				// @todo: reimplement pause as boolean in game state class, to stop processing updates (but continue updating the display
 					(*it)->Pause();
 					PushState(StatePauseMenu::Instance());
@@ -349,7 +367,7 @@ bool Game::GetInput()
 				//std::cout << "Changing back to play mode..." << std::endl;
 				ChangeState(StatePlaying::Instance());
 
-				StatePlaying::Instance()->ChangeLevel(StateEditor::Instance()->GetLevel());
+				StatePlaying::Instance()->ChangeLevel(StateEditor::Instance()->GetLevel()->GetFileName());
 				StatePlaying::Instance()->Resume(); 
 				break;
 
