@@ -67,27 +67,18 @@ int ClassName::HandleEvents(Event& event)
 		case SDLK_F1:
 			std::cout << "Saving level..." << std::endl;
 			SaveLevel();
-			// @todo
 			break;
 
 		case SDLK_F2:
 			std::cout << "Loading level..." << std::endl;
 			LoadLevel();
-			// @todo
 			break;
 
-		//case SDLK_F3:
-		//	std::cout << "Changing level..." << std::endl;
+		case SDLK_F3:
+			std::cout << "Switching to play mode..." << std::endl;
+			//@todo
+			break;
 
-		//	std::string level = "";
-
-		//	// DEBUG!!!!
-		//	// Get level string somehow...?
-		//	// @todo: time for console?
-		//	std::getline(std::cin, level);
-
-		//	SetLevel(level);
-		//	break;
 		}
 	}
 
@@ -96,20 +87,35 @@ int ClassName::HandleEvents(Event& event)
 			event.ev.button.clicks == 1)
 		{
 			if (event.ev.button.button == SDL_BUTTON_LEFT) {
-				_isCreating = true;
+				if (!_isDeleting) {
+					_isSelecting = true;
+
+					int mx, my;
+					SDL_GetMouseState(&mx, &my);
+
+					_selectionStart = { mx, my };
+				}
 			}
 			else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
-				_isDeleting = true;
+				if (!_isSelecting)
+					_isDeleting = true;
 			}
 		}
 		else if (event.ev.type == SDL_MOUSEBUTTONUP &&
 			event.ev.button.clicks == 1)
 		{
 			if (event.ev.button.button == SDL_BUTTON_LEFT) {
-				_isCreating = false;
+				if (!_isDeleting)
+					_isSelecting = false;
+
+					int mx, my;
+					SDL_GetMouseState(&mx, &my);
+
+					SelectEntities(_selectionStart.x, _selectionStart.y, mx - _selectionStart.x, my - _selectionStart.y);
 			}
 			else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
-				_isDeleting = false;
+				if (!_isSelecting)
+					_isDeleting = false;
 			}
 		}
 		else if (event.ev.type == SDL_MOUSEWHEEL)
@@ -149,7 +155,7 @@ void ClassName::Update()
 		if (Input::KeyHeld(SDLK_k)) globalCam->Move(0, -4);
 		if (Input::KeyHeld(SDLK_l)) globalCam->Move(4, 0);
 
-		if (_isCreating || _isDeleting) {
+		if (_isCreating || _isDeleting || _isSelecting) {
 			int mx, my;
 
 			SDL_GetMouseState(&mx, &my);
@@ -224,9 +230,10 @@ void ClassName::Update()
 				//_currentLevel.RemoveEntities(mx, my);
 			}
 
-			else if (_isSelecting) {
-				// @todo
-			}
+			// Don't need this, we don't actually do anything while selecting except draw the rectangle
+			//else if (_isSelecting) {
+			//	// @todo
+			//}
 		}
 	}
 }
@@ -266,7 +273,7 @@ void ClassName::Render(float interpolation)
 	auto iter = _levelEntities.begin();
 
 	while (iter != _levelEntities.end()) {
-		if ((*iter).entPtr != nullptr) {
+		if ((*iter).entPtr != nullptr && !((*iter)._selected)) {
 			(*iter).entPtr->Render(interpolation, -globalCam->x(), -globalCam->y());
 		}
 
@@ -299,6 +306,13 @@ void ClassName::Render(float interpolation)
 		}
 		//DrawText(type_text, defaultFont, 9, 9, TextAlignment::ALIGN_LEFT, {0, 0, 0, 255});
 		DrawText(type_text, TextQuality::SHADED, defaultFont, 8, 8, TextAlignment::ALIGN_LEFT, {255, 255, 255, 255});
+	}
+
+	if (_isSelecting) {
+		int mx, my;
+
+		SDL_GetMouseState(&mx, &my);
+		DrawRect(_selectionStart.x, _selectionStart.y, mx - _selectionStart.x, my - _selectionStart.y, SDL_Color{ 255, 0, 0, 255 });
 	}
 }
 
@@ -404,6 +418,44 @@ void ClassName::CreateUI()
 	modeSelector->title = ("Mode");
 	modeSelector->type = PanelType::FOCUS;
 	_entities.AddEntity(modeSelector);
+}
+
+void ClassName::SelectEntities(int x, int y, int w, int h)
+{
+	int tx, ty, tw, th;
+
+	// If we select in opposite direction, account for that
+	if (w >= 0) {
+		tx = x;
+		tw = w;
+	} else {
+		tx = (x + w);
+		tw = (w * -1);
+	}
+
+	if (h >= 0) {
+		ty = y;
+		th = h;
+	} else {
+		ty = (y + h);
+		th = (h * -1);
+	}
+
+	// Loop through all entities, figure out which ones fall in this rectangle
+	for (EditorEnt &it : _levelEntities) {
+		Entity *temp = it.entPtr;
+		if (   temp->x >= tx
+			&& temp->y >= ty
+			&& (temp->x + temp->image()->width())  <= (tx + tw)
+			&& (temp->y + temp->image()->height()) <= (ty + th)) 
+		{
+			it._selected = true;
+			it._hidden = true;
+		} else {
+			it._selected = false;
+			it._hidden = false;
+		}
+	}
 }
 
 #ifdef ClassName

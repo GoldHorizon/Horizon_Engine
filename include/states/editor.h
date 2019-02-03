@@ -64,7 +64,10 @@ private:
 	bool _isDeleting;
 	bool _isSelecting;
 
+	vec2<int> _selectionStart;
+
 	void CreateUI();
+	void SelectEntities(int x, int y, int w, int h);
 
 	// Editor entity struct
 	struct EditorEnt {
@@ -79,6 +82,7 @@ private:
 	};
 
 	std::vector<EditorEnt> _levelEntities;
+
 };
 
 #ifdef ClassName
