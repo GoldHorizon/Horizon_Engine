@@ -65,6 +65,7 @@ private:
 	bool _isSelecting;
 
 	vec2<int> _selectionStart;
+	int _selectionTimer;
 
 	void CreateUI();
 	void SelectEntities(int x, int y, int w, int h);

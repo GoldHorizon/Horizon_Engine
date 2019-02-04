@@ -17,9 +17,12 @@ Text* CreateText(std::string name, Font* font, SDL_Point pos, SDL_Color color, T
 	return text;
 }
 
-void DrawRect(SDL_Rect draw_rect, SDL_Color c) {
+void DrawRect(SDL_Rect draw_rect, SDL_Color c, bool fill) {
 	SDL_SetRenderDrawColor(globalRenderer, c.r, c.g, c.b, c.a);
-	SDL_RenderFillRect(globalRenderer, &draw_rect);
+	if (fill)
+		SDL_RenderFillRect(globalRenderer, &draw_rect);
+	else
+		SDL_RenderDrawRect(globalRenderer, &draw_rect);
 }
 
 //void DrawRect(int x, int y, int w, int h, int r, int g, int b, int a) {
@@ -28,16 +31,22 @@ void DrawRect(SDL_Rect draw_rect, SDL_Color c) {
 //	SDL_RenderFillRect(globalRenderer, &rect);
 //}
 
-void DrawRect(int x, int y, int w, int h, SDL_Color c) {
+void DrawRect(int x, int y, int w, int h, SDL_Color c, bool fill) {
 	SDL_SetRenderDrawColor(globalRenderer, c.r, c.g, c.b, c.a);
 	SDL_Rect rect = {x, y, w, h};
-	SDL_RenderFillRect(globalRenderer, &rect);
+	if (fill)
+		SDL_RenderFillRect(globalRenderer, &rect);
+	else
+		SDL_RenderDrawRect(globalRenderer, &rect);
 }
 
-void DrawRect(int x, int y, int w, int h, vec4<float> c) {
+void DrawRect(int x, int y, int w, int h, vec4<float> c, bool fill) {
 	SDL_SetRenderDrawColor(globalRenderer, c.x * 255, c.y * 255, c.z * 255, c.w * 255);
 	SDL_Rect rect = {x, y, w, h};
-	SDL_RenderFillRect(globalRenderer, &rect);
+	if (fill)
+		SDL_RenderFillRect(globalRenderer, &rect);
+	else
+		SDL_RenderDrawRect(globalRenderer, &rect);
 }
 
 void DrawLine(SDL_Point p1, SDL_Point p2, SDL_Color c)

@@ -37,6 +37,8 @@ void ClassName::Initialize()
 	//_textType.SetFont(defaultFont);
 	//_textType.SetPosition(8, 8);
 	//Entities().AddEntity(&_textType);
+
+	_selectionTimer = 200;
 	
 	CreateUI();
 }
@@ -93,7 +95,9 @@ int ClassName::HandleEvents(Event& event)
 					int mx, my;
 					SDL_GetMouseState(&mx, &my);
 
-					_selectionStart = { mx, my };
+					vec2<int> real = ScreenToWorld(mx, my);
+
+					_selectionStart = { real.x, real.y };
 				}
 			}
 			else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
@@ -270,14 +274,33 @@ void ClassName::Render(float interpolation)
 	//_currentLevel.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
 
 	// Temp render code, testing
-	auto iter = _levelEntities.begin();
+	//auto iter = _levelEntities.begin();
 
-	while (iter != _levelEntities.end()) {
-		if ((*iter).entPtr != nullptr && !((*iter)._selected)) {
-			(*iter).entPtr->Render(interpolation, -globalCam->x(), -globalCam->y());
-		}
+	//while (iter != _levelEntities.end()) {
+	//	// Make sure we draw selected objects differently
+	//	if ((*iter).entPtr != nullptr && !((*iter)._selected)) {
+	//		(*iter).entPtr->Render(interpolation, -globalCam->x(), -globalCam->y());
+	//	}
+	//	if ((*iter)._selected) {
+	//		DrawRect((*iter)
+	//	}
 
-		iter++;
+	//	iter++;
+	//}
+
+	for (auto it : _levelEntities) {
+		Entity *temp = it.entPtr;
+
+		if (it._hidden) continue;
+
+		if (temp != nullptr)
+			temp->Render(interpolation, -globalCam->x(), -globalCam->y());
+	
+		if (it._selected)
+			DrawRect(temp->x - temp->image()->origin.x, temp->y - temp->image()->origin.y, 
+					 temp->image()->width(), temp->image()->height(), 
+					 SDL_Color { 255, 255, 255, static_cast<Uint8>(_selectionTimer) });
+
 	}
 
 	// Render editor objects (like panels)
@@ -308,11 +331,13 @@ void ClassName::Render(float interpolation)
 		DrawText(type_text, TextQuality::SHADED, defaultFont, 8, 8, TextAlignment::ALIGN_LEFT, {255, 255, 255, 255});
 	}
 
+	// Draw selection boundaries
 	if (_isSelecting) {
 		int mx, my;
 
 		SDL_GetMouseState(&mx, &my);
-		DrawRect(_selectionStart.x, _selectionStart.y, mx - _selectionStart.x, my - _selectionStart.y, SDL_Color{ 255, 0, 0, 255 });
+		vec2<int> real = ScreenToWorld(mx, my);
+		DrawRect(_selectionStart.x, _selectionStart.y, real.x - _selectionStart.x, real.y - _selectionStart.y, SDL_Color{ 255, 0, 0, 255 }, false);
 	}
 }
 
@@ -442,18 +467,29 @@ void ClassName::SelectEntities(int x, int y, int w, int h)
 	}
 
 	// Loop through all entities, figure out which ones fall in this rectangle
+	bool big_box = (tw > 3 || th > 3);
+
 	for (EditorEnt &it : _levelEntities) {
 		Entity *temp = it.entPtr;
-		if (   temp->x >= tx
-			&& temp->y >= ty
-			&& (temp->x + temp->image()->width())  <= (tx + tw)
-			&& (temp->y + temp->image()->height()) <= (ty + th)) 
+		
+		// Get entities real position/size due to offset
+		int ox, oy, ow, oh;
+		ox = static_cast<int>(temp->x - temp->image()->origin.x);
+		oy = static_cast<int>(temp->y - temp->image()->origin.y);
+		ow = temp->image()->width();
+		oh = temp->image()->height();
+
+
+		if ((big_box && ox >= tx
+			&& oy >= ty
+			&& (ox + ow) <= (tx + tw)
+			&& (oy + oh) <= (ty + th))
+			||
+			(!big_box && ContainsPoint({ ox, oy }, { ow, oh }, { tx, ty })))
 		{
 			it._selected = true;
-			it._hidden = true;
 		} else {
 			it._selected = false;
-			it._hidden = false;
 		}
 	}
 }
