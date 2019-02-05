@@ -73,7 +73,10 @@ private:
 	bool _isMoving;		// Selected entitites
 
 	// Editor vars
-	EditMode _currentMode = EditMode::SELECTING;
+	EditMode _primaryMode = EditMode::SELECTING;
+	EditMode _secondaryMode = EditMode::DELETING;
+	bool _primaryActive = false;
+	bool _secondaryActive = false;
 	bool _drawHUD = true;
 
 	vec2<int> _selectionStart;
@@ -95,7 +98,6 @@ private:
 	};
 
 	std::vector<EditorEnt> _levelEntities;
-
 };
 
 #ifdef ClassName

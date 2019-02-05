@@ -29,10 +29,6 @@ void ClassName::Initialize()
 	_gridSize = 32;
 	_entityType = EditorEntityType::PLAYER;
 
-	_isCreating = false;
-	_isDeleting = false;
-	_isSelecting = false;
-
 	_drawType = true;
 	//_textType.SetFont(defaultFont);
 	//_textType.SetPosition(8, 8);
@@ -66,6 +62,39 @@ int ClassName::HandleEvents(Event& event)
 		//		_drawGrid = !_drawGrid;
 		//	break;
 
+		// Mode Changing:
+		case SDLK_q:
+			if (!_primaryActive && !_secondaryActive)
+				if (!Input::KeyHeld(SDLK_LSHIFT))
+					_primaryMode = EditMode::CREATING;
+				else
+					_secondaryMode = EditMode::CREATING;
+			break;
+
+		case SDLK_w:
+			if (!_primaryActive && !_secondaryActive)
+				if (!Input::KeyHeld(SDLK_LSHIFT))
+					_primaryMode = EditMode::DELETING;
+				else
+					_secondaryMode = EditMode::DELETING;
+			break;
+
+		case SDLK_e:
+			if (!_primaryActive && !_secondaryActive)
+				if (!Input::KeyHeld(SDLK_LSHIFT))
+					_primaryMode = EditMode::MOVING;
+				else
+					_secondaryMode = EditMode::MOVING;
+			break;
+
+		case SDLK_r:
+			if (!_primaryActive && !_secondaryActive)
+				if (!Input::KeyHeld(SDLK_LSHIFT))
+					_primaryMode = EditMode::SELECTING;
+				else
+					_secondaryMode = EditMode::SELECTING;
+			break;
+
 		// Show/hide grid (Maybe group with HUD one day)
 		case SDLK_g:
 			_drawGrid = !_drawGrid;
@@ -76,15 +105,15 @@ int ClassName::HandleEvents(Event& event)
 			_drawHUD = !_drawHUD;
 			break;
 
-		case SDLK_F1:
-			std::cout << "Saving level..." << std::endl;
-			SaveLevel();
-			break;
+		//case SDLK_F1:
+		//	std::cout << "Saving level..." << std::endl;
+		//	SaveLevel();
+		//	break;
 
-		case SDLK_F2:
-			std::cout << "Loading level..." << std::endl;
-			LoadLevel();
-			break;
+		//case SDLK_F2:
+		//	std::cout << "Loading level..." << std::endl;
+		//	LoadLevel();
+		//	break;
 
 		case SDLK_F3:
 			std::cout << "Switching to play mode..." << std::endl;
@@ -98,8 +127,34 @@ int ClassName::HandleEvents(Event& event)
 		if (event.ev.type == SDL_MOUSEBUTTONDOWN &&
 			event.ev.button.clicks == 1)
 		{
-			if (event.ev.button.button == SDL_BUTTON_LEFT) {
-				if (!_isDeleting) {
+			EditMode *mode;
+			bool valid = false;
+
+			if (event.ev.button.button == SDL_BUTTON_LEFT && !_secondaryActive) {
+				mode = &_primaryMode;
+				_primaryActive = true;
+				valid = true;
+			} else if (event.ev.button.button == SDL_BUTTON_RIGHT && !_primaryActive) {
+				mode = &_secondaryMode;
+				_secondaryActive = true;
+				valid = true;
+			}
+
+			if (valid) {
+				switch (*mode) {
+				case EditMode::CREATING:
+					_isCreating = true;
+					break;
+
+				case EditMode::DELETING:
+					_isDeleting = true;
+					break;
+
+				case EditMode::MOVING:
+					_isMoving = true;
+					break;
+
+				case EditMode::SELECTING:
 					_isSelecting = true;
 
 					int mx, my;
@@ -108,28 +163,52 @@ int ClassName::HandleEvents(Event& event)
 					vec2<int> real = ScreenToWorld(mx, my);
 
 					_selectionStart = { real.x, real.y };
+					break;
 				}
-			}
-			else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
-				if (!_isSelecting)
-					_isDeleting = true;
 			}
 		}
 		else if (event.ev.type == SDL_MOUSEBUTTONUP &&
 			event.ev.button.clicks == 1)
 		{
-			if (event.ev.button.button == SDL_BUTTON_LEFT) {
-				if (!_isDeleting)
+			EditMode *mode;
+			bool valid = false;
+
+			if (event.ev.button.button == SDL_BUTTON_LEFT && _primaryActive) {
+				mode = &_primaryMode;
+				_primaryActive = false;
+				valid = true;
+			}
+			else if (event.ev.button.button == SDL_BUTTON_RIGHT && _secondaryActive) {
+				mode = &_secondaryMode;
+				_secondaryActive = false;
+				valid = true;
+			}
+
+			if (valid) {
+				switch (*mode) {
+				case EditMode::CREATING:
+					_isCreating = false;
+					break;
+
+				case EditMode::DELETING:
+					_isDeleting = false;
+					break;
+
+				case EditMode::MOVING:
+					_isMoving = false;
+					break;
+
+				case EditMode::SELECTING:
 					_isSelecting = false;
 
 					int mx, my;
 					SDL_GetMouseState(&mx, &my);
 
+					vec2<int> real = ScreenToWorld(mx, my);
+
 					SelectEntities(_selectionStart.x, _selectionStart.y, mx - _selectionStart.x, my - _selectionStart.y);
-			}
-			else if (event.ev.button.button == SDL_BUTTON_RIGHT) {
-				if (!_isSelecting)
-					_isDeleting = false;
+					break;
+				}
 			}
 		}
 		else if (event.ev.type == SDL_MOUSEWHEEL)
@@ -164,7 +243,7 @@ void ClassName::Update()
 		_entities.UpdateAll();
 
 		// @todo: consolidate these vars now that we have an enum for edit mode
-		if (_isCreating || _isDeleting || _isSelecting || _isMoving) {
+		if (_primaryActive || _secondaryActive) {
 			int mx, my;
 
 			SDL_GetMouseState(&mx, &my);
@@ -213,7 +292,9 @@ void ClassName::Update()
 				// Breaks if we add to our own entity list, then try to load
 				if (_levelName != "")
 				{
+					EditorEnt editor_obj(obj);
 					_currentLevel.AddEntity(obj);
+					_levelEntities.push_back(editor_obj);
 				}
 
 				// Temporary, just to practice creation
@@ -227,8 +308,6 @@ void ClassName::Update()
 				while (iter != _levelEntities.end()) {
 					Entity* ep = (*iter).entPtr;
 					if (ep->ImageContainsPoint(vec2<int>{mx, my})) {
-						//std::cout << "MARKED FOR DELETION" << std::endl;
-						//delete (*iter).entPtr; // @Cleanup Shouldn't this be outside of RemoveEntity??
 						_currentLevel.RemoveEntity((*iter).entPtr);
 						iter = _levelEntities.erase(iter);
 					}
