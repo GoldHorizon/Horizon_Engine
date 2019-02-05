@@ -7,6 +7,13 @@
 
 #define ClassName StateEditor
 
+enum class EditMode {
+	SELECTING,
+	CREATING,
+	DELETING,
+	MOVING,
+};
+
 class StateEditor : public GameState
 {
 	/*
@@ -60,9 +67,14 @@ private:
 	//Text _textType; // @Todo: may have to reuse this
 
 	// Entity mode
-	bool _isCreating;
-	bool _isDeleting;
-	bool _isSelecting;
+	bool _isCreating;	// Creating entities on mouse
+	bool _isDeleting;	// Deleting entities on mouse
+	bool _isSelecting;	// Box/Click selection
+	bool _isMoving;		// Selected entitites
+
+	// Editor vars
+	EditMode _currentMode = EditMode::SELECTING;
+	bool _drawHUD = true;
 
 	vec2<int> _selectionStart;
 	int _selectionTimer;

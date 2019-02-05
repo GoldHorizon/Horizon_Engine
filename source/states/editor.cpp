@@ -61,9 +61,19 @@ int ClassName::HandleEvents(Event& event)
 			if (event.ev.key.repeat == 0)
 				return OPEN_MENU;
 			break;
-		case SDLK_SLASH:
-			if (event.ev.key.repeat == 0)
-				_drawGrid = !_drawGrid;
+		//case SDLK_SLASH:
+		//	if (event.ev.key.repeat == 0)
+		//		_drawGrid = !_drawGrid;
+		//	break;
+
+		// Show/hide grid (Maybe group with HUD one day)
+		case SDLK_g:
+			_drawGrid = !_drawGrid;
+			break;
+
+		// Show/hide HUD
+		case SDLK_h:
+			_drawHUD = !_drawHUD;
 			break;
 
 		case SDLK_F1:
@@ -153,13 +163,8 @@ void ClassName::Update()
 		// Only updates entities local to editor, NOT _currentLevel's entities
 		_entities.UpdateAll();
 
-		// Temporary camera movement
-		if (Input::KeyHeld(SDLK_h)) globalCam->Move(-4, 0);
-		if (Input::KeyHeld(SDLK_j)) globalCam->Move(0, 4);
-		if (Input::KeyHeld(SDLK_k)) globalCam->Move(0, -4);
-		if (Input::KeyHeld(SDLK_l)) globalCam->Move(4, 0);
-
-		if (_isCreating || _isDeleting || _isSelecting) {
+		// @todo: consolidate these vars now that we have an enum for edit mode
+		if (_isCreating || _isDeleting || _isSelecting || _isMoving) {
 			int mx, my;
 
 			SDL_GetMouseState(&mx, &my);
@@ -233,11 +238,6 @@ void ClassName::Update()
 
 				//_currentLevel.RemoveEntities(mx, my);
 			}
-
-			// Don't need this, we don't actually do anything while selecting except draw the rectangle
-			//else if (_isSelecting) {
-			//	// @todo
-			//}
 		}
 	}
 }
@@ -270,24 +270,7 @@ void ClassName::Render(float interpolation)
 		}
 	}
 
-	// Draw level entities, without updating them
-	//_currentLevel.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
-
-	// Temp render code, testing
-	//auto iter = _levelEntities.begin();
-
-	//while (iter != _levelEntities.end()) {
-	//	// Make sure we draw selected objects differently
-	//	if ((*iter).entPtr != nullptr && !((*iter)._selected)) {
-	//		(*iter).entPtr->Render(interpolation, -globalCam->x(), -globalCam->y());
-	//	}
-	//	if ((*iter)._selected) {
-	//		DrawRect((*iter)
-	//	}
-
-	//	iter++;
-	//}
-
+	// Draw level entities that aren't hidden
 	for (auto it : _levelEntities) {
 		Entity *temp = it.entPtr;
 
@@ -304,10 +287,11 @@ void ClassName::Render(float interpolation)
 	}
 
 	// Render editor objects (like panels)
-	_entities.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
+	if (_drawHUD)
+		_entities.RenderAll(interpolation, -globalCam->x(), -globalCam->y());
 
 	// Draw object type
-	if (_drawType)
+	if (_drawHUD && _drawType)
 	{
 		std::string type_text = "";
 		switch (_entityType)
@@ -354,22 +338,7 @@ bool ClassName::LoadLevel()
 
 		result = _currentLevel.LoadLevel();
 
-		if (result)
-		{
-			//while (_levelEntities.size > 0) {
-			//	_levelEntities.pop_back();
-			//}
-
-			//auto iter = _currentLevel.collection().begin();
-
-			//while (iter != _currentLevel.collection().end()) {
-			//	assert((*iter) != nullptr);
-
-			//	_levelEntities.push_back(EditorEnt(*iter));
-			//	iter++;
-			//}
-		}
-		else
+		if (!result)
 		{
 			std::cout << "Couldn't load level... Creating new level '" << _levelName << "'" << std::endl;
 			//AddOutput("Couldn't load  level, creating new one...");
@@ -390,6 +359,7 @@ bool ClassName::LoadLevel()
 		}
 		
 		return result;
+
 	} else { 
 		std::cout << "Error: Cannot load empty level" << std::endl;
 		return false; 
@@ -421,7 +391,7 @@ void ClassName::SetLevel(std::string name)
 
 void ClassName::SetLevel(Level* level)
 {
-	std::cout << "Setting editor level to " << level->GetFileName() << "..." << std::endl;
+	std::cout << "Setting editor level to " << level->GetFileName() << "... (NOT IMPLEMENTED)" << std::endl;
 }
 
 Level* ClassName::GetLevel()
@@ -439,15 +409,22 @@ void ClassName::ResetLevel()
 void ClassName::CreateUI()
 {
 	Panel* modeSelector = new Panel();
+
 	modeSelector->SetPosition(64, 64);
 	modeSelector->title = ("Mode");
 	modeSelector->type = PanelType::FOCUS;
+
 	_entities.AddEntity(modeSelector);
 }
 
 void ClassName::SelectEntities(int x, int y, int w, int h)
 {
+	// Variables for accurate entity selection boxes
 	int tx, ty, tw, th;
+
+	// This is used to add to a selection (possible remove from later)
+	bool add_to_selection		= Input::KeyHeld(SDLK_LSHIFT);
+	bool remove_from_selection	= Input::KeyHeld(SDLK_LCTRL);
 
 	// If we select in opposite direction, account for that
 	if (w >= 0) {
@@ -479,7 +456,6 @@ void ClassName::SelectEntities(int x, int y, int w, int h)
 		ow = temp->image()->width();
 		oh = temp->image()->height();
 
-
 		if ((big_box && ox >= tx
 			&& oy >= ty
 			&& (ox + ow) <= (tx + tw)
@@ -487,8 +463,13 @@ void ClassName::SelectEntities(int x, int y, int w, int h)
 			||
 			(!big_box && ContainsPoint({ ox, oy }, { ow, oh }, { tx, ty })))
 		{
-			it._selected = true;
-		} else {
+			// If we're removing, make sure we get this object out of selection
+			if (remove_from_selection)
+				it._selected = false;
+			else
+				it._selected = true;
+
+		} else if (!add_to_selection && !remove_from_selection) {
 			it._selected = false;
 		}
 	}
