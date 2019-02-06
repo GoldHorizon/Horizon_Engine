@@ -35,6 +35,7 @@ class Camera
 
 		void SetPosition(int x, int y);
 		void SetPosition(vec2<int> pos);
+
 		void SetDimensions(int w, int h);
 		void SetDimensions(vec2<int> dim);
 

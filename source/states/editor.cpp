@@ -125,23 +125,28 @@ int ClassName::HandleEvents(Event& event)
 
 	else if (!event.blocked()) {
 		if (event.ev.type == SDL_MOUSEBUTTONDOWN &&
-			event.ev.button.clicks == 1)
+			(event.ev.button.clicks == 1 || event.ev.button.button == SDL_BUTTON_MIDDLE))
 		{
-			EditMode *mode;
+			EditMode mode;
 			bool valid = false;
 
-			if (event.ev.button.button == SDL_BUTTON_LEFT && !_secondaryActive) {
-				mode = &_primaryMode;
+			if (event.ev.button.button == SDL_BUTTON_LEFT && !_secondaryActive && !_cameraActive) {
+				mode = _primaryMode;
 				_primaryActive = true;
 				valid = true;
-			} else if (event.ev.button.button == SDL_BUTTON_RIGHT && !_primaryActive) {
-				mode = &_secondaryMode;
+			} 
+			else if (event.ev.button.button == SDL_BUTTON_RIGHT && !_primaryActive && !_cameraActive) {
+				mode = _secondaryMode;
 				_secondaryActive = true;
 				valid = true;
 			}
+			else if (event.ev.button.button == SDL_BUTTON_MIDDLE && !_primaryActive && !_secondaryActive) {
+				_cameraActive = true;
+				SDL_GetRelativeMouseState(nullptr, nullptr);
+			}
 
 			if (valid) {
-				switch (*mode) {
+				switch (mode) {
 				case EditMode::CREATING:
 					_isCreating = true;
 					break;
@@ -168,7 +173,7 @@ int ClassName::HandleEvents(Event& event)
 			}
 		}
 		else if (event.ev.type == SDL_MOUSEBUTTONUP &&
-			event.ev.button.clicks == 1)
+			(event.ev.button.clicks == 1 || event.ev.button.button == SDL_BUTTON_MIDDLE))
 		{
 			EditMode *mode;
 			bool valid = false;
@@ -182,6 +187,9 @@ int ClassName::HandleEvents(Event& event)
 				mode = &_secondaryMode;
 				_secondaryActive = false;
 				valid = true;
+			}
+			else if (event.ev.button.button == SDL_BUTTON_MIDDLE && _cameraActive) {
+				_cameraActive = false;
 			}
 
 			if (valid) {
@@ -206,7 +214,7 @@ int ClassName::HandleEvents(Event& event)
 
 					vec2<int> real = ScreenToWorld(mx, my);
 
-					SelectEntities(_selectionStart.x, _selectionStart.y, mx - _selectionStart.x, my - _selectionStart.y);
+					SelectEntities(_selectionStart.x, _selectionStart.y, real.x - _selectionStart.x, real.y - _selectionStart.y);
 					break;
 				}
 			}
@@ -242,7 +250,6 @@ void ClassName::Update()
 		// Only updates entities local to editor, NOT _currentLevel's entities
 		_entities.UpdateAll();
 
-		// @todo: consolidate these vars now that we have an enum for edit mode
 		if (_primaryActive || _secondaryActive) {
 			int mx, my;
 
@@ -307,7 +314,7 @@ void ClassName::Update()
 
 				while (iter != _levelEntities.end()) {
 					Entity* ep = (*iter).entPtr;
-					if (ep->ImageContainsPoint(vec2<int>{mx, my})) {
+					if (ep->ImageContainsPoint(vec2<int>{temp.x, temp.y})) {
 						_currentLevel.RemoveEntity((*iter).entPtr);
 						iter = _levelEntities.erase(iter);
 					}
@@ -317,6 +324,12 @@ void ClassName::Update()
 
 				//_currentLevel.RemoveEntities(mx, my);
 			}
+		}
+		else if (_cameraActive) {
+			int mx, my;
+			SDL_GetRelativeMouseState(&mx, &my);
+
+			globalCam->Move(-mx, -my);
 		}
 	}
 }
@@ -359,7 +372,7 @@ void ClassName::Render(float interpolation)
 			temp->Render(interpolation, -globalCam->x(), -globalCam->y());
 	
 		if (it._selected)
-			DrawRect(temp->x - temp->image()->origin.x, temp->y - temp->image()->origin.y, 
+			DrawRect(temp->x - temp->image()->origin.x - globalCam->x(), temp->y - temp->image()->origin.y - globalCam->y(), 
 					 temp->image()->width(), temp->image()->height(), 
 					 SDL_Color { 255, 255, 255, static_cast<Uint8>(_selectionTimer) });
 
@@ -400,7 +413,7 @@ void ClassName::Render(float interpolation)
 
 		SDL_GetMouseState(&mx, &my);
 		vec2<int> real = ScreenToWorld(mx, my);
-		DrawRect(_selectionStart.x, _selectionStart.y, real.x - _selectionStart.x, real.y - _selectionStart.y, SDL_Color{ 255, 0, 0, 255 }, false);
+		DrawRect(_selectionStart.x - globalCam->x(), _selectionStart.y - globalCam->y(), real.x - _selectionStart.x, real.y - _selectionStart.y, SDL_Color{ 255, 0, 0, 255 }, false);
 	}
 }
 

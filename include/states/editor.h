@@ -8,6 +8,7 @@
 #define ClassName StateEditor
 
 enum class EditMode {
+	CAMERA,
 	SELECTING,
 	CREATING,
 	DELETING,
@@ -67,16 +68,17 @@ private:
 	//Text _textType; // @Todo: may have to reuse this
 
 	// Entity mode
-	bool _isCreating;	// Creating entities on mouse
-	bool _isDeleting;	// Deleting entities on mouse
-	bool _isSelecting;	// Box/Click selection
-	bool _isMoving;		// Selected entitites
+	bool _isCreating = false;	// Creating entities on mouse
+	bool _isDeleting = false;	// Deleting entities on mouse
+	bool _isSelecting = false;	// Box/Click selection
+	bool _isMoving = false;		// Selected entitites
 
 	// Editor vars
 	EditMode _primaryMode = EditMode::SELECTING;
 	EditMode _secondaryMode = EditMode::DELETING;
 	bool _primaryActive = false;
 	bool _secondaryActive = false;
+	bool _cameraActive = false;
 	bool _drawHUD = true;
 
 	vec2<int> _selectionStart;
