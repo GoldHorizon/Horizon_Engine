@@ -30,9 +30,6 @@ void ClassName::Initialize()
 	_entityType = EditorEntityType::PLAYER;
 
 	_drawType = true;
-	//_textType.SetFont(defaultFont);
-	//_textType.SetPosition(8, 8);
-	//Entities().AddEntity(&_textType);
 
 	_selectionTimer = 200;
 	
@@ -57,10 +54,6 @@ int ClassName::HandleEvents(Event& event)
 			if (event.ev.key.repeat == 0)
 				return OPEN_MENU;
 			break;
-		//case SDLK_SLASH:
-		//	if (event.ev.key.repeat == 0)
-		//		_drawGrid = !_drawGrid;
-		//	break;
 
 		// Mode Changing:
 		case SDLK_q:
@@ -105,15 +98,30 @@ int ClassName::HandleEvents(Event& event)
 			_drawHUD = !_drawHUD;
 			break;
 
-		//case SDLK_F1:
-		//	std::cout << "Saving level..." << std::endl;
-		//	SaveLevel();
-		//	break;
+		case SDLK_DELETE:
+			// Delete selected entities. Use while in case for breaks from deletions
+		{
+			auto iter = _levelEntities.begin();
 
-		//case SDLK_F2:
-		//	std::cout << "Loading level..." << std::endl;
-		//	LoadLevel();
-		//	break;
+			while (iter != _levelEntities.end()) {
+				if (iter->_selected) {
+					_currentLevel.RemoveEntity((*iter).entPtr);
+					iter = _levelEntities.erase(iter);
+				}
+				else iter++; // Only increment in else, because deletion causes iter to go to next element anyways, possibly OOB
+			}
+		}
+		break;
+
+		case SDLK_F1:
+			std::cout << "Saving level..." << std::endl;
+			SaveLevel();
+			break;
+
+		case SDLK_F2:
+			std::cout << "Loading level..." << std::endl;
+			LoadLevel();
+			break;
 
 		case SDLK_F3:
 			std::cout << "Switching to play mode..." << std::endl;
@@ -142,7 +150,7 @@ int ClassName::HandleEvents(Event& event)
 			}
 			else if (event.ev.button.button == SDL_BUTTON_MIDDLE && !_primaryActive && !_secondaryActive) {
 				_cameraActive = true;
-				SDL_GetRelativeMouseState(nullptr, nullptr);
+				SDL_GetRelativeMouseState(nullptr, nullptr); // To reset the relative mouse values
 			}
 
 			if (valid) {
@@ -157,6 +165,9 @@ int ClassName::HandleEvents(Event& event)
 
 				case EditMode::MOVING:
 					_isMoving = true;
+					SDL_GetRelativeMouseState(nullptr, nullptr);
+					_moveDiffx = 0;
+					_moveDiffy = 0;
 					break;
 
 				case EditMode::SELECTING:
@@ -164,10 +175,7 @@ int ClassName::HandleEvents(Event& event)
 
 					int mx, my;
 					SDL_GetMouseState(&mx, &my);
-
-					vec2<int> real = ScreenToWorld(mx, my);
-
-					_selectionStart = { real.x, real.y };
+					_selectionStart = ScreenToWorld(mx, my);
 					break;
 				}
 			}
@@ -221,6 +229,7 @@ int ClassName::HandleEvents(Event& event)
 		}
 		else if (event.ev.type == SDL_MOUSEWHEEL)
 		{
+			// Currently using mousewheel to cycle entities for creation, but may be changed
 			if (event.ev.wheel.y < 0)
 			{
 				_entityType = static_cast<EditorEntityType>((static_cast<int>(_entityType)) + 1);	
@@ -321,8 +330,29 @@ void ClassName::Update()
 					else
 						iter++;
 				}
+			}
 
-				//_currentLevel.RemoveEntities(mx, my);
+			else if (_isMoving) {
+				int mx, my;
+				SDL_GetRelativeMouseState(&mx, &my);
+
+				_moveDiffx += mx;
+				_moveDiffy += my;
+
+				int diff_amount_x = _moveDiffx / _gridSize;
+				int diff_amount_y = _moveDiffy / _gridSize;
+
+				if (diff_amount_x > 0 || diff_amount_x < 0 || diff_amount_y > 0 || diff_amount_y < 0) {
+					for (auto it : _levelEntities) {
+						if (it._selected) {
+							it.entPtr->x += _gridSize * diff_amount_x;
+							it.entPtr->y += _gridSize * diff_amount_y;
+						}
+					}
+
+					_moveDiffx %= _gridSize;
+					_moveDiffy %= _gridSize;
+				}
 			}
 		}
 		else if (_cameraActive) {
@@ -518,6 +548,9 @@ void ClassName::SelectEntities(int x, int y, int w, int h)
 	bool add_to_selection		= Input::KeyHeld(SDLK_LSHIFT);
 	bool remove_from_selection	= Input::KeyHeld(SDLK_LCTRL);
 
+	// If we do a click-select, we only want to select a single entity under the mouse cursor
+	bool found_one = false;
+
 	// If we select in opposite direction, account for that
 	if (w >= 0) {
 		tx = x;
@@ -553,13 +586,15 @@ void ClassName::SelectEntities(int x, int y, int w, int h)
 			&& (ox + ow) <= (tx + tw)
 			&& (oy + oh) <= (ty + th))
 			||
-			(!big_box && ContainsPoint({ ox, oy }, { ow, oh }, { tx, ty })))
+			(!big_box && ContainsPoint({ ox, oy }, { ow, oh }, { tx, ty }) && !found_one && it._selected == remove_from_selection))
 		{
 			// If we're removing, make sure we get this object out of selection
 			if (remove_from_selection)
 				it._selected = false;
 			else
 				it._selected = true;
+
+			found_one = true;
 
 		} else if (!add_to_selection && !remove_from_selection) {
 			it._selected = false;

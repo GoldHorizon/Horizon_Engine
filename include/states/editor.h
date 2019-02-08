@@ -81,6 +81,9 @@ private:
 	bool _cameraActive = false;
 	bool _drawHUD = true;
 
+	int _moveDiffx = 0;
+	int _moveDiffy = 0;
+
 	vec2<int> _selectionStart;
 	int _selectionTimer;
 
