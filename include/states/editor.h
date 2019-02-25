@@ -21,7 +21,11 @@ class StateEditor : public GameState
 	 * Constructors/Destructors
 	 */
 public:
-	ClassName() {SetType(GameStateType::LEVEL_EDITOR); Resume(); }
+	ClassName() {
+		Initialize();
+		SetType(GameStateType::LEVEL_EDITOR); 
+		Resume(); 
+	}
 	~ClassName();
 
 	/*

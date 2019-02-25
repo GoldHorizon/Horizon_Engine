@@ -17,6 +17,7 @@ class StatePlaying:
 	 */
 public:
     ClassName() {
+		Initialize();
 		SetType(GameStateType::PLAYING_GAME); 
 		Resume(); 
 	}

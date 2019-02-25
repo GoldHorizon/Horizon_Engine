@@ -19,6 +19,7 @@ class StateConsole:
 	 */
 public:
     ClassName() {
+		Initialize();
 		SetType(GameStateType::CONSOLE); 
 		Resume();
 	}

@@ -37,6 +37,9 @@ public:
 	// PopState()           - Pop the latest state from the top of the stack
 	void PopState();
 
+	// GetState()			- Get the latest state, or the latest of a specific type
+	GameState* GetState(GameStateType type = GameStateType::NONE);
+
 	// GetInput()			- Retrieves global window input, returns quit value
 	GameStatus GetInput();
 

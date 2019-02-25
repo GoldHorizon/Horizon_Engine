@@ -12,7 +12,10 @@ class StateOptions:
 	 * Constructors/Destructors
 	 */
 public:
-    ClassName() {SetType(GameStateType::OPTIONS);}
+    ClassName() {
+		Initialize();
+		SetType(GameStateType::OPTIONS);
+	}
     ~StateOptions();
 	/*
 	 * Class Methods

@@ -13,6 +13,7 @@ public:
 	 * Constructors/Destructors
 	 */
 	StateName() {
+		Initialize();
 		SetType(GameStateType::MINESWEEPER);
 		Resume();
 	}

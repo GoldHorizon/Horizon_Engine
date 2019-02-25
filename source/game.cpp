@@ -30,7 +30,7 @@ Game::Game():
 	SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
 
     // Set our stack to only be uninitialized.
-    _stateStack.push_back(StateUninitialized::Instance());
+    _stateStack.push_back(new StateUninitialized);
 
 	auto quit_game_command = [this](sVector args) { QuitGame(); };
 
@@ -118,7 +118,7 @@ GameStatus Game::Initialize()
 
 	// If all is well, set the game state and return something besides -1
 	//ChangeState(StateTitleScreen::Instance());
-    ChangeState(StatePlaying::Instance());
+    ChangeState(new StatePlaying);
 
 	//
 	// COMMANDS
@@ -253,8 +253,7 @@ void Game::ChangeState(GameState* newState)
 {
     while (!_stateStack.empty())
     {
-        //_stateStack.back()->Cleanup();
-        _stateStack.pop_back();
+		PopState();
     }
 
 	if (newState != nullptr)
@@ -290,8 +289,22 @@ void Game::PushState(GameState* newState)
 
 void Game::PopState()
 {
-    //_stateStack.back()->Cleanup();
+    _stateStack.back()->Cleanup();
+	delete _stateStack.back();
     _stateStack.pop_back();
+}
+
+GameState* Game::GetState(GameStateType type)
+{
+	auto reverse_it = _stateStack.rbegin();
+
+	while (reverse_it != _stateStack.rend()) {
+		if ((*reverse_it)->GetType() == type) {
+			return (*reverse_it);
+		}
+	}
+
+	return nullptr;
 }
 
 GameStatus Game::GetInput()
@@ -315,7 +328,7 @@ GameStatus Game::GetInput()
 		{
 		case KeyEvent::close_menu:
 			if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
-				_stateStack.pop_back();
+				PopState();
 				_stateStack.back()->Resume();
 			}
 			break;
@@ -324,50 +337,55 @@ GameStatus Game::GetInput()
 			if ((*it)->GetType() == GameStateType::PLAYING_GAME) {
 			// @todo: reimplement pause as boolean in game state class, to stop processing updates (but continue updating the display
 				(*it)->Pause();
-				PushState(StatePauseMenu::Instance());
-				StatePauseMenu::Instance()->SetSelectedOption(0);
-				StatePauseMenu::Instance()->ChangeMenuOption("Edit", 2);
+
+				StatePauseMenu* menu = new StatePauseMenu;
+				PushState(menu);
+				menu->SetSelectedOption(0);
+				menu->ChangeMenuOption("Edit", 2);
 			}
 
 			else if ((*it)->GetType() == GameStateType::LEVEL_EDITOR) {
 			// @todo: reimplement pause as boolean in game state class, to stop processing updates (but continue updating the display
 				(*it)->Pause();
-				PushState(StatePauseMenu::Instance());
-				StatePauseMenu::Instance()->SetSelectedOption(0);
-				StatePauseMenu::Instance()->ChangeMenuOption("Play", 2);
+
+				StatePauseMenu* menu = new StatePauseMenu;
+				PushState(menu);
+				menu->SetSelectedOption(0);
+				menu->ChangeMenuOption("Play", 2);
 			}
 			break;
 
 		case KeyEvent::level_editor:
 			{
-				ChangeState(StateEditor::Instance());
+				ChangeState(new StateEditor);
+				//ChangeState(StateEditor::Instance());
 
-				Level* temp = StatePlaying::Instance()->GetLevel();
+				//Level* temp = StatePlaying::Instance()->GetLevel();
 
-				if (temp != nullptr) {
-					if (temp->GetFileName() != "")
-						StateEditor::Instance()->SetLevel(temp->GetFileName());
-				}
+				//if (temp != nullptr) {
+				//	if (temp->GetFileName() != "")
+				//		StateEditor::Instance()->SetLevel(temp->GetFileName());
+				//}
 
-				StateEditor::Instance()->Resume(); 
+				//StateEditor::Instance()->Resume(); 
 			}
 			break;
 
 		case KeyEvent::play_mode:
-			ChangeState(StatePlaying::Instance());
+			ChangeState(new StatePlaying);
 
-			StatePlaying::Instance()->ChangeLevel(StateEditor::Instance()->GetLevel()->GetFileName());
-			StatePlaying::Instance()->Resume(); 
+			//StatePlaying::Instance()->ChangeLevel(StateEditor::Instance()->GetLevel()->GetFileName());
+			//StatePlaying::Instance()->Resume(); 
 			break;
 
 		case KeyEvent::restart:
-			StatePlaying::Instance()->Restart();
-			StateEditor::Instance()->ResetLevel();
-			if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
-				// @check
-				_stateStack.pop_back();
-				_stateStack.back()->Resume();
-			}
+			//StatePlaying::Instance()->Restart();
+			//StateEditor::Instance()->ResetLevel();
+			//if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
+			//	// @check
+			//	PopState();
+			//	_stateStack.back()->Resume();
+			//}
 			break;
 
 		//// Not needed?!
@@ -377,6 +395,7 @@ GameStatus Game::GetInput()
 
 		case KeyEvent::game_quit:
 			QuitGame();
+			return GameStatus::stopped;
 			break;
 
 		default:
@@ -521,7 +540,7 @@ void Game::CloseConsole()
 	if (_stateStack.back()->GetType() == GameStateType::CONSOLE)
 	{
 		//std::cout << "Closing console..." << std::endl;
-		_stateStack.pop_back();
+		PopState();
 		_stateStack.back()->Resume();
 
 		if (SDL_IsTextInputActive())

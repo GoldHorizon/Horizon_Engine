@@ -12,7 +12,11 @@ class StateUninitialized:
 	 * Constructors/Destructors
 	 */
 public:
-    ClassName() {SetType(GameStateType::UNINITIALIZED); Resume();}
+    ClassName() {
+		Initialize();
+		SetType(GameStateType::UNINITIALIZED); 
+		Resume();
+	}
     ~StateUninitialized();
 	/*
 	 * Class Methods

@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 	Game mainGame;
 
 	// Initialize the game, return error if it failed
-	if (mainGame.Initialize() == -1)
+	if (mainGame.Initialize() == GameStatus::error)
 	{
 		return -1;
 	}
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 		while (SDL_GetTicks() > nextGameTick && loops < MAX_FRAMESKIP && gameIsRunning)
 		{
             // Get input from keyboard and mouse
-			gameIsRunning = mainGame.GetInput();
+			gameIsRunning = (mainGame.GetInput() == GameStatus::running);
 
             // Update entities in the game
 			mainGame.Update();

@@ -12,7 +12,10 @@ class StateTitleScreen:
 	 * Constructors/Destructors
 	 */
 public:
-    ClassName() {SetType(GameStateType::TITLE_SCREEN);}
+    ClassName() {
+		Initialize();
+		SetType(GameStateType::TITLE_SCREEN);
+	}
     ~StateTitleScreen();
 	/*
 	 * Class Methods

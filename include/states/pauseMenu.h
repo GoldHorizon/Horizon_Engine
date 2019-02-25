@@ -16,6 +16,7 @@ class StatePauseMenu:
 	 */
 public:
     ClassName() {
+		Initialize();
 		SetType(GameStateType::PAUSE_MENU); 
 		Resume();
 	}

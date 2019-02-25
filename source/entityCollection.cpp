@@ -178,6 +178,7 @@ void EntityCollection::UpdateAll()
 
 void EntityCollection::RenderAll(float interpolation, int xOffset, int yOffset)
 {
+	
 	_collection.sort(EComp);
 	_collection.reverse();
 

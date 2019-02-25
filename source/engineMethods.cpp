@@ -99,12 +99,20 @@ Entity* CreateSerializedObject(std::string str)
 
 void AddOutput(std::string str)
 {
-	StateConsole::Instance()->AddOutput(str);
+	//StateConsole::Instance()->AddOutput(str);
+	//auto console = main_game.GetState(GameStateType::CONSOLE);
+	//
+	//if (console)
+	//	console->AddOutput(str);
 }
 
 void AddError(std::string str)
 {
-	StateConsole::Instance()->AddError(str);
+	//StateConsole::Instance()->AddError(str);
+	//auto console = main_game.GetState(GameStateType::CONSOLE);
+	//
+	//if (console)
+	//	console->AddError(str);
 }
 
 vec2<int> WorldToScreen(const vec2<int> &coords)

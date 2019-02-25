@@ -2,6 +2,7 @@
 
 enum class GameStateType
 {
+	NONE,
 	UNINITIALIZED,
 	TITLE_SCREEN,
 	MAIN_MENU,
