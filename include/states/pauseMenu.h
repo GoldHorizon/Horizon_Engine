@@ -14,12 +14,11 @@ class StatePauseMenu:
 	/*
 	 * Constructors/Destructors
 	 */
-protected:
+public:
     ClassName() {
 		SetType(GameStateType::PAUSE_MENU); 
 		Resume();
 	}
-public:
     ~StatePauseMenu();
 	/*
 	 * Class Methods
@@ -27,7 +26,7 @@ public:
     void Initialize();
     void Cleanup();
 
-    int HandleEvents(Event&);
+    KeyEvent HandleEvents(Event&);
     void Update();
 	void UpdateMenu();
     void Render(float interpolation);
@@ -40,19 +39,7 @@ public:
 	int GetSelectedOption();
 	void SetSelectedOption(int pos);
 
-    static ClassName* Instance()
-    {
-        if (_thisInstance == nullptr)
-        {
-            _thisInstance = new ClassName;
-        	_thisInstance->Initialize();
-        }
-        return _thisInstance;
-    }
-
 private:
-    static ClassName* _thisInstance;
-
 	Text* _menuList[MENU_SIZE];
 	int _menuOptionSelected;
 

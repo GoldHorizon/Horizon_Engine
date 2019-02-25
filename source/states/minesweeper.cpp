@@ -5,8 +5,6 @@
 
 #define StateName StateMinesweeper
 
-StateName* StateName::_thisInstance = nullptr;
-
 StateName::~StateName()
 {
 	Cleanup();
@@ -22,58 +20,60 @@ void StateName::Initialize()
 	//
 	// COMMANDS
 	//
-	commands["mines"] = [this](sVector args) {
-		bool showFlags = false;
-		bool showBombs = false;
-		bool showClicked = false;
+	//commands["mines"] = [this](sVector args) {
+	//	bool showFlags = false;
+	//	bool showBombs = false;
+	//	bool showClicked = false;
 
-		if (args.size() > 0) {
-			if (args[0] == "all") {
-				showFlags = true;
-				showBombs = true;
-				showClicked = true;
-			} else if (args[0] == "flags") {
-				showFlags = true;
-			} else if (args[0] == "bombs") {
-				showBombs = true;
-			} else if (args[0] == "clicked") {
-				showClicked = true;
-			} else StateConsole::Instance()->AddError("No valid argument! Use all, flags, bombs, or clicked");
-		}
+	//	if (args.size() > 0) {
+	//		if (args[0] == "all") {
+	//			showFlags = true;
+	//			showBombs = true;
+	//			showClicked = true;
+	//		} else if (args[0] == "flags") {
+	//			showFlags = true;
+	//		} else if (args[0] == "bombs") {
+	//			showBombs = true;
+	//		} else if (args[0] == "clicked") {
+	//			showClicked = true;
+	//		} //else StateConsole::Instance()->AddError("No valid argument! Use all, flags, bombs, or clicked");
+	//	}
 
-		if (showFlags) {
-			StateConsole::Instance()->AddOutput("---- List of flag tiles ----");	
+	//	if (showFlags) {
+	//		//StateConsole::Instance()->AddOutput("---- List of flag tiles ----");	
 
-			for (int j = 0; j < _mainBoard.height(); j++) {
-				for (int i = 0; i < _mainBoard.width(); i++) {
-					if (_mainBoard.GetTile(i, j).flagged())
-						StateConsole::Instance()->AddOutput("  " + std::to_string(i) + ", " + std::to_string(j));
-				}
-			}
-		}
+	//		for (int j = 0; j < _mainBoard.height(); j++) {
+	//			for (int i = 0; i < _mainBoard.width(); i++) {
+	//				if (_mainBoard.GetTile(i, j).flagged())
+	//					//StateConsole::Instance()->AddOutput("  " + std::to_string(i) + ", " + std::to_string(j));
+	//					continue;
+	//			}
+	//		}
+	//	}
 
-		if (showBombs) {
-			StateConsole::Instance()->AddOutput("---- List of bomb tiles ----");	
+	//	if (showBombs) {
+	//		//StateConsole::Instance()->AddOutput("---- List of bomb tiles ----");	
 
-			for (int j = 0; j < _mainBoard.height(); j++) {
-				for (int i = 0; i < _mainBoard.width(); i++) {
-					if (_mainBoard.GetTile(i, j).bomb())
-						StateConsole::Instance()->AddOutput("  " + std::to_string(i) + ", " + std::to_string(j));
-				}
-			}
-		}
+	//		for (int j = 0; j < _mainBoard.height(); j++) {
+	//			for (int i = 0; i < _mainBoard.width(); i++) {
+	//				if (_mainBoard.GetTile(i, j).bomb())
+	//					//StateConsole::Instance()->AddOutput("  " + std::to_string(i) + ", " + std::to_string(j));
+	//					continue;
+	//			}
+	//		}
+	//	}
 
-		if (showClicked) {
-			StateConsole::Instance()->AddOutput("---- List of clicked tiles ----");	
+	//	if (showClicked) {
+	//		//StateConsole::Instance()->AddOutput("---- List of clicked tiles ----");	
 
-			for (int j = 0; j < _mainBoard.height(); j++) {
-				for (int i = 0; i < _mainBoard.width(); i++) {
-					if (_mainBoard.GetTile(i, j).clicked())
-						StateConsole::Instance()->AddOutput("  " + std::to_string(i) + ", " + std::to_string(j));
-				}
-			}
-		}
-	};
+	//		for (int j = 0; j < _mainBoard.height(); j++) {
+	//			for (int i = 0; i < _mainBoard.width(); i++) {
+	//				if (_mainBoard.GetTile(i, j).clicked())
+	//					//StateConsole::Instance()->AddOutput("  " + std::to_string(i) + ", " + std::to_string(j));
+	//			}
+	//		}
+	//	}
+	//};
 }
 
 void StateName::Cleanup()
@@ -81,7 +81,7 @@ void StateName::Cleanup()
 
 }
 
-int StateName::HandleEvents(Event& event)
+KeyEvent StateName::HandleEvents(Event& event)
 {
 	//_mainBoard.HandleEvents(event);
 
@@ -98,7 +98,7 @@ int StateName::HandleEvents(Event& event)
 	else if (event.ev.type == SDL_MOUSEBUTTONDOWN) 
 	{
 		// If the game has ended (due to win or loss) don't worry about clicking anything
-		if (_mainBoard.ended() == true) return -1;
+		if (_mainBoard.ended() == true) return KeyEvent::none;
 
 		int mx, my; 
 		SDL_GetMouseState(&mx, &my);
@@ -115,7 +115,7 @@ int StateName::HandleEvents(Event& event)
 			mx /= 32;
 			my /= 32;
 		}
-		else return -1;
+		else return KeyEvent::none;
 
 		if (event.ev.button.button == SDL_BUTTON_LEFT)
 		{
@@ -134,7 +134,7 @@ int StateName::HandleEvents(Event& event)
 		}
 	}
 
-	return -1;
+	return KeyEvent::none;
 }
 
 void StateName::Update()

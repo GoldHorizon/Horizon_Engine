@@ -1,11 +1,11 @@
-//#include <entities.h>
-#include "../include/gameState.h"
+#include "gameState.h"
 
 GameState::~GameState()
 {
 
 }
 
+// @todo change some of the get/set methods' variables to be public instead
 GameStateType GameState::GetType()
 {
     return _type;

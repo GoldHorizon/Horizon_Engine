@@ -9,8 +9,6 @@
 
 #define ClassName StatePauseMenu
 
-ClassName* ClassName::_thisInstance = nullptr;
-
 ClassName::~ClassName()
 {
 	Cleanup();
@@ -78,7 +76,7 @@ void ClassName::Cleanup()
 //		if (_menuList[i] != nullptr) delete _menuList[i];
 }
 
-int ClassName::HandleEvents(Event& event)
+KeyEvent ClassName::HandleEvents(Event& event)
 {
 	if (event.ev.type == SDL_KEYDOWN)
 	{
@@ -87,7 +85,7 @@ int ClassName::HandleEvents(Event& event)
 		{
 		case SDLK_ESCAPE:
 			if (event.ev.key.repeat == 0)
-				return CLOSE_MENU;
+				return KeyEvent::close_menu;
 			break;
 
 		case SDLK_DOWN:
@@ -116,30 +114,30 @@ int ClassName::HandleEvents(Event& event)
 			switch (_menuOptionSelected)
 			{
 			case 0:
-				return CLOSE_MENU;
+				return KeyEvent::close_menu;
 				break;
 
 			case 1:
 				// Send signal to game to restart current level
-				return RESTART;
+				return KeyEvent::restart;
 				break;
 
 			case 2:
 				// Send signal to game to open level editor
 				if (_menuList[_menuOptionSelected]->text() == "Edit")
-					return LEVEL_EDITOR;
+					return KeyEvent::level_editor;
 				if (_menuList[_menuOptionSelected]->text() == "Play")
-					return PLAY_MODE;
+					return KeyEvent::play_mode;
 				break;
 
 			case 3:
 				// Send signal to game to open options menu
-				return OPTIONS_MENU;
+				return KeyEvent::options_menu;
 				break;
 
 			case 4:
 				// Send signal to game to exit the game!
-				return GAME_QUIT; 
+				return KeyEvent::game_quit; 
 				break;
 
 
@@ -147,7 +145,7 @@ int ClassName::HandleEvents(Event& event)
 		}
 	}
 
-	return -1;
+	return KeyEvent::none;
 }
 
 void ClassName::Update()

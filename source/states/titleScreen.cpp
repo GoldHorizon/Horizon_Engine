@@ -3,8 +3,6 @@
 
 #define ClassName StateTitleScreen
 
-ClassName* ClassName::_thisInstance = nullptr;
-
 ClassName::~ClassName()
 {
 
@@ -30,9 +28,9 @@ void ClassName::Resume()
 
 }
 
-int ClassName::HandleEvents(Event&)
+KeyEvent ClassName::HandleEvents(Event&)
 {
-	return -1;
+	return KeyEvent::none;
 }
 
 void ClassName::Update()

@@ -4,7 +4,9 @@
 #include "text.h"
 #include "event.h"
 
+#ifndef ClassName
 #define ClassName StateConsole
+#endif
 
 struct c_line;
 enum class c_line_type;
@@ -15,23 +17,22 @@ class StateConsole:
 	/*
 	 * Constructors/Destructors
 	 */
-protected:
+public:
     ClassName() {
 		SetType(GameStateType::CONSOLE); 
 		Resume();
 	}
-public:
     ~ClassName();
 
 	/*
 	 * Class Methods
 	 */
-    void Initialize();
-    void Cleanup();
+    void Initialize() override;
+    void Cleanup() override;
 
-    int HandleEvents(Event&);
-    void Update();
-    void Render(float interpolation);
+    KeyEvent HandleEvents(Event&) override;
+    void Update() override;
+    void Render(float interpolation) override;
 
 	void Open(bool big = false);
 	void Close();
@@ -44,19 +45,7 @@ public:
 	void AddOutput(std::string str);
 	void AddError(std::string str);
 
-    static ClassName* Instance()
-    {
-        if (_thisInstance == nullptr)
-        {
-            _thisInstance = new ClassName;
-        	_thisInstance->Initialize();
-        }
-        return _thisInstance;
-    }
-
 private:
-    static ClassName* _thisInstance;
-
 	bool _isOpenBig;
 	bool _isOpenSmall;
 	int _openHeight;

@@ -11,6 +11,8 @@
 // and
 // https://sourcemaking.com/design_patterns/singleton/cpp/1 
 
+// Removing singleton design pattern
+
 class GameState
 {
 	/*
@@ -18,6 +20,7 @@ class GameState
 	 */
 protected:
     GameState() {}
+
 public:
     virtual ~GameState();
 	/*
@@ -26,19 +29,9 @@ public:
     virtual void Initialize() = 0;
     virtual void Cleanup() = 0;
 
-    virtual int HandleEvents(Event&) = 0;
+    virtual KeyEvent HandleEvents(Event&) = 0;
     virtual void Update() = 0;
     virtual void Render(float interpolation) = 0;
-
-    // NOTE: Goes in all inherited states
-    // static GameState* Instance()
-    //{
-    //    if (_thisInstance == nullptr)
-    //    {
-    //        _thisInstance = new GameState;
-    //    }
-    //    return _thisInstance;
-    //}
 
     // GetType()            - Returns the state type
     GameStateType GetType();
@@ -62,14 +55,6 @@ protected:
     EntityCollection _entities;
 
 private:
-    // NOTE: Goes in all inherited states
-    //static GameState* _thisInstance;
-
     GameStateType _type;
     bool _paused;
-
 };
-
-// NOTE: Goes in all inherited states
-// Initiate global instance to nullptr
-//GameState* GameState::_thisInstance = nullptr;

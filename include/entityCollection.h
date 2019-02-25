@@ -9,6 +9,7 @@ template <typename T> bool PComp(const T * const &a, const T * const &b)
 	return *a < *b;
 }
 
+// Used to compare entities for sorting by their depths (or ID?)
 bool EComp(const Entity * const &a, const Entity * const &b);
 
 class EntityCollection

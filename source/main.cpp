@@ -22,9 +22,7 @@
 // Program start
 int main(int argc, char** argv)
 {
-	// Entry point for debug
-	//std::cout << "Entry point" << std::endl;
-
+	// Start game
 	Game mainGame;
 
 	// Initialize the game, return error if it failed
@@ -66,42 +64,10 @@ int main(int argc, char** argv)
 			//std::cout << loops << " ";
 		}
 
-		// Decides how much to predict movement of entity
+		// Decides how much to predict movement of entity -- @todo rework this
 		interpolation = float(SDL_GetTicks() + SKIP_TICKS - nextGameTick) / float(SKIP_TICKS);
 		mainGame.Render(interpolation);
-
-		// Part of testing loop counter
-		//std::cout << interpolation << std::endl;
 	}
-
-//
-//  OLD GAME LOOP
-//
-// userQuit : If the user has somehow exited the application
-//	bool userQuit = false;
-//
-//	long startTime = SDL_GetTicks();
-//	long endTime = SDL_GetTicks();
-//
-//	double difference = 0;
-//
-//	while (!userQuit)
-//	{
-//		startTime = SDL_GetTicks();
-//
-//		userQuit = mainGame.GetInput();
-//		mainGame.Update(difference);
-//		mainGame.Render();
-//
-//		endTime = SDL_GetTicks();
-//
-//		difference = static_cast<double>(endTime - startTime) / 1000;
-//		//std::cout << difference << std::endl;
-//
-//	}
-
-
-
 
 	return 0;
 }

@@ -12,8 +12,6 @@
 
 #define ClassName StateConsole
 
-ClassName* ClassName::_thisInstance = nullptr;
-
 ClassName::~ClassName()
 {
 	Cleanup();
@@ -86,7 +84,7 @@ void ClassName::Cleanup()
 
 }
 
-int ClassName::HandleEvents(Event& event)
+KeyEvent ClassName::HandleEvents(Event& event)
 {
 	if (event.ev.type == SDL_KEYDOWN)
 	{
@@ -358,12 +356,8 @@ int ClassName::HandleEvents(Event& event)
 			n--;
 		}
 	}
-	//else if (event.ev.type == SDL_TEXTEDITING)
-	//{
-	//	//std::cout << "DEBUG testing editing input?" << std::endl;
-	//}
 
-	return -1;
+	return KeyEvent::none;
 }
 
 void ClassName::Update()
@@ -387,9 +381,8 @@ void ClassName::Update()
 		Lerp<int>(_openHeight, 0, rate);
 	}
 
-	if (/*!SDL_IsTextInputActive() && */IsOpen())
+	if (IsOpen())
 	{
-		//std::cout << "Starting text input..." << std::endl;
 		SDL_StartTextInput();
 	}
 }

@@ -11,8 +11,6 @@
 
 #define ClassName StatePlaying
 
-ClassName* ClassName::_thisInstance = nullptr;
-
 ClassName::~ClassName()
 {
 	Cleanup();
@@ -40,7 +38,7 @@ void ClassName::Cleanup()
 	delete _level;
 }
 
-int ClassName::HandleEvents(Event& event)
+KeyEvent ClassName::HandleEvents(Event& event)
 {
 	_entities.HandleAllEvents(event);
 
@@ -53,12 +51,12 @@ int ClassName::HandleEvents(Event& event)
 		{
 		case SDLK_ESCAPE:
 			if (event.ev.key.repeat == 0)
-				return OPEN_MENU;
+				return KeyEvent::open_menu;
 			break;
 		}
 	}
 
-	return -1;
+	return KeyEvent::none;
 }
 
 void ClassName::Update()

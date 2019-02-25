@@ -20,9 +20,8 @@ class StateEditor : public GameState
 	/*
 	 * Constructors/Destructors
 	 */
-protected:
-	ClassName() {SetType(GameStateType::LEVEL_EDITOR); Resume(); }
 public:
+	ClassName() {SetType(GameStateType::LEVEL_EDITOR); Resume(); }
 	~ClassName();
 
 	/*
@@ -31,7 +30,7 @@ public:
 	void Initialize();
 	void Cleanup();
 
-	int HandleEvents(Event&);
+	KeyEvent HandleEvents(Event&);
 	void Update();
 	void Render(float interpolation);
 
@@ -43,19 +42,7 @@ public:
 
 	void ResetLevel();
 
-    static ClassName* Instance()
-    {
-        if (_thisInstance == nullptr)
-        {
-            _thisInstance = new ClassName;
-			_thisInstance->Initialize();
-        }
-        return _thisInstance;
-    }
-
 private:
-    static ClassName* _thisInstance;
-
 	Level _currentLevel;
 
 	std::string _levelName;

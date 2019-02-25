@@ -13,8 +13,6 @@
 
 #define ClassName StateEditor
 
-ClassName* ClassName::_thisInstance = nullptr;
-
 ClassName::~ClassName()
 {
 
@@ -41,7 +39,7 @@ void ClassName::Cleanup()
 
 }
 
-int ClassName::HandleEvents(Event& event)
+KeyEvent ClassName::HandleEvents(Event& event)
 {
 	// We don't want to update the objects we are editing
 	_entities.HandleAllEvents(event);
@@ -52,7 +50,7 @@ int ClassName::HandleEvents(Event& event)
 		{
 		case SDLK_ESCAPE:
 			if (event.ev.key.repeat == 0)
-				return OPEN_MENU;
+				return KeyEvent::open_menu;
 			break;
 
 		// Mode Changing:
@@ -247,9 +245,7 @@ int ClassName::HandleEvents(Event& event)
 		}
 	}
 
-	
-
-	return -1;
+	return KeyEvent::none;
 }
 
 void ClassName::Update()
