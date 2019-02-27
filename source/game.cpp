@@ -124,34 +124,41 @@ GameStatus Game::Initialize()
 	// COMMANDS
 	//
 	// Some game commands to be implemented
-	//commands["state"] = [this](sVector args) {
-	//	if (args.size() > 0) 
-	//	{
-	//		for (size_t i = 0; i < args.size(); i++)
-	//		{
-	//			if (args[i] == "uninitialized") {
-	//				ChangeState(StateUninitialized::Instance());
-	//				StateUninitialized::Instance()->Pause();
-	//			}
-	//			else if (args[i] == "playing") {
-	//				ChangeState(StatePlaying::Instance());
-	//				StatePlaying::Instance()->Pause();
-	//			}
-	//			else if (args[i] == "editor") {
-	//				ChangeState(StateEditor::Instance());
-	//				StateEditor::Instance()->Pause();
-	//			}
-	//			else if (args[i] == "minesweeper") {
-	//				ChangeState(StateMinesweeper::Instance());
-	//				StateMinesweeper::Instance()->Pause();
-	//			}
-	//			else break;
+	commands["state"] = [this](sVector args) {
+		if (args.size() > 0) 
+		{
+			auto console = (*--_stateStack.end());
 
-	//			PushState(StateConsole::Instance());
-	//			//}
-	//		}
-	//	}
-	//};
+			for (size_t i = 0; i < args.size(); i++)
+			{
+				GameState* state;
+				if (args[i] == "uninitialized") {
+					state = new StateUninitialized;
+				}
+				else if (args[i] == "playing") {
+					state = new StatePlaying;
+				}
+				else if (args[i] == "editor") {
+					state = new StateEditor;
+				}
+				else if (args[i] == "minesweeper") {
+					state = new StateMinesweeper;
+				}
+				else break;
+
+				state->Pause();
+
+				// @todo - reimplement console appearing back on top?
+				auto it = _stateStack.begin();
+				while ((*it)->GetType() != GameStateType::CONSOLE && _stateStack.size() > 0) {
+					_stateStack.erase(it);
+					it = _stateStack.begin();
+				}
+				_stateStack.emplace(_stateStack.begin(), state);
+
+			}
+		}
+	};
 
 	//commands["level"] = [this](sVector args) {
 	//	if (args.size() > 1) {
@@ -296,6 +303,9 @@ void Game::PopState()
 
 GameState* Game::GetState(GameStateType type)
 {
+	if (type == GameStateType::NONE)
+		return _stateStack.back();
+
 	auto reverse_it = _stateStack.rbegin();
 
 	while (reverse_it != _stateStack.rend()) {
@@ -378,15 +388,15 @@ GameStatus Game::GetInput()
 			//StatePlaying::Instance()->Resume(); 
 			break;
 
-		case KeyEvent::restart:
-			//StatePlaying::Instance()->Restart();
-			//StateEditor::Instance()->ResetLevel();
-			//if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
-			//	// @check
-			//	PopState();
-			//	_stateStack.back()->Resume();
-			//}
-			break;
+		//case KeyEvent::restart:
+		//	StatePlaying::Instance()->Restart();
+		//	StateEditor::Instance()->ResetLevel();
+		//	if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
+		//		// @check
+		//		PopState();
+		//		_stateStack.back()->Resume();
+		//	}
+		//	break;
 
 		//// Not needed?!
 		//case CLOSE_CONSOLE: 
@@ -398,6 +408,9 @@ GameStatus Game::GetInput()
 			return GameStatus::stopped;
 			break;
 
+		case KeyEvent::none:
+			// Do nothing
+			break;
 		default:
 			std::cout << "Error: Unimplemented or invalid menu event detected..." << std::endl;
 			break;
@@ -459,7 +472,12 @@ GameStatus Game::GetInput()
 		}
 
 	}
-	// The player has not quit the game, so return false
+
+	// The player has quit the game, so return stopped
+	if (!_playing)
+		return GameStatus::stopped;
+
+	// The player has not quit the game
 	return report_status;
 }
 
