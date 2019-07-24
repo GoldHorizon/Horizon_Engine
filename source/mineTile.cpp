@@ -57,7 +57,7 @@ int  MineTile::count()
 
 void MineTile::SetClicked(bool c)
 {
-	if (_flagged) return;
+	if (_flagged || _clicked == c) return;
 
 	_clicked = c;
 	// Update image

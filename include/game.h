@@ -29,16 +29,16 @@ public:
 
 	// ChangeState()		- Changes state to specified state
 	//	newState:		new state to change to
-	void ChangeState(GameState* newState);
+	std::shared_ptr<GameState> ChangeState(GameStateType newState);
 
 	// PushState()          - Push another state onto the stack of states
-	void PushState (GameState* newState);
+	std::shared_ptr<GameState> PushState  (GameStateType newState);
 
 	// PopState()           - Pop the latest state from the top of the stack
 	void PopState();
 
 	// GetState()			- Get the latest state, or the latest of a specific type
-	GameState* GetState(GameStateType type = GameStateType::NONE);
+	//GameState* GetState(GameStateType type = GameStateType::NONE);
 
 	// GetInput()			- Retrieves global window input, returns quit value
 	GameStatus GetInput();
@@ -71,7 +71,7 @@ private:
 	Event _event;
 
 	// _stateStack      - stack of all states in game
-	std::vector<GameState*> _stateStack;
+	std::vector<std::shared_ptr<GameState>> _stateStack;
 
 	// _entities		- collection of game entities
 	EntityCollection _entities;

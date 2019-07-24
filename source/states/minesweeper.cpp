@@ -132,6 +132,41 @@ KeyEvent StateName::HandleEvents(Event& event)
 				_mainBoard.FlagTile(mx, my);
 			}
 		}
+		else if (event.ev.button.button == SDL_BUTTON_MIDDLE)
+		{
+			return KeyEvent::none;
+
+			auto tile = _mainBoard.GetTile(mx, my);
+
+			if (tile.clicked() && tile.count() > 0) {
+				int num = tile.count();
+				int flg = 0;
+
+				for (int j = my - 1; j <= my + 1; j++) {
+					for (int i = mx - 1; i <= mx + 1; i++) {
+						if (i >= 0 && i < _mainBoard.width() &&
+							j >= 0 && j < _mainBoard.height() &&
+								!(i == mx && j == my))
+						{
+							if (_mainBoard.GetTile(i, j).flagged()) flg++;
+						}
+					}
+				}
+
+				if (num == flg) {
+					for (int j = my - 1; j <= my + 1; j++) {
+						for (int i = mx - 1; i <= mx + 1; i++) {
+							if (i >= 0 && i < _mainBoard.width() &&
+								j >= 0 && j < _mainBoard.height() &&
+								!(i == mx && j == my))
+							{
+								_mainBoard.ClickTile(i, j);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	return KeyEvent::none;
