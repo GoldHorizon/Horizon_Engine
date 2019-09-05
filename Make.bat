@@ -1,1 +1,0 @@
-clang -c -lstdc++ -lSDL2main -lSDL2 -Isdl/include -Iinclude source/globals.cpp include/globals.h
