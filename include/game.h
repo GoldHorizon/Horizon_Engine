@@ -1,11 +1,13 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "entityCollection.h"
 #include "enumerations.h"
 #include "event.h"
 #include "file.h"
+#include "states/console.h"
 
 #include "SDL.h"
 
@@ -29,10 +31,10 @@ public:
 
 	// ChangeState()		- Changes state to specified state
 	//	newState:		new state to change to
-	void ChangeState(GameState* newState);
+	GameState* ChangeState(GameStateType type);
 
 	// PushState()          - Push another state onto the stack of states
-	void PushState (GameState* newState);
+	GameState* PushState(GameStateType type);
 
 	// PopState()           - Pop the latest state from the top of the stack
 	void PopState();
@@ -71,7 +73,10 @@ private:
 	Event _event;
 
 	// _stateStack      - stack of all states in game
-	std::vector<GameState*> _stateStack;
+	std::vector<std::unique_ptr<GameState>> _stateStack;
+
+	// _console			- persistent console in the game
+	StateConsole _console;
 
 	// _entities		- collection of game entities
 	EntityCollection _entities;

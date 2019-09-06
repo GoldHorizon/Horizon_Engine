@@ -30,7 +30,7 @@ Game::Game():
 	SDL_SetRenderDrawColor(_mainRenderer, 0, 0, 0, 255);
 
     // Set our stack to only be uninitialized.
-    _stateStack.push_back(new StateUninitialized);
+    _stateStack.push_back(std::make_unique<StateUninitialized>());
 
 	auto quit_game_command = [this](sVector args) { QuitGame(); };
 
@@ -118,7 +118,7 @@ GameStatus Game::Initialize()
 
 	// If all is well, set the game state and return something besides -1
 	//ChangeState(StateTitleScreen::Instance());
-    ChangeState(new StatePlaying);
+    ChangeState(GameStateType::PLAYING_GAME);
 
 	//
 	// COMMANDS
@@ -127,35 +127,30 @@ GameStatus Game::Initialize()
 	commands["state"] = [this](sVector args) {
 		if (args.size() > 0) 
 		{
-			auto console = (*--_stateStack.end());
-
 			for (size_t i = 0; i < args.size(); i++)
 			{
-				GameState* state;
 				if (args[i] == "uninitialized") {
-					state = new StateUninitialized;
+					ChangeState(GameStateType::UNINITIALIZED);
 				}
 				else if (args[i] == "playing") {
-					state = new StatePlaying;
+					ChangeState(GameStateType::PLAYING_GAME);
 				}
 				else if (args[i] == "editor") {
-					state = new StateEditor;
+					ChangeState(GameStateType::LEVEL_EDITOR);
 				}
 				else if (args[i] == "minesweeper") {
-					state = new StateMinesweeper;
+					ChangeState(GameStateType::MINESWEEPER);
 				}
 				else break;
 
-				state->Pause();
+				GetState()->Pause();
 
 				// @todo - reimplement console appearing back on top?
-				auto it = _stateStack.begin();
-				while ((*it)->GetType() != GameStateType::CONSOLE && _stateStack.size() > 0) {
-					_stateStack.erase(it);
-					it = _stateStack.begin();
-				}
-				_stateStack.emplace(_stateStack.begin(), state);
-
+				//auto it = _stateStack.begin();
+				//while ((*it)->GetType() != GameStateType::CONSOLE && _stateStack.size() > 0) {
+				//	_stateStack.erase(it);
+				//	it = _stateStack.begin();
+				//}
 			}
 		}
 	};
@@ -256,61 +251,85 @@ void Game::LoadFonts()
 	fontList[3] = consoleFont;
 }
 
-void Game::ChangeState(GameState* newState)
+GameState* Game::ChangeState(GameStateType type)
 {
     while (!_stateStack.empty())
     {
 		PopState();
     }
 
-	if (newState != nullptr)
-	{
-		GameStateType type = newState->GetType();
-		switch(type)
-		{
-			case GameStateType::MAIN_MENU:
-				// Create buttons here???
-				// Probably not, do that in main menu state class...
-				break;
-
-			case GameStateType::PLAYING_GAME:
-				break;
-
-			case GameStateType::LEVEL_EDITOR:
-				break;
-
-			default:
-				//std::cerr << "ERROR: Trying to change to error state" << std::endl;
-				//_stateStack.push_back(StateUninitialized::Instance());
-				break;
-		}
-
-		_stateStack.push_back(newState);
-	}
+	return PushState(type);
 }
 
-void Game::PushState(GameState* newState)
+GameState* Game::PushState(GameStateType type)
 {
-    _stateStack.push_back(newState);
+	std::unique_ptr<GameState> newState = nullptr;
+	//GameStateType type = newState->GetType();
+
+	switch(type)
+	{
+	case GameStateType::MAIN_MENU: {
+		// Create buttons here???
+		// Probably not, do that in main menu state class...
+		newState = std::make_unique<StateTitleScreen>();
+		break;
+	}
+
+	case GameStateType::PAUSE_MENU: {
+		
+		newState = std::make_unique<StatePauseMenu>();
+		break;
+	}
+
+	case GameStateType::PLAYING_GAME: {
+
+		newState = std::make_unique<StatePlaying>();
+		break;
+	}
+
+	case GameStateType::LEVEL_EDITOR: {
+
+		newState = std::make_unique<StateEditor>();
+		break;
+	}
+
+	case GameStateType::MINESWEEPER: {
+
+		newState = std::make_unique<StateMinesweeper>();
+		break;
+	}
+
+	default: {
+		std::cerr << "ERROR: Trying to change to unimplemented state" << std::endl;
+		//_stateStack.push_back(StateUninitialized::Instance());
+	} 
+	}
+
+	if (newState) {
+		auto statePtr = newState.get();
+		_stateStack.push_back(std::move(newState));
+		return statePtr;
+	}
+
+	return nullptr;
 }
 
 void Game::PopState()
 {
     _stateStack.back()->Cleanup();
-	delete _stateStack.back();
     _stateStack.pop_back();
 }
 
 GameState* Game::GetState(GameStateType type)
 {
 	if (type == GameStateType::NONE)
-		return _stateStack.back();
+		return _stateStack.back().get();
 
 	auto reverse_it = _stateStack.rbegin();
 
 	while (reverse_it != _stateStack.rend()) {
 		if ((*reverse_it)->GetType() == type) {
-			return (*reverse_it);
+			return (*reverse_it).get();
 		}
 	}
 
@@ -330,63 +349,64 @@ GameStatus Game::GetInput()
 
 		// This will allow the topmost gamestate to handle any events given to the window
 		// (Preventing lower gamestates from taking input i.e. when a pause menu overlay is up)
-		std::vector<GameState*>::iterator it = _stateStack.end();
-		it--;
-		event_response = (*it)->HandleEvents(_event);
+		if (_console.IsOpen()) {
+			event_response = _console.HandleEvents(_event);
+		}
+		else {
+			event_response = (_stateStack.back())->HandleEvents(_event);
+		}
 
 		switch (event_response)
 		{
 		case KeyEvent::close_menu:
-			if ((*it)->GetType() == GameStateType::PAUSE_MENU) {
+			if (_stateStack.back()->GetType() == GameStateType::PAUSE_MENU) {
 				PopState();
 				_stateStack.back()->Resume();
 			}
 			break;
 
 		case KeyEvent::open_menu:
-			if ((*it)->GetType() == GameStateType::PLAYING_GAME) {
+			if (_stateStack.back()->GetType() == GameStateType::PLAYING_GAME) {
 			// @todo: reimplement pause as boolean in game state class, to stop processing updates (but continue updating the display
-				(*it)->Pause();
+				_stateStack.back()->Pause();
 
-				StatePauseMenu* menu = new StatePauseMenu;
-				PushState(menu);
+				StatePauseMenu* menu = dynamic_cast<StatePauseMenu*>(PushState(GameStateType::PAUSE_MENU));
 				menu->SetSelectedOption(0);
 				menu->ChangeMenuOption("Edit", 2);
 			}
 
-			else if ((*it)->GetType() == GameStateType::LEVEL_EDITOR) {
+			else if (_stateStack.back()->GetType() == GameStateType::LEVEL_EDITOR) {
 			// @todo: reimplement pause as boolean in game state class, to stop processing updates (but continue updating the display
-				(*it)->Pause();
+				_stateStack.back()->Pause();
 
-				StatePauseMenu* menu = new StatePauseMenu;
-				PushState(menu);
+				StatePauseMenu* menu = dynamic_cast<StatePauseMenu*>(PushState(GameStateType::PAUSE_MENU));
 				menu->SetSelectedOption(0);
 				menu->ChangeMenuOption("Play", 2);
 			}
 			break;
 
-		case KeyEvent::level_editor:
-			{
-				ChangeState(new StateEditor);
-				//ChangeState(StateEditor::Instance());
+		case KeyEvent::level_editor: {
+			ChangeState(GameStateType::LEVEL_EDITOR);
+			//ChangeState(StateEditor::Instance());
 
-				//Level* temp = StatePlaying::Instance()->GetLevel();
+			//Level* temp = StatePlaying::Instance()->GetLevel();
 
-				//if (temp != nullptr) {
-				//	if (temp->GetFileName() != "")
-				//		StateEditor::Instance()->SetLevel(temp->GetFileName());
-				//}
+			//if (temp != nullptr) {
+			//	if (temp->GetFileName() != "")
+			//		StateEditor::Instance()->SetLevel(temp->GetFileName());
+			//}
 
-				//StateEditor::Instance()->Resume(); 
-			}
-			break;
+			//StateEditor::Instance()->Resume(); 
+		}
+		break;
 
-		case KeyEvent::play_mode:
-			ChangeState(new StatePlaying);
+		case KeyEvent::play_mode: {
+			ChangeState(GameStateType::PLAYING_GAME);
 
 			//StatePlaying::Instance()->ChangeLevel(StateEditor::Instance()->GetLevel()->GetFileName());
 			//StatePlaying::Instance()->Resume(); 
 			break;
+		}
 
 		//case KeyEvent::restart:
 		//	StatePlaying::Instance()->Restart();
@@ -421,38 +441,25 @@ GameStatus Game::GetInput()
 		{
 			switch (_event.ev.key.keysym.sym)
 			{
-			case SDLK_BACKQUOTE:
-				//std::cout << "Pressed backquote! ";
-				if (_stateStack.back()->GetType() == GameStateType::CONSOLE)
-				{
-					//std::cout << "Console open, closing... " << std::endl;
-					//StateConsole::Instance()->Close();
-				}
-				else
-				{
-					std::vector<GameState*>::iterator it = _stateStack.end();
-					//if (_stateStack.size() > 1)
-					it--;
-					(*it)->Pause();
+			case SDLK_BACKQUOTE: 
+			{
+				if (_console.IsClosed()) {
+					_stateStack.back()->Pause();
 
-					StateConsole* console = new StateConsole();
-					
-					PushState(console);
 					//std::cout << "Console closed, opening ";
 					if (_event.ev.key.keysym.mod & KMOD_LSHIFT)
 					{
 						//std::cout << "big..." << std::endl;
-						console->Open(true);
+						_console.Open(true);
 					}
 					else
 					{
 						//std::cout << "small..." << std::endl;
-						console->Open(false);
+						_console.Open(false);
 					}
 				}
+			} break;
 
-			default:
-				break;
 			}
 		}
 		else if (_event.ev.type == SDL_WINDOWEVENT && _event.ev.window.windowID == SDL_GetWindowID(_mainWindow))
@@ -484,7 +491,10 @@ GameStatus Game::GetInput()
 void Game::Update()
 {
 	// STEP 2: Update
-	if (!_stateStack.empty())
+
+	_console.Update();
+
+	if (!_stateStack.empty() && _console.IsClosed())
 		{
 			// This will allow the topmost gamestate to handle any events given to the window
 			// (Preventing lower gamestates from taking input i.e. when a pause menu overlay is up)
@@ -492,7 +502,7 @@ void Game::Update()
 			//it--;
 			//(*it)->Update();
 
-			std::vector<GameState*>::iterator it = _stateStack.begin();
+			auto it = _stateStack.begin();
 			while (it != _stateStack.end())
 			{
 				if (!(*it)->IsPaused()) {
@@ -504,13 +514,13 @@ void Game::Update()
 
 	// Check console (if we have it open) if it should be closed
 	// @todo I DONT KNOW IF THIS LINE WORKS
-	if (_stateStack.back()->GetType() == GameStateType::CONSOLE && dynamic_cast<StateConsole*>(_stateStack.back())->IsClosed()) {
+	if (_console.IsClosed())
 		CloseConsole();
 
-		std::vector<GameState*>::iterator it = _stateStack.end();
-		it--;
-		(*it)->Resume();
-	}
+	//	auto it = _stateStack.end();
+	//	it--;
+	//	(*it)->Resume();
+	//}
 
 	// Check if variables file is outdated, so we can hotload new variables
 	if (_varFile.IsOutdated()) {
@@ -528,7 +538,7 @@ void Game::Render(float interpolation)
 
     if (!_stateStack.empty())
     {
-        std::vector<GameState*>::iterator it = _stateStack.begin();
+        auto it = _stateStack.begin();
 
         while (it != _stateStack.end())
         {
@@ -540,6 +550,9 @@ void Game::Render(float interpolation)
             it++;
         }
     }
+
+	// Render the console
+	_console.Render(interpolation);
 
     // deprecated ***
 	//_entities.RenderAll(interpolation);
@@ -555,18 +568,17 @@ EntityCollection& Game::Entities()
 
 void Game::CloseConsole()
 {
-	if (_stateStack.back()->GetType() == GameStateType::CONSOLE)
-	{
-		//std::cout << "Closing console..." << std::endl;
-		PopState();
-		_stateStack.back()->Resume();
+	//std::cout << "Closing console..." << std::endl;
+	//PopState();
+	_stateStack.back()->Resume();
 
-		if (SDL_IsTextInputActive())
-		{
-			//std::cout << "Stopping text input..." << std::endl;
-			SDL_StopTextInput();
-		}
+	if (SDL_IsTextInputActive())
+	{
+		//std::cout << "Stopping text input..." << std::endl;
+		SDL_StopTextInput();
 	}
+
+	_console.Close();
 }
 
 void Game::QuitGame()

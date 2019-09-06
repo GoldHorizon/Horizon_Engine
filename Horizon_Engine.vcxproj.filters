@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
-    <Filter Include="Include Files">
-      <UniqueIdentifier>{79b461ee-ba16-4b6a-b6bb-4082d488a125}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\States">
       <UniqueIdentifier>{fde377c6-dd10-47f6-8658-4ea62e0fc8ec}</UniqueIdentifier>
     </Filter>
@@ -185,13 +182,7 @@
     <ClInclude Include="include\types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\variables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\wall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\states\options.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\states\playing.h">
@@ -216,6 +207,9 @@
       <Filter>Header Files\States</Filter>
     </ClInclude>
     <ClInclude Include="include\states\console.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="include\states\options.h">
       <Filter>Header Files\States</Filter>
     </ClInclude>
   </ItemGroup>

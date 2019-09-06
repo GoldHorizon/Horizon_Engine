@@ -188,7 +188,6 @@
     <ClInclude Include="include\states\uninitialized.h" />
     <ClInclude Include="include\text.h" />
     <ClInclude Include="include\types.h" />
-    <ClInclude Include="include\variables.h" />
     <ClInclude Include="include\wall.h" />
     <ClInclude Include="sdl\include\begin_code.h" />
   </ItemGroup>
