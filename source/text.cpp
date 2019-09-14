@@ -148,26 +148,27 @@ void Text::Unserialize(std::string str)
 {
 	Entity::Unserialize(str);
 
-	sVector* list = ParseSerializedString(str);
+	auto list = ParseSerializedString(str);
+	auto list_vec = *list;
 
 	size_t index = 0;
 
-	while ((*list)[index] != "@Text" && index < list->size())
+	while (list_vec[index] != "@Text" && index < list_vec.size())
 		index++;
 
-	if ((*list)[index++] == "@Text")
+	if (list_vec[index++] == "@Text")
 	{
-		_text		= (*list)[index++];
-		color.r		= stoi((*list)[index++]);
-		color.g		= stoi((*list)[index++]);
-		color.b		= stoi((*list)[index++]);
-		color.a		= stoi((*list)[index++]);
-		maxWidth	= stoi((*list)[index++]);
-		wrap		= (*list)[index++] == "1" ? true : false;
-		int a		= stoi((*list)[index++]);
+		_text		= list_vec[index++];
+		color.r		= stoi(list_vec[index++]);
+		color.g		= stoi(list_vec[index++]);
+		color.b		= stoi(list_vec[index++]);
+		color.a		= stoi(list_vec[index++]);
+		maxWidth	= stoi(list_vec[index++]);
+		wrap		= list_vec[index++] == "1" ? true : false;
+		int a		= stoi(list_vec[index++]);
 		align = static_cast<TextAlignment>(a);
 
-		std::string f	= (*list)[index++];
+		std::string f	= list_vec[index++];
 
 		if (_font != nullptr) { 
 			delete _font;
@@ -189,8 +190,6 @@ void Text::Unserialize(std::string str)
 		UpdateImage();
 		//_font->Unserialize(str);
 	}
-			
-	delete list;
 }
 
 bool operator<(const Text &el, const Text &er)

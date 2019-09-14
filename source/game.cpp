@@ -32,7 +32,7 @@ Game::Game():
     // Set our stack to only be uninitialized.
     _stateStack.push_back(std::make_unique<StateUninitialized>());
 
-	auto quit_game_command = [this](sVector args) { QuitGame(); };
+	auto quit_game_command = [this](std::vector<std::string> args) { QuitGame(); };
 
 	commands["quit"] = quit_game_command;
 	commands["exit"] = quit_game_command;
@@ -124,7 +124,7 @@ GameStatus Game::Initialize()
 	// COMMANDS
 	//
 	// Some game commands to be implemented
-	commands["state"] = [this](sVector args) {
+	commands["state"] = [this](std::vector<std::string> args) {
 		if (args.size() > 0) 
 		{
 			for (size_t i = 0; i < args.size(); i++)

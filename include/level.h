@@ -30,10 +30,11 @@ public:
 	bool LoadLevel();
 	void LoadEntity(std::string filePath, std::string fileName);
 
-	void AddEntity(Entity* obj);
-	void AddEntity(Entity* obj, int x, int y);
+	//void AddEntity(Entity* obj);
+	//void AddEntity(Entity* obj, int x, int y);
+	void AddEntity(std::unique_ptr<Entity> obj);
+	void AddEntity(std::unique_ptr<Entity> obj, int x, int y);
 	
-	void RemoveEntity(Entity* obj);
 	void RemoveEntity(int index);
 	void RemoveEntity(SDL_Point point);
 	void RemoveEntity(int x, int y);

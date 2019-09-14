@@ -10,7 +10,8 @@ template <typename T> bool PComp(const T * const &a, const T * const &b)
 }
 
 // Used to compare entities for sorting by their depths (or ID?)
-bool EComp(const Entity * const &a, const Entity * const &b);
+//bool EComp(const Entity * const &a, const Entity * const &b);
+bool EComp(const std::unique_ptr<Entity>& a, const std::unique_ptr<Entity> &b);
 
 class EntityCollection
 {
@@ -40,9 +41,12 @@ class EntityCollection
 		Entity* GetByIndex(unsigned int index) const;
 
 		// AddEntity()		- Add an entity into the collection
-		//	name:		name of the entity being added
 		//	entity:		pointer to the entity to add
-		void AddEntity(Entity* entity);
+		//	name:		name of the entity being added
+		void AddEntity(std::unique_ptr<Entity> entity);
+
+		void Remove(Entity* entity);
+		void Remove(std::unique_ptr<Entity>& entity);
 
 		// RemoveByName()	- Remove an entity with the specified name
 		//	name:		name of entity to remove
@@ -73,14 +77,15 @@ class EntityCollection
 		 * Get Methods
 		 */
 		Entity* operator[](int ID);
-		eList& collection();
+		std::list<std::unique_ptr<Entity>>& collection();
 
 		/*
 		 * Set Methods
 		 */
 	protected:
 		// _collection			// Collection of entities
-		eList _collection;
+		std::list<std::unique_ptr<Entity>> _collection;
+
 
 	private:
 		int nextID;

@@ -189,7 +189,6 @@
     <ClInclude Include="include\text.h" />
     <ClInclude Include="include\types.h" />
     <ClInclude Include="include\wall.h" />
-    <ClInclude Include="sdl\include\begin_code.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -103,7 +103,7 @@ KeyEvent ClassName::HandleEvents(Event& event)
 
 			while (iter != _levelEntities.end()) {
 				if (iter->_selected) {
-					_currentLevel.RemoveEntity((*iter).entPtr);
+					_currentLevel.Remove((*iter).entPtr);
 					iter = _levelEntities.erase(iter);
 				}
 				else iter++; // Only increment in else, because deletion causes iter to go to next element anyways, possibly OOB
@@ -320,7 +320,7 @@ void ClassName::Update()
 				while (iter != _levelEntities.end()) {
 					Entity* ep = (*iter).entPtr;
 					if (ep->ImageContainsPoint(vec2<int>{temp.x, temp.y})) {
-						_currentLevel.RemoveEntity((*iter).entPtr);
+						_currentLevel.Remove((*iter).entPtr);
 						iter = _levelEntities.erase(iter);
 					}
 					else
@@ -526,13 +526,13 @@ void ClassName::ResetLevel()
 
 void ClassName::CreateUI()
 {
-	Panel* modeSelector = new Panel();
+	auto modeSelector = std::make_unique<Panel>();
 
 	modeSelector->SetPosition(64, 64);
 	modeSelector->title = ("Mode");
 	modeSelector->type = PanelType::FOCUS;
 
-	_entities.AddEntity(modeSelector);
+	_entities.AddEntity(std::move(modeSelector));
 }
 
 void ClassName::SelectEntities(int x, int y, int w, int h)

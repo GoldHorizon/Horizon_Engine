@@ -121,29 +121,28 @@ std::string Entity::Serialize()
 
 void Entity::Unserialize(std::string str)
 {
-	sVector* list = ParseSerializedString(str);
+	auto list = ParseSerializedString(str);
+	auto list_vec = *list;
 
 	size_t index = 0;
 
-	while ((*list)[index] != "@Entity" && index < list->size())
+	while (list_vec[index] != "@Entity" && index < list_vec.size())
 		index++;
 
 	if ((*list)[index++] == "@Entity")
 	{
 		//_imagePath 			= (*list)[index++];
-		_name 				= (*list)[index++];
-		active 				= (*list)[index++] == "1" ? true : false;	
-		visible 			= (*list)[index++] == "1" ? true : false;	
-		x					= std::stof((*list)[index++]);	
-		y					= std::stof((*list)[index++]);
-		depth 				= std::stof((*list)[index++]);
-		_direction 			= std::stof((*list)[index++]);
-		_speed 				= std::stof((*list)[index++]);
-		_hspeed 			= std::stof((*list)[index++]);
-		_vspeed 			= std::stof((*list)[index++]);
+		_name 				= list_vec[index++];
+		active 				= list_vec[index++] == "1" ? true : false;	
+		visible 			= list_vec[index++] == "1" ? true : false;	
+		x					= std::stof(list_vec[index++]);	
+		y					= std::stof(list_vec[index++]);
+		depth 				= std::stof(list_vec[index++]);
+		_direction 			= std::stof(list_vec[index++]);
+		_speed 				= std::stof(list_vec[index++]);
+		_hspeed 			= std::stof(list_vec[index++]);
+		_vspeed 			= std::stof(list_vec[index++]);
 	}
-
-	delete list;
 }
 
 std::string Entity::SerializeFile()

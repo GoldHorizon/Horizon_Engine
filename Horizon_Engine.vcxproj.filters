@@ -188,9 +188,6 @@
     <ClInclude Include="include\states\playing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sdl\include\begin_code.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\states\minesweeper.h">
       <Filter>Header Files\States</Filter>
     </ClInclude>

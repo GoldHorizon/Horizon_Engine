@@ -5,8 +5,8 @@
 
 #include <string>
 
-sVector* ParseSerializedString(std::string str);
-Entity* CreateSerializedObject(std::string str);
+std::unique_ptr<std::vector<std::string>> ParseSerializedString(std::string str);
+std::unique_ptr<Entity> CreateSerializedObject(std::string str);
 
 void AddOutput(std::string str);
 void AddError(std::string str);

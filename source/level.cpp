@@ -197,41 +197,35 @@ void Level::LoadEntity(std::string filePath, std::string fileName)
 		File entityFile;
 		entityFile.OpenFile(filePath);
 
-		Entity* obj = nullptr;
+		std::unique_ptr<Entity> obj;
 		
 		// @Todo: Need to rework how entity string is read, for when formatting changes
 		entityFile.ReadFileAll();
-		sVector* svp = entityFile.GetDataVector();
-		obj = CreateSerializedObject((*svp)[0]);
+		auto svp = entityFile.GetDataVector();
+		obj = CreateSerializedObject(svp[0]);
 
 		assert (obj != nullptr && "Could not create serialized object from string");
 
 		obj->ID = fileID;
 		
-		AddEntity(obj);
+		AddEntity(std::move(obj));
 		entityFile.CloseFile();
 	}
 }
 
-void Level::AddEntity(Entity* obj)
+void Level::AddEntity(std::unique_ptr<Entity> obj) 
 {
 	//AddEntity(obj);
 	//
-	EntityCollection::AddEntity(obj);
+	EntityCollection::AddEntity(std::move(obj));
 
-	const SDL_Point p = {(int)obj->x, (int)obj->y};
+	//const SDL_Point p = {(int)obj->x, (int)obj->y}; // ?
 }
 
-void Level::AddEntity(Entity* obj, int x, int y)
+void Level::AddEntity(std::unique_ptr<Entity> obj, int x, int y) 
 {
 	obj->SetPosition(x, y);
-	AddEntity(obj);
-}
-
-void Level::RemoveEntity(Entity* obj)
-{
-	delete obj;
-	_collection.remove(obj);
+	AddEntity(std::move(obj));
 }
 
 void Level::RemoveEntity(int index)
@@ -284,7 +278,7 @@ void Level::RemoveLastEntity()
 
 void Level::RemoveEntities(int x, int y)
 {
-	for (auto ep : _collection) {
+	for (auto& ep : _collection) {
 		// If the entity has an image loaded...
 		if (ep->image()->width() > 0) {
 			vec2<int> e_pos;
@@ -307,7 +301,7 @@ void Level::RemoveEntities(int x, int y)
 			}
 			
 			if (ContainsPoint(e_pos, e_dim, vec2<int>{x, y})) {
-				RemoveEntity(ep);
+				EntityCollection::Remove(ep);
 				return;
 			}
 		}

@@ -50,7 +50,7 @@ void ClassName::Initialize()
 	// COMMANDS
 	//
 	// Test command!
-	auto test_func = [this](sVector args) {
+	auto test_func = [this](std::vector<std::string> args) {
 		//std::cout << "Argument count: " << args.size() << std::endl;
 		//std::for_each (args.begin(), args.end(), [](std::string s) { std::cout << "\t" << s << std::endl; });
 		AddOutput("Argument count: " + std::to_string(args.size()));
@@ -58,9 +58,9 @@ void ClassName::Initialize()
 	commands["test"] = test_func;
 
 	// List command
-	auto help_command = [this](sVector args) {
+	auto help_command = [this](std::vector<std::string> args) {
 		std::string list;
-		std::map<std::string, std::function<void(sVector)>>::iterator it = commands.begin();
+		std::map<std::string, std::function<void(std::vector<std::string>)>>::iterator it = commands.begin();
 
 		list += it->first;
 
@@ -524,7 +524,7 @@ void ClassName::ParseCommand(std::string str)
 		stream >> command;
 		//std::cout << "Command:\t\t" << next_arg << std::endl;
 
-		sVector args;
+		std::vector<std::string> args;
 
 		stream >> next_arg;
 		while (stream) {

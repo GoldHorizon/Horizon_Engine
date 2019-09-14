@@ -10,9 +10,9 @@
 #include <sstream>
 #include <iostream>
 
-sVector* ParseSerializedString(std::string str)
+std::unique_ptr<std::vector<std::string>> ParseSerializedString(std::string str)
 {
-	sVector* strList = new sVector;
+	auto strList = std::make_unique<std::vector<std::string>>();
 
 	std::stringstream stream(str);
 	std::string temp;
@@ -58,7 +58,7 @@ sVector* ParseSerializedString(std::string str)
 	return strList;
 }
 
-Entity* CreateSerializedObject(std::string str)
+std::unique_ptr<Entity> CreateSerializedObject(std::string str)
 {
 	if (str.find("@Entity") == std::string::npos)
 	{
@@ -66,26 +66,26 @@ Entity* CreateSerializedObject(std::string str)
 		return nullptr;
 	}
 
-	Entity* obj = nullptr;
+	std::unique_ptr<Entity> obj;
 
 	if (str.find("@Player") != std::string::npos)
 	{
-		obj = new Player;
+		obj = std::make_unique<Player>();
 	}
 
 	if (str.find("@Text") != std::string::npos)
 	{
-		obj = new Text;
+		obj = std::make_unique<Text>();
 	}
 
 	if (str.find("@Ball") != std::string::npos)
 	{
-		obj = new Ball;
+		obj = std::make_unique<Ball>();
 	}
 
 	if (str.find("@Wall") != std::string::npos)
 	{
-		obj = new Wall;
+		obj = std::make_unique<Wall>();
 	}
 
 	if (obj != nullptr)

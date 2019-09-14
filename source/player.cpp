@@ -16,7 +16,7 @@ Player::Player()
 	//image()->SetColor({.5 * 255, .5 * 255, .2 * 255});
 	image()->SetBlendMode(BlendMode::BLEND);
 
-	commands["psetc"] = [this](sVector args) {
+	commands["psetc"] = [this](std::vector<std::string> args) {
 		if (args.size() == 3) {
 			float rgb[3];
 			for (int i = 0; i < 3; i++)
@@ -26,7 +26,7 @@ Player::Player()
 		} else AddError("Need 3 arguments");
 	};
 
-	commands["psetm"] = [this](sVector args) {
+	commands["psetm"] = [this](std::vector<std::string> args) {
 		if (args.size() == 1) {
 			if (args[0] == "none") this->image()->SetBlendMode(BlendMode::NONE);
 			if (args[0] == "blend") this->image()->SetBlendMode(BlendMode::BLEND);
@@ -36,7 +36,7 @@ Player::Player()
 		} else AddError("Need 1 argument");
 	};
 
-	commands["pseta"] = [this](sVector args) {
+	commands["pseta"] = [this](std::vector<std::string> args) {
 		if (args.size() == 1)
 			image()->SetAlpha(std::atof(args[0].c_str()));
 		else AddError("Need 1 argument");

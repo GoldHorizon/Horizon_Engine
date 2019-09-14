@@ -139,8 +139,8 @@ void File::PrintData()
 	std::cout << "<<<<<<<<<< End print of data contents" << std::endl;
 }
 
-sVector* File::GetDataVector()
+std::vector<std::string>& File::GetDataVector()
 {
-	return &_data;	
+	return _data;	
 }
 
