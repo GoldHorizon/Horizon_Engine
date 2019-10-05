@@ -102,8 +102,8 @@ KeyEvent ClassName::HandleEvents(Event& event)
 			auto iter = _levelEntities.begin();
 
 			while (iter != _levelEntities.end()) {
-				if (iter->_selected) {
-					_currentLevel.Remove((*iter).entPtr);
+				if ((*iter)->_selected) {
+					_currentLevel.Remove(*((*iter)->entPtr));
 					iter = _levelEntities.erase(iter);
 				}
 				else iter++; // Only increment in else, because deletion causes iter to go to next element anyways, possibly OOB
@@ -277,20 +277,20 @@ void ClassName::Update()
 				// Entity Selection
 				//
 				//////////////////////
-				Entity* obj = nullptr;
+				std::unique_ptr<Entity> obj;
 
 				switch (_entityType)
 				{
 					case EditorEntityType::PLAYER:
-						obj = new Player();
+						obj = std::make_unique<Player>();
 						break;
 
 					case EditorEntityType::BALL:
-						obj = new Ball();
+						obj = std::make_unique<Ball>();
 						break;
 
 					case EditorEntityType::WALL:
-						obj = new Wall();
+						obj = std::make_unique<Wall>();	
 						break;
 
 					default:
@@ -304,9 +304,9 @@ void ClassName::Update()
 				// Breaks if we add to our own entity list, then try to load
 				if (_levelName != "")
 				{
-					EditorEnt editor_obj(obj);
-					_currentLevel.AddEntity(obj);
-					_levelEntities.push_back(editor_obj);
+					auto editor_obj = std::make_unique<EditorEnt>(obj);
+					_currentLevel.AddEntity(std::move(obj));
+					_levelEntities.push_back(std::move(editor_obj));
 				}
 
 				// Temporary, just to practice creation
@@ -318,9 +318,9 @@ void ClassName::Update()
 				auto iter = _levelEntities.begin();
 
 				while (iter != _levelEntities.end()) {
-					Entity* ep = (*iter).entPtr;
+					Entity* ep = (*iter)->entPtr->get();
 					if (ep->ImageContainsPoint(vec2<int>{temp.x, temp.y})) {
-						_currentLevel.Remove((*iter).entPtr);
+						_currentLevel.Remove(*(*iter)->entPtr);
 						iter = _levelEntities.erase(iter);
 					}
 					else
@@ -339,10 +339,10 @@ void ClassName::Update()
 				int diff_amount_y = _moveDiffy / _gridSize;
 
 				if (diff_amount_x > 0 || diff_amount_x < 0 || diff_amount_y > 0 || diff_amount_y < 0) {
-					for (auto it : _levelEntities) {
-						if (it._selected) {
-							it.entPtr->x += _gridSize * diff_amount_x;
-							it.entPtr->y += _gridSize * diff_amount_y;
+					for (auto& it : _levelEntities) {
+						if (it->_selected) {
+							(*it->entPtr)->x += _gridSize * diff_amount_x;
+							(*it->entPtr)->y += _gridSize * diff_amount_y;
 						}
 					}
 
@@ -389,15 +389,17 @@ void ClassName::Render(float interpolation)
 	}
 
 	// Draw level entities that aren't hidden
-	for (auto it : _levelEntities) {
-		Entity *temp = it.entPtr;
+	for (auto& it : _levelEntities) {
+		Entity *temp = it->entPtr->get();
 
-		if (it._hidden) continue;
+		assert(temp);
+
+		if (it->_hidden) continue;
 
 		if (temp != nullptr)
 			temp->Render(interpolation, -globalCam->x(), -globalCam->y());
 	
-		if (it._selected)
+		if (it->_selected)
 			DrawRect(temp->x - temp->image()->origin.x - globalCam->x(), temp->y - temp->image()->origin.y - globalCam->y(), 
 					 temp->image()->width(), temp->image()->height(), 
 					 SDL_Color { 255, 255, 255, static_cast<Uint8>(_selectionTimer) });
@@ -472,7 +474,8 @@ bool ClassName::LoadLevel()
 		while (iter != _currentLevel.collection().end()) {
 			assert((*iter) != nullptr);
 
-			_levelEntities.push_back(EditorEnt(*iter));
+			
+			_levelEntities.push_back(std::make_unique<EditorEnt>(*iter));
 			iter++;
 		}
 		
@@ -567,8 +570,8 @@ void ClassName::SelectEntities(int x, int y, int w, int h)
 	// Loop through all entities, figure out which ones fall in this rectangle
 	bool big_box = (tw > 3 || th > 3);
 
-	for (EditorEnt &it : _levelEntities) {
-		Entity *temp = it.entPtr;
+	for (auto& it : _levelEntities) {
+		Entity *temp = it->entPtr->get();
 		
 		// Get entities real position/size due to offset
 		int ox, oy, ow, oh;
@@ -582,18 +585,18 @@ void ClassName::SelectEntities(int x, int y, int w, int h)
 			&& (ox + ow) <= (tx + tw)
 			&& (oy + oh) <= (ty + th))
 			||
-			(!big_box && ContainsPoint({ ox, oy }, { ow, oh }, { tx, ty }) && !found_one && it._selected == remove_from_selection))
+			(!big_box && ContainsPoint({ ox, oy }, { ow, oh }, { tx, ty }) && !found_one && it->_selected == remove_from_selection))
 		{
 			// If we're removing, make sure we get this object out of selection
 			if (remove_from_selection)
-				it._selected = false;
+				it->_selected = false;
 			else
-				it._selected = true;
+				it->_selected = true;
 
 			found_one = true;
 
 		} else if (!add_to_selection && !remove_from_selection) {
-			it._selected = false;
+			it->_selected = false;
 		}
 	}
 }

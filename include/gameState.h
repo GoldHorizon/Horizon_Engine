@@ -55,6 +55,6 @@ protected:
     EntityCollection _entities;
 
 private:
-    GameStateType _type;
-    bool _paused;
+    GameStateType _type = GameStateType::NONE;
+    bool _paused = true;
 };

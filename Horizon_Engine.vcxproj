@@ -76,14 +76,14 @@
       <WarningLevel>Level1</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\nickh\source\repos\Horizon_Engine\sdl\include;C:\Users\nickh\source\repos\Horizon_Engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\nickf\source\repos\Horizon_Engine\include;C:\Users\nickf\source\repos\Horizon_Engine\sdl\include;C:\Users\nickh\source\repos\Horizon_Engine\sdl\include;C:\Users\nickh\source\repos\Horizon_Engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>C:\Users\nickh\source\repos\Horizon_Engine\sdl\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\nickf\source\repos\Horizon_Engine\sdl\lib\x86;C:\Users\nickh\source\repos\Horizon_Engine\sdl\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -93,7 +93,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>C:\Users\nickh\source\repos\Horizon_Engine\sdl\include;C:\Users\nickh\source\repos\Horizon_Engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\nickf\source\repos\Horizon_Engine\include;C:\Users\nickf\source\repos\Horizon_Engine\sdl\include;C:\Users\nickh\source\repos\Horizon_Engine\sdl\include;C:\Users\nickh\source\repos\Horizon_Engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -101,26 +101,26 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\nickh\source\repos\Horizon_Engine\sdl\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\nickf\source\repos\Horizon_Engine\sdl\lib\x86;C:\Users\nickh\source\repos\Horizon_Engine\sdl\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\nickh\source\repos\Horizon_Engine\sdl\include;C:\Users\nickh\source\repos\Horizon_Engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\nickf\source\repos\Horizon_Engine\include;C:\Users\nickf\source\repos\Horizon_Engine\sdl\include;C:\Users\nickh\source\repos\Horizon_Engine\sdl\include;C:\Users\nickh\source\repos\Horizon_Engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\nickh\source\repos\Horizon_Engine\sdl\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\nickf\source\repos\Horizon_Engine\sdl\lib\x64;C:\Users\nickh\source\repos\Horizon_Engine\sdl\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\nickh\source\repos\Horizon_Engine\sdl\include;C:\Users\nickh\source\repos\Horizon_Engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\nickf\source\repos\Horizon_Engine\include;C:\Users\nickf\source\repos\Horizon_Engine\sdl\include;C:\Users\nickh\source\repos\Horizon_Engine\sdl\include;C:\Users\nickh\source\repos\Horizon_Engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\nickh\source\repos\Horizon_Engine\sdl\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\nickf\source\repos\Horizon_Engine\sdl\lib\x64;C:\Users\nickh\source\repos\Horizon_Engine\sdl\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

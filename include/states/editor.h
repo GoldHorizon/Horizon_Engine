@@ -83,17 +83,17 @@ private:
 
 	// Editor entity struct
 	struct EditorEnt {
-		Entity* entPtr;
+		std::unique_ptr<Entity>* entPtr;
 
 		bool _locked = false;
 		bool _hidden = false;
 		bool _selected = false;
 		bool _grabbed = false;
 
-		EditorEnt(Entity* ep) : entPtr(ep) {};
+		EditorEnt(std::unique_ptr<Entity>& ep) : entPtr(&ep) {};
 	};
 
-	std::vector<EditorEnt> _levelEntities;
+	std::vector<std::unique_ptr<EditorEnt>> _levelEntities;
 };
 
 #ifdef ClassName
