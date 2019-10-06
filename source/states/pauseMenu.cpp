@@ -53,9 +53,8 @@ void ClassName::Initialize()
 	//_menuList[4] = menuOptionQuit;
 	
 	auto menuTitle = CreateText("Menu", menuTitleFont, { SCREEN_WIDTH / 2, 160 }, SDL_Color({255, 255, 0, 255}), ALIGN_CENTER);
-	auto menuPtr = std::make_unique<Text>(*menuTitle);
 
-	_entities.AddEntity(std::move(menuPtr));
+	_entities.AddEntity(std::move(menuTitle));
 
 	AddMenuOption("Resume");
 	AddMenuOption("Restart");
@@ -218,13 +217,13 @@ void ClassName::AddMenuOption(std::string option, int pos)
 		return;
 	}
 
-	Text* menuOption = CreateText(option, menuOptionFont, { SCREEN_WIDTH / 2, 320 - 32 + (index * 32) }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
-	std::unique_ptr<Entity> menuPtr = std::make_unique<Text>(*menuOption);
+	auto menuPtr = CreateText(option, menuOptionFont, { SCREEN_WIDTH / 2, 320 - 32 + (index * 32) }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
 
 	//std::cout << "Adding Entity..." << std::endl;
+
+	_menuList[index] = menuPtr.get();
 	_entities.AddEntity(std::move(menuPtr));
 	//std::cout << "Adding MenuOption " << index << "..." << std::endl;
-	_menuList[index] = menuOption;
 	//std::cout << "Updating menu..." << std::endl;
 	//std::cout << "Updating menu..." << std::endl;
 

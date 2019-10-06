@@ -6,9 +6,9 @@
 
 #include <iostream>
 
-Text* CreateText(std::string name, Font* font, SDL_Point pos, SDL_Color color, TextAlignment align)
+std::unique_ptr<Text> CreateText(std::string name, Font* font, SDL_Point pos, SDL_Color color, TextAlignment align)
 {
-	Text* text = new Text(name, font);
+	auto text = std::make_unique<Text>(name, font);
 	text->SetPosition(pos);
 	text->color = (color);
 	text->align = (align);
