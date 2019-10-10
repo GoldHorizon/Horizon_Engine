@@ -10,14 +10,12 @@
 #include <algorithm>
 #include <cassert>
 
-#define ClassName StateConsole
-
-ClassName::~ClassName()
+StateConsole::~StateConsole()
 {
 	Cleanup();
 }
 
-void ClassName::Initialize()
+void StateConsole::Initialize()
 {
 	// 
 	// VARIABLES
@@ -79,12 +77,12 @@ void ClassName::Initialize()
 	//AddCommand("help", list_command, 0, 0);
 }
 
-void ClassName::Cleanup()
+void StateConsole::Cleanup()
 {
 
 }
 
-KeyEvent ClassName::HandleEvents(Event& event)
+KeyEvent StateConsole::HandleEvents(Event& event)
 {
 	if (event.ev.type == SDL_KEYDOWN)
 	{
@@ -166,7 +164,7 @@ KeyEvent ClassName::HandleEvents(Event& event)
 					{
 						std::string lh, rh;
 						lh = _currentLine.substr(0, _cursorPosition);
-						rh = _currentLine.substr(_cursorPosition + 1, std::string::npos);
+						rh = _currentLine.substr(static_cast<size_t>(_cursorPosition) + 1, std::string::npos);
 
 						_currentLine = lh + rh;
 					}
@@ -242,7 +240,7 @@ KeyEvent ClassName::HandleEvents(Event& event)
 
 		case SDLK_UP:
 			{
-				size_t i = _currentLineSelected + 1;
+				size_t i = static_cast<size_t>(_currentLineSelected) + 1;
 				while (i < _history.size()
 						&& _history[i].type != c_line_type::INPUT) {
 					i++;
@@ -360,7 +358,7 @@ KeyEvent ClassName::HandleEvents(Event& event)
 	return KeyEvent::none;
 }
 
-void ClassName::Update()
+void StateConsole::Update()
 {
 	int rate = SCREEN_HEIGHT * _openHeightBig * _openRate;
 
@@ -387,7 +385,7 @@ void ClassName::Update()
 	}
 }
 
-void ClassName::Render(float interpolation)
+void StateConsole::Render(float interpolation)
 {
 	if (_openHeight > 0) {
 		// Draw console window
@@ -408,7 +406,7 @@ void ClassName::Render(float interpolation)
 		}
 
 		// First drop shadow, then text
-		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8 + 1, drawHeight + 1, ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8 + 1, drawHeight + 1, TextAlignment::ALIGN_LEFT, {0, 0, 0, 255});
 
 		// Decide text color based on text type
 		SDL_Color *text_c;
@@ -425,8 +423,10 @@ void ClassName::Render(float interpolation)
 			case c_line_type::ERROR:
 				text_c = &_textErrorColor;
 				break;
+			default:
+				text_c = &_textErrorColor;
 		}
-		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8, drawHeight, ALIGN_LEFT, *text_c);
+		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8, drawHeight, TextAlignment::ALIGN_LEFT, *text_c);
 	}
 
 	// Draw the cursor
@@ -434,14 +434,14 @@ void ClassName::Render(float interpolation)
 
 	// Also draw current line being typed
 	if (_currentLine != "") {
-		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 32 + 1, ALIGN_LEFT, {0, 0, 0, 255});
-		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8, _openHeight - 32, ALIGN_LEFT, _textInputColor);
+		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 32 + 1, TextAlignment::ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8, _openHeight - 32, TextAlignment::ALIGN_LEFT, _textInputColor);
 	}
 
     //_entities.RenderAll(interpolation);
 }
 
-void ClassName::Open(bool big)
+void StateConsole::Open(bool big)
 {
 	if (IsClosed()) {
 		_currentLine = "";
@@ -460,7 +460,7 @@ void ClassName::Open(bool big)
 	_openHeight += (SCREEN_HEIGHT * _openHeightBig) * _openRate;
 }
 
-void ClassName::Close()
+void StateConsole::Close()
 {
 	_isOpenSmall = false;
 	_isOpenBig = false;
@@ -468,7 +468,7 @@ void ClassName::Close()
 	SDL_StopTextInput();
 }
 
-bool ClassName::IsOpen()
+bool StateConsole::IsOpen()
 {
 	//std::cout << "_openHeight\t\t" << _openHeight << std::endl;
 	//std::cout << "_openHeightSmall\t\t" << SCREEN_HEIGHT * _openHeightSmall << std::endl;
@@ -487,12 +487,12 @@ bool ClassName::IsOpen()
 	return false;
 }
 
-bool ClassName::IsClosed()
+bool StateConsole::IsClosed()
 {
 	return (_openHeight == 0 && !_isOpenBig && !_isOpenSmall);
 }
 
-void ClassName::SelectLine(int line)
+void StateConsole::SelectLine(int line)
 {
 	if (_currentLineSelected == -1 && line >= 0) {
 		_savedLine = _currentLine;	
@@ -510,7 +510,7 @@ void ClassName::SelectLine(int line)
 	}
 }
 
-void ClassName::ParseCommand(std::string str)
+void StateConsole::ParseCommand(std::string str)
 {
 	if (str.size() > 0)
 	{
@@ -546,12 +546,12 @@ void ClassName::ParseCommand(std::string str)
 	}
 }
 
-void ClassName::AddOutput(std::string str)
+void StateConsole::AddOutput(std::string str)
 {
 	_history.insert(_history.begin(), c_line(str, c_line_type::OUTPUT));
 }
 
-void ClassName::AddError(std::string str)
+void StateConsole::AddError(std::string str)
 {
 	_history.insert(_history.begin(), c_line(str, c_line_type::ERROR));
 }
@@ -560,6 +560,6 @@ c_line::c_line(std::string s, c_line_type t) :
 	text(s),
 	type(t) {}
 
-#ifdef ClassName
-#undef ClassName
+#ifdef StateConsole
+#undef StateConsole
 #endif

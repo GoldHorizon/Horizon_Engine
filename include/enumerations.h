@@ -63,7 +63,7 @@ enum class KeyEvent {
 	close_console
 };
 
-enum TextAlignment {
+enum class TextAlignment {
 	ALIGN_LEFT,
 	ALIGN_CENTER,
 	ALIGN_RIGHT

@@ -16,7 +16,7 @@ Text::Text(std::string text, Font* font) :
 	color(DEFAULT_COLOR),
 	maxWidth(0),
 	wrap(false),
-	align(ALIGN_LEFT),
+	align(TextAlignment::ALIGN_LEFT),
 	_font(font),
 	_text(text)
 {
@@ -80,11 +80,11 @@ void Text::UpdateImage()
 	else
 		tempSurface = TTF_RenderText_Solid(_font->font(), _text.c_str(), color);
 
-	if (align != ALIGN_LEFT)
+	if (align != TextAlignment::ALIGN_LEFT)
 	{
-		if (align == ALIGN_CENTER)
+		if (align == TextAlignment::ALIGN_CENTER)
 			image()->origin = {tempSurface->w/2, 0};
-		else if (align == ALIGN_RIGHT)
+		else if (align == TextAlignment::ALIGN_RIGHT)
 			image()->origin = {tempSurface->w, 0};
 	}
 

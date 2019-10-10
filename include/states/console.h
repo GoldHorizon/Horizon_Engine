@@ -4,10 +4,6 @@
 #include "text.h"
 #include "event.h"
 
-#ifndef ClassName
-#define ClassName StateConsole
-#endif
-
 struct c_line;
 enum class c_line_type;
 
@@ -18,12 +14,12 @@ class StateConsole:
 	 * Constructors/Destructors
 	 */
 public:
-    ClassName() {
+	StateConsole() {
 		Initialize();
 		SetType(GameStateType::CONSOLE); 
 		Resume();
 	}
-    ~ClassName();
+    ~StateConsole();
 
 	/*
 	 * Class Methods
@@ -54,7 +50,7 @@ private:
 	float _openHeightBig;
 	float _openHeightSmall;
 
-	unsigned int _cursorPosition;
+	unsigned _cursorPosition;
 
 	std::string _currentLine;
 	std::string _savedLine;
@@ -65,8 +61,8 @@ private:
 	SDL_Color _textOutputColor;
 	SDL_Color _textErrorColor;
 
-	std::vector<c_line> _history;
-	unsigned int _historyLine;
+	std::vector<c_line> _history;	// Previous lines
+	unsigned _historyLine;			// Saved line being typed
 };
 
 struct c_line
@@ -83,7 +79,3 @@ enum class c_line_type
 	OUTPUT,
 	ERROR	
 };
-
-#ifdef ClassName
-#undef ClassName
-#endif

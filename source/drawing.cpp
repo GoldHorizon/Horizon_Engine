@@ -75,6 +75,8 @@ void DrawText(std::string str, TextQuality quality, Font* font, int x, int y, Te
 		case TextQuality::SHADED: 
 			surface = TTF_RenderText_Shaded(font->font(), str.c_str(), c, bg); 
 			break;
+		default:
+			surface = nullptr;
 	}
 
 	if (surface == nullptr) {
@@ -95,7 +97,7 @@ void DrawText(std::string str, TextQuality quality, Font* font, int x, int y, Te
 	//std::cout << "Surface dimensions: " << surface->w << ", " << surface->h << std::endl;
 	//std::cout << "Texture dimensions: " << texture->w << ", " << texture->h << std::endl;
 	
-	int offset;
+	int offset = 0;
 	switch (align) {
 		case TextAlignment::ALIGN_LEFT:
 			offset = 0;

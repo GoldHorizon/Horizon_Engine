@@ -52,7 +52,7 @@ void ClassName::Initialize()
 	//_menuList[3] = menuOptionOptions;
 	//_menuList[4] = menuOptionQuit;
 	
-	auto menuTitle = CreateText("Menu", menuTitleFont, { SCREEN_WIDTH / 2, 160 }, SDL_Color({255, 255, 0, 255}), ALIGN_CENTER);
+	auto menuTitle = CreateText("Menu", menuTitleFont, { SCREEN_WIDTH / 2, 160 }, SDL_Color({255, 255, 0, 255}), TextAlignment::ALIGN_CENTER);
 
 	_entities.AddEntity(std::move(menuTitle));
 
@@ -217,7 +217,7 @@ void ClassName::AddMenuOption(std::string option, int pos)
 		return;
 	}
 
-	auto menuPtr = CreateText(option, menuOptionFont, { SCREEN_WIDTH / 2, 320 - 32 + (index * 32) }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	auto menuPtr = CreateText(option, menuOptionFont, { SCREEN_WIDTH / 2, 320 - 32 + (index * 32) }, SDL_Color({255, 255, 255, 255}), TextAlignment::ALIGN_CENTER);
 
 	//std::cout << "Adding Entity..." << std::endl;
 
