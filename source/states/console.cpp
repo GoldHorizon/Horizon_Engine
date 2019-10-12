@@ -387,20 +387,30 @@ void StateConsole::Update()
 
 void StateConsole::Render(float interpolation)
 {
+	float rate;
+	if (!IsOpen() && !IsClosed())
+	{
+		rate = SCREEN_HEIGHT * _openHeightBig * _openRate * interpolation;
+		if ((!_isOpenBig && !_isOpenSmall) || (_isOpenSmall && (_openHeight > _openHeightSmall * SCREEN_HEIGHT)))
+			rate *= -1;
+	}
+	else
+		rate = 0;
+
 	if (_openHeight > 0) {
 		// Draw console window
-		DrawRect(0, 0, SCREEN_WIDTH, _openHeight, _consoleColor);
-		DrawLine(0, _openHeight - 40, SCREEN_WIDTH, _openHeight - 40, SDL_Color {255, 255, 255, 255});
-		DrawLine(0, _openHeight - 39, SCREEN_WIDTH, _openHeight - 39, SDL_Color {0, 0, 0, 255});
+		DrawRect(0, 0, SCREEN_WIDTH, _openHeight + rate, _consoleColor);
+		DrawLine(0, _openHeight - 40 + rate, SCREEN_WIDTH, _openHeight - 40 + rate, SDL_Color {255, 255, 255, 255});
+		DrawLine(0, _openHeight - 39 + rate, SCREEN_WIDTH, _openHeight - 39 + rate, SDL_Color {0, 0, 0, 255});
 	}
 
 	// Draw history lines 
 	for (size_t i = _historyLine; i < _history.size(); i++)
 	{
-		int drawHeight = (_openHeight - 64 - (16 * i) + (_historyLine * 16));
+		int drawHeight = (_openHeight - 64 - (16 * i) + (_historyLine * 16)) + rate;
 
 		// If trying to draw above the screen, we can stop drawing to save render time
-		if (drawHeight < -16) {
+		if (drawHeight < 0) {
 			//std::cout << "DEBUG drawing above screen, i = " << i << std::endl;
 			break;
 		}
@@ -430,15 +440,13 @@ void StateConsole::Render(float interpolation)
 	}
 
 	// Draw the cursor
-	DrawRect((_cursorPosition * 10) + 9, static_cast<int>(_openHeight - 32), 10, 20, SDL_Color {180, 0, 0, 255});
+	DrawRect((_cursorPosition * 10) + 9, static_cast<int>(_openHeight - 32) + rate, 10, 20, SDL_Color {180, 0, 0, 255});
 
 	// Also draw current line being typed
 	if (_currentLine != "") {
-		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 32 + 1, TextAlignment::ALIGN_LEFT, {0, 0, 0, 255});
-		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8, _openHeight - 32, TextAlignment::ALIGN_LEFT, _textInputColor);
+		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 32 + 1 + rate, TextAlignment::ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8, _openHeight - 32 + rate, TextAlignment::ALIGN_LEFT, _textInputColor);
 	}
-
-    //_entities.RenderAll(interpolation);
 }
 
 void StateConsole::Open(bool big)

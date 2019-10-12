@@ -16,6 +16,8 @@
 extern SDL_Renderer* globalRenderer;
 extern Camera* globalCam;
 
+extern unsigned currentFPS;
+
 // Fonts
 extern Font *defaultFont;
 extern Font *menuTitleFont;

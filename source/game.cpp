@@ -4,6 +4,7 @@
 #include "enumerations.h"
 #include "types.h"
 #include "inputManager.h"
+#include "drawing.h"
 
 #include "states/playing.h"
 #include "states/uninitialized.h"
@@ -492,7 +493,8 @@ void Game::Update()
 {
 	// STEP 2: Update
 
-	_console.Update();
+	if (!_console.IsClosed())
+		_console.Update();
 
 	if (!_stateStack.empty() && _console.IsClosed())
 		{
@@ -554,8 +556,10 @@ void Game::Render(float interpolation)
 	// Render the console
 	_console.Render(interpolation);
 
-    // deprecated ***
-	//_entities.RenderAll(interpolation);
+
+	// Draw FPS in top right, mostly for debug right now
+	DrawText("FPS:", TextQuality::SHADED, defaultFont, SCREEN_WIDTH - 80, 16, TextAlignment::ALIGN_LEFT, { 255, 255, 255, 255 });
+	DrawText(std::to_string(currentFPS), TextQuality::SHADED, defaultFont, SCREEN_WIDTH - 16, 16, TextAlignment::ALIGN_RIGHT, { 255, 255, 255, 255 });
 
 	// Draw (present) the renderer to the screen
 	SDL_RenderPresent(_mainRenderer);
@@ -568,8 +572,6 @@ EntityCollection& Game::Entities()
 
 void Game::CloseConsole()
 {
-	//std::cout << "Closing console..." << std::endl;
-	//PopState();
 	_stateStack.back()->Resume();
 
 	if (SDL_IsTextInputActive())
