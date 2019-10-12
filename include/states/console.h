@@ -4,8 +4,6 @@
 #include "text.h"
 #include "event.h"
 
-#define ClassName StateConsole
-
 struct c_line;
 enum class c_line_type;
 
@@ -15,23 +13,23 @@ class StateConsole:
 	/*
 	 * Constructors/Destructors
 	 */
-protected:
-    ClassName() {
+public:
+	StateConsole() {
+		Initialize();
 		SetType(GameStateType::CONSOLE); 
 		Resume();
 	}
-public:
-    ~ClassName();
+    ~StateConsole();
 
 	/*
 	 * Class Methods
 	 */
-    void Initialize();
-    void Cleanup();
+    void Initialize() override;
+    void Cleanup() override;
 
-    int HandleEvents(Event&);
-    void Update();
-    void Render(float interpolation);
+    KeyEvent HandleEvents(Event&) override;
+    void Update() override;
+    void Render(float interpolation) override;
 
 	void Open(bool big = false);
 	void Close();
@@ -44,19 +42,7 @@ public:
 	void AddOutput(std::string str);
 	void AddError(std::string str);
 
-    static ClassName* Instance()
-    {
-        if (_thisInstance == nullptr)
-        {
-            _thisInstance = new ClassName;
-        	_thisInstance->Initialize();
-        }
-        return _thisInstance;
-    }
-
 private:
-    static ClassName* _thisInstance;
-
 	bool _isOpenBig;
 	bool _isOpenSmall;
 	int _openHeight;
@@ -64,7 +50,7 @@ private:
 	float _openHeightBig;
 	float _openHeightSmall;
 
-	unsigned int _cursorPosition;
+	unsigned _cursorPosition;
 
 	std::string _currentLine;
 	std::string _savedLine;
@@ -75,8 +61,8 @@ private:
 	SDL_Color _textOutputColor;
 	SDL_Color _textErrorColor;
 
-	std::vector<c_line> _history;
-	unsigned int _historyLine;
+	std::vector<c_line> _history;	// Previous lines
+	unsigned _historyLine;			// Saved line being typed
 };
 
 struct c_line
@@ -93,7 +79,3 @@ enum class c_line_type
 	OUTPUT,
 	ERROR	
 };
-
-#ifdef ClassName
-#undef ClassName
-#endif

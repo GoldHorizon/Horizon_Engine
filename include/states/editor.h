@@ -7,14 +7,25 @@
 
 #define ClassName StateEditor
 
+enum class EditMode {
+	CAMERA,
+	SELECTING,
+	CREATING,
+	DELETING,
+	MOVING,
+};
+
 class StateEditor : public GameState
 {
 	/*
 	 * Constructors/Destructors
 	 */
-protected:
-	ClassName() {SetType(GameStateType::LEVEL_EDITOR); Resume(); }
 public:
+	ClassName() {
+		Initialize();
+		SetType(GameStateType::LEVEL_EDITOR); 
+		Resume(); 
+	}
 	~ClassName();
 
 	/*
@@ -23,7 +34,7 @@ public:
 	void Initialize();
 	void Cleanup();
 
-	int HandleEvents(Event&);
+	KeyEvent HandleEvents(Event&);
 	void Update();
 	void Render(float interpolation);
 
@@ -31,24 +42,11 @@ public:
 	bool LoadLevel();
 	void SetLevel(std::string name);
 	void SetLevel(Level* level);
-	std::string GetLevel();
+	Level* GetLevel();
 
 	void ResetLevel();
 
-    static ClassName* Instance()
-    {
-        if (_thisInstance == nullptr)
-        {
-            _thisInstance = new ClassName;
-			_thisInstance->Initialize();
-        }
-        return _thisInstance;
-    }
-
 private:
-    static ClassName* _thisInstance;
-
-	//std::vector<Level*> _levelList;
 	Level _currentLevel;
 
 	std::string _levelName;
@@ -57,12 +55,45 @@ private:
 	int _gridSize;
 	EditorEntityType _entityType;
 	bool _drawType;
-	//Text _textType;
 
-	// If user is creating/deleting any entities
-	bool _isCreating;
-	bool _isDeleting;
+	//Text _textType; // @Todo: may have to reuse this
 
+	// Entity mode
+	bool _isCreating = false;	// Creating entities on mouse
+	bool _isDeleting = false;	// Deleting entities on mouse
+	bool _isSelecting = false;	// Box/Click selection
+	bool _isMoving = false;		// Selected entitites
+
+	// Editor vars
+	EditMode _primaryMode = EditMode::SELECTING;
+	EditMode _secondaryMode = EditMode::DELETING;
+	bool _primaryActive = false;
+	bool _secondaryActive = false;
+	bool _cameraActive = false;
+	bool _drawHUD = true;
+
+	int _moveDiffx = 0;
+	int _moveDiffy = 0;
+
+	vec2<int> _selectionStart;
+	int _selectionTimer;
+
+	void CreateUI();
+	void SelectEntities(int x, int y, int w, int h);
+
+	// Editor entity struct
+	struct EditorEnt {
+		std::unique_ptr<Entity>* entPtr;
+
+		bool _locked = false;
+		bool _hidden = false;
+		bool _selected = false;
+		bool _grabbed = false;
+
+		EditorEnt(std::unique_ptr<Entity>& ep) : entPtr(&ep) {};
+	};
+
+	std::vector<std::unique_ptr<EditorEnt>> _levelEntities;
 };
 
 #ifdef ClassName

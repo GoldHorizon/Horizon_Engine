@@ -7,11 +7,12 @@
 #include <iostream>
 #include <math.h>
 
-#include "entity.h"
+//#include "entity.h"
+#include "SDL.h"
 
+class Entity;
 
 typedef std::list<Entity*> eList;
-typedef std::vector<std::string> sVector;
 typedef std::vector<Entity*> eVector;
 
 typedef std::map<SDL_Point, Entity*> peMap;
@@ -178,4 +179,3 @@ struct vec4 : public vec3<T> {
 		return output;
 	}
 };
-

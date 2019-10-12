@@ -9,8 +9,6 @@
 
 #define ClassName StatePauseMenu
 
-ClassName* ClassName::_thisInstance = nullptr;
-
 ClassName::~ClassName()
 {
 	Cleanup();
@@ -54,8 +52,9 @@ void ClassName::Initialize()
 	//_menuList[3] = menuOptionOptions;
 	//_menuList[4] = menuOptionQuit;
 	
-	Text* menuTitle = CreateText("Menu", menuTitleFont, { SCREEN_WIDTH / 2, 160 }, SDL_Color({255, 255, 0, 255}), ALIGN_CENTER);
-	_entities.AddEntity(menuTitle);
+	auto menuTitle = CreateText("Menu", menuTitleFont, { SCREEN_WIDTH / 2, 160 }, SDL_Color({255, 255, 0, 255}), TextAlignment::ALIGN_CENTER);
+
+	_entities.AddEntity(std::move(menuTitle));
 
 	AddMenuOption("Resume");
 	AddMenuOption("Restart");
@@ -78,7 +77,7 @@ void ClassName::Cleanup()
 //		if (_menuList[i] != nullptr) delete _menuList[i];
 }
 
-int ClassName::HandleEvents(Event& event)
+KeyEvent ClassName::HandleEvents(Event& event)
 {
 	if (event.ev.type == SDL_KEYDOWN)
 	{
@@ -87,7 +86,7 @@ int ClassName::HandleEvents(Event& event)
 		{
 		case SDLK_ESCAPE:
 			if (event.ev.key.repeat == 0)
-				return CLOSE_MENU;
+				return KeyEvent::close_menu;
 			break;
 
 		case SDLK_DOWN:
@@ -116,30 +115,30 @@ int ClassName::HandleEvents(Event& event)
 			switch (_menuOptionSelected)
 			{
 			case 0:
-				return CLOSE_MENU;
+				return KeyEvent::close_menu;
 				break;
 
 			case 1:
 				// Send signal to game to restart current level
-				return RESTART;
+				return KeyEvent::restart;
 				break;
 
 			case 2:
 				// Send signal to game to open level editor
 				if (_menuList[_menuOptionSelected]->text() == "Edit")
-					return LEVEL_EDITOR;
+					return KeyEvent::level_editor;
 				if (_menuList[_menuOptionSelected]->text() == "Play")
-					return PLAY_MODE;
+					return KeyEvent::play_mode;
 				break;
 
 			case 3:
 				// Send signal to game to open options menu
-				return OPTIONS_MENU;
+				return KeyEvent::options_menu;
 				break;
 
 			case 4:
 				// Send signal to game to exit the game!
-				return GAME_QUIT; 
+				return KeyEvent::game_quit; 
 				break;
 
 
@@ -147,7 +146,7 @@ int ClassName::HandleEvents(Event& event)
 		}
 	}
 
-	return -1;
+	return KeyEvent::none;
 }
 
 void ClassName::Update()
@@ -218,12 +217,13 @@ void ClassName::AddMenuOption(std::string option, int pos)
 		return;
 	}
 
-	Text* menuOption = CreateText(option, menuOptionFont, { SCREEN_WIDTH / 2, 320 - 32 + (index * 32) }, SDL_Color({255, 255, 255, 255}), ALIGN_CENTER);
+	auto menuPtr = CreateText(option, menuOptionFont, { SCREEN_WIDTH / 2, 320 - 32 + (index * 32) }, SDL_Color({255, 255, 255, 255}), TextAlignment::ALIGN_CENTER);
 
 	//std::cout << "Adding Entity..." << std::endl;
-	_entities.AddEntity(menuOption);
+
+	_menuList[index] = menuPtr.get();
+	_entities.AddEntity(std::move(menuPtr));
 	//std::cout << "Adding MenuOption " << index << "..." << std::endl;
-	_menuList[index] = menuOption;
 	//std::cout << "Updating menu..." << std::endl;
 	//std::cout << "Updating menu..." << std::endl;
 

@@ -8,17 +8,14 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <cassert>
 
-#define ClassName StateConsole
-
-ClassName* ClassName::_thisInstance = nullptr;
-
-ClassName::~ClassName()
+StateConsole::~StateConsole()
 {
 	Cleanup();
 }
 
-void ClassName::Initialize()
+void StateConsole::Initialize()
 {
 	// 
 	// VARIABLES
@@ -51,7 +48,7 @@ void ClassName::Initialize()
 	// COMMANDS
 	//
 	// Test command!
-	auto test_func = [this](sVector args) {
+	auto test_func = [this](std::vector<std::string> args) {
 		//std::cout << "Argument count: " << args.size() << std::endl;
 		//std::for_each (args.begin(), args.end(), [](std::string s) { std::cout << "\t" << s << std::endl; });
 		AddOutput("Argument count: " + std::to_string(args.size()));
@@ -59,9 +56,9 @@ void ClassName::Initialize()
 	commands["test"] = test_func;
 
 	// List command
-	auto help_command = [this](sVector args) {
+	auto help_command = [this](std::vector<std::string> args) {
 		std::string list;
-		std::map<std::string, std::function<void(sVector)>>::iterator it = commands.begin();
+		std::map<std::string, std::function<void(std::vector<std::string>)>>::iterator it = commands.begin();
 
 		list += it->first;
 
@@ -80,12 +77,12 @@ void ClassName::Initialize()
 	//AddCommand("help", list_command, 0, 0);
 }
 
-void ClassName::Cleanup()
+void StateConsole::Cleanup()
 {
 
 }
 
-int ClassName::HandleEvents(Event& event)
+KeyEvent StateConsole::HandleEvents(Event& event)
 {
 	if (event.ev.type == SDL_KEYDOWN)
 	{
@@ -167,7 +164,7 @@ int ClassName::HandleEvents(Event& event)
 					{
 						std::string lh, rh;
 						lh = _currentLine.substr(0, _cursorPosition);
-						rh = _currentLine.substr(_cursorPosition + 1, std::string::npos);
+						rh = _currentLine.substr(static_cast<size_t>(_cursorPosition) + 1, std::string::npos);
 
 						_currentLine = lh + rh;
 					}
@@ -217,7 +214,7 @@ int ClassName::HandleEvents(Event& event)
 				}
 				else
 				{
-					if (_cursorPosition == _currentLine.size()) {
+					if (_cursorPosition == _currentLine.size() && _currentLine.size() > 0) {
 						// Delete last character
 						if (_currentLine.size() > 0)
 							_currentLine.pop_back();
@@ -235,13 +232,15 @@ int ClassName::HandleEvents(Event& event)
 						_currentLine = lh + rh;
 						_cursorPosition = lh.size();
 					}	
+
+					assert (_cursorPosition >= 0 && "Console cursor position less than 0");
 				}
 			}
 			break;
 
 		case SDLK_UP:
 			{
-				size_t i = _currentLineSelected + 1;
+				size_t i = static_cast<size_t>(_currentLineSelected) + 1;
 				while (i < _history.size()
 						&& _history[i].type != c_line_type::INPUT) {
 					i++;
@@ -317,6 +316,8 @@ int ClassName::HandleEvents(Event& event)
 				
 					_currentLineSelected = -1;
 					_cursorPosition = 0;
+
+					_historyLine = 0;
 				}
 			}
 			break;
@@ -353,15 +354,11 @@ int ClassName::HandleEvents(Event& event)
 			n--;
 		}
 	}
-	//else if (event.ev.type == SDL_TEXTEDITING)
-	//{
-	//	//std::cout << "DEBUG testing editing input?" << std::endl;
-	//}
 
-	return -1;
+	return KeyEvent::none;
 }
 
-void ClassName::Update()
+void StateConsole::Update()
 {
 	int rate = SCREEN_HEIGHT * _openHeightBig * _openRate;
 
@@ -382,27 +379,44 @@ void ClassName::Update()
 		Lerp<int>(_openHeight, 0, rate);
 	}
 
-	if (/*!SDL_IsTextInputActive() && */IsOpen())
+	if (IsOpen())
 	{
-		//std::cout << "Starting text input..." << std::endl;
 		SDL_StartTextInput();
 	}
 }
 
-void ClassName::Render(float interpolation)
+void StateConsole::Render(float interpolation)
 {
+	float rate;
+	if (!IsOpen() && !IsClosed())
+	{
+		rate = SCREEN_HEIGHT * _openHeightBig * _openRate * interpolation;
+		if ((!_isOpenBig && !_isOpenSmall) || (_isOpenSmall && (_openHeight > _openHeightSmall * SCREEN_HEIGHT)))
+			rate *= -1;
+	}
+	else
+		rate = 0;
+
 	if (_openHeight > 0) {
 		// Draw console window
-		DrawRect(0, 0, SCREEN_WIDTH, _openHeight, _consoleColor);
-		DrawLine(0, _openHeight - 40, SCREEN_WIDTH, _openHeight - 40, SDL_Color {255, 255, 255, 255});
-		DrawLine(0, _openHeight - 39, SCREEN_WIDTH, _openHeight - 39, SDL_Color {0, 0, 0, 255});
+		DrawRect(0, 0, SCREEN_WIDTH, _openHeight + rate, _consoleColor);
+		DrawLine(0, _openHeight - 40 + rate, SCREEN_WIDTH, _openHeight - 40 + rate, SDL_Color {255, 255, 255, 255});
+		DrawLine(0, _openHeight - 39 + rate, SCREEN_WIDTH, _openHeight - 39 + rate, SDL_Color {0, 0, 0, 255});
 	}
 
-	// Draw history lines @Fix: don't properly stop rendering lines at the top of the window
+	// Draw history lines 
 	for (size_t i = _historyLine; i < _history.size(); i++)
 	{
+		int drawHeight = (_openHeight - 64 - (16 * i) + (_historyLine * 16)) + rate;
+
+		// If trying to draw above the screen, we can stop drawing to save render time
+		if (drawHeight < 0) {
+			//std::cout << "DEBUG drawing above screen, i = " << i << std::endl;
+			break;
+		}
+
 		// First drop shadow, then text
-		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 64 - (16 * i) + 1 + (_historyLine * 16), ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8 + 1, drawHeight + 1, TextAlignment::ALIGN_LEFT, {0, 0, 0, 255});
 
 		// Decide text color based on text type
 		SDL_Color *text_c;
@@ -419,23 +433,23 @@ void ClassName::Render(float interpolation)
 			case c_line_type::ERROR:
 				text_c = &_textErrorColor;
 				break;
+			default:
+				text_c = &_textErrorColor;
 		}
-		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8, _openHeight - 64 - (16 * i) + (_historyLine * 16), ALIGN_LEFT, *text_c);
+		DrawText(_history[i].text, TextQuality::BLENDED, consoleFont, 8, drawHeight, TextAlignment::ALIGN_LEFT, *text_c);
 	}
 
 	// Draw the cursor
-	DrawRect((_cursorPosition * 10) + 9, static_cast<int>(_openHeight - 32), 10, 20, SDL_Color {180, 0, 0, 255});
+	DrawRect((_cursorPosition * 10) + 9, static_cast<int>(_openHeight - 32) + rate, 10, 20, SDL_Color {180, 0, 0, 255});
 
 	// Also draw current line being typed
 	if (_currentLine != "") {
-		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 32 + 1, ALIGN_LEFT, {0, 0, 0, 255});
-		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8, _openHeight - 32, ALIGN_LEFT, _textInputColor);
+		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8 + 1, _openHeight - 32 + 1 + rate, TextAlignment::ALIGN_LEFT, {0, 0, 0, 255});
+		DrawText(_currentLine, TextQuality::BLENDED, consoleFont, 8, _openHeight - 32 + rate, TextAlignment::ALIGN_LEFT, _textInputColor);
 	}
-
-    //_entities.RenderAll(interpolation);
 }
 
-void ClassName::Open(bool big)
+void StateConsole::Open(bool big)
 {
 	if (IsClosed()) {
 		_currentLine = "";
@@ -454,7 +468,7 @@ void ClassName::Open(bool big)
 	_openHeight += (SCREEN_HEIGHT * _openHeightBig) * _openRate;
 }
 
-void ClassName::Close()
+void StateConsole::Close()
 {
 	_isOpenSmall = false;
 	_isOpenBig = false;
@@ -462,7 +476,7 @@ void ClassName::Close()
 	SDL_StopTextInput();
 }
 
-bool ClassName::IsOpen()
+bool StateConsole::IsOpen()
 {
 	//std::cout << "_openHeight\t\t" << _openHeight << std::endl;
 	//std::cout << "_openHeightSmall\t\t" << SCREEN_HEIGHT * _openHeightSmall << std::endl;
@@ -481,12 +495,12 @@ bool ClassName::IsOpen()
 	return false;
 }
 
-bool ClassName::IsClosed()
+bool StateConsole::IsClosed()
 {
 	return (_openHeight == 0 && !_isOpenBig && !_isOpenSmall);
 }
 
-void ClassName::SelectLine(int line)
+void StateConsole::SelectLine(int line)
 {
 	if (_currentLineSelected == -1 && line >= 0) {
 		_savedLine = _currentLine;	
@@ -504,7 +518,7 @@ void ClassName::SelectLine(int line)
 	}
 }
 
-void ClassName::ParseCommand(std::string str)
+void StateConsole::ParseCommand(std::string str)
 {
 	if (str.size() > 0)
 	{
@@ -518,7 +532,7 @@ void ClassName::ParseCommand(std::string str)
 		stream >> command;
 		//std::cout << "Command:\t\t" << next_arg << std::endl;
 
-		sVector args;
+		std::vector<std::string> args;
 
 		stream >> next_arg;
 		while (stream) {
@@ -540,12 +554,12 @@ void ClassName::ParseCommand(std::string str)
 	}
 }
 
-void ClassName::AddOutput(std::string str)
+void StateConsole::AddOutput(std::string str)
 {
 	_history.insert(_history.begin(), c_line(str, c_line_type::OUTPUT));
 }
 
-void ClassName::AddError(std::string str)
+void StateConsole::AddError(std::string str)
 {
 	_history.insert(_history.begin(), c_line(str, c_line_type::ERROR));
 }
@@ -554,6 +568,6 @@ c_line::c_line(std::string s, c_line_type t) :
 	text(s),
 	type(t) {}
 
-#ifdef ClassName
-#undef ClassName
+#ifdef StateConsole
+#undef StateConsole
 #endif

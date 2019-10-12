@@ -16,6 +16,8 @@
 extern SDL_Renderer* globalRenderer;
 extern Camera* globalCam;
 
+extern unsigned currentFPS;
+
 // Fonts
 extern Font *defaultFont;
 extern Font *menuTitleFont;
@@ -25,7 +27,7 @@ extern Font *consoleFont;
 extern Font *fontList[FONT_COUNT]; // Used for serialization of text objects
 
 // Commands
-extern std::map<std::string, std::function<void(sVector)>> commands;
+extern std::map<std::string, std::function<void(std::vector<std::string>)>> commands;
 
 
 // Test command stuff

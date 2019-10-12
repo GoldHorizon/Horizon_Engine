@@ -2,6 +2,7 @@
 
 SDL_Renderer* globalRenderer = nullptr;
 Camera* globalCam = nullptr;
+unsigned currentFPS = 0;
 
 Font *defaultFont = nullptr;
 Font *menuTitleFont = nullptr;

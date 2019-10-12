@@ -1,5 +1,7 @@
 #include "file.h"
 
+#include <ctime> // For debug printing time_t values
+
 File::File() : 	
 	_reading(false),
 	_writing(false)
@@ -21,6 +23,9 @@ void File::OpenFile(std::string name, bool read, bool write)
 
 	_file.open(_fileName.c_str());
 	_file.close();
+
+	UpdateFileInfo();
+	_lastModifyTime = _fileInfo.st_mtime;
 
 	if (read)
 	{
@@ -93,6 +98,29 @@ bool File::IsOpen()
 	return _file.is_open();
 }
 
+int File::UpdateFileInfo()
+{
+	return (stat(_fileName.c_str(), &_fileInfo) != 0);
+}
+
+time_t File::GetModifyTime()
+{
+	// Get time of modification from file
+	if (UpdateFileInfo() == 0) {
+		return _fileInfo.st_mtime;
+	} else return 0;
+}
+
+bool File::IsOutdated()
+{
+	if (GetModifyTime() > _lastModifyTime)
+	{
+		_lastModifyTime = _fileInfo.st_mtime;
+		return true;
+	}
+	return false;
+}
+
 void File::SetFilePos(std::ios_base::seekdir pos, int offset)
 {
 	if (_file.is_open())
@@ -108,11 +136,11 @@ void File::PrintData()
 	std::cout << ">>>>>>>>>> Printing data contents for file " << _fileName << std::endl;
 	for (size_t i = 0; i < _data.size(); i++)
 		std::cout << _data[i] << std::endl;
-	std::cout << "<<<<<<<<<< End print of data contents." << std::endl;
+	std::cout << "<<<<<<<<<< End print of data contents" << std::endl;
 }
 
-sVector* File::GetDataVector()
+std::vector<std::string>& File::GetDataVector()
 {
-	return &_data;	
+	return _data;	
 }
 

@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-bool EComp(const Entity * const &a, const Entity * const &b)
+bool EComp(const std::unique_ptr<Entity>& a, const std::unique_ptr<Entity>& b)
 {
 	if (*a == *b)
 	{
@@ -15,15 +15,12 @@ bool EComp(const Entity * const &a, const Entity * const &b)
 
 EntityCollection::EntityCollection()
 {
-	nextID = 0;
+	nextID = 1;
 }
 
 EntityCollection::~EntityCollection()
 {
-	while (_collection.size() > 0)
-	{
-		_collection.erase(_collection.begin());	
-	}
+	ClearEntities();
 }
 
 int EntityCollection::GetCount() const
@@ -33,66 +30,67 @@ int EntityCollection::GetCount() const
 
 Entity* EntityCollection::GetByName(std::string name) const
 {
-	eList::const_iterator it = _collection.begin();
-
-	// Doesn't work while entity doesn't have a name attribute
-	while (it != _collection.end())
-	{
-		if ((*it)->name() == name)
-		{
-			return (*it);
-		}
+	for (auto& e : _collection) {
+		if (e->name() == name) return e.get();
 	}
+
 	return nullptr;	
 }
 
 Entity* EntityCollection::GetByID(int ID) const
 {
-	eList::const_iterator it = _collection.begin();
-
-	while (it != _collection.end())
-	{
-		if ((*it)->ID == ID)
-		{
-			return (*it);
-		}
+	for (auto& e : _collection) {
+		if (e->ID == ID) return e.get();
 	}
-	return nullptr;
+
+	return nullptr;	
 }
 
 Entity* EntityCollection::GetByIndex(unsigned int index) const
 {
-	eList::const_iterator it = _collection.begin();
+	if (index >= _collection.size()) return nullptr;
 
-	if (index < _collection.size())
+	auto it = _collection.begin();
+
+	for (unsigned int i = 0; i < index; i++)
 	{
-		for (unsigned int i = 0; i < index; i++)
-		{
-			it++;
-		}
-		return (*it);
+		it++;
 	}
-
-	return nullptr;
+	return it->get();
 }
 
-void EntityCollection::AddEntity(Entity* entity)
+void EntityCollection::AddEntity(std::unique_ptr<Entity> entity)
 {
-	entity->ID = (nextID++);
+	if (entity->ID == 0)
+		entity->ID = (nextID++);
 	
-	_collection.push_back(entity);
+	_collection.push_back(std::move(entity));
 }
 
+void EntityCollection::Remove(Entity* entity)
+{
+	for (auto& e : _collection) {
+		if (e.get() == entity)
+			_collection.remove(e);
+	}
+}
+
+void EntityCollection::Remove(std::unique_ptr<Entity>& entity) 
+{
+	_collection.remove(entity);
+}
+
+// @Cleanup: should we be deleteing the member when removing it?
+// 	Look at ALL remove functions to check this
 void EntityCollection::RemoveByName(std::string name)
 {
-	eList::const_iterator it = _collection.begin();
+	auto it = _collection.begin();
 
 	// Doesn't work while entity doesn't have a name attribute
 	while (it != _collection.end())
 	{
 		if ((*it)->name() == name)
 		{
-			delete (*it);
 			_collection.erase(it);
 		}
 
@@ -102,7 +100,7 @@ void EntityCollection::RemoveByName(std::string name)
 
 void EntityCollection::RemoveByID(int ID)
 {
-	eList::const_iterator it = _collection.begin();
+	auto it = _collection.begin();
 
 	while (it != _collection.end() && (*it)->ID != ID)
 	{
@@ -111,15 +109,13 @@ void EntityCollection::RemoveByID(int ID)
 
 	if (it != _collection.end())
 	{
-		delete (*it);
-
 		_collection.erase(it);
 	}
 }
 
 void EntityCollection::RemoveByIndex(unsigned int index)
 {
-	eList::const_iterator it = _collection.begin();
+	auto it = _collection.begin();
 	
 	if (index < _collection.size())
 	{
@@ -130,8 +126,6 @@ void EntityCollection::RemoveByIndex(unsigned int index)
 
 		if ((*it) != nullptr)
 		{
-			delete (*it);
-
 			_collection.erase(it);
 		}		
 	}
@@ -139,76 +133,72 @@ void EntityCollection::RemoveByIndex(unsigned int index)
 
 void EntityCollection::ClearEntities()
 {
-	while (_collection.size() > 0)
-	{
-		delete _collection.back();
-		_collection.pop_back();
-	}
+	_collection.clear();
 }
 
 void EntityCollection::HandleAllEvents(Event& event)
 {
-	eList::const_iterator it = _collection.end();
+	auto it = _collection.rbegin();
 
-	it--;
-
-	do
+	while (it != _collection.rend())
 	{
-		// If the event has been blocked, stop checking entities with it.
-		if (event.blocked()) return;
-
-		if ((*it) != nullptr)
-		{
-			(*it)->HandleEvents(event);
-		}
-
-		it--;
-	}
-	while (it != _collection.end());
-}
-
-void EntityCollection::UpdateAll()
-{
-	eList::const_iterator it = _collection.end();
-
-	it--;
-
-	do
-	{
-		// Uncomment to debug Update() on different entities
-		//std::cerr << it->first << std::endl;
-		if ((*it) != nullptr && (*it)->active)
-		{
-			(*it)->Update();
-		}
-
-		it--;
-	}
-	while (it != _collection.begin());
-}
-
-void EntityCollection::RenderAll(float interpolation, int xOffset, int yOffset)
-{
-	_collection.sort(EComp);
-	_collection.reverse();
-
-	eList::const_iterator it = _collection.begin();
-
-	while (it != _collection.end())
-	{
-		// Uncomment to debug Render() on different entities
-		//std::cerr << it->first << std::endl;
 		if ((*it) != nullptr && (*it)->visible)
 		{
-			(*it)->Render(interpolation, xOffset, yOffset);
+			(*it)->HandleEvents(event);
 		}
 
 		it++;
 	}
 }
 
+void EntityCollection::UpdateAll()
+{
+	auto it = _collection.rbegin();
+
+	while (it != _collection.rend())
+	{
+		if ((*it) != nullptr && (*it)->visible)
+		{
+			(*it)->Update();
+		}
+
+		it++;
+	}
+}
+
+void EntityCollection::RenderAll(float interpolation, int xOffset, int yOffset)
+{
+	
+	_collection.sort(EComp);
+	_collection.reverse();
+
+	for (auto& e : _collection) {
+		if (e != nullptr && e->visible)
+			e->Render(interpolation, xOffset, yOffset);
+	}
+
+	//auto it = _collection.begin();
+
+	//while (it != _collection.end())
+	//{
+	//	// Uncomment to debug Render() on different entities
+	//	//std::cerr << it->first << std::endl;
+	//	if ((*it) != nullptr && (*it)->visible)
+	//	{
+	//		(*it)->Render(interpolation, xOffset, yOffset);
+	//	}
+
+	//	it++;
+	//}
+}
+
 Entity* EntityCollection::operator[](int ID)
 {
 	return GetByIndex(ID);
+}
+
+std::list<std::unique_ptr<Entity>>& EntityCollection::collection()
+{
+	return _collection;
 }
 

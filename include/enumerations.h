@@ -2,6 +2,7 @@
 
 enum class GameStateType
 {
+	NONE,
 	UNINITIALIZED,
 	TITLE_SCREEN,
 	MAIN_MENU,
@@ -50,18 +51,19 @@ enum class PanelType {
 	STATIC
 };
 
-enum KeyEvents {
-	GAME_QUIT,
-	OPEN_MENU,
-	CLOSE_MENU,
-	OPTIONS_MENU,
-	RESTART,
-	LEVEL_EDITOR,
-	PLAY_MODE,
-	CLOSE_CONSOLE
+enum class KeyEvent {
+	none,
+	game_quit,
+	open_menu,
+	close_menu,
+	options_menu,
+	restart,
+	level_editor,
+	play_mode,
+	close_console
 };
 
-enum TextAlignment {
+enum class TextAlignment {
 	ALIGN_LEFT,
 	ALIGN_CENTER,
 	ALIGN_RIGHT

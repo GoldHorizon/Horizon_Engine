@@ -114,23 +114,21 @@ std::string Font::Serialize()
 
 void Font::Unserialize(std::string str)
 {
-	sVector* list = ParseSerializedString(str);
+	auto list = ParseSerializedString(str);
+	auto list_vec = (*list);
 
 	size_t index = 0;
 
-	while ((*list)[index] != "Font" && index < list->size())
+	while (list_vec[index] != "Font" && index < list_vec.size())
 		index++;
 
-	if ((*list)[index++] == "Font")
+	if (list_vec[index++] == "Font")
 	{
-		name		= (*list)[index++];
-		_file		= (*list)[index++];
-		_size		= std::stoi((*list)[index++]);
+		name		= list_vec[index++];
+		_file		= list_vec[index++];
+		_size		= std::stoi(list_vec[index++]);
 
 		LoadFont(_file, _size);
 	}
-			
-	delete list;
-
 }
 

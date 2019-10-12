@@ -2,8 +2,6 @@
 
 #define ClassName StateUninitialized
 
-ClassName* ClassName::_thisInstance = nullptr;
-
 ClassName::~ClassName()
 {
 
@@ -19,9 +17,9 @@ void ClassName::Cleanup()
 
 }
 
-int ClassName::HandleEvents(Event& event)
+KeyEvent ClassName::HandleEvents(Event& event)
 {
-	return -1;
+	return KeyEvent::none;
 }
 
 void ClassName::Update()

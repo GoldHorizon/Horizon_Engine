@@ -8,15 +8,15 @@
 class StateMinesweeper :
 	public GameState
 {
+public:
 	/*
 	 * Constructors/Destructors
 	 */
-protected:
 	StateName() {
+		Initialize();
 		SetType(GameStateType::MINESWEEPER);
 		Resume();
 	}
-public:
 	~StateName();
 
 	/*
@@ -25,26 +25,14 @@ public:
     void Initialize();
     void Cleanup();
 
-    int HandleEvents(Event&);
+    KeyEvent HandleEvents(Event&);
     void Update();
     void Render(float interpolation);
 
 	void StartGame(int startx, int starty);
 	void ResetBoard(int sizex, int sizey);
 
-    static StateName* Instance()
-    {
-        if (_thisInstance == nullptr)
-        {
-            _thisInstance = new StateName;
-        	_thisInstance->Initialize();
-        }
-        return _thisInstance;
-    }
-
 private:
-    static StateName* _thisInstance;
-
 	MineBoard _mainBoard;
 };
 

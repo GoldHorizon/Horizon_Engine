@@ -1,11 +1,11 @@
 #pragma once
 
+#include <vector>
+
 #include "gameState.h"
 #include "level.h"
 #include "camera.h"
 #include "event.h"
-
-#include <vector>
 
 #define ClassName StatePlaying
 
@@ -15,12 +15,12 @@ class StatePlaying:
 	/*
 	 * Constructors/Destructors
 	 */
-protected:
+public:
     ClassName() {
+		Initialize();
 		SetType(GameStateType::PLAYING_GAME); 
 		Resume(); 
 	}
-public:
     ~StatePlaying();
 	/*
 	 * Class Methods
@@ -28,7 +28,7 @@ public:
     void Initialize();
     void Cleanup();
 
-    int HandleEvents(Event&);
+    KeyEvent HandleEvents(Event&);
     void Update();
     void Render(float interpolation);
 
@@ -41,20 +41,7 @@ public:
 
 	void Restart();
 
-    static ClassName* Instance()
-    {
-        if (_thisInstance == nullptr)
-        {
-            _thisInstance = new ClassName;
-        	_thisInstance->Initialize();
-        }
-        return _thisInstance;
-    }
-
 private:
-    static ClassName* _thisInstance;
-
-	//std::vector<Level*> _levelList;
 	Level * _level;
 };
 

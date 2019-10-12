@@ -11,9 +11,11 @@ class StateOptions:
 	/*
 	 * Constructors/Destructors
 	 */
-protected:
-    ClassName() {SetType(GameStateType::OPTIONS);}
 public:
+    ClassName() {
+		Initialize();
+		SetType(GameStateType::OPTIONS);
+	}
     ~StateOptions();
 	/*
 	 * Class Methods
@@ -24,22 +26,10 @@ public:
     void Pause();
     void Resume();
 
-    int HandleEvents(Event&);
+    KeyEvent HandleEvents(Event&);
     void Update();
     void Render(float interpolation);
 
-    static ClassName* Instance()
-    {
-        if (_thisInstance == nullptr)
-        {
-            _thisInstance = new ClassName;
-        }
-        _thisInstance->Initialize();
-        return _thisInstance;
-    }
-
-private:
-    static ClassName* _thisInstance;
 };
 
 #ifdef ClassName
